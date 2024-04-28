@@ -44,7 +44,9 @@ namespace Lumina.Systems
             PlanetarySettings();
             ColorAdjustments();
             WhiteBalance();
+#if DEBUG
             ShadowsMidTonesHighlights();
+#endif
         }
 
         private void ColorAdjustments()
@@ -125,8 +127,7 @@ namespace Lumina.Systems
 
                         if (planetarySystemInstance != null)
                         {
-                            Mod.log.Info("Current Longitude: " + planetarySystemInstance.longitude);
-                            Mod.log.Info("Current Latitude: " + planetarySystemInstance.latitude);
+                    
 
                             Type planetarySystemType = typeof(PlanetarySystem);
                             FieldInfo latitudeField = planetarySystemType.GetField("m_Latitude", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -179,7 +180,7 @@ namespace Lumina.Systems
             }
         }
 
-
+#if DEBUG
         private void ShadowsMidTonesHighlights()
         {
 
@@ -216,11 +217,12 @@ namespace Lumina.Systems
                 }
 
             }
+        #endif
 
         }
 
     }
-    }
+    
 
 
 

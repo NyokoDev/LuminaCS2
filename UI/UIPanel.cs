@@ -9,6 +9,7 @@ using Input = UnityEngine.Input;
 
 namespace Lumina.UI
 {
+    using Lumina.XML;
     using LuminaMod.XML;
     using System.IO;
     using System.Runtime.Remoting;
@@ -27,7 +28,7 @@ namespace Lumina.UI
         private float TemperatureSpace = GlobalVariables.Instance.Temperature;
         private float TintSpace = GlobalVariables.Instance.Tint;
 
-        private Vector4Parameter Shadows = GlobalVariables.Instance.Shadows;
+   
 
 
         private bool panelVisible = false;
@@ -98,16 +99,7 @@ namespace Lumina.UI
             }
 
         }
-        public void SaveToFileIn()
-        {
-            string localLowDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            localLowDirectory = Path.Combine(localLowDirectory, "..", "LocalLow");
-            string assemblyDirectory = Path.Combine(localLowDirectory, "Colossal Order", "Cities Skylines II", "Mods", "Lumina");
-            Directory.CreateDirectory(assemblyDirectory);
-            string settingsFilePath = Path.Combine(assemblyDirectory, "Lumina.xml");
-            GlobalVariables.SaveToFile(settingsFilePath);
-        }
-        
+    
         void PanelWindow(int windowID)
         {
             float YControl = 20;
@@ -135,7 +127,7 @@ namespace Lumina.UI
             slider4Value = GUI.HorizontalSlider(Slider4Rect, slider4Value, -10000f, 10000f);
             slider4Value = Mathf.Round(slider4Value * 1000f) / 1000f; // Set step size
             GlobalVariables.Instance.Saturation = slider4Value;
-            SaveToFileIn();
+
 
             // Planetary Settings
 
@@ -219,6 +211,17 @@ namespace Lumina.UI
             Shadows.value = oldShadowsValue;
             GlobalVariables.Instance.Shadows = Shadows;
 #endif 
+            Rect Button1Rect = (new Rect(20, YControl += 30, 100, 20));
+            if (GUI.Button(Button1Rect, "Save"))
+            {
+                GlobalVariables.SaveToFile(GlobalPaths.GlobalModSavingPath);
+            }
+
+            if (GUI.Button(new Rect(20, Button1Rect.y, 100, 20), "Reset Settings"))
+            {
+                GlobalVariables.SaveToFile(GlobalPaths.GlobalModSavingPath);
+            }
+
 
 
 

@@ -11,6 +11,7 @@ using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Drawing2D;
+using LuminaMod.XML;
 
 namespace Lumina
 {
@@ -34,9 +35,7 @@ namespace Lumina
             m_Setting = new Setting(this);
             m_Setting.RegisterInOptionsUI();
             GameManager.instance.localizationManager.AddSource("en-US", new LocaleEN(m_Setting));
-
-            AssetDatabase.global.LoadSettings(nameof(Lumina), m_Setting, new Setting(this));
-
+     
 
             updateSystem.UpdateAfter<PostProcessSystem>(SystemUpdatePhase.GameSimulation);
         }

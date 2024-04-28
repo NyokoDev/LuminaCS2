@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using Lumina.XML;
 
 namespace Lumina
 {
@@ -121,10 +122,7 @@ namespace Lumina
             try
             {
 
-                string localLowDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-                localLowDirectory = Path.Combine(localLowDirectory, "..", "LocalLow");
-                string assemblyDirectory = Path.Combine(localLowDirectory, "Colossal Order", "Cities Skylines II", "Mods", "Lumina");
-                string settingsFilePath = Path.Combine(assemblyDirectory, "Lumina.xml");
+                string settingsFilePath = GlobalPaths.GlobalModSavingPath;
 
 
                 // Check if the file exists
@@ -178,12 +176,8 @@ namespace Lumina
 
         public void SaveToFileIn()
         {
-            string localLowDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            localLowDirectory = Path.Combine(localLowDirectory, "..", "LocalLow");
-            string assemblyDirectory = Path.Combine(localLowDirectory, "Colossal Order", "Cities Skylines II", "Mods", "Lumina");
-            Directory.CreateDirectory(assemblyDirectory);
-            string settingsFilePath = Path.Combine(assemblyDirectory, "Lumina.xml");
-            GlobalVariables.SaveToFile(settingsFilePath);
+            File.Create(GlobalPaths.GlobalModSavingPath);
+            GlobalVariables.SaveToFile(GlobalPaths.GlobalModSavingPath);
         }
 
         public override void SetDefaults()

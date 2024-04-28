@@ -4,6 +4,8 @@ using System.Xml.Serialization;
 using UnityEngine.Rendering;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
+using Lumina;
+using System.Threading;
 
 namespace LuminaMod.XML
 {
@@ -37,6 +39,7 @@ namespace LuminaMod.XML
         [XmlElement]
         public float Tint { get; set; }
 
+#if DEBUG
         [XmlElement]
         public Vector4Parameter Shadows { get; set; }
 
@@ -58,29 +61,44 @@ namespace LuminaMod.XML
         [XmlElement]
         public MinFloatParameter highlightsEnd { get; set; }
 
-
+#endif
 
         public static void SaveToFile(string filePath)
         {
-            try
-            {
-                // Create an XmlSerializer for the GlobalVariables type.
-                XmlSerializer serializer = new XmlSerializer(typeof(GlobalVariables));
+            const int maxRetries = 3;
+            int retries = 0;
 
-                // Create or open the file for writing.
-                using (TextWriter writer = new StreamWriter(filePath))
+            while (retries < maxRetries)
+            {
+                try
                 {
-                    // Serialize the current static object to the file.
-                    serializer.Serialize(writer, Instance);
+                    XmlSerializer serializer = new XmlSerializer(typeof(GlobalVariables));
+                    using (TextWriter writer = new StreamWriter(filePath))
+                    {
+                        serializer.Serialize(writer, Instance);
+                    }
+                    break; // Break out of the loop if the write operation is successful
                 }
-
-
+                catch (IOException ex) when (ex.HResult == -2147024864) // Sharing violation error code
+                {
+                    // Log the error and retry after a short delay
+                    Mod.log.Info($"Sharing violation encountered. Retrying in 1 second...");
+                    Thread.Sleep(1000); // Wait for 1 second before retrying
+                    retries++;
+                }
+                catch (Exception ex)
+                {
+                    Mod.log.Info($"Error saving GlobalVariables to file: {ex.Message}");
+                    break; // Break out of the loop if an unexpected error occurs
+                }
             }
-            catch (Exception ex)
+
+            if (retries >= maxRetries)
             {
-                Console.WriteLine($"Error saving GlobalVariables to file: {ex.Message}");
+                Mod.log.Info($"Failed to save GlobalVariables to file after {maxRetries} retries.");
             }
         }
+
 
         public static GlobalVariables LoadFromFile(string filePath)
         {
@@ -107,13 +125,7 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.Temperature = loadedVariables.Temperature;
                     GlobalVariables.Instance.Tint = loadedVariables.Tint;
 
-                    GlobalVariables.Instance.Shadows = loadedVariables.Shadows;
-                    GlobalVariables.Instance.Midtones = loadedVariables.Midtones;
-                    GlobalVariables.Instance.Highlights = loadedVariables.Highlights;
-                    GlobalVariables.Instance.ShadowsStart = loadedVariables.ShadowsStart;
-                    GlobalVariables.Instance.ShadowsEnd = loadedVariables.ShadowsEnd;
-                    GlobalVariables.Instance.highlightsStart = loadedVariables.highlightsStart;
-                    GlobalVariables.Instance.highlightsEnd = loadedVariables.highlightsEnd;
+             
 
 
 
@@ -123,7 +135,7 @@ namespace LuminaMod.XML
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Failed to load Lumina settings. Ensure that at least one setting is set.");
+                Mod.log.Info("Failed to load Lumina settings. Ensure that at least one setting is set.");
                 return null;
             }
         }
