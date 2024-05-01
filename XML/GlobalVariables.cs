@@ -7,6 +7,7 @@ using UnityEngine.Rendering.HighDefinition;
 using Lumina;
 using System.Threading;
 using Game.PSI;
+using Game.Rendering;
 
 namespace LuminaMod.XML
 {
@@ -18,10 +19,6 @@ namespace LuminaMod.XML
         /// </summary>
         [XmlElement]
         public float PostExposure { get; set; }
-
-
-        [XmlElement]
-        public float TestValue = 100f;
 
         [XmlElement]
         public float Contrast { get; set; }
@@ -44,12 +41,12 @@ namespace LuminaMod.XML
         [XmlElement]
         public float Tint { get; set; }
 
-#if DEBUG
         [XmlElement]
-        public Vector4Parameter Shadows { get; set; }
+        public float Shadows { get; set; }
+
 
         [XmlElement]
-        public Vector4Parameter Midtones { get; set; }
+        public float Midtones { get; set; } = 1f;
 
         [XmlElement]
         public Vector4Parameter Highlights { get; set; }
@@ -66,10 +63,9 @@ namespace LuminaMod.XML
         [XmlElement]
         public MinFloatParameter highlightsEnd { get; set; }
 
-#endif
 
         [XmlIgnore]
-        public string Version = "1.3.2";
+        public string Version = "1.3.3";
 
         public static void SaveToFile(string filePath)
         {
@@ -97,6 +93,11 @@ namespace LuminaMod.XML
                 catch (Exception ex)
                 {
                     Mod.log.Info($"Error saving GlobalVariables to file: {ex.Message}");
+                    NotificationSystem.Push(
+    "mod-check",
+    thumbnail: "https://i.imgur.com/C9fZDiA.png",
+    title: "Lumina",
+    text: $"Saving settings failed. Error message:" + ex.Message.ToString());
                     break; // Break out of the loop if an unexpected error occurs
                 }
             }
@@ -133,6 +134,9 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.Temperature = loadedVariables.Temperature;
                     GlobalVariables.Instance.Tint = loadedVariables.Tint;
 
+                    GlobalVariables.Instance.Shadows = loadedVariables.Shadows;
+                    GlobalVariables.Instance.Midtones = loadedVariables.Midtones;
+
              
 
 
@@ -144,9 +148,13 @@ namespace LuminaMod.XML
             catch (Exception ex)
             {
                 Mod.log.Info("Failed to load Lumina settings. Ensure that at least one setting is set.");
-                NotificationSystem.Push("mod-check",
-                 title: "Lumina",
-                 text: $"Failed to retrieve Lumina settings.");
+                NotificationSystem.Push(
+    "mod-check",
+    thumbnail: "https://i.imgur.com/C9fZDiA.png",
+    title: "Lumina",
+    text: $"Issue retrieving settings. Check Lumina.mod.log for more information."
+);
+
                 return null;
             }
         }

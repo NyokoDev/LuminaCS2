@@ -30,6 +30,7 @@ namespace Lumina.Systems
         public Vignette m_Vignette;
         public ColorAdjustments m_ColorAdjustments;
         private WhiteBalance m_WhiteBalance;
+        private ShadowsMidtonesHighlights m_ShadowsMidtonesHighlights;
 
         private UnityEngine.Rendering.HighDefinition.ColorAdjustments colorAdjustments;
         private PhotoModeRenderSystem PhotoModeRenderSystem;
@@ -53,9 +54,8 @@ namespace Lumina.Systems
             PlanetarySettings();
             ColorAdjustments();
             WhiteBalance();
-#if DEBUG
             ShadowsMidTonesHighlights();
-#endif
+
         }
 
         private void ColorAdjustments()
@@ -76,11 +76,6 @@ namespace Lumina.Systems
                     colorAdjustments.contrast.Override(GlobalVariables.Instance.Contrast);
                     colorAdjustments.hueShift.Override(GlobalVariables.Instance.hueShift);
                     colorAdjustments.saturation.Override(GlobalVariables.Instance.Saturation);
-
-                    // Accessing the postExposure field
-                    float exposureValue = colorAdjustments.postExposure.value;
-                    float contrastvalue = colorAdjustments.contrast.value;
-
                 }
             }
         }
@@ -90,11 +85,19 @@ namespace Lumina.Systems
             m_WhiteBalance.tint.Override(GlobalVariables.Instance.Tint);
         }
 
+        private void ShadowsMidTonesHighlights()
+        {
+            m_ShadowsMidtonesHighlights.shadows.Override(new Vector4(GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows));
+            m_ShadowsMidtonesHighlights.midtones.Override(new Vector4(GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones));
+
+
+        }
 
 
 
-    
-                    
+
+
+
 
 
 
@@ -135,6 +138,8 @@ namespace Lumina.Systems
                 m_WhiteBalance.temperature.Override(GlobalVariables.Instance.Temperature);
                 m_WhiteBalance.tint.Override(GlobalVariables.Instance.Tint);
 
+
+
                 // Add and configure Color Adjustments effect
                 m_ColorAdjustments = m_Profile.Add<ColorAdjustments>();
                 m_ColorAdjustments.colorFilter.Override(new Color(1f, 1f, 1f));
@@ -142,7 +147,10 @@ namespace Lumina.Systems
 
                 m_SetupDone = true;
 
-               
+                m_ShadowsMidtonesHighlights = m_Profile.Add<ShadowsMidtonesHighlights>(); // Shadows, midtones, highlights
+                m_ShadowsMidtonesHighlights.active = true;
+                m_ShadowsMidtonesHighlights.shadows.Override(new Vector4(GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows));
+                m_ShadowsMidtonesHighlights.midtones.Override(new Vector4(GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones));
 
                 Mod.log.Info("[LUMINA] Successfully added HDRP volume.");
             }
@@ -169,7 +177,7 @@ namespace Lumina.Systems
 
                         if (planetarySystemInstance != null)
                         {
-                    
+
 
                             Type planetarySystemType = typeof(PlanetarySystem);
                             FieldInfo latitudeField = planetarySystemType.GetField("m_Latitude", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -183,7 +191,7 @@ namespace Lumina.Systems
                                 latitudeField.SetValue(planetarySystemInstance, newLatitude);
                                 longitudeField.SetValue(planetarySystemInstance, newLongitude);
 
-                       
+
                             }
                             else
                             {
@@ -220,50 +228,6 @@ namespace Lumina.Systems
 #endif
             }
         }
-
-#if DEBUG
-        private void ShadowsMidTonesHighlights()
-        {
-
-
-
-
-            /// White Balance retrieval
-            Type photoModeRenderSystemType = typeof(PhotoModeRenderSystem);
-            FieldInfo m_ShadowsMidtonesHighlightsField = photoModeRenderSystemType.GetField("m_ShadowsMidtonesHighlights", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            if (m_ShadowsMidtonesHighlightsField != null) // Checking if the field is found
-            {
-                PhotoModeRenderSystem photoModeRenderSystemInstance = World.GetExistingSystemManaged<PhotoModeRenderSystem>();
-                if (photoModeRenderSystemInstance != null)
-                {
-                    UnityEngine.Rendering.HighDefinition.ShadowsMidtonesHighlights SMHValue = (UnityEngine.Rendering.HighDefinition.ShadowsMidtonesHighlights)m_ShadowsMidtonesHighlightsField.GetValue(photoModeRenderSystemInstance);
-
-
-                    // Using White Balance same as Lumina.
-                    if (SMHValue != null)
-                    {
-
-                        SMHValue.shadows.Override((Vector4)GlobalVariables.Instance.Shadows);
-                        SMHValue.midtones.Override((Vector4)GlobalVariables.Instance.Midtones);
-                        SMHValue.highlights.Override((Vector4)GlobalVariables.Instance.Highlights);
-                        SMHValue.shadowsStart.Override((float)GlobalVariables.Instance.ShadowsStart);
-                        SMHValue.shadowsEnd.Override((float)GlobalVariables.Instance.ShadowsEnd);
-                        SMHValue.highlightsStart.Override((float)GlobalVariables.Instance.highlightsStart);
-                        SMHValue.highlightsEnd.Override((float)GlobalVariables.Instance.highlightsEnd);
-                    }
-
-
-
-                }
-
-            }
-        #endif
-
-        }
-
     }
-    
-
-
+}
 

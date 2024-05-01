@@ -30,10 +30,14 @@ namespace Lumina.UI
         private float TemperatureSpace = GlobalVariables.Instance.Temperature;
         private float TintSpace = GlobalVariables.Instance.Tint;
 
-   
+        private float ShadowsSpace = GlobalVariables.Instance.Shadows;
+        private float MidtonesSpace = GlobalVariables.Instance.Midtones;
+
+
 
 
         private bool panelVisible = false;
+        private bool secondpanelVisible = false;
 
         private Rect panelRect = new Rect(10, 10, 400, 600);
         private Rect buttonRect = new Rect(10, 10, 150, 30);
@@ -74,10 +78,20 @@ namespace Lumina.UI
                 blackWindowStyle.normal.textColor = Color.white;
 
                 panelRect = GUI.Window(0, panelRect, PanelWindow, "Lumina", blackWindowStyle);
-
             }
-            // else block can be omitted if you don't want to do anything when panelVisible is false
-        }
+
+            // Add another if statement here
+            if (secondpanelVisible)
+            {
+                GUIStyle blackWindowStyle = new GUIStyle(GUI.skin.window);
+                blackWindowStyle.normal.textColor = Color.white;
+                panelRect = GUI.Window(0, panelRect, SecondPanel, "Lumina", blackWindowStyle);
+            }
+                
+
+        
+        // else block can be omitted if you don't want to do anything when panelVisible is false
+    }
 
 
         void ButtonWindow(int windowID)
@@ -101,13 +115,23 @@ namespace Lumina.UI
             }
 
         }
-    
+
         void PanelWindow(int windowID)
         {
             float YControl = 20;
             GUI.DragWindow(new Rect(0, 0, panelRect.width, 20));
 
-            GUI.Label(new Rect(20, YControl, 100, 20), "Post Exposure");
+            if (GUI.Button(new Rect(20, YControl, 100, 20), "Shadows"))
+            {
+                if (panelVisible)
+                {
+                    panelVisible = false;
+                    secondpanelVisible = true;
+                }
+            }
+
+
+            GUI.Label(new Rect(20, YControl += 30, 100, 20), "Post Exposure");
             Rect Slider1Rect = new Rect(20, 40, 300, 20);
             slider1Value = GUI.HorizontalSlider(Slider1Rect, slider1Value, -20f, 30f);
             GlobalVariables.Instance.PostExposure = slider1Value;
@@ -135,7 +159,7 @@ namespace Lumina.UI
 
             GUI.skin.label.wordWrap = false;
             GUI.skin.label.fontSize = 14; // Or any other size you prefer
-            GUI.Label(new Rect(20, YControl += 30, 100, 20), "Planet Settings");
+            GUI.Label(new Rect(20, YControl += 31, 100, 20), "Planet Settings");
 
             GUI.Label(new Rect(20, YControl += 30, 100, 20), "Longitude");
             Rect LongitudeRect = new Rect(20, YControl += 20, 300, 20);
@@ -150,7 +174,7 @@ namespace Lumina.UI
             LatitudeValue = Mathf.Round(LatitudeValue * 1000f) / 1000f; // Set step size
             GlobalVariables.Instance.Latitude = LatitudeValue;
 
- 
+
 
 
 
@@ -193,13 +217,13 @@ namespace Lumina.UI
             GUI.Label(new Rect(20, YControl += 30, 100, 20), "White Balance");
             GUI.Label(new Rect(20, YControl += 30, 100, 20), "Temperature");
             Rect TemperatureRect = new Rect(20, YControl += 20, 300, 20);
-            TemperatureSpace = GUI.HorizontalSlider(TemperatureRect, TemperatureSpace, -10000f, 10000f);
+            TemperatureSpace = GUI.HorizontalSlider(TemperatureRect, TemperatureSpace, -100f, 100f);
             TemperatureSpace = Mathf.Round(TemperatureSpace * 1000f) / 1000f; // Set step size
             GlobalVariables.Instance.Temperature = TemperatureSpace;
 
             GUI.Label(new Rect(20, YControl += 30, 100, 20), "Tint");
             Rect TintRect = new Rect(20, YControl += 20, 300, 20);
-            TintSpace = GUI.HorizontalSlider(TintRect, TintSpace, -10000f, 10000f);
+            TintSpace = GUI.HorizontalSlider(TintRect, TintSpace, -100f, 100f);
             TintSpace = Mathf.Round(TintSpace * 1000f) / 1000f; // Set step size
             GlobalVariables.Instance.Tint = TintSpace;
 
@@ -243,7 +267,7 @@ namespace Lumina.UI
                     {
                         defaultValue = 0.0f;
                     }
-    
+
 
                     if (defaultValue != null)
                     {
@@ -276,5 +300,46 @@ namespace Lumina.UI
                 isDraggingPanel = false;
             }
         }
+
+
+
+        /// <summary>
+        /// Second Panel. Shadows MidTones etc.
+        /// </summary>
+        /// <param name="windowID"></param>
+
+            void SecondPanel(int windowID)
+            {
+                float YControl = 20;
+                GUI.DragWindow(new Rect(0, 0, panelRect.width, 20));
+
+            if (GUI.Button(new Rect(20, YControl, 100, 20), "Go Back"))
+            {
+                if (secondpanelVisible)
+                {
+                    panelVisible = true;
+                    secondpanelVisible = false;
+                }
+            }
+
+            GUI.Label(new Rect(20, YControl += 30, 150, 20), "Shadow Intensity");
+            Rect Slider1Rect = new Rect(20, YControl += 20, 300, 20);
+            ShadowsSpace = Mathf.Round(GUI.HorizontalSlider(Slider1Rect, ShadowsSpace, -1f, 1f) * 1000f) / 1000f;
+            GlobalVariables.Instance.Shadows = ShadowsSpace;
+
+            ShadowsSpace = float.TryParse(GUI.TextField(new Rect(330, Slider1Rect.y, 40, 20), ShadowsSpace.ToString()), out float parsedShadowsSpace) ? parsedShadowsSpace : ShadowsSpace;
+            
+
+
+            //Midtones
+
+            GUI.Label(new Rect(20, YControl += 30, 150, 20), "Midtones");
+            Rect Slider2Rect = new Rect(20, YControl += 20, 300, 20);
+            MidtonesSpace = Mathf.Round(GUI.HorizontalSlider(Slider2Rect, MidtonesSpace, -1f, 1f) * 1000f) / 1000f;
+            GlobalVariables.Instance.Midtones = MidtonesSpace;
+
+            MidtonesSpace = float.TryParse(GUI.TextField(new Rect(330, Slider2Rect.y, 40, 20), MidtonesSpace.ToString()), out float parsedMidtonesSpace) ? parsedMidtonesSpace : MidtonesSpace;
+        }
+        }
     }
-}
+

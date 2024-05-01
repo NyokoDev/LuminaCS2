@@ -14,6 +14,7 @@ using System.Drawing.Drawing2D;
 using LuminaMod.XML;
 using Lumina.XML;
 using Game.PSI;
+using static System.Net.WebRequestMethods;
 
 namespace Lumina
 {
@@ -51,9 +52,13 @@ namespace Lumina
             catch
             {
                 // Notify if failed to retrieve Lumina settings
-                NotificationSystem.Push("mod-check",
-                    title: "Lumina",
-                    text: $"Exception attempting to retrieve Lumina settings.");
+                NotificationSystem.Push(
+        "mod-check",
+        thumbnail: "https://i.imgur.com/C9fZDiA.png",
+        title: "Lumina",
+        text: $"Exception attempting to retrieve Lumina settings."
+    );
+
             }
         }
 
