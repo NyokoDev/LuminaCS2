@@ -22,6 +22,14 @@ namespace Lumina.Systems
     internal partial class PostProcessSystem : SystemBase
     {
 
+        bool m_SetupDone = false;
+        Volume LuminaVolume;
+        private VolumeProfile m_Profile;
+
+        public Exposure m_Exposure;
+        public Vignette m_Vignette;
+        public ColorAdjustments m_ColorAdjustments;
+        private WhiteBalance m_WhiteBalance;
 
         private UnityEngine.Rendering.HighDefinition.ColorAdjustments colorAdjustments;
         private PhotoModeRenderSystem PhotoModeRenderSystem;
@@ -40,6 +48,7 @@ namespace Lumina.Systems
                 PanelInitialized = true;
                 Panel = false;
             }
+
 
             PlanetarySettings();
             ColorAdjustments();
@@ -75,38 +84,71 @@ namespace Lumina.Systems
                 }
             }
         }
-        private void WhiteBalance() {
-
-
-
-
-            /// White Balance retrieval
-            Type photoModeRenderSystemType = typeof(PhotoModeRenderSystem);
-            FieldInfo whiteBalanceField = photoModeRenderSystemType.GetField("m_WhiteBalance", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            if (whiteBalanceField != null) // Checking if the field is found
-            {
-                PhotoModeRenderSystem photoModeRenderSystemInstance = World.GetExistingSystemManaged<PhotoModeRenderSystem>();
-                if (photoModeRenderSystemInstance != null)
-                {
-                    UnityEngine.Rendering.HighDefinition.WhiteBalance whiteBalanceValue = (UnityEngine.Rendering.HighDefinition.WhiteBalance)whiteBalanceField.GetValue(photoModeRenderSystemInstance);
-
-
-                    // Using White Balance same as Lumina.
-                    if (whiteBalanceValue != null)
-                    {
-
-                        whiteBalanceValue.temperature.Override(GlobalVariables.Instance.Temperature);
-                        whiteBalanceValue.tint.Override(GlobalVariables.Instance.Tint);
-                    }
-
-
-
-                }
-
-            }
-
+        private void WhiteBalance()
+        {
+            m_WhiteBalance.temperature.Override(GlobalVariables.Instance.Temperature);
+            m_WhiteBalance.tint.Override(GlobalVariables.Instance.Tint);
         }
+
+
+
+
+    
+                    
+
+
+
+
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+            ConvertToHDRP();
+        }
+
+        public void ConvertToHDRP()
+        {
+            if (!m_SetupDone)
+            {
+                // Create new Global Volume GameObject
+                GameObject globalVolume = new GameObject("Lumina");
+                UnityEngine.Object.DontDestroyOnLoad(globalVolume);
+
+                // Add Volume component
+                LuminaVolume = globalVolume.AddComponent<Volume>();
+                LuminaVolume.priority = 2000f;
+                LuminaVolume.enabled = true;
+
+                // Access the Volume Profile
+                m_Profile = LuminaVolume.profile;
+
+                // Add and configure Exposure effect
+                m_Exposure = m_Profile.Add<Exposure>();
+                m_Exposure.active = true;
+                m_Exposure.mode.value = ExposureMode.Automatic;
+                m_Exposure.limitMin.Override(-5f);
+                m_Exposure.limitMax.Override(14f);
+                m_Exposure.fixedExposure.Override(100f);
+
+                // Add and configure White Balance effect
+                m_WhiteBalance = m_Profile.Add<WhiteBalance>();
+                m_WhiteBalance.active = true;
+                m_WhiteBalance.temperature.Override(GlobalVariables.Instance.Temperature);
+                m_WhiteBalance.tint.Override(GlobalVariables.Instance.Tint);
+
+                // Add and configure Color Adjustments effect
+                m_ColorAdjustments = m_Profile.Add<ColorAdjustments>();
+                m_ColorAdjustments.colorFilter.Override(new Color(1f, 1f, 1f));
+                m_ColorAdjustments.contrast.Override(0f);
+
+                m_SetupDone = true;
+
+               
+
+                Mod.log.Info("[LUMINA] Successfully added HDRP volume.");
+            }
+        }
+
+
 
         private void PlanetarySettings()
         {
@@ -141,8 +183,7 @@ namespace Lumina.Systems
                                 latitudeField.SetValue(planetarySystemInstance, newLatitude);
                                 longitudeField.SetValue(planetarySystemInstance, newLongitude);
 
-                                Mod.log.Info("Set Latitude: " + planetarySystemInstance.latitude);
-                                Mod.log.Info("Set Longitude: " + planetarySystemInstance.longitude);
+                       
                             }
                             else
                             {

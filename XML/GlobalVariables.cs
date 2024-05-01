@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 using Lumina;
 using System.Threading;
+using Game.PSI;
 
 namespace LuminaMod.XML
 {
@@ -17,6 +18,10 @@ namespace LuminaMod.XML
         /// </summary>
         [XmlElement]
         public float PostExposure { get; set; }
+
+
+        [XmlElement]
+        public float TestValue = 100f;
 
         [XmlElement]
         public float Contrast { get; set; }
@@ -62,6 +67,9 @@ namespace LuminaMod.XML
         public MinFloatParameter highlightsEnd { get; set; }
 
 #endif
+
+        [XmlIgnore]
+        public string Version = "1.3.2";
 
         public static void SaveToFile(string filePath)
         {
@@ -136,6 +144,9 @@ namespace LuminaMod.XML
             catch (Exception ex)
             {
                 Mod.log.Info("Failed to load Lumina settings. Ensure that at least one setting is set.");
+                NotificationSystem.Push("mod-check",
+                 title: "Lumina",
+                 text: $"Failed to retrieve Lumina settings.");
                 return null;
             }
         }
@@ -155,6 +166,6 @@ namespace LuminaMod.XML
             }
         }
 
-
+    
     }
 }

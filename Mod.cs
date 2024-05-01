@@ -12,6 +12,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing.Drawing2D;
 using LuminaMod.XML;
+using Lumina.XML;
+using Game.PSI;
 
 namespace Lumina
 {
@@ -23,21 +25,36 @@ namespace Lumina
 
         public void OnLoad(UpdateSystem updateSystem)
         {
-
-            _harmony = new($"{nameof(Lumina)}.{nameof(Mod)}");
+            // Initialize Harmony for patching
+            _harmony = new Harmony($"{nameof(Lumina)}.{nameof(Mod)}");
             _harmony.PatchAll(typeof(Mod).Assembly);
-            Mod.log.Info("Ran PatchAll.");
+            Mod.log.Info("Patching completed successfully.");
             log.Info(nameof(OnLoad));
 
+            // Log mod asset location if found
             if (GameManager.instance.modManager.TryGetExecutableAsset(this, out var asset))
-                log.Info($"Mod asset location {asset.path}");
+                log.Info($"Mod asset location: {asset.path}");
 
+            // Initialize and register mod settings
             m_Setting = new Setting(this);
             m_Setting.RegisterInOptionsUI();
             GameManager.instance.localizationManager.AddSource("en-US", new LocaleEN(m_Setting));
-     
 
-            updateSystem.UpdateAfter<PostProcessSystem>(SystemUpdatePhase.GameSimulation);
+            // Update system after PostProcessSystem but before culling
+            updateSystem.UpdateAfter<PostProcessSystem>(SystemUpdatePhase.PreCulling);
+
+            try
+            {
+                // Load global settings
+                GlobalVariables.LoadFromFile(GlobalPaths.GlobalModSavingPath);
+            }
+            catch
+            {
+                // Notify if failed to retrieve Lumina settings
+                NotificationSystem.Push("mod-check",
+                    title: "Lumina",
+                    text: $"Exception attempting to retrieve Lumina settings.");
+            }
         }
 
         public void OnDispose()
@@ -52,27 +69,5 @@ namespace Lumina
                 m_Setting = null;
             }
         }
-
-
-            [HarmonyPatch(typeof(PhotoModeUISystem), nameof(PhotoModeUISystem.Activate))]
-            [HarmonyPrefix]
-            public static bool OverrideActivate(PhotoModeRenderSystem ___m_PhotoModeRenderSystem)
-            {
-                ___m_PhotoModeRenderSystem.Enable(true);
-                return false;
-            }
-
-            [HarmonyPatch(typeof(PhotoModeRenderSystem), nameof(PhotoModeRenderSystem.DisableAllCameraProperties))]
-            [HarmonyPrefix]
-            public static bool DontDisableAllCameraPropertiesPlease(Game.Rendering.PhotoModeRenderSystem __instance)
-            {
-                foreach (KeyValuePair<string, PhotoModeProperty> photoModeProperty in __instance.photoModeProperties)
-                {
-                    Mod.log.Info($"Property Name: {photoModeProperty.Key}, Enabled: {photoModeProperty.Value.isEnabled}");
-                    photoModeProperty.Value.setEnabled?.Invoke(obj: true);
-                }
-
-                return false;
-            }
-        }
     }
+}

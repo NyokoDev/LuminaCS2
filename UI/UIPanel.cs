@@ -9,9 +9,11 @@ using Input = UnityEngine.Input;
 
 namespace Lumina.UI
 {
+  
     using Lumina.XML;
     using LuminaMod.XML;
     using System.IO;
+    using System.Reflection;
     using System.Runtime.Remoting;
     using UnityEngine.Rendering;
 
@@ -201,6 +203,12 @@ namespace Lumina.UI
             TintSpace = Mathf.Round(TintSpace * 1000f) / 1000f; // Set step size
             GlobalVariables.Instance.Tint = TintSpace;
 
+            TintSpace = float.TryParse(GUI.TextField(new Rect(330, TintRect.y, 40, 20), TintSpace.ToString()), out float parsedTintSpace) ? parsedTintSpace : TintSpace;
+            TemperatureSpace = float.TryParse(GUI.TextField(new Rect(330, TemperatureRect.y, 40, 20), TemperatureSpace.ToString()), out float parsedTemperatureSpace) ? parsedTemperatureSpace : TemperatureSpace;
+
+
+
+
 #if DEBUG
             GUI.Label(new Rect(20, YControl += 30, 100, 20), "Sha/Mid/HighL");
             GUI.Label(new Rect(20, YControl += 30, 100, 20), "Shadows");
@@ -210,17 +218,46 @@ namespace Lumina.UI
             oldShadowsValue.x = GUI.HorizontalSlider(ShadowsSpaceRect, oldShadowsValue.x, -10000f, 10000f);
             Shadows.value = oldShadowsValue;
             GlobalVariables.Instance.Shadows = Shadows;
-#endif 
+#endif
             Rect Button1Rect = (new Rect(20, YControl += 30, 100, 20));
             if (GUI.Button(Button1Rect, "Save"))
             {
                 GlobalVariables.SaveToFile(GlobalPaths.GlobalModSavingPath);
             }
 
-            if (GUI.Button(new Rect(20, Button1Rect.y, 100, 20), "Reset Settings"))
+
+            if (GUI.Button(new Rect(Button1Rect.x, YControl += 30, 100, 20), "Reset Settings"))
             {
-                GlobalVariables.SaveToFile(GlobalPaths.GlobalModSavingPath);
+                // Reset each value in GlobalVariables class
+                Type globalVarsType = typeof(GlobalVariables);
+                FieldInfo[] fields = globalVarsType.GetFields(BindingFlags.Static | BindingFlags.Public);
+
+                foreach (FieldInfo field in fields)
+                {
+                    object defaultValue = null;
+                    if (field.FieldType == typeof(int))
+                    {
+                        defaultValue = 0;
+                    }
+                    else if (field.FieldType == typeof(float))
+                    {
+                        defaultValue = 0.0f;
+                    }
+    
+
+                    if (defaultValue != null)
+                    {
+                        field.SetValue(null, defaultValue);
+                    }
+                    GlobalVariables.SaveToFile(GlobalPaths.GlobalModSavingPath);
+                }
             }
+
+            // Assuming you have version information stored in a variable
+            // Label for version information
+            GUI.Label(new Rect(20, YControl += 30, 100, 20), "v" + GlobalVariables.Instance.Version);
+
+
 
 
 
