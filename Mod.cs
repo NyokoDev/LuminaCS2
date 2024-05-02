@@ -53,12 +53,11 @@ namespace Lumina
             {
                 // Notify if failed to retrieve Lumina settings
                 NotificationSystem.Push(
-        "mod-check",
-        thumbnail: "https://i.imgur.com/C9fZDiA.png",
-        title: "Lumina",
-        text: $"Exception attempting to retrieve Lumina settings."
-    );
-
+                    "lumina-mod-check",
+                    thumbnail: "https://i.imgur.com/C9fZDiA.png",
+                    title: "Lumina",
+                    text: $"Exception attempting to retrieve Lumina settings."
+                );
             }
         }
 
