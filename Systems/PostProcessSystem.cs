@@ -58,6 +58,7 @@ namespace Lumina.Systems
 
         }
 
+      
         private void ColorAdjustments()
         {
             // Use reflection to get the private ColorAdjustments field from LightingSystem
@@ -92,16 +93,6 @@ namespace Lumina.Systems
 
 
         }
-
-
-
-
-
-
-
-
-
-
         protected override void OnCreate()
         {
             base.OnCreate();
@@ -118,7 +109,7 @@ namespace Lumina.Systems
 
                 // Add Volume component
                 LuminaVolume = globalVolume.AddComponent<Volume>();
-                LuminaVolume.priority = 2000f;
+                LuminaVolume.priority = 1980f;
                 LuminaVolume.enabled = true;
 
                 // Access the Volume Profile
@@ -143,7 +134,6 @@ namespace Lumina.Systems
                 // Add and configure Color Adjustments effect
                 m_ColorAdjustments = m_Profile.Add<ColorAdjustments>();
                 m_ColorAdjustments.colorFilter.Override(new Color(1f, 1f, 1f));
-                m_ColorAdjustments.contrast.Override(0f);
 
                 m_SetupDone = true;
 

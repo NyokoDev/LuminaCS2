@@ -1,0 +1,24 @@
+:root {
+    --size: 40rem;
+}
+
+.LuminaIcon2 {
+    /* Adjust positioning as needed */
+    position: relative;
+    /* Transition all properties for smoother animation */
+    transition: transform 0.5s ease;
+    /* Other styles */
+    width: var(--size);
+    height: var(--size);
+}
+
+.LuminaIcon2:hover {
+    /* Apply transform on hover */
+    transform: translateY(-12%);
+}
+
+.LuminaIcon2 img {
+    /* Set dimensions for the icon */
+    width: 25rem;
+    height: 25rem;
+}

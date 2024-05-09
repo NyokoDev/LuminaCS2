@@ -9,7 +9,9 @@ using Input = UnityEngine.Input;
 
 namespace Lumina.UI
 {
-  
+    using Game.Rendering.CinematicCamera;
+    using Game.UI;
+    using Lumina.Systems;
     using Lumina.XML;
     using LuminaMod.XML;
     using System.IO;
@@ -19,27 +21,26 @@ namespace Lumina.UI
 
     public class SliderPanel : MonoBehaviour
     {
-        private float slider1Value = GlobalVariables.Instance.PostExposure;
-        private float slider2Value = GlobalVariables.Instance.Contrast;
-        private float slider3Value = GlobalVariables.Instance.hueShift;
-        private float slider4Value = GlobalVariables.Instance.Saturation;
-
-        private float LongitudeValue = GlobalVariables.Instance.Longitude;
-        private float LatitudeValue = GlobalVariables.Instance.Latitude;
-
-        private float TemperatureSpace = GlobalVariables.Instance.Temperature;
-        private float TintSpace = GlobalVariables.Instance.Tint;
-
-        private float ShadowsSpace = GlobalVariables.Instance.Shadows;
-        private float MidtonesSpace = GlobalVariables.Instance.Midtones;
+        public static float slider1Value { get; set; } = GlobalVariables.Instance.PostExposure;
+        public static float slider2Value { get; set; } = GlobalVariables.Instance.Contrast;
+        public static float slider3Value { get; set; } = GlobalVariables.Instance.hueShift;
+        public static float slider4Value { get; set; } = GlobalVariables.Instance.Saturation;
+        public static float LongitudeValue { get; set; } = GlobalVariables.Instance.Longitude;
+        public static float LatitudeValue { get; set; } = GlobalVariables.Instance.Latitude;
+        public static float TemperatureSpace { get; set; } = GlobalVariables.Instance.Temperature;
+        public static float TintSpace { get; set; } = GlobalVariables.Instance.Tint;
+        public static float ShadowsSpace { get; set; } = GlobalVariables.Instance.Shadows;
+        public static float MidtonesSpace { get; set; } = GlobalVariables.Instance.Midtones;
 
 
-
-
-        private bool panelVisible = false;
+        public static bool showResetDialog = false;
+        private static bool showPhotoModeSendDialog = false;
+        public static bool Updating = false;
+        public static bool OnReset = false;
+        private static bool panelVisible = false;
         private bool secondpanelVisible = false;
 
-        private Rect panelRect = new Rect(10, 10, 400, 600);
+        private Rect panelRect = new Rect(10, 10, 400, 610);
         private Rect buttonRect = new Rect(10, 10, 150, 30);
         private Vector2 panelOffset;
         private Vector2 buttonOffset;
@@ -48,6 +49,8 @@ namespace Lumina.UI
         private Vector2 buttonDragStartPosition;
 
         public static bool buttonVisible { get; set; }
+        public static bool AllGood { get; set; }
+        public static Dictionary<string, PhotoModeProperty> PhotoModePropertiesCopy = new Dictionary<string, PhotoModeProperty>();
 
 
         /// <summary>
@@ -60,10 +63,28 @@ namespace Lumina.UI
                 if (Input.GetKeyDown(KeyCode.C))
                 {
                     panelVisible = !panelVisible;
+
                 }
             }
         }
 
+        void Start()
+        {
+            // Find all GameObjects with Volume components
+            Volume[] volumes = FindObjectsOfType<Volume>();
+
+            // Iterate through each volume and log its information
+            foreach (Volume volume in volumes)
+            {
+                Mod.log.Info("Volume found: " + volume.gameObject.name);
+
+                // You can access and log various properties of the volume here
+                // For example, you can access its profile, parameters, etc.
+            }
+
+
+
+        }
 
         private void OnGUI()
         {
@@ -87,11 +108,46 @@ namespace Lumina.UI
                 blackWindowStyle.normal.textColor = Color.white;
                 panelRect = GUI.Window(0, panelRect, SecondPanel, "Lumina", blackWindowStyle);
             }
-                
 
-        
-        // else block can be omitted if you don't want to do anything when panelVisible is false
-    }
+            if (showResetDialog)
+            {
+                GUI.Window(0, new Rect(Screen.width / 2 - 150, Screen.height / 2 - 75, 300, 150), ResetDialogWindow, "Confirmation");
+            }
+
+            if (showPhotoModeSendDialog)
+            {
+                GUI.Window(0, new Rect(Screen.width / 2 - 150, Screen.height / 2 - 75, 400, 150), SendSettingsToLuminaConfirmation, "Confirmation");
+            }
+
+
+
+
+
+
+
+            // else block can be omitted if you don't want to do anything when panelVisible is false
+        }
+
+
+        private void SendSettingsToLuminaConfirmation(int windowID)
+        {
+            GUI.Label(new Rect(50, 30, 400, 30), "Send settings to Lumina? This will override existing settings.");
+
+            if (GUI.Button(new Rect(50, 80, 80, 30), "Yes"))
+            {
+                PhotoModeExtractor.ExtractColorAdjustments();
+                showPhotoModeSendDialog = false;
+            }
+
+            if (GUI.Button(new Rect(170, 80, 80, 30), "No"))
+            {
+                showPhotoModeSendDialog = false;
+                // Do nothing
+            }
+        }
+
+
+
 
 
         void ButtonWindow(int windowID)
@@ -116,10 +172,20 @@ namespace Lumina.UI
 
         }
 
+
+
         void PanelWindow(int windowID)
         {
             float YControl = 20;
-            GUI.DragWindow(new Rect(0, 0, panelRect.width, 20));
+            GUI.DragWindow(new Rect(0, 0, panelRect.width, 30));
+
+            // Add 'x' button at the top-right corner
+            if (GUI.Button(new Rect(panelRect.width - 20, YControl, 19, 20), "X"))
+            {
+                // Close the window
+                panelVisible = false;
+                secondpanelVisible = false;
+            }
 
             if (GUI.Button(new Rect(20, YControl, 100, 20), "Shadows"))
             {
@@ -133,24 +199,25 @@ namespace Lumina.UI
 
             GUI.Label(new Rect(20, YControl += 30, 100, 20), "Post Exposure");
             Rect Slider1Rect = new Rect(20, 40, 300, 20);
-            slider1Value = GUI.HorizontalSlider(Slider1Rect, slider1Value, -20f, 30f);
+            slider1Value = GUI.HorizontalSlider(Slider1Rect, slider1Value, -20f, 15f);
+            slider1Value = Mathf.Round(slider1Value * 1000f) / 1000f; // Set step size of 0.001f
             GlobalVariables.Instance.PostExposure = slider1Value;
 
             GUI.Label(new Rect(20, YControl += 30, 100, 20), "Contrast");
             Rect Slider2Rect = new Rect(20, YControl += 30, 300, 20);
-            slider2Value = GUI.HorizontalSlider(Slider2Rect, slider2Value, -10000f, 10000f);
+            slider2Value = GUI.HorizontalSlider(Slider2Rect, slider2Value, -100f, 100f);
             slider2Value = Mathf.Round(slider2Value * 1000f) / 1000f; // Set step size
             GlobalVariables.Instance.Contrast = slider2Value;
 
             GUI.Label(new Rect(20, YControl += 30, 100, 20), "Hue Shift");
             Rect Slider3Rect = new Rect(20, YControl += 30, 300, 20);
-            slider3Value = GUI.HorizontalSlider(Slider3Rect, slider3Value, -10000f, 10000f);
+            slider3Value = GUI.HorizontalSlider(Slider3Rect, slider3Value, -180f, 180f);
             slider3Value = Mathf.Round(slider3Value * 1000f) / 1000f; // Set step size
             GlobalVariables.Instance.hueShift = slider3Value;
 
             GUI.Label(new Rect(20, YControl += 30, 100, 20), "Saturation");
             Rect Slider4Rect = new Rect(20, YControl += 30, 300, 20);
-            slider4Value = GUI.HorizontalSlider(Slider4Rect, slider4Value, -10000f, 10000f);
+            slider4Value = GUI.HorizontalSlider(Slider4Rect, slider4Value, -100f, 100f);
             slider4Value = Mathf.Round(slider4Value * 1000f) / 1000f; // Set step size
             GlobalVariables.Instance.Saturation = slider4Value;
 
@@ -163,14 +230,14 @@ namespace Lumina.UI
 
             GUI.Label(new Rect(20, YControl += 30, 100, 20), "Longitude");
             Rect LongitudeRect = new Rect(20, YControl += 20, 300, 20);
-            LongitudeValue = GUI.HorizontalSlider(LongitudeRect, LongitudeValue, -10000f, 10000f);
+            LongitudeValue = GUI.HorizontalSlider(LongitudeRect, LongitudeValue, -180f, 180f);
             LongitudeValue = Mathf.Round(LongitudeValue * 1000f) / 1000f; // Set step size
             GlobalVariables.Instance.Longitude = LongitudeValue;
 
 
             GUI.Label(new Rect(20, YControl += 30, 100, 20), "Latitude");
             Rect LatitudeRect = new Rect(20, YControl += 20, 300, 20);
-            LatitudeValue = GUI.HorizontalSlider(LatitudeRect, LatitudeValue, -10000f, 10000f);
+            LatitudeValue = GUI.HorizontalSlider(LatitudeRect, LatitudeValue, -90f, 90f);
             LatitudeValue = Mathf.Round(LatitudeValue * 1000f) / 1000f; // Set step size
             GlobalVariables.Instance.Latitude = LatitudeValue;
 
@@ -252,34 +319,15 @@ namespace Lumina.UI
 
             if (GUI.Button(new Rect(Button1Rect.x, YControl += 30, 100, 20), "Reset Settings"))
             {
-                // Reset each value in GlobalVariables class
-                Type globalVarsType = typeof(GlobalVariables);
-                FieldInfo[] fields = globalVarsType.GetFields(BindingFlags.Static | BindingFlags.Public);
+                showResetDialog = true;
 
-                foreach (FieldInfo field in fields)
-                {
-                    object defaultValue = null;
-                    if (field.FieldType == typeof(int))
-                    {
-                        defaultValue = 0;
-                    }
-                    else if (field.FieldType == typeof(float))
-                    {
-                        defaultValue = 0.0f;
-                    }
-
-
-                    if (defaultValue != null)
-                    {
-                        field.SetValue(null, defaultValue);
-                    }
-                    GlobalVariables.SaveToFile(GlobalPaths.GlobalModSavingPath);
-                }
             }
 
-            // Assuming you have version information stored in a variable
-            // Label for version information
-            GUI.Label(new Rect(20, YControl += 30, 100, 20), "v" + GlobalVariables.Instance.Version);
+
+
+
+
+            GUI.Label(new Rect(20, YControl += 30, 100, 20), "v" + GlobalPaths.Version);
 
 
 
@@ -299,7 +347,39 @@ namespace Lumina.UI
             {
                 isDraggingPanel = false;
             }
+
+
+
+
         }
+    
+
+
+
+
+
+
+
+        
+
+
+
+        private void ResetDialogWindow(int windowID)
+        {
+            GUI.Label(new Rect(50, 30, 200, 30), "Are you sure you want to reset settings?");
+
+            if (GUI.Button(new Rect(50, 80, 80, 30), "Yes"))
+            {
+                ResetSettings();
+                showResetDialog = false;
+            }
+
+            if (GUI.Button(new Rect(170, 80, 80, 30), "No"))
+            {
+                showResetDialog = false;
+            }
+        }
+
 
 
 
@@ -308,10 +388,18 @@ namespace Lumina.UI
         /// </summary>
         /// <param name="windowID"></param>
 
-            void SecondPanel(int windowID)
+        void SecondPanel(int windowID)
+        {
+            float YControl = 20;
+            GUI.DragWindow(new Rect(0, 0, panelRect.width, 30));
+
+            // Add 'x' button at the top-right corner
+            if (GUI.Button(new Rect(panelRect.width - 20, YControl, 19, 20), "X"))
             {
-                float YControl = 20;
-                GUI.DragWindow(new Rect(0, 0, panelRect.width, 20));
+                // Close the window
+                panelVisible = false;
+                secondpanelVisible = false;
+            }
 
             if (GUI.Button(new Rect(20, YControl, 100, 20), "Go Back"))
             {
@@ -328,10 +416,10 @@ namespace Lumina.UI
             GlobalVariables.Instance.Shadows = ShadowsSpace;
 
             ShadowsSpace = float.TryParse(GUI.TextField(new Rect(330, Slider1Rect.y, 40, 20), ShadowsSpace.ToString()), out float parsedShadowsSpace) ? parsedShadowsSpace : ShadowsSpace;
-            
+    
 
 
-            //Midtones
+            //MidtonesGame.UI.InGame.PhotoModeUISystem
 
             GUI.Label(new Rect(20, YControl += 30, 150, 20), "Midtones");
             Rect Slider2Rect = new Rect(20, YControl += 20, 300, 20);
@@ -340,6 +428,113 @@ namespace Lumina.UI
 
             MidtonesSpace = float.TryParse(GUI.TextField(new Rect(330, Slider2Rect.y, 40, 20), MidtonesSpace.ToString()), out float parsedMidtonesSpace) ? parsedMidtonesSpace : MidtonesSpace;
         }
+
+        private void ResetSettings()
+        {
+            slider1Value = -1.431f;
+            slider2Value = 1f;
+            slider3Value = 1f;
+            slider4Value = 1f;
+            LatitudeValue = 41.9028f;
+            LongitudeValue = 12.4964f;
+            TintSpace = 1f;
+            TemperatureSpace = 1f;
+            ShadowsSpace = 1f;
+            MidtonesSpace = 1f;
+
+            GlobalVariables.Instance.PostExposure = -1.431f;
+            GlobalVariables.Instance.Contrast = 1f;
+            GlobalVariables.Instance.hueShift = 1f;
+            GlobalVariables.Instance.Saturation = 1f;
+            GlobalVariables.Instance.Latitude = 41.9028f;
+            GlobalVariables.Instance.Longitude = 12.4964f;
+            GlobalVariables.Instance.Tint = 1f;
+            GlobalVariables.Instance.Temperature = 1f;
+            GlobalVariables.Instance.Shadows = 1f;
+            GlobalVariables.Instance.Midtones = 1f;
+
+            // Save changes
+            GlobalVariables.SaveToFile(GlobalPaths.GlobalModSavingPath);
         }
+
+        internal static void Toggle()
+        {
+            panelVisible = !panelVisible;
+        }
+
+        internal static void SendToLumina()
+        {
+            showPhotoModeSendDialog = true;
+           
+        }
+
+        public static void CheckUp()
+        {
+            // Set AllGood to false initially
+            SliderPanel.AllGood = false;
+
+            // Iterate through each property in PhotoModePropertiesCopy
+            foreach (KeyValuePair<string, PhotoModeProperty> kvp in SliderPanel.PhotoModePropertiesCopy)
+            {
+                string propertyName = kvp.Key;
+                PhotoModeProperty property = kvp.Value;
+
+                // Check if the property matches any condition and SliderPanel is updating
+                if (SliderPanel.Updating)
+                {
+                    if (propertyName == "ShadowsMidtonesHighlights.shadows")
+                    {
+                        // Handle ShadowsMidtonesHighlights.shadows property
+                    }
+                    else if (propertyName == "ColorAdjustments.postExposure")
+                    {
+                        // Handle ColorAdjustments.postExposure property
+                    }
+                    else if (propertyName == "ColorAdjustments.contrast")
+                    {
+                        // Handle ColorAdjustments.contrast property
+                        float contrastValue = property.getValue();
+                        Mod.log.Info("Contrast value " + contrastValue);
+                    }
+                    else if (propertyName == "ColorAdjustments.hueShift")
+                    {
+                        // Handle ColorAdjustments.hueShift property
+                        float value = property.getValue();
+                        SliderPanel.slider3Value = value;
+                    }
+                    else if (propertyName == "ColorAdjustments.saturation")
+                    {
+                        // Handle ColorAdjustments.saturation property
+                        float value = property.getValue();
+                        SliderPanel.slider4Value = value;
+                    }
+                    else if (propertyName == "WhiteBalance.temperature")
+                    {
+                        // Handle WhiteBalance.temperature property
+                        float value = property.getValue();
+                        SliderPanel.TemperatureSpace = value;
+                    }
+                    else if (propertyName == "ShadowsMidtonesHighlights.midtones")
+                    {
+                        // Handle ShadowsMidtonesHighlights.midtones property
+                        float value = property.getValue();
+                        SliderPanel.MidtonesSpace = value;
+                    }
+                    else if (propertyName == "WhiteBalance.tint")
+                    {
+                        // Handle WhiteBalance.tint property
+                        float value = property.getValue();
+                        SliderPanel.TintSpace = value;
+                    }
+                }
+            }
+
+            // Set AllGood to true after all properties have been checked
+  
+            SliderPanel.Updating = false;
+            SliderPanel.AllGood = true;
+        }
+
     }
+}
 

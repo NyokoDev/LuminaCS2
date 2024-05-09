@@ -8,6 +8,7 @@ using Lumina;
 using System.Threading;
 using Game.PSI;
 using Game.Rendering;
+using Lumina.XML;
 
 namespace LuminaMod.XML
 {
@@ -42,33 +43,22 @@ namespace LuminaMod.XML
         public float Tint { get; set; }
 
         [XmlElement]
-        public float Shadows { get; set; }
-
+        public float Shadows { get; set; } = 1f;
 
         [XmlElement]
         public float Midtones { get; set; } = 1f;
 
-        [XmlElement]
-        public Vector4Parameter Highlights { get; set; }
 
-        [XmlElement]
-        public MinFloatParameter ShadowsStart { get; set; }
-
-        [XmlElement]
-        public MinFloatParameter ShadowsEnd { get; set; }
-
-        [XmlElement]
-        public MinFloatParameter highlightsStart { get; set; }
-
-        [XmlElement]
-        public MinFloatParameter highlightsEnd { get; set; }
-
-
-        [XmlIgnore]
-        public string Version = "1.3.3";
+       
 
         public static void SaveToFile(string filePath)
         {
+
+            if (!Directory.Exists(GlobalPaths.assemblyDirectory))
+            {
+                Directory.CreateDirectory(GlobalPaths.assemblyDirectory);
+            }
+
             const int maxRetries = 3;
             int retries = 0;
 
@@ -92,9 +82,9 @@ namespace LuminaMod.XML
                 }
                 catch (Exception ex)
                 {
-                    Mod.log.Info($"Error saving GlobalVariables to file: {ex.Message}");
+                    Mod.log.Info($"Error saving settings to file: {ex.Message}");
                     NotificationSystem.Push(
-    "mod-check",
+    "lumina",
     thumbnail: "https://i.imgur.com/C9fZDiA.png",
     title: "Lumina",
     text: $"Saving settings failed. Error message:" + ex.Message.ToString());
@@ -104,7 +94,7 @@ namespace LuminaMod.XML
 
             if (retries >= maxRetries)
             {
-                Mod.log.Info($"Failed to save GlobalVariables to file after {maxRetries} retries.");
+                Mod.log.Info($"Failed to save settings to file after {maxRetries} retries.");
             }
         }
 
@@ -113,6 +103,12 @@ namespace LuminaMod.XML
         {
             try
             {
+                // Ensure directory exists
+                if (!Directory.Exists(GlobalPaths.assemblyDirectory))
+                {
+                    Directory.CreateDirectory(GlobalPaths.assemblyDirectory);
+                }
+
                 // Create an XmlSerializer for the GlobalVariables type.
                 XmlSerializer serializer = new XmlSerializer(typeof(GlobalVariables));
 
@@ -152,12 +148,13 @@ namespace LuminaMod.XML
     "mod-check",
     thumbnail: "https://i.imgur.com/C9fZDiA.png",
     title: "Lumina",
-    text: $"Issue retrieving settings. Check Lumina.mod.log for more information."
+    text: $"Please set a setting or verify the settings file."
 );
 
                 return null;
             }
         }
+
 
 
         // Singleton pattern to ensure only one instance of GlobalVariables exists.

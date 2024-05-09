@@ -23,6 +23,7 @@ namespace Lumina
         public static ILog log = LogManager.GetLogger($"{nameof(Lumina)}.{nameof(Mod)}").SetShowsErrorsInUI(false);
         private Setting m_Setting;
         private Harmony? _harmony;
+        public const string MOD_UI = "Lumina";
 
         public void OnLoad(UpdateSystem updateSystem)
         {
@@ -35,7 +36,7 @@ namespace Lumina
             // Log mod asset location if found
             if (GameManager.instance.modManager.TryGetExecutableAsset(this, out var asset))
                 log.Info($"Mod asset location: {asset.path}");
-
+       
             // Initialize and register mod settings
             m_Setting = new Setting(this);
             m_Setting.RegisterInOptionsUI();
@@ -43,6 +44,10 @@ namespace Lumina
 
             // Update system after PostProcessSystem but before culling
             updateSystem.UpdateAfter<PostProcessSystem>(SystemUpdatePhase.PreCulling);
+
+            updateSystem.UpdateAt<UISystem>(SystemUpdatePhase.MainLoop);
+
+
 
             try
             {
@@ -53,11 +58,12 @@ namespace Lumina
             {
                 // Notify if failed to retrieve Lumina settings
                 NotificationSystem.Push(
-                    "lumina-mod-check",
-                    thumbnail: "https://i.imgur.com/C9fZDiA.png",
-                    title: "Lumina",
-                    text: $"Exception attempting to retrieve Lumina settings."
-                );
+        "lumina",
+        thumbnail: "https://i.imgur.com/C9fZDiA.png",
+        title: "Lumina",
+        text: $"Wasn't possible to retrieve settings."
+    );
+
             }
         }
 

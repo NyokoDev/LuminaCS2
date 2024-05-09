@@ -1,0 +1,18 @@
+:root {
+    --size: 42rem;
+}
+
+.LuminaIcon {
+    pointer-events: auto;
+    width: var(--size);
+    height: var(--size);
+}
+
+.LuminaIcon img {
+    width: 30rem;
+    height: 30rem;
+}
+
+.Tab1{
+    display: none;
+}

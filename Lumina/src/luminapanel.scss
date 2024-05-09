@@ -1,0 +1,390 @@
+.Panel {
+   position: absolute;
+   display: flex;
+   width: 950rem;
+   height: 400rem;
+   top: 500rem;
+   left: 200rem;
+   background-color: rgba(71, 55, 55, 0.3);
+   box-shadow: inset 0 0 20px rgba(16, 16, 16, 0.6); /* Add a blurred black inner shadow */
+   overflow-y: auto;
+ }
+ 
+ 
+  
+ .Span1{
+  
+    width: 1500rem;
+    height: 200rem;
+ }
+
+ .LuminaBckImage{
+    position: absolute;
+    right: 200rem;
+    width: 100%;
+    height: 100%;
+ }
+ 
+ .TabsRow {
+   position: absolute;
+   display: flex;
+   width: 950rem;
+   height: 50rem;
+   top: 440rem;
+   left: 200rem;
+   background-color: rgba(0, 0, 0, 0.7); /* Black with 70% opacity */
+}
+
+
+
+
+.ColorAdjustmentsButton {
+   position: absolute;
+   display: flex;
+   background-image: url('https://svgshare.com/i/15rh.svg');
+   background-size: cover; /* Make sure the background image covers the entire area */
+   width: 45rem;
+   height: 45rem;
+   left: 900rem; /* Adjusted left position */
+   transition: transform 0.01s ease-in-out;
+   border-radius: 50%; /* Make it round */
+}
+
+.ColorAdjustmentsButtonDeselected {
+   position: absolute;
+   display: flex;
+   background-image: url('https://svgshare.com/i/15rh.svg');
+   background-size: cover; /* Make sure the background image covers the entire area */
+   width: 45rem;
+   height: 45rem;
+   left: 900rem; /* Adjusted left position */
+   transition: transform 0.01s ease-in-out;
+   border-radius: 50%; /* Make it round */
+}
+
+.SettingsButton {
+   position: absolute;
+   display: inline-block;
+   background-image: url('https://svgshare.com/i/15qq.svg');
+   background-size: cover; /* Make sure the background image covers the entire area */
+   width: 45rem;
+   height: 45rem;
+   left: 850rem; /* Adjusted left position */
+   transition: transform 0.01s ease-in-out;
+   border-radius: 50%; /* Make it round */
+}
+
+.SettingsButtonDeselected {
+   position: absolute;
+   display: inline-block;
+   background-image: url('https://svgshare.com/i/15qq.svg');
+   background-size: cover; /* Make sure the background image covers the entire area */
+   width: 45rem;
+   height: 45rem;
+   left: 850rem; /* Adjusted left position */
+   transition: transform 2s ease-in-out;
+   border-radius: 50%; /* Make it round */
+}
+
+.ColorAdjustmentsButton:hover {
+   transform: translateY(-15%);
+}
+
+
+
+.SettingsButton:hover{
+   transform: translateY(-15%);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ .ColorAdjustments{
+   position: absolute;
+
+   right: 200rem;
+   width: 800rem;
+ }
+
+ .FirstTabLabel{
+   color: white;
+   position: absolute;
+   top: 15rem;
+   left: -20rem;
+   width:200rem;
+
+ 
+
+   font-size: 20rem;
+ }
+ .CALabel{
+   color: rgb(255, 255, 255);
+   position: absolute;
+   top: 50rem;
+   left: 480rem;
+   width: 100%;
+
+   font-size: 18rem;
+ }
+
+ 
+// PostExposure Variables
+$pe-top: 20rem;
+$global-height: 40rem;
+$distance:30rem;
+.PostExposureSlider{
+   position: absolute;
+   height: 30rem;
+   right: -120rem;
+   left: 480rem;
+   top: $global-height + $distance + 20rem;
+   width: 500rem;
+}
+
+.PostExposureLabel {
+   position: absolute;
+   color: rgb(118, 118, 118);
+   font-size: 20rem;
+   left: 200rem;
+   width: 150rem;
+   top: $global-height + $distance + 20rem;
+   white-space: nowrap;
+}
+
+.PostExposureValue{
+   position: absolute;
+   color: white;
+   font-size: 18.7rem;
+   left: 370rem;
+   top: $global-height + $distance + 20rem;
+   width: 150rem;
+   white-space: nowrap;
+}
+
+
+
+
+// Contrast variables
+$contrast-top: 50rem;
+
+.ContrastSlider {
+   position: absolute;
+   height: 30rem;
+   right: -120rem;
+   left: 480rem;
+   top: $global-height + $distance + 70rem;
+   width: 500rem;
+}
+
+.ContrastLabel {
+   position: absolute;
+   color: rgb(118, 118, 118);
+   font-size: 20rem;
+   left: 200rem;
+   width: 150rem;
+   top: $global-height + $distance + 70rem;
+   white-space: nowrap;
+}
+
+.ContrastValue {
+   position: absolute;
+   color: white;
+   font-size: 18.7rem;
+   left: 370rem;
+   top: $global-height + $distance + 70rem;
+   width: 150rem;
+   white-space: nowrap;
+}
+
+
+// Hueshift variables
+$hueshift-top: 80rem;
+
+.HueshiftSlider {
+   position: absolute;
+   height: 30rem;
+   right: -120rem;
+   left: 480rem;
+   top: $global-height + $distance + 120rem;
+   width: 500rem;
+}
+
+.HueshiftLabel {
+   position: absolute;
+   color: rgb(118, 118, 118);
+   font-size: 20rem;
+   left: 200rem;
+   width: 150rem;
+   top: $global-height + $distance + 120rem;
+   white-space: nowrap;
+}
+
+.HueshiftValue {
+   position: absolute;
+   color: white;
+   font-size: 18.7rem;
+   left: 370rem;
+   top: $global-height + $distance + 120rem;
+   width: 150rem;
+   white-space: nowrap;
+}
+
+// Saturation
+
+.SaturationSlider {
+   position: absolute;
+   height: 30rem;
+   right: -120rem;
+   left: 480rem;
+   top: $global-height + $distance + 170rem;
+   width: 500rem;
+}
+
+.SaturationLabel {
+   position: absolute;
+   color: rgb(118, 118, 118);
+   font-size: 20rem;
+   left: 200rem;
+   width: 150rem;
+   top: $global-height + $distance + 170rem;
+   white-space: nowrap;
+}
+
+.SaturationValue {
+   position: absolute;
+   color: white;
+   font-size: 18.7rem;
+   left: 370rem;
+   top: $global-height + $distance + 170rem;
+   width: 150rem;
+   white-space: nowrap;
+}
+
+// White Balance
+
+.WBLabel{
+   color: rgb(255, 255, 255);
+   position: absolute;
+   top: 280rem;
+   left: 500rem;
+   width: 100%;
+
+   font-size: 18rem;
+}
+
+// Temperature
+
+.TemperatureSlider {
+   position: absolute;
+   height: 30rem;
+   right: -120rem;
+   left: 480rem;
+   top: $global-height + $distance + 240rem;
+   width: 500rem;
+}
+
+.TemperatureLabel {
+   position: absolute;
+   color: rgb(118, 118, 118);
+   font-size: 20rem;
+   left: 200rem;
+   width: 150rem;
+   top: $global-height + $distance + 240rem;
+   white-space: nowrap;
+}
+
+.TemperatureValue {
+   position: absolute;
+   color: white;
+   font-size: 18.7rem;
+   left: 370rem;
+   top: $global-height + $distance + 240rem;
+   width: 150rem;
+   white-space: nowrap;
+}
+
+// Tint
+
+.TintSlider {
+   position: absolute;
+   height: 30rem;
+   right: -120rem;
+   left: 480rem;
+   top: $global-height + $distance + 290rem;
+   width: 500rem;
+}
+
+.TintLabel {
+   position: absolute;
+   color: rgb(118, 118, 118);
+   font-size: 20rem;
+   left: 200rem;
+   width: 150rem;
+   top: $global-height + $distance + 290rem;
+   white-space: nowrap;
+}
+
+.TintValue {
+   position: absolute;
+   color: white;
+   font-size: 18.7rem;
+   left: 370rem;
+   top: $global-height + $distance + 290rem;
+   width: 150rem;
+   white-space: nowrap;
+}
+
+// Brightness
+
+.BLabel {
+   color: rgb(255, 255, 255);
+   position: absolute;
+   top: 400rem;
+   left: 500rem;
+   width: 100%;
+
+   font-size: 18rem;
+}
+
+
+// Settings
+
+.HelloLabel {
+ font-size: 200rem;
+}
+
+
+.SettingsPanel {
+   position: absolute; 
+   top: 0rem;
+   left: 0rem;
+   width: inherit;
+   height: inherit;
+   overflow-y: auto;
+ }
+
+ .LuminaSaveButton {
+   position: absolute;
+   display: flex;
+   width: 300rem;
+   top: 20rem;
+   left: 40rem;
+ }
+
+ .LuminaResetSettingsButton {
+   position: absolute;
+   display: flex;
+   width: 300rem;
+   top: 70rem;
+   left: 40rem;
+ }
