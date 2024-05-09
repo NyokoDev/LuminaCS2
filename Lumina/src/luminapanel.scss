@@ -7,7 +7,22 @@
    left: 200rem;
    background-color: rgba(71, 55, 55, 0.3);
    box-shadow: inset 0 0 20px rgba(16, 16, 16, 0.6); /* Add a blurred black inner shadow */
-   overflow-y: auto;
+   overflow-y: scroll;
+   max-height: 400rem; 
+ }
+ 
+ .Panel::-webkit-scrollbar {
+   position: absolute;
+   width: 950rem;
+   height: 400rem;
+ }
+ 
+ .Panel::-webkit-scrollbar-thumb {
+   background-color: #888; /* Color of the thumb */
+ }
+ 
+ .Panel::-webkit-scrollbar-track {
+   background-color: #f1f1f1; /* Color of the track */
  }
  
  
@@ -65,25 +80,27 @@
 .SettingsButton {
    position: absolute;
    display: inline-block;
-   background-image: url('https://svgshare.com/i/15qq.svg');
+   background-image: url('https://svgshare.com/i/15uQ.svg');
    background-size: cover; /* Make sure the background image covers the entire area */
    width: 45rem;
    height: 45rem;
    left: 850rem; /* Adjusted left position */
    transition: transform 0.01s ease-in-out;
    border-radius: 50%; /* Make it round */
+   filter: invert(100%); /* Invert the colors to turn black to white */
 }
 
 .SettingsButtonDeselected {
    position: absolute;
    display: inline-block;
-   background-image: url('https://svgshare.com/i/15qq.svg');
+   background-image: url('https://svgshare.com/i/15uQ.svg');
    background-size: cover; /* Make sure the background image covers the entire area */
    width: 45rem;
    height: 45rem;
    left: 850rem; /* Adjusted left position */
    transition: transform 2s ease-in-out;
    border-radius: 50%; /* Make it round */
+   filter: invert(100%); /* Invert the colors to turn black to white */
 }
 
 .ColorAdjustmentsButton:hover {
@@ -357,6 +374,102 @@ $hueshift-top: 80rem;
 }
 
 
+// Shadows
+
+.ShadowsSlider {
+   position: absolute;
+   height: 30rem;
+   right: -120rem;
+   left: 480rem;
+   top: $global-height + $distance + 360rem;
+   width: 500rem;
+}
+
+.ShadowsLabel {
+   position: absolute;
+   color: rgb(118, 118, 118);
+   font-size: 20rem;
+   left: 200rem;
+   width: 150rem;
+   top: $global-height + $distance + 360rem;
+   white-space: nowrap;
+}
+
+.ShadowsValue {
+   position: absolute;
+   color: white;
+   font-size: 18.7rem;
+   left: 370rem;
+   top: $global-height + $distance + 360rem;
+   width: 150rem;
+   white-space: nowrap;
+}
+
+
+.MidtonesSlider {
+   position: absolute;
+   height: 30rem;
+   right: -120rem;
+   left: 480rem;
+   top: $global-height + $distance + 430rem;
+   width: 500rem;
+}
+
+.MidtonesLabel {
+   position: absolute;
+   color: rgb(118, 118, 118);
+   font-size: 20rem;
+   left: 200rem;
+   width: 150rem;
+   top: $global-height + $distance +  430rem;
+   white-space: nowrap;
+}
+
+// Midtones
+.MidtonesValue {
+   position: absolute;
+   color: white;
+   font-size: 18.7rem;
+   left: 370rem;
+   top: $global-height + $distance +  430rem;
+   width: 150rem;
+   white-space: nowrap;
+}
+
+
+// Highlights
+.HighlightsSlider {
+   position: absolute;
+   height: 30rem;
+   right: -120rem;
+   left: 480rem;
+   top: $global-height + $distance +  500rem;
+   width: 500rem;
+}
+
+.HighlightsLabel {
+   position: absolute;
+   color: rgb(118, 118, 118);
+   font-size: 20rem;
+   left: 200rem;
+   width: 150rem;
+   top: $global-height + $distance +   500rem;
+   white-space: nowrap;
+}
+
+.HighlightsValue {
+   position: absolute;
+   color: white;
+   font-size: 18.7rem;
+   left: 370rem;
+   top: $global-height + $distance +  500rem;
+   width: 150rem;
+   white-space: nowrap;
+}
+
+
+
+
 // Settings
 
 .HelloLabel {
@@ -385,6 +498,32 @@ $hueshift-top: 80rem;
    position: absolute;
    display: flex;
    width: 300rem;
-   top: 70rem;
+   top: 80rem;
    left: 40rem;
  }
+
+ // Save image
+ .SaveButtonLuminaImage {
+   position: absolute;
+   left: 125rem;
+   top: 30rem;
+   mask-image: url('https://svgshare.com/i/15u4.svg')
+ }
+
+  // Save image
+  .ResetButtonLuminaImage {
+   position: absolute;
+   left: 125rem;
+   top: 30rem;
+   mask-image: url('https://svgshare.com/i/15u4.svg')
+ }
+
+ .VersionCheckLabel {
+   position: absolute;
+   bottom: 0rem;
+   width: 100rem;
+   height: 40rem;
+   background-color: rgba(0, 0, 0, 0.2); /* Black with 70% opacity */
+   color: rgba($color: #35372f, $alpha: 1.0) /* Set text color to white */
+ }
+ 

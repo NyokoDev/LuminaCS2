@@ -452,6 +452,7 @@ namespace Lumina.UI
             GlobalVariables.Instance.Temperature = 1f;
             GlobalVariables.Instance.Shadows = 1f;
             GlobalVariables.Instance.Midtones = 1f;
+            GlobalVariables.Instance.Highlights = 1f;
 
             // Save changes
             GlobalVariables.SaveToFile(GlobalPaths.GlobalModSavingPath);

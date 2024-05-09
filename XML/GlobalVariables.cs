@@ -48,8 +48,11 @@ namespace LuminaMod.XML
         [XmlElement]
         public float Midtones { get; set; } = 1f;
 
+        [XmlElement]
+        public float Highlights { get; set; } = 1f;
 
-       
+
+
 
         public static void SaveToFile(string filePath)
         {
@@ -132,6 +135,7 @@ namespace LuminaMod.XML
 
                     GlobalVariables.Instance.Shadows = loadedVariables.Shadows;
                     GlobalVariables.Instance.Midtones = loadedVariables.Midtones;
+                    GlobalVariables.Instance.Highlights = loadedVariables.Highlights;
 
              
 
@@ -171,6 +175,6 @@ namespace LuminaMod.XML
             }
         }
 
-    
+
     }
 }

@@ -17,6 +17,7 @@ export type PropsSlider = {
 	thumb?: ReactNode, 
 	theme?: any, 
 	className?: string, 
+	step?: number,
 	style?: string, 
 	children?: string, 
 	noFill: boolean, 

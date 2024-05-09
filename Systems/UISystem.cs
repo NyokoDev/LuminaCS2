@@ -48,6 +48,51 @@ namespace Lumina.Systems
             AddBinding(new TriggerBinding(Mod.MOD_UI, "ResetLuminaSettings", Reset));
 
 
+
+
+
+            // Shadows Midtones
+
+
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MOD_UI, "GetShadows", () => GetShadows()));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MOD_UI, "GetMidtones", () => GetMidtones()));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MOD_UI, "GetHighlights", () => GetHighlights()));
+            AddBinding(new TriggerBinding<float>(Mod.MOD_UI, "SetShadows", SetShadows));
+            AddBinding(new TriggerBinding<float>(Mod.MOD_UI, "SetMidtones", SetMidtones));
+            AddBinding(new TriggerBinding<float>(Mod.MOD_UI, "SetHighlights", SetHighlights));
+
+
+
+        }
+
+        private float GetHighlights()
+        {
+            return GlobalVariables.Instance.Highlights;
+        }
+
+        private float GetMidtones()
+        {
+            return GlobalVariables.Instance.Midtones;
+        }
+
+        private float GetShadows()
+        {
+            return GlobalVariables.Instance.Shadows;
+        }
+
+        private void SetHighlights(float obj)
+        {
+            GlobalVariables.Instance.Highlights = obj;
+        }
+
+        private void SetMidtones(float obj)
+        {
+            GlobalVariables.Instance.Midtones = obj;
+        }
+
+        private void SetShadows(float obj)
+        {
+            GlobalVariables.Instance.Shadows = obj;
         }
 
         private void Reset()

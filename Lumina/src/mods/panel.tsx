@@ -24,6 +24,10 @@ export const Saturation$ = bindValue<number>(mod.id, 'GetSaturation');
 export const Temperature$ = bindValue<number>(mod.id, 'GetTemperature');
 export const Tint$ = bindValue<number>(mod.id, 'GetTint');
 
+// Shadows Midtones Highlights
+export const Shadows$ = bindValue<number>(mod.id, 'GetShadows');
+export const Midtones$ = bindValue<number>(mod.id, 'GetMidtones');
+export const Highlights$ =  bindValue<number>(mod.id, 'GetHighlights');
 
 
 // const SliderTheme: Theme | any = getModule(
@@ -54,6 +58,13 @@ export const YourPanelComponent: React.FC<any> = () => {
   // WhiteBalance
   const TempValue = useValue(Temperature$);
   const TintValue = useValue(Tint$);
+
+
+  // Shadows/Midtones/highlights
+const ShadowsValue = useValue(Shadows$);
+const MidtonesValue = useValue(Midtones$);
+const HighlightsValue = useValue(Highlights$);
+
 
 // Initialize state variables using useState hook
 const [ColorAdjustmentsEnabled$, setCA] = useState(true);
@@ -136,6 +147,44 @@ function ResetToDefault() {
   trigger(mod.id, 'ResetLuminaSettings');
 }
   
+
+// Shadows
+const handleShadows = (value: number) => {
+  // Round the value to the nearest step size of 0.001
+  const roundedValue = Math.round(value / 0.001) * 0.001;
+  // Convert the rounded value to an integer if necessary
+  const id = start + (value * stepSize);
+  // Trigger the action with the adjusted value
+  trigger(mod.id, 'SetShadows', id);
+};
+
+const handleMidtones = (value: number) => {
+  // Round the value to the nearest step size of 0.001
+  const roundedValue = Math.round(value / 0.001) * 0.001;
+  // Convert the rounded value to an integer if necessary
+  const id = start + (value * stepSize);
+  // Trigger the action with the adjusted value
+  trigger(mod.id, 'SetMidtones', id);
+};
+
+const handleHighlights = (value: number) => {
+  // Round the value to the nearest step size of 0.001
+  const roundedValue = Math.round(value / 0.001) * 0.001;
+  // Convert the rounded value to an integer if necessary
+  const id = start + (value * stepSize);
+  // Trigger the action with the adjusted value
+  trigger(mod.id, 'SetHighlights', id);
+};
+
+const start = -1;
+  const end = 1;
+  const stepSize = 0.0001;
+
+  // Calculate the number of steps based on the range
+  const numberOfSteps = Math.floor((end - start) / stepSize);
+
+
+
 return (
   <div className="Global">
 
@@ -161,7 +210,7 @@ return (
 </Tooltip>
 
 <Tooltip
-  tooltip="Color" // Specify the content of the tooltip
+  tooltip="Settings" // Specify the content of the tooltip
   disabled={false} // Specify whether the tooltip is disabled (default: false)
   alignment="center" // Specify the alignment of the tooltip (e.g., "start", "center", "end")
   className="custom-tooltip" // Specify additional class names for styling purposes
@@ -325,20 +374,112 @@ return (
           // onMouseLeave={() => console.log("onMouseLeave")}
         />
 
-<label className="title_SVH title_zQN BLabel">v1.4 - Beta</label>
+
+<label className="title_SVH title_zQN BLabel">Brightness</label>
+
+<label className="title_SVH title_zQN ShadowsLabel" style={{ whiteSpace: 'nowrap' }}>Shadows</label>
+        <label className="title_SVH title_zQN ShadowsValue" >{ShadowsValue.toString()} </label>
+
+        <Slider
+          value={(ShadowsValue - start) / stepSize}
+          start={-1}
+          end={numberOfSteps}
+          className="ShadowsSlider"
+          gamepadStep={0.001}
+     
+        
+          valueTransformer={SliderValueTransformer.intTransformer}
+          disabled={false}
+          noFill={false}
+          onChange={(number) => handleShadows(number)}
+           // Set the step size here
+          // onDragStart={() => console.log("onDragStart")}
+          // onDragEnd={() => console.log("onDragEnd")}
+          // onMouseOver={() => console.log("onMouseOver")}
+          // onMouseLeave={() => console.log("onMouseLeave")}
+        />
+
+        
+<label className="title_SVH title_zQN MidtonesLabel" style={{ whiteSpace: 'nowrap' }}>Midtones</label>
+        <label className="title_SVH title_zQN MidtonesValue" >{MidtonesValue.toString()} </label>
+
+        <Slider
+           value={(MidtonesValue - start) / stepSize}
+           start={-1}
+           end={numberOfSteps}
+          className="MidtonesSlider"
+          gamepadStep={0.001}
+
+        
+          valueTransformer={SliderValueTransformer.intTransformer}
+          disabled={false}
+          noFill={false}
+          onChange={(number) => handleMidtones(number)}
+          // onDragStart={() => console.log("onDragStart")}
+          // onDragEnd={() => console.log("onDragEnd")}
+          // onMouseOver={() => console.log("onMouseOver")}
+          // onMouseLeave={() => console.log("onMouseLeave")}
+        />
+
+<label className="title_SVH title_zQN HighlightsLabel" style={{ whiteSpace: 'nowrap' }}>Highlights</label>
+        <label className="title_SVH title_zQN HighlightsValue" >{HighlightsValue.toString()} </label>
+
+        <Slider
+           value={(HighlightsValue - start) / stepSize}
+           start={-1}
+           end={numberOfSteps}
+          className="HighlightsSlider"
+          gamepadStep={0.001}
+
+        
+          valueTransformer={SliderValueTransformer.intTransformer}
+          disabled={false}
+          noFill={false}
+          onChange={(number) => handleHighlights(number)}
+          // onDragStart={() => console.log("onDragStart")}
+          // onDragEnd={() => console.log("onDragEnd")}
+          // onMouseOver={() => console.log("onMouseOver")}
+          // onMouseLeave={() => console.log("onMouseLeave")}
+        />
+
+
+
+
+
+
+
+
 </div>
+
+
 )}
 
 {SettingsEnabled$ && (
     <div className="SettingsPanel">
     <button 
+
     onClick={SaveSettings}
     className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LuminaSaveButton">Save</button>
+<div className="tinted-icon_iKo icon_zVk SaveButtonLuminaImage" > </div>
     <button 
+
     
     onClick={ResetToDefault}
     className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LuminaResetSettingsButton">Reset to Default</button>
+
+    <h1 className="title_SVH title_zQN VersionCheckLabel">v1.4r1</h1>
+
+
+
+
+
+
+
+
     </div>
+
+
+
   )}
 
 
