@@ -5,6 +5,7 @@ import { getModule, ModuleRegistryExtend } from "cs2/modding";
 import { VanillaComponentResolver } from "classes/VanillaComponentResolver";
 import { Slider, PropsSlider, SliderValueTransformer } from "./slider";
 //import { LocalizedString, useLocalization } from "cs2/l10n";
+import { useLocalization } from "cs2/l10n";
 import mod from "../../mod.json";
 import "../luminapanel.scss"; 
 import { useState } from "react";
@@ -53,6 +54,8 @@ export const YourPanelComponent: React.FC<any> = () => {
   const HSValue = useValue(HueShift$);
   const SAValue = useValue(Saturation$);
 
+  //Use localization
+  const { translate } = useLocalization();
 
 
   // WhiteBalance
@@ -192,7 +195,7 @@ return (
 <div className="TabsRow">
 
     <Tooltip
-  tooltip="Color" // Specify the content of the tooltip
+  tooltip={translate("LUMINA.colortooltip")} // Specify the content of the tooltip
   disabled={false} // Specify whether the tooltip is disabled (default: false)
   alignment="center" // Specify the alignment of the tooltip (e.g., "start", "center", "end")
   className="custom-tooltip" // Specify additional class names for styling purposes
@@ -210,7 +213,7 @@ return (
 </Tooltip>
 
 <Tooltip
-  tooltip="Settings" // Specify the content of the tooltip
+  tooltip={translate("LUMINA.settingstooltip")}// Specify the content of the tooltip
   disabled={false} // Specify whether the tooltip is disabled (default: false)
   alignment="center" // Specify the alignment of the tooltip (e.g., "start", "center", "end")
   className="custom-tooltip" // Specify additional class names for styling purposes
@@ -250,8 +253,8 @@ return (
     {ColorAdjustmentsEnabled$ && (
     <div className="ColorAdjustments">
  
-        <label className="title_SVH title_zQN CALabel"> ColorAdjustments</label>
-        <label className="title_SVH title_zQN PostExposureLabel" style={{ whiteSpace: 'nowrap' }}>Post Exposure</label>
+        <label className="title_SVH title_zQN CALabel">{translate("LUMINA.coloradjustments")}</label>
+        <label className="title_SVH title_zQN PostExposureLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.postexposure")}</label>
         <label className="title_SVH title_zQN PostExposureValue" >{PEValue.toString()} </label>
 
         <Slider
@@ -268,7 +271,7 @@ return (
           onChange={(number) => handleSliderChange(number)}
           />
 
-        <label className="title_SVH title_zQN ContrastLabel" style={{ whiteSpace: 'nowrap' }}>Contrast</label>
+        <label className="title_SVH title_zQN ContrastLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.contrast")}</label>
         <label className="title_SVH title_zQN ContrastValue" >{COValue.toString()} </label>
 
         <Slider
@@ -289,7 +292,7 @@ return (
           // onMouseLeave={() => console.log("onMouseLeave")}
         />
 
-<label className="title_SVH title_zQN HueshiftLabel" style={{ whiteSpace: 'nowrap' }}>Hue shift</label>
+<label className="title_SVH title_zQN HueshiftLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.hueshift")}</label>
         <label className="title_SVH title_zQN HueshiftValue" >{HSValue.toString()} </label>
 
         <Slider
@@ -310,7 +313,7 @@ return (
           // onMouseLeave={() => console.log("onMouseLeave")}
         />
 
-<label className="title_SVH title_zQN SaturationLabel" style={{ whiteSpace: 'nowrap' }}>Saturation</label>
+<label className="title_SVH title_zQN SaturationLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.saturation")}</label>
         <label className="title_SVH title_zQN SaturationValue" >{SAValue.toString()} </label>
 
         <Slider
@@ -331,8 +334,8 @@ return (
           // onMouseLeave={() => console.log("onMouseLeave")}
         />
 
-<label className="title_SVH title_zQN WBLabel"> White Balance</label>
-<label className="title_SVH title_zQN TemperatureLabel" style={{ whiteSpace: 'nowrap' }}>Temperature</label>
+<label className="title_SVH title_zQN WBLabel">{translate("LUMINA.whitebalance")}</label>
+<label className="title_SVH title_zQN TemperatureLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.temperature")}</label>
         <label className="title_SVH title_zQN TemperatureValue" >{TempValue.toString()} </label>
 
         <Slider
@@ -353,7 +356,7 @@ return (
           // onMouseLeave={() => console.log("onMouseLeave")}
         />
 
-<label className="title_SVH title_zQN TintLabel" style={{ whiteSpace: 'nowrap' }}>Tint</label>
+<label className="title_SVH title_zQN TintLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.tint")}</label>
         <label className="title_SVH title_zQN TintValue" >{TintValue.toString()} </label>
 
         <Slider
@@ -375,9 +378,9 @@ return (
         />
 
 
-<label className="title_SVH title_zQN BLabel">Brightness</label>
+<label className="title_SVH title_zQN BLabel">{translate("LUMINA.brightness")}</label>
 
-<label className="title_SVH title_zQN ShadowsLabel" style={{ whiteSpace: 'nowrap' }}>Shadows</label>
+<label className="title_SVH title_zQN ShadowsLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.shadows")}</label>
         <label className="title_SVH title_zQN ShadowsValue" >{ShadowsValue.toString()} </label>
 
         <Slider
@@ -400,7 +403,7 @@ return (
         />
 
         
-<label className="title_SVH title_zQN MidtonesLabel" style={{ whiteSpace: 'nowrap' }}>Midtones</label>
+<label className="title_SVH title_zQN MidtonesLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.midtones")}</label>
         <label className="title_SVH title_zQN MidtonesValue" >{MidtonesValue.toString()} </label>
 
         <Slider
@@ -421,7 +424,7 @@ return (
           // onMouseLeave={() => console.log("onMouseLeave")}
         />
 
-<label className="title_SVH title_zQN HighlightsLabel" style={{ whiteSpace: 'nowrap' }}>Highlights</label>
+<label className="title_SVH title_zQN HighlightsLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.highlights")}</label>
         <label className="title_SVH title_zQN HighlightsValue" >{HighlightsValue.toString()} </label>
 
         <Slider
@@ -459,13 +462,13 @@ return (
     <button 
 
     onClick={SaveSettings}
-    className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LuminaSaveButton">Save</button>
+    className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LuminaSaveButton">{translate("LUMINA.save")}</button>
 <div className="tinted-icon_iKo icon_zVk SaveButtonLuminaImage" > </div>
     <button 
 
     
     onClick={ResetToDefault}
-    className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LuminaResetSettingsButton">Reset to Default</button>
+    className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LuminaResetSettingsButton">{translate("LUMINA.resettodefault")}</button>
 
     <h1 className="title_SVH title_zQN VersionCheckLabel">v1.4r1</h1>
 

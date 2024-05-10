@@ -15,6 +15,7 @@ using LuminaMod.XML;
 using Lumina.XML;
 using Game.PSI;
 using static System.Net.WebRequestMethods;
+using Lumina.Locale;
 
 namespace Lumina
 {
@@ -47,7 +48,8 @@ namespace Lumina
 
             updateSystem.UpdateAt<UISystem>(SystemUpdatePhase.MainLoop);
 
-
+            // Load translations.
+            Localization.LoadTranslations(null, log);
 
             try
             {
