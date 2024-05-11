@@ -74,23 +74,37 @@ namespace Lumina.Systems
                 {
                     // Set the exposure value to 0 using Override method
                     colorAdjustments.postExposure.Override(GlobalVariables.Instance.PostExposure);
+                    colorAdjustments.postExposure.overrideState = GlobalVariables.Instance.PostExposureActive;
+
+
                     colorAdjustments.contrast.Override(GlobalVariables.Instance.Contrast);
+                    colorAdjustments.contrast.overrideState = GlobalVariables.Instance.contrastActive;
+
                     colorAdjustments.hueShift.Override(GlobalVariables.Instance.hueShift);
+                    colorAdjustments.hueShift.overrideState = GlobalVariables.Instance.hueShiftActive;
+
                     colorAdjustments.saturation.Override(GlobalVariables.Instance.Saturation);
+                    colorAdjustments.saturation.overrideState = GlobalVariables.Instance.saturationActive;
+
                 }
             }
         }
         private void WhiteBalance()
         {
             m_WhiteBalance.temperature.Override(GlobalVariables.Instance.Temperature);
+            m_WhiteBalance.temperature.overrideState = GlobalVariables.Instance.TemperatureActive;
             m_WhiteBalance.tint.Override(GlobalVariables.Instance.Tint);
+            m_WhiteBalance.tint.overrideState = GlobalVariables.Instance.TintActive;
         }
 
         private void ShadowsMidTonesHighlights()
         {
             m_ShadowsMidtonesHighlights.shadows.Override(new Vector4(GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows));
+            m_ShadowsMidtonesHighlights.shadows.overrideState = GlobalVariables.Instance.ShadowsActive;
             m_ShadowsMidtonesHighlights.midtones.Override(new Vector4(GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones));
+            m_ShadowsMidtonesHighlights.midtones.overrideState = GlobalVariables.Instance.MidtonesActive;
             m_ShadowsMidtonesHighlights.highlights.Override(new Vector4(GlobalVariables.Instance.Highlights, GlobalVariables.Instance.Highlights, GlobalVariables.Instance.Highlights, GlobalVariables.Instance.Highlights));
+            m_ShadowsMidtonesHighlights.highlights.overrideState = GlobalVariables.Instance.HighlightsActive;
 
 
         }

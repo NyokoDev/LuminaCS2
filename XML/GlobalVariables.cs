@@ -19,16 +19,28 @@ namespace LuminaMod.XML
         /// PostExposure
         /// </summary>
         [XmlElement]
-        public float PostExposure { get; set; }
+        public float PostExposure { get; set; } 
+
+        [XmlElement]
+        public bool PostExposureActive { get; set; } 
 
         [XmlElement]
         public float Contrast { get; set; }
 
         [XmlElement]
+        public bool contrastActive { get; set; }
+
+        [XmlElement]
         public float hueShift { get; set; }
 
         [XmlElement]
+        public bool hueShiftActive { get; set; }
+
+        [XmlElement]
         public float Saturation { get; set; }
+
+        [XmlElement]
+        public bool saturationActive { get; set; }
 
         [XmlElement]
         public float Longitude { get; set; }
@@ -40,17 +52,34 @@ namespace LuminaMod.XML
         public float Temperature { get; set; }
 
         [XmlElement]
+        public bool TemperatureActive { get; set; }
+
+        [XmlElement]
         public float Tint { get; set; }
+
+        [XmlElement]
+        public bool TintActive { get; set; }
 
         [XmlElement]
         public float Shadows { get; set; } = 1f;
 
         [XmlElement]
+        public bool ShadowsActive { get; set;}
+
+        [XmlElement]
         public float Midtones { get; set; } = 1f;
+
+        [XmlElement]
+        public bool MidtonesActive { get; set; }
 
         [XmlElement]
         public float Highlights { get; set; } = 1f;
 
+        [XmlElement]
+        public bool HighlightsActive { get; set; }
+
+
+   
 
 
 
@@ -123,19 +152,28 @@ namespace LuminaMod.XML
 
                     // Set the loaded values to the corresponding properties.
                     GlobalVariables.Instance.PostExposure = loadedVariables.PostExposure;
+                    GlobalVariables.Instance.PostExposureActive = loadedVariables.PostExposureActive;
                     GlobalVariables.Instance.Contrast = loadedVariables.Contrast;
+                    GlobalVariables.Instance.contrastActive = loadedVariables.contrastActive;
                     GlobalVariables.Instance.hueShift = loadedVariables.hueShift;
+                    GlobalVariables.Instance.hueShiftActive = loadedVariables.hueShiftActive;
                     GlobalVariables.Instance.Saturation = loadedVariables.Saturation;
+                    GlobalVariables.Instance.saturationActive = loadedVariables.saturationActive;
 
                     GlobalVariables.Instance.Latitude = loadedVariables.Latitude;
                     GlobalVariables.Instance.Longitude = loadedVariables.Longitude; 
 
                     GlobalVariables.Instance.Temperature = loadedVariables.Temperature;
+                    GlobalVariables.Instance.TemperatureActive = loadedVariables.TemperatureActive;
                     GlobalVariables.Instance.Tint = loadedVariables.Tint;
+                    GlobalVariables.Instance.TintActive = loadedVariables.TintActive;
 
                     GlobalVariables.Instance.Shadows = loadedVariables.Shadows;
+                    GlobalVariables.Instance.ShadowsActive = loadedVariables.ShadowsActive;
                     GlobalVariables.Instance.Midtones = loadedVariables.Midtones;
+                    GlobalVariables.Instance.MidtonesActive = loadedVariables.MidtonesActive;
                     GlobalVariables.Instance.Highlights = loadedVariables.Highlights;
+                    GlobalVariables.Instance.HighlightsActive = loadedVariables.HighlightsActive;
 
              
 

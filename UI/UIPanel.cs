@@ -37,7 +37,7 @@ namespace Lumina.UI
         private static bool showPhotoModeSendDialog = false;
         public static bool Updating = false;
         public static bool OnReset = false;
-        private static bool panelVisible = false;
+        public static bool panelVisible = false;
         private bool secondpanelVisible = false;
 
         private Rect panelRect = new Rect(10, 10, 400, 610);

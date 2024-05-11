@@ -188,6 +188,32 @@ $distance:30rem;
    white-space: nowrap;
 }
 
+.pecheckbox {
+   position: absolute;
+   left: 370rem;
+   top: $global-height + $distance + 20rem;
+   width: 45rem;
+   height: 45rem;
+
+ }
+
+ .pecheckboximage {
+   position: absolute;
+   left: 0rem;
+   top: $global-height + $distance + -70rem;
+   background-image: url('https://svgshare.com/i/15wf.svg');
+   background-size: cover; /* Make sure the background image covers the entire area */
+   width: 28rem;
+   height: 28rem;
+   filter: invert(100%);
+ }
+
+ .postexposurecheckbox2 {
+   z-index: -1;
+ }
+
+
+
 
 
 
@@ -223,6 +249,32 @@ $contrast-top: 50rem;
    white-space: nowrap;
 }
 
+// Contrast checkbox
+.cocheckbox {
+   position: absolute;
+   left: 370rem;
+   top: $global-height + $distance + 70rem;
+   width: 45rem;
+   height: 45rem;
+
+ }
+
+ .cocheckboximage {
+   position: absolute;
+   left: 0rem;
+   top: $global-height + $distance + -70rem;
+   background-image: url('https://svgshare.com/i/15wf.svg');
+   background-size: cover; /* Make sure the background image covers the entire area */
+   width: 28rem;
+   height: 28rem;
+   filter: invert(100%);
+ }
+
+ .contrastcheckbox2 {
+   z-index: -1;
+ }
+
+
 
 // Hueshift variables
 $hueshift-top: 80rem;
@@ -256,6 +308,32 @@ $hueshift-top: 80rem;
    white-space: nowrap;
 }
 
+// Hueshift checkbox
+.hscheckbox {
+   position: absolute;
+   left: 370rem;
+   top: $global-height + $distance + 120rem;
+   width: 45rem;
+   height: 45rem;
+
+ }
+
+ .hscheckboximage {
+   position: absolute;
+   left: 0rem;
+   top: $global-height + $distance + -70rem;
+   background-image: url('https://svgshare.com/i/15wf.svg');
+   background-size: cover; /* Make sure the background image covers the entire area */
+   width: 28rem;
+   height: 28rem;
+   filter: invert(100%);
+ }
+
+ .hueshiftcheckbox2 {
+   z-index: -1;
+ }
+
+
 // Saturation
 
 .SaturationSlider {
@@ -286,6 +364,32 @@ $hueshift-top: 80rem;
    width: 150rem;
    white-space: nowrap;
 }
+
+// Saturation checkbox
+.satcheckbox {
+   position: absolute;
+   left: 370rem;
+   top: $global-height + $distance + 170rem;
+   width: 45rem;
+   height: 45rem;
+
+ }
+
+ .satcheckboximage {
+   position: absolute;
+   left: 0rem;
+   top: $global-height + $distance + -70rem;
+   background-image: url('https://svgshare.com/i/15wf.svg');
+   background-size: cover; /* Make sure the background image covers the entire area */
+   width: 28rem;
+   height: 28rem;
+   filter: invert(100%);
+ }
+
+ .satcheckbox2 {
+   z-index: -1;
+ }
+
 
 // White Balance
 
@@ -330,6 +434,32 @@ $hueshift-top: 80rem;
    white-space: nowrap;
 }
 
+// Temperature checkbox
+.tempcheckbox {
+   position: absolute;
+   left: 370rem;
+   top: $global-height + $distance + 240rem;
+   width: 45rem;
+   height: 45rem;
+
+ }
+
+ .tempcheckboximage {
+   position: absolute;
+   left: 0rem;
+   top: $global-height + $distance + -70rem;
+   background-image: url('https://svgshare.com/i/15wf.svg');
+   background-size: cover; /* Make sure the background image covers the entire area */
+   width: 28rem;
+   height: 28rem;
+   filter: invert(100%);
+ }
+
+ .tempcheckbox2 {
+   z-index: -1;
+ }
+
+
 // Tint
 
 .TintSlider {
@@ -360,6 +490,32 @@ $hueshift-top: 80rem;
    width: 150rem;
    white-space: nowrap;
 }
+
+
+// Tint checkbox
+.tintcheckbox {
+   position: absolute;
+   left: 370rem;
+   top: $global-height + $distance + 290rem;
+   width: 45rem;
+   height: 45rem;
+
+ }
+
+ .tintcheckboximage {
+   position: absolute;
+   left: 0rem;
+   top: $global-height + $distance + -70rem;
+   background-image: url('https://svgshare.com/i/15wf.svg');
+   background-size: cover; /* Make sure the background image covers the entire area */
+   width: 28rem;
+   height: 28rem;
+   filter: invert(100%);
+ }
+
+ .tintcheckbox2 {
+   z-index: -1;
+ }
 
 // Brightness
 
@@ -405,6 +561,31 @@ $hueshift-top: 80rem;
    white-space: nowrap;
 }
 
+// Shadows checkbox
+.shadowscheckbox {
+   position: absolute;
+   left: 370rem;
+   top: $global-height + $distance + 360rem;
+   width: 45rem;
+   height: 45rem;
+
+ }
+
+ .shadowscheckboximage {
+   position: absolute;
+   left: 0rem;
+   top: $global-height + $distance + -70rem;
+   background-image: url('https://svgshare.com/i/15wf.svg');
+   background-size: cover; /* Make sure the background image covers the entire area */
+   width: 28rem;
+   height: 28rem;
+   filter: invert(100%);
+ }
+
+ .shadowscheckbox2 {
+   z-index: -1;
+ }
+
 
 .MidtonesSlider {
    position: absolute;
@@ -436,6 +617,32 @@ $hueshift-top: 80rem;
    white-space: nowrap;
 }
 
+// Shadows checkbox
+.midtonescheckbox {
+   position: absolute;
+   left: 370rem;
+   top: $global-height + $distance +  430rem;
+   width: 45rem;
+   height: 45rem;
+
+ }
+
+ .midtonescheckboximage {
+   position: absolute;
+   left: 0rem;
+   top: $global-height + $distance + -70rem;
+   background-image: url('https://svgshare.com/i/15wf.svg');
+   background-size: cover; /* Make sure the background image covers the entire area */
+   width: 28rem;
+   height: 28rem;
+   filter: invert(100%);
+ }
+
+ .midtonescheckbox2 {
+   z-index: -1;
+ }
+
+
 
 // Highlights
 .HighlightsSlider {
@@ -466,6 +673,32 @@ $hueshift-top: 80rem;
    width: 150rem;
    white-space: nowrap;
 }
+
+// highlights checkbox
+.highlightscheckbox {
+   position: absolute;
+   left: 370rem;
+   top: $global-height + $distance +  500rem;
+   width: 45rem;
+   height: 45rem;
+
+ }
+
+ .highlightscheckboximage {
+   position: absolute;
+   left: 0rem;
+   top: $global-height + $distance + -70rem;
+   background-image: url('https://svgshare.com/i/15wf.svg');
+   background-size: cover; /* Make sure the background image covers the entire area */
+   width: 28rem;
+   height: 28rem;
+   filter: invert(100%);
+ }
+
+ .highlightscheckbox2 {
+   z-index: -1;
+ }
+
 
 
 
@@ -525,5 +758,14 @@ $hueshift-top: 80rem;
    height: 40rem;
    background-color: rgba(0, 0, 0, 0.2); /* Black with 70% opacity */
    color: rgba($color: #35372f, $alpha: 1.0) /* Set text color to white */
+ }
+
+ .UnityLegacyUIButton {
+   position: absolute;
+   display: flex;
+   background-color: black;
+   width: 300rem;
+   left: 400rem;
+   top: 80rem;
  }
  

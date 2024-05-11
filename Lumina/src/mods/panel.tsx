@@ -17,18 +17,31 @@ export let ColorAdjustmentsEnabled = true;
 
 // ColorAdjustments
 export const PostExposure$ = bindValue<number>(mod.id, 'PostExposure');
+export const PostExposureActive$ = bindValue<boolean>(mod.id, 'GetPostExposureCheckbox');
 export const Contrast$ = bindValue<number>(mod.id, 'GetContrast');
+export const ContrastActive$ = bindValue<boolean>(mod.id, 'GetcontrastCheckbox');
 export const HueShift$ = bindValue<number>(mod.id, 'GetHueShift');
+export const hueshiftActive$ = bindValue<boolean>(mod.id, 'GethueshiftCheckbox');
 export const Saturation$ = bindValue<number>(mod.id, 'GetSaturation');
+export const saturationActive$ = bindValue<boolean>(mod.id, 'GetsaturationCheckbox');
+
+
 
 // White Balance
 export const Temperature$ = bindValue<number>(mod.id, 'GetTemperature');
+export const TemperatureActive$ = bindValue<boolean>(mod.id, 'GetTempCheckbox');
 export const Tint$ = bindValue<number>(mod.id, 'GetTint');
+export const TintActive$ = bindValue<boolean>(mod.id, 'GetTintCheckbox');
 
 // Shadows Midtones Highlights
 export const Shadows$ = bindValue<number>(mod.id, 'GetShadows');
+export const ShadowsActive$ = bindValue<boolean>(mod.id, 'GetShadowsCheckbox');
 export const Midtones$ = bindValue<number>(mod.id, 'GetMidtones');
+export const MidtonesActive$ = bindValue<boolean>(mod.id, 'GetMidtonesCheckbox');
 export const Highlights$ =  bindValue<number>(mod.id, 'GetHighlights');
+export const HighlightsActive$ =  bindValue<boolean>(mod.id, 'GetHighlightsCheckbox');
+
+
 
 
 // const SliderTheme: Theme | any = getModule(
@@ -50,9 +63,13 @@ let tab2 = false;
 export const YourPanelComponent: React.FC<any> = () => {
   // Values
   const PEValue = useValue(PostExposure$);
+  const PostExposureActive = useValue<boolean>(PostExposureActive$);
+  const ContrastActive = useValue<boolean>(ContrastActive$);
   const COValue = useValue(Contrast$);
+  const hueshiftActive = useValue<boolean>(hueshiftActive$);
   const HSValue = useValue(HueShift$);
   const SAValue = useValue(Saturation$);
+  const saturationActive = useValue(saturationActive$);
 
   //Use localization
   const { translate } = useLocalization();
@@ -60,29 +77,52 @@ export const YourPanelComponent: React.FC<any> = () => {
 
   // WhiteBalance
   const TempValue = useValue(Temperature$);
+  const TempActive = useValue(TemperatureActive$);
   const TintValue = useValue(Tint$);
+  const TintActive = useValue(TintActive$);
 
 
   // Shadows/Midtones/highlights
 const ShadowsValue = useValue(Shadows$);
+const ShadowsActive = useValue(ShadowsActive$);
 const MidtonesValue = useValue(Midtones$);
+const MidtonesActive = useValue(MidtonesActive$);
 const HighlightsValue = useValue(Highlights$);
+const HighlightsActive = useValue(HighlightsActive$);
+
+
 
 
 // Initialize state variables using useState hook
 const [ColorAdjustmentsEnabled$, setCA] = useState(true);
 const [SettingsEnabled$, setSettings] = useState(false);
-  
+
+
 
 
   const [tab1, setTab1] = useState(false);
   const moveItIconSrc = tab1 ? "coui://ui-mods/images/SendToLumina.svg" : "coui://ui-mods/images/SendToLumina.svg";
+
+  const start = -1;
+  const end = 1;
+  const stepSize = 0.0001;
+
+  const globalstart = -100;
+  const globalend = 100;
+  const globalstepSize = 0.0001;
+
+  const globalnumberOfSteps = Math.floor((globalend - globalstart) / globalstepSize);
+
+  
+
+  // Calculate the number of steps based on the range
+  const numberOfSteps = Math.floor((end - start) / stepSize);
   
   const handleSliderChange = (value: number) => {
     // Round the value to the nearest step size of 0.001
     const roundedValue = Math.round(value / 0.001) * 0.001;
     // Convert the rounded value to an integer if necessary
-    const id = parseInt(roundedValue.toString());
+    const id = globalstart + (value * globalstepSize);
     // Trigger the action with the adjusted value
     trigger(mod.id, 'SetPostExposure', id);
 };
@@ -91,7 +131,7 @@ const handleContrast = (value: number) => {
   // Round the value to the nearest step size of 0.001
   const roundedValue = Math.round(value / 0.001) * 0.001;
   // Convert the rounded value to an integer if necessary
-  const id = parseInt(roundedValue.toString());
+  const id = globalstart + (value * globalstepSize);
   // Trigger the action with the adjusted value
   trigger(mod.id, 'SetContrast', id);
 };
@@ -104,7 +144,7 @@ const handleHueShift = (value: number) => {
   // Round the value to the nearest step size of 0.001
   const roundedValue = Math.round(value / 0.001) * 0.001;
   // Convert the rounded value to an integer if necessary
-  const id = parseInt(roundedValue.toString());
+  const id = globalstart + (value * globalstepSize);
   // Trigger the action with the adjusted value
   trigger(mod.id, 'SetHueShift', id);
 };
@@ -113,7 +153,7 @@ const handleSaturation = (value: number) => {
   // Round the value to the nearest step size of 0.001
   const roundedValue = Math.round(value / 0.001) * 0.001;
   // Convert the rounded value to an integer if necessary
-  const id = parseInt(roundedValue.toString());
+  const id = globalstart + (value * globalstepSize);
   // Trigger the action with the adjusted value
   trigger(mod.id, 'SetSaturation', id);
 };
@@ -125,7 +165,7 @@ const handleTemperature = (value: number) => {
   // Round the value to the nearest step size of 0.001
   const roundedValue = Math.round(value / 0.001) * 0.001;
   // Convert the rounded value to an integer if necessary
-  const id = parseInt(roundedValue.toString());
+  const id = globalstart + (value * globalstepSize);
   // Trigger the action with the adjusted value
   trigger(mod.id, 'SetTemperature', id);
 };
@@ -134,7 +174,7 @@ const handleTint = (value: number) => {
   // Round the value to the nearest step size of 0.001
   const roundedValue = Math.round(value / 0.001) * 0.001;
   // Convert the rounded value to an integer if necessary
-  const id = parseInt(roundedValue.toString());
+  const id = globalstart + (value * globalstepSize);
   // Trigger the action with the adjusted value
   trigger(mod.id, 'SetTint', id);
 };
@@ -179,12 +219,54 @@ const handleHighlights = (value: number) => {
   trigger(mod.id, 'SetHighlights', id);
 };
 
-const start = -1;
-  const end = 1;
-  const stepSize = 0.0001;
+    // LegacyUI
+    const OpenLegacyUI = () => {
+        trigger(mod.id, 'OpenLegacyUI');
+    }
 
-  // Calculate the number of steps based on the range
-  const numberOfSteps = Math.floor((end - start) / stepSize);
+
+    const handlePostExposureCheckbox = () => {
+      trigger(mod.id, 'SetPostExposureCheckbox'); // Assuming mod is declared somewhere outside this function
+    }
+
+    const handlecontrastCheckbox = () => {
+      trigger(mod.id, 'SetcontrastCheckbox'); // Assuming mod is declared somewhere outside this function
+    }
+
+    const handlehueshiftCheckbox = () => {
+      trigger(mod.id, 'SethueshiftCheckbox'); // Assuming mod is declared somewhere outside this function
+    }
+
+    const handlesaturationCheckbox = () => {
+      trigger(mod.id, 'SetsaturationCheckbox'); // Assuming mod is declared somewhere outside this function
+    }
+
+    const handletemperatureCheckbox = () => {
+      trigger(mod.id, 'SetTempCheckbox'); 
+    }
+
+    const handleTintCheckbox = () => {
+      trigger(mod.id, 'SetTintCheckbox'); 
+    }
+
+    const handleShadowsCheckbox = () => {
+      trigger(mod.id, 'SetShadowsCheckbox'); 
+    }
+
+    const handleMidtonesCheckbox = () => {
+      trigger(mod.id, 'SetMidtonesCheckbox'); 
+    }
+
+    const handleHighlightsCheckbox = () => {
+      trigger(mod.id, 'SetHighlightsCheckbox'); 
+    }
+    
+    
+    
+
+    
+
+
 
 
 
@@ -257,10 +339,38 @@ return (
         <label className="title_SVH title_zQN PostExposureLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.postexposure")}</label>
         <label className="title_SVH title_zQN PostExposureValue" >{PEValue.toString()} </label>
 
+
+     
+        <div className="pecheckbox">
+  {PostExposureActive && (
+    <div className="pecheckboximage" onClick={handlePostExposureCheckbox}></div>
+  )}
+
+  <button
+    className={`toggle_cca item-mouse-states_Fmi toggle_th_ postexposurecheckbox2`}
+    onClick={handlePostExposureCheckbox}
+  ></button>
+</div>
+
+        
+
+
+
+
+
+ 
+        <input
+  type="range"
+  className="toggle_cca item-mouse-states_Fmi toggle_th_"
+  min={-5}
+  max={1}
+  value={PEValue.toString()}
+  onChange={(event) => handleSliderChange(parseFloat(event.target.value))}
+/>
         <Slider
-          value={PEValue}
-          start={-5}
-          end={1}
+                   value={(PEValue- globalstart) / globalstepSize}
+                   start={-180}
+                   end={globalnumberOfSteps}
           className="PostExposureSlider"
           gamepadStep={0.001}
 
@@ -275,9 +385,9 @@ return (
         <label className="title_SVH title_zQN ContrastValue" >{COValue.toString()} </label>
 
         <Slider
-          value={COValue}
-          start={-100}
-          end={100}
+           value={(COValue- globalstart) / globalstepSize}
+           start={-180}
+           end={globalnumberOfSteps}
           className="ContrastSlider"
           gamepadStep={0.001}
 
@@ -292,13 +402,39 @@ return (
           // onMouseLeave={() => console.log("onMouseLeave")}
         />
 
+<div className="cocheckbox">
+  {ContrastActive && (
+    <div className="cocheckboximage" onClick={handlecontrastCheckbox}></div>
+  )}
+
+  <button
+    className={`toggle_cca item-mouse-states_Fmi toggle_th_ contrastcheckbox2`}
+    onClick={handlecontrastCheckbox}
+  ></button>
+</div>
+
+
+
 <label className="title_SVH title_zQN HueshiftLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.hueshift")}</label>
         <label className="title_SVH title_zQN HueshiftValue" >{HSValue.toString()} </label>
 
+        <div className="hscheckbox">
+  {hueshiftActive && (
+    <div className="hscheckboximage" onClick={handlehueshiftCheckbox}></div>
+  )}
+
+  <button
+    className={`toggle_cca item-mouse-states_Fmi toggle_th_ hueshiftcheckbox2`}
+    onClick={handlehueshiftCheckbox}
+  ></button>
+</div>
+
+
+
         <Slider
-          value={HSValue}
+          value={(HSValue- globalstart) / globalstepSize}
           start={-180}
-          end={180}
+          end={globalnumberOfSteps}
           className="HueshiftSlider"
           gamepadStep={0.001}
 
@@ -316,10 +452,21 @@ return (
 <label className="title_SVH title_zQN SaturationLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.saturation")}</label>
         <label className="title_SVH title_zQN SaturationValue" >{SAValue.toString()} </label>
 
+        <div className="satcheckbox">
+  {saturationActive && (
+    <div className="satcheckboximage" onClick={handlesaturationCheckbox}></div>
+  )}
+
+  <button
+    className={`toggle_cca item-mouse-states_Fmi toggle_th_ satcheckbox2`}
+    onClick={handlesaturationCheckbox}
+  ></button>
+</div>
+
         <Slider
-          value={SAValue}
+          value={(SAValue - globalstart) / globalstepSize}
           start={-100}
-          end={100}
+          end={globalnumberOfSteps}
           className="SaturationSlider"
           gamepadStep={0.001}
 
@@ -338,10 +485,22 @@ return (
 <label className="title_SVH title_zQN TemperatureLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.temperature")}</label>
         <label className="title_SVH title_zQN TemperatureValue" >{TempValue.toString()} </label>
 
+        <div className="tempcheckbox">
+  {TempActive && (
+    <div className="tempcheckboximage" onClick={handletemperatureCheckbox}></div>
+  )}
+
+  <button
+    className={`toggle_cca item-mouse-states_Fmi toggle_th_ tempcheckbox2`}
+    onClick={handletemperatureCheckbox}
+  ></button>
+</div>
+
+
         <Slider
-          value={TempValue}
-          start={-100}
-          end={100}
+          value={(TempValue- globalstart) / globalstepSize}
+          start={-180}
+          end={globalnumberOfSteps}
           className="TemperatureSlider"
           gamepadStep={0.001}
 
@@ -359,10 +518,21 @@ return (
 <label className="title_SVH title_zQN TintLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.tint")}</label>
         <label className="title_SVH title_zQN TintValue" >{TintValue.toString()} </label>
 
+
+        <div className="tintcheckbox">
+  {TintActive && (
+    <div className="tintcheckboximage" onClick={handleTintCheckbox}></div>
+  )}
+
+  <button
+    className={`toggle_cca item-mouse-states_Fmi toggle_th_ tintcheckbox2`}
+    onClick={handleTintCheckbox}
+  ></button>
+</div>
         <Slider
-          value={TintValue}
-          start={-100}
-          end={100}
+           value={(TintValue- globalstart) / globalstepSize}
+           start={-180}
+           end={globalnumberOfSteps}
           className="TintSlider"
           gamepadStep={0.001}
 
@@ -382,6 +552,17 @@ return (
 
 <label className="title_SVH title_zQN ShadowsLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.shadows")}</label>
         <label className="title_SVH title_zQN ShadowsValue" >{ShadowsValue.toString()} </label>
+
+        <div className="shadowscheckbox">
+  {ShadowsActive && (
+    <div className="shadowscheckboximage" onClick={handleShadowsCheckbox}></div>
+  )}
+
+  <button
+    className={`toggle_cca item-mouse-states_Fmi toggle_th_ shadowscheckbox2`}
+    onClick={handleShadowsCheckbox}
+  ></button>
+</div>
 
         <Slider
           value={(ShadowsValue - start) / stepSize}
@@ -406,6 +587,18 @@ return (
 <label className="title_SVH title_zQN MidtonesLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.midtones")}</label>
         <label className="title_SVH title_zQN MidtonesValue" >{MidtonesValue.toString()} </label>
 
+        <div className="midtonescheckbox">
+  {MidtonesActive && (
+    <div className="midtonescheckboximage" onClick={handleMidtonesCheckbox}></div>
+  )}
+
+  <button
+    className={`toggle_cca item-mouse-states_Fmi toggle_th_ midtonescheckbox2`}
+    onClick={handleMidtonesCheckbox}
+  ></button>
+</div>
+
+
         <Slider
            value={(MidtonesValue - start) / stepSize}
            start={-1}
@@ -426,6 +619,20 @@ return (
 
 <label className="title_SVH title_zQN HighlightsLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.highlights")}</label>
         <label className="title_SVH title_zQN HighlightsValue" >{HighlightsValue.toString()} </label>
+
+
+        <div className="highlightscheckbox">
+  {HighlightsActive && (
+    <div className="highlightscheckboximage" onClick={handleHighlightsCheckbox}></div>
+  )}
+
+  <button
+    className={`toggle_cca item-mouse-states_Fmi toggle_th_ highlightscheckbox2`}
+    onClick={handleHighlightsCheckbox}
+  ></button>
+</div>
+
+
 
         <Slider
            value={(HighlightsValue - start) / stepSize}
@@ -459,10 +666,15 @@ return (
 
 {SettingsEnabled$ && (
     <div className="SettingsPanel">
-    <button 
 
+      <Button sounds={null} className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LuminaSaveButton">
+    <button 
+  
     onClick={SaveSettings}
     className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LuminaSaveButton">{translate("LUMINA.save")}</button>
+</Button>
+
+    
 <div className="tinted-icon_iKo icon_zVk SaveButtonLuminaImage" > </div>
     <button 
 
@@ -470,9 +682,7 @@ return (
     onClick={ResetToDefault}
     className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LuminaResetSettingsButton">{translate("LUMINA.resettodefault")}</button>
 
-    <h1 className="title_SVH title_zQN VersionCheckLabel">v1.4r1</h1>
-
-
+                    <h1 className="title_SVH title_zQN VersionCheckLabel">v1.4r3</h1>
 
 
 
