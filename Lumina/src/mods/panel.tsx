@@ -667,15 +667,13 @@ return (
 {SettingsEnabled$ && (
     <div className="SettingsPanel">
 
-      <Button sounds={null} className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LuminaSaveButton">
     <button 
   
     onClick={SaveSettings}
     className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LuminaSaveButton">{translate("LUMINA.save")}</button>
-</Button>
+
 
     
-<div className="tinted-icon_iKo icon_zVk SaveButtonLuminaImage" > </div>
     <button 
 
     
