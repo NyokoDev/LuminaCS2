@@ -443,17 +443,26 @@ namespace Lumina.UI
             MidtonesSpace = 1f;
 
             GlobalVariables.Instance.PostExposure = -1.431f;
-            GlobalVariables.Instan
+            GlobalVariables.Instance.PostExposureActive = false;
             GlobalVariables.Instance.Contrast = 1f;
+            GlobalVariables.Instance.contrastActive = false;
             GlobalVariables.Instance.hueShift = 1f;
+            GlobalVariables.Instance.hueShiftActive = false;
             GlobalVariables.Instance.Saturation = 1f;
+            GlobalVariables.Instance.saturationActive = false;
             GlobalVariables.Instance.Latitude = 41.9028f;
             GlobalVariables.Instance.Longitude = 12.4964f;
+
             GlobalVariables.Instance.Tint = 1f;
+            GlobalVariables.Instance.TintActive = false;
             GlobalVariables.Instance.Temperature = 1f;
+            GlobalVariables.Instance.TemperatureActive = false;
             GlobalVariables.Instance.Shadows = 1f;
+            GlobalVariables.Instance.ShadowsActive = false;
             GlobalVariables.Instance.Midtones = 1f;
+            GlobalVariables.Instance.MidtonesActive = false;
             GlobalVariables.Instance.Highlights = 1f;
+            GlobalVariables.Instance.HighlightsActive = false;
 
             // Save changes
             GlobalVariables.SaveToFile(GlobalPaths.GlobalModSavingPath);
