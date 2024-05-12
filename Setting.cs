@@ -47,53 +47,6 @@ namespace Lumina
         }
 
 
-        [SettingsUISection(kSection, kToggleGroup)]
-        [SettingsUISlider(min = -500f, max = 1000f, step = 1f, unit = "percentage", scaleDragVolume = true)]
-        public float PostExposure
-        {
-            get { return GlobalVariables.Instance.PostExposure; }
-            set
-            {
-                GlobalVariables.Instance.PostExposure = value;
-                SaveToFileIn();
-            }
-        }
-
-        [SettingsUISection(kSection, kToggleGroup)]
-        [SettingsUISlider(min = -10000f, max = 10000f, step = 1f, unit = "integer", scaleDragVolume = true)]
-        public float Contrast
-        {
-            get { return GlobalVariables.Instance.Contrast; }
-            set
-            {
-                GlobalVariables.Instance.Contrast = value;
-                SaveToFileIn();
-            }
-        }
-
-        [SettingsUISection(kSection, kToggleGroup)]
-        [SettingsUISlider(min = -10000f, max = 10000f, step = 1f, unit = "integer", scaleDragVolume = true)]
-        public float HueShift
-        {
-            get { return GlobalVariables.Instance.hueShift; }
-            set
-            {
-                GlobalVariables.Instance.hueShift = value;
-                SaveToFileIn();
-            }
-        }
-
-        [SettingsUISection(kSection, kToggleGroup)]
-        [SettingsUISlider(min = -10000f, max = 10000f, step = 1f, unit = "integer", scaleDragVolume = true)]
-        public float Saturation
-        {
-            get { return GlobalVariables.Instance.Saturation; }
-            set
-            {
-                GlobalVariables.Instance.Saturation = value;
-                SaveToFileIn();
-            }
-        }
 
         [SettingsUIButton]
         [SettingsUISection(kSection, kToggleGroup)]
@@ -108,11 +61,35 @@ namespace Lumina
 
         [SettingsUIButton]
         [SettingsUISection(kSection, kToggleGroup)]
+        public bool Guides
+        {
+            set
+            {
+                OpenGuides();
+
+            }
+        }
+
+
+
+        [SettingsUIButton]
+        [SettingsUISection(kSection, kToggleGroup)]
         public bool Support
         {
             set
             {
                 OpenDiscordInvite();
+
+            }
+        }
+
+        [SettingsUIButton]
+        [SettingsUISection(kSection, kToggleGroup)]
+        public bool Donate
+        {
+            set
+            {
+                OpenPaypal();
 
             }
         }
@@ -128,12 +105,13 @@ namespace Lumina
                 // Check if the file exists
                 if (File.Exists(settingsFilePath))
                 {
-
+                    GlobalVariables.SaveToFile(GlobalPaths.GlobalModSavingPath); // Save first
                     Process.Start(settingsFilePath);
                 }
                 else
                 {
-                    Console.WriteLine("File not found: " + settingsFilePath);
+                    GlobalVariables.SaveToFile(GlobalPaths.GlobalModSavingPath);
+                    Process.Start(settingsFilePath);
                 }
             }
             catch (Exception ex)
@@ -156,6 +134,37 @@ namespace Lumina
                 Console.WriteLine("An error occurred: " + ex.Message);
             }
         }
+
+        public void OpenPaypal()
+        {
+            try
+            {
+                string discordInviteLink = "https://paypal.me/nyokodev";
+
+                // Use Process.Start to open the URL in the default web browser
+                System.Diagnostics.Process.Start(discordInviteLink);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred: " + ex.Message);
+            }
+        }
+
+        public void OpenGuides()
+        {
+            try
+            {
+                string discordInviteLink = "https://github.com/NyokoDev/LuminaCS2";
+
+                // Use Process.Start to open the URL in the default web browser
+                System.Diagnostics.Process.Start(discordInviteLink);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred: " + ex.Message);
+            }
+        }
+
 
 
 
@@ -208,31 +217,30 @@ namespace Lumina
         { m_Setting.GetOptionTabLocaleID(Setting.kSection), "Main" },
 
         { m_Setting.GetOptionGroupLocaleID(Setting.kButtonGroup), "Buttons" },
-        { m_Setting.GetOptionGroupLocaleID(Setting.kToggleGroup), "Color Adjustments" },
+        { m_Setting.GetOptionGroupLocaleID(Setting.kToggleGroup), "Lumina "  + GlobalPaths.Version},
         { m_Setting.GetOptionGroupLocaleID(Setting.kSliderGroup), "Sliders" },
         { m_Setting.GetOptionGroupLocaleID(Setting.kDropdownGroup), "Dropdowns" },
 
         { m_Setting.GetOptionLabelLocaleID(nameof(Setting.Button)), "Toggle IMGUR button visibility" },
         { m_Setting.GetOptionDescLocaleID(nameof(Setting.Button)), "Shows or hides the ingame IMGUR button." },
 
+          { m_Setting.GetOptionLabelLocaleID(nameof(Setting.Guides)), "Lumina Guides" },
+       { m_Setting.GetOptionDescLocaleID(nameof(Setting.Guides)), "Opens Lumina guides for information and documentation in a new tab." },
 
-        { m_Setting.GetOptionLabelLocaleID(nameof(Setting.PostExposure)), "Post Exposure" },
-        { m_Setting.GetOptionDescLocaleID(nameof(Setting.PostExposure)), "Adjusts the brightness of the image just before color grading, in EV." },
-
-       { m_Setting.GetOptionLabelLocaleID(nameof(Setting.Support)), "Support" },
+       { m_Setting.GetOptionLabelLocaleID(nameof(Setting.Support)), "Discord Server" },
        { m_Setting.GetOptionDescLocaleID(nameof(Setting.Support)), "Opens Support discord server in new tab." },
 
-        { m_Setting.GetOptionLabelLocaleID(nameof(Setting.OpenLocationButton)), "Open file" },
-       { m_Setting.GetOptionDescLocaleID(nameof(Setting.OpenLocationButton)), "Opens file in new tab." },
+              { m_Setting.GetOptionLabelLocaleID(nameof(Setting.Donate)), "Donate" },
+       { m_Setting.GetOptionDescLocaleID(nameof(Setting.Donate)), "Opens Paypal donation wizard in new tab. Thanks for considering supporting me!" },
+{
+    m_Setting.GetOptionLabelLocaleID(nameof(Setting.OpenLocationButton)),
+    "Open Saved Settings File"
+},
+{
+    m_Setting.GetOptionDescLocaleID(nameof(Setting.OpenLocationButton)),
+    "Opens the saved settings file in a new tab."
+},
 
-        { m_Setting.GetOptionLabelLocaleID(nameof(Setting.Contrast)), "Contrast" },
-        { m_Setting.GetOptionDescLocaleID(nameof(Setting.Contrast)), "Contrast refers to the difference in luminance or color that makes an object (or its representation in an image or display) distinguishable. It is the difference between the darkest and lightest areas in an image. Adjusting contrast can make an image appear more vibrant and dynamic by increasing the difference between light and dark areas, or it can be reduced to create a softer, more subdued look." },
-
-        { m_Setting.GetOptionLabelLocaleID(nameof(Setting.HueShift)), "Hue Shift" },
-        { m_Setting.GetOptionDescLocaleID(nameof(Setting.HueShift)), "Hue shift, also known as hue adjustment, refers to the modification of the colors in an image along the color spectrum. It involves changing the overall tint of the image by shifting the hues of its individual colors. This adjustment can be used to fine-tune the color balance or to create artistic effects by subtly altering the overall color tone of an image." },
-
-        { m_Setting.GetOptionLabelLocaleID(nameof(Setting.Saturation)), "Saturation" },
-        { m_Setting.GetOptionDescLocaleID(nameof(Setting.Saturation)), "Saturation refers to the intensity or purity of colors in an image. Increasing saturation enhances the vividness and richness of colors, making them more vibrant and striking. Conversely, decreasing saturation desaturates the colors, resulting in a more muted or grayscale appearance. Saturation adjustment allows for precise control over the color intensity in an image, enabling photographers and artists to achieve the desired visual impact." },
 
         { m_Setting.GetEnumValueLocaleID(Setting.SomeEnum.Value1), "Value 1" },
         { m_Setting.GetEnumValueLocaleID(Setting.SomeEnum.Value2), "Value 2" },

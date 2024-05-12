@@ -42,6 +42,10 @@ export const Highlights$ =  bindValue<number>(mod.id, 'GetHighlights');
 export const HighlightsActive$ =  bindValue<boolean>(mod.id, 'GetHighlightsCheckbox');
 
 
+// Planetary Settings
+export const LatitudeValue$ = bindValue<number>(mod.id, 'LatitudeValue');
+export const LongitudeValue$ = bindValue<number>(mod.id, 'LongitudeValue');
+
 
 
 // const SliderTheme: Theme | any = getModule(
@@ -90,13 +94,16 @@ const MidtonesActive = useValue(MidtonesActive$);
 const HighlightsValue = useValue(Highlights$);
 const HighlightsActive = useValue(HighlightsActive$);
 
+// Planetary Settings
+const LatitudeValue = useValue(LatitudeValue$);
+const LongitudeValue = useValue(LongitudeValue$);
 
 
 
 // Initialize state variables using useState hook
 const [ColorAdjustmentsEnabled$, setCA] = useState(true);
 const [SettingsEnabled$, setSettings] = useState(false);
-
+const [PlanetaryEnabled$, setPlanetaryTab] = useState(false);
 
 
 
@@ -112,6 +119,11 @@ const [SettingsEnabled$, setSettings] = useState(false);
   const globalstepSize = 0.0001;
 
   const globalnumberOfSteps = Math.floor((globalend - globalstart) / globalstepSize);
+
+  const planetstart = -100;
+  const planetend = 100;
+  const planetstepSize = 0.0001;
+  const planetnumberofsteps = Math.floor((planetend - planetstart) / planetstepSize);
 
   
 
@@ -260,7 +272,21 @@ const handleHighlights = (value: number) => {
     const handleHighlightsCheckbox = () => {
       trigger(mod.id, 'SetHighlightsCheckbox'); 
     }
+
+
+
+
+    const handleLatitude = (value: number) => {
+      const id = planetstart + (value * planetstepSize);
+      trigger(mod.id, 'SetLatitude', id);
+    };
     
+    
+
+    const handleLongitude = (value: number) => {
+      const id = planetstart + (value * planetstepSize);
+      trigger(mod.id, 'SetLongitude', id);
+    };
     
     
 
@@ -290,6 +316,7 @@ return (
   }}
   onClick={() => { setCA(true)
     setSettings(false)
+    setPlanetaryTab(false)
    }}>
 </button>
 </Tooltip>
@@ -307,6 +334,7 @@ return (
   }}
   onClick={() => { setCA(false)
     setSettings(true)
+    setPlanetaryTab(false)
  ;}}>
 </button>
 
@@ -315,6 +343,24 @@ return (
 
 </Tooltip>
 
+
+<Tooltip
+  tooltip={translate("LUMINA.planetarytooltip")}// Specify the content of the tooltip
+  disabled={false} // Specify whether the tooltip is disabled (default: false)
+  alignment="center" // Specify the alignment of the tooltip (e.g., "start", "center", "end")
+  className="custom-tooltip" // Specify additional class names for styling purposes
+>
+<button 
+  className={tab1 ? 'PlanetaryButtonDeselected' : 'PlanetaryButton'} 
+  onSelect={() => {
+    console.log("[LUMINA] Toggled Planetary panel.");
+  }}
+  onClick={() => { setCA(false)
+    setSettings(false)
+    setPlanetaryTab(true)
+ ;}}>
+</button>
+</Tooltip>
 
 
 
@@ -680,7 +726,10 @@ return (
     onClick={ResetToDefault}
     className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LuminaResetSettingsButton">{translate("LUMINA.resettodefault")}</button>
 
-                    <h1 className="title_SVH title_zQN VersionCheckLabel">v1.4r3</h1>
+                    <h1 className="title_SVH title_zQN VersionCheckLabel">v1.5</h1>
+
+
+
 
 
 
@@ -689,11 +738,74 @@ return (
 
     </div>
 
+    
+
 
 
   )}
 
+{PlanetaryEnabled$ && 
+<div className="PlanetaryPanel">
+  
+  
+<label className="title_SVH title_zQN LatitudeLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.latitude")}</label>
+<Slider
+           value={(LatitudeValue - planetstart) / planetstepSize}
+           start={-100}
+           end={planetnumberofsteps}
+          className="LatitudeSlider"
+          gamepadStep={0.001}
 
+        
+          valueTransformer={SliderValueTransformer.intTransformer}
+          disabled={false}
+          noFill={false}
+          onChange={(number) => handleLatitude(number)}
+          // onDragStart={() => console.log("onDragStart")}
+          // onDragEnd={() => console.log("onDragEnd")}
+          // onMouseOver={() => console.log("onMouseOver")}
+          // onMouseLeave={() => console.log("onMouseLeave")}
+        />
+  
+  <input
+  value={LatitudeValue}
+  type="range"
+  className="toggle_cca item-mouse-states_Fmi toggle_th_ LatitudeInput"
+  onChange={(event) => handleLatitude(Number(event.target.value))}
+/>
+
+<label className="title_SVH title_zQN LongitudeLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.longitude")}</label>
+<Slider
+           value={(LongitudeValue - planetstart) / planetstepSize}
+           start={-100}
+           end={planetnumberofsteps}
+          className="LongitudeSlider"
+          gamepadStep={0.001}
+
+        
+          valueTransformer={SliderValueTransformer.intTransformer}
+          disabled={false}
+          noFill={false}
+          onChange={(number) => handleLongitude(number)}
+          // onDragStart={() => console.log("onDragStart")}
+          // onDragEnd={() => console.log("onDragEnd")}
+          // onMouseOver={() => console.log("onMouseOver")}
+          // onMouseLeave={() => console.log("onMouseLeave")}
+        />
+  
+  <input
+  value={LongitudeValue}
+  type="range"
+  className="toggle_cca item-mouse-states_Fmi toggle_th_ LongitudeInput"
+  onChange={(event) => handleLongitude(Number(event.target.value))}
+/>
+
+
+
+  
+  
+   </div>
+}
 
 </div>
 

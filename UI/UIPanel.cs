@@ -443,6 +443,7 @@ namespace Lumina.UI
             MidtonesSpace = 1f;
 
             GlobalVariables.Instance.PostExposure = -1.431f;
+            GlobalVariables.Instan
             GlobalVariables.Instance.Contrast = 1f;
             GlobalVariables.Instance.hueShift = 1f;
             GlobalVariables.Instance.Saturation = 1f;

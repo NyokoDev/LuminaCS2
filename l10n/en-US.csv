@@ -16,6 +16,9 @@
 "LUMINA.resettodefault","Reset to Default"
 "LUMINA.legacyUI","Use LegacyUI"
 "LUMINA.legacyuitooltip","Opens the Unity IMGUR Legacy UI"
+"LUMINA.latitude","Latitude"
+"LUMINA.longitude","Longitude"
+"LUMINA.planetarytooltip","Planetary Settings"
 
 
 

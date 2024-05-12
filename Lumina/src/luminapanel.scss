@@ -84,7 +84,7 @@
    background-size: cover; /* Make sure the background image covers the entire area */
    width: 45rem;
    height: 45rem;
-   left: 850rem; /* Adjusted left position */
+   left: 0rem;
    transition: transform 0.01s ease-in-out;
    border-radius: 50%; /* Make it round */
    filter: invert(100%); /* Invert the colors to turn black to white */
@@ -97,10 +97,40 @@
    background-size: cover; /* Make sure the background image covers the entire area */
    width: 45rem;
    height: 45rem;
+   left: 0rem;
+   transition: transform 2s ease-in-out;
+   border-radius: 50%; /* Make it round */
+   filter: invert(100%); /* Invert the colors to turn black to white */
+}
+
+.PlanetaryButton {
+   position: absolute;
+   display: inline-block;
+   background-image: url('https://svgshare.com/i/15zP.svg');
+   background-size: cover; /* Make sure the background image covers the entire area */
+   width: 43rem;
+   height: 43rem;
+   left: 850rem; /* Adjusted left position */
+   transition: transform 0.01s ease-in-out;
+   border-radius: 50%; /* Make it round */
+   filter: invert(100%); /* Invert the colors to turn black to white */
+}
+
+.PlanetaryButtonDeselected {
+   position: absolute;
+   display: inline-block;
+   background-image: url('https://svgshare.com/i/15zP.svg');
+   background-size: cover; /* Make sure the background image covers the entire area */
+   width: 43rem;
+   height: 43rem;
    left: 850rem; /* Adjusted left position */
    transition: transform 2s ease-in-out;
    border-radius: 50%; /* Make it round */
    filter: invert(100%); /* Invert the colors to turn black to white */
+}
+
+.PlanetaryButton:hover {
+   transform: translateY(-15%);
 }
 
 .ColorAdjustmentsButton:hover {
@@ -768,4 +798,81 @@ $hueshift-top: 80rem;
    left: 400rem;
    top: 80rem;
  }
+
+.PlanetaryPanel {
+   position: absolute; 
+   top: 0rem;
+   left: 0rem;
+   width: inherit;
+   height: inherit;
+   overflow-y: auto;
+}
+
+
+
+
+ // Planetary Settings
+
+ // Latitude
+.LatitudeLabel {
+   position: absolute;
+   color: rgb(118, 118, 118);
+   font-size: 20rem;
+   left: 0rem;
+   width: 150rem;
+   top: $global-height + $distance + -9rem;
+   white-space: nowrap;
+}
+
+.LatitudeSlider {
+   position: absolute;
+   height: 30rem;
+   right: -120rem;
+   left: 250rem;
+   top: $global-height + $distance + 0rem;
+   width: 680rem;
+   background-color: rgba(0, 0, 0, 0.5);
+}
+
+.LatitudeInput {
+   position: absolute;
+   color: rgb(118, 118, 118);
+   font-size: 20rem;
+   left: 155rem;
+   width: 50rem;
+   top: $global-height + $distance + -9rem;
+   white-space: nowrap;
+}
+
+//Longitude
+.LongitudeLabel {
+   position: absolute;
+   color: rgb(118, 118, 118);
+   font-size: 20rem;
+   left: 0rem;
+   width: 150rem;
+   top: $global-height + $distance + 31rem;
+   white-space: nowrap;
+}
+
+.LongitudeSlider {
+   position: absolute;
+   height: 30rem;
+   right: -120rem;
+   left: 250rem;
+   top: $global-height + $distance + 40rem;
+   width: 680rem;
+   background-color: rgba(0, 0, 0, 0.5);
+}
+
+.LongitudeInput {
+   position: absolute;
+   color: rgb(118, 118, 118);
+   font-size: 20rem;
+   left: 155rem;
+   width: 50rem;
+   top: $global-height + $distance + 31rem;
+   white-space: nowrap;
+}
  
+

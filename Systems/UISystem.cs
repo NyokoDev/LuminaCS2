@@ -43,12 +43,22 @@ namespace Lumina.Systems
 
             StartShadowsMidtonesHighlights();
             ShadowsMidtonesHighlightsCheckboxes();
+            PlanetarySettings();
 
 
           
 
             //LegacyUI
             AddBinding(new TriggerBinding(Mod.MOD_UI, "OpenLegacyUI", OpenLegacyUI));
+        }
+
+        private void PlanetarySettings()
+        {
+            AddBinding(new TriggerBinding<float>(Mod.MOD_UI, "SetLatitude", PlanetarySettingsMerger.SetLatitude));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MOD_UI, "LatitudeValue", () => PlanetarySettingsMerger.LatitudeValue()));
+
+            AddBinding(new TriggerBinding<float>(Mod.MOD_UI, "SetLongitude", PlanetarySettingsMerger.SetLongitude));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MOD_UI, "LongitudeValue", () => PlanetarySettingsMerger.LongitudeValue()));
         }
 
         private void ShadowsMidtonesHighlightsCheckboxes()
