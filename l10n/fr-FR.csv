@@ -17,3 +17,7 @@
 "LUMINA.latitude","Latitude"
 "LUMINA.longitude","Longitude"
 "LUMINA.planetarytooltip","Tooltip planétaire"
+"LUMINA.presetmanagement","Gestion des préréglages"
+"LUMINA.importpreset","Importer le préréglage"
+"LUMINA.confirmationonpreset","Souhaitez-vous importer le préréglage sélectionné ? Veuillez noter que cette action remplacera les paramètres existants."
+"LUMINA.openfolderlabel","Ouvrir le dossier de préréglages"

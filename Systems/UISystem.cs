@@ -50,6 +50,12 @@ namespace Lumina.Systems
 
             //LegacyUI
             AddBinding(new TriggerBinding(Mod.MOD_UI, "OpenLegacyUI", OpenLegacyUI));
+            AddBinding(new TriggerBinding(Mod.MOD_UI, "ImportLuminaPreset", PresetManagement.ExecuteImport));
+            AddBinding(new TriggerBinding(Mod.MOD_UI, "ExportLuminaPreset", PresetManagement.ExportLuminaPreset));
+            AddBinding(new TriggerBinding<string>(Mod.MOD_UI, "UpdatePresetName", PresetManagement.UpdatePresetName));
+            AddBinding(new TriggerBinding(Mod.MOD_UI, "OpenPresetFolder", PresetManagement.OpenPresetFolder));
+
+
         }
 
         private void PlanetarySettings()

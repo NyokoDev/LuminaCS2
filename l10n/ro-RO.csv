@@ -17,3 +17,7 @@
 "LUMINA.latitude","Latitudine"
 "LUMINA.longitude","Longitudine"
 "LUMINA.planetarytooltip","Sugestie planetară"
+"LUMINA.presetmanagement","Gestionare preset"
+"LUMINA.importpreset","Importare preset"
+"LUMINA.confirmationonpreset","Doriți să importați presetul selectat? Vă rugăm să rețineți că această acțiune va înlocui setările existente."
+"LUMINA.openfolderlabel","Deschideți dosarul preset"

@@ -7,19 +7,12 @@ import { Slider, PropsSlider, SliderValueTransformer } from "./slider";
 //import { LocalizedString, useLocalization } from "cs2/l10n";
 import { useLocalization } from "cs2/l10n";
 import mod from "../../mod.json";
-import "../luminapanel.scss"; 
+import "luminapanel.scss";
+import "editor_lumina.scss";
 import { useState } from "react";
 import { createPortal } from "react-dom";
-import React, { Fragment } from 'react';
-import {SketchPicker} from 'react-color';
-import Box from "@mui/material/Box";
-import { Slider as Slider2, TextField, createTheme } from '@mui/material';
-import { ThemeProvider } from '@mui/material/styles';
-import red from "@mui/material/colors/red";
-import FilePicker from "./FilePicker";
 
-
-export let isInstalled$ = false;
+export let EditorEnabled$ = false;
 export let ColorAdjustmentsEnabled = true;
 
 
@@ -54,13 +47,6 @@ export const HighlightsActive$ =  bindValue<boolean>(mod.id, 'GetHighlightsCheck
 export const LatitudeValue$ = bindValue<number>(mod.id, 'LatitudeValue');
 export const LongitudeValue$ = bindValue<number>(mod.id, 'LongitudeValue');
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: red[500],
-    },
-  },
-});
 
 
 // const SliderTheme: Theme | any = getModule(
@@ -79,7 +65,7 @@ let tab2 = false;
 
 
 
-export const YourPanelComponent: React.FC<any> = () => {
+export const Editor_Panel: React.FC<any> = () => {
   // Values
   const PEValue = useValue(PostExposure$);
   const PostExposureActive = useValue<boolean>(PostExposureActive$);
@@ -119,7 +105,6 @@ const LongitudeValue = useValue(LongitudeValue$);
 const [ColorAdjustmentsEnabled$, setCA] = useState(true);
 const [SettingsEnabled$, setSettings] = useState(false);
 const [PlanetaryEnabled$, setPlanetaryTab] = useState(false);
-const [OnImport, OnImportChange] = useState(false);
 
 
 
@@ -141,7 +126,6 @@ const [OnImport, OnImportChange] = useState(false);
   const planetstepSize = 0.0001;
   const planetnumberofsteps = Math.floor((planetend - planetstart) / planetstepSize);
 
- 
   
 
   // Calculate the number of steps based on the range
@@ -218,23 +202,6 @@ function ResetToDefault() {
   console.log("Sent to Lumina button clicked.");
   trigger(mod.id, 'ResetLuminaSettings');
 }
-
-function ImportPreset() {
-  console.log("Import lumina preset button clicked.");
-
-  trigger(mod.id, 'ImportLuminaPreset');
-}
-
-function ExportPreset() {
-  console.log("Export lumina preset button clicked.");
-  trigger(mod.id, 'ExportLuminaPreset');
-}
-
-function UpdatePresetName(value: string) {
-  trigger(mod.id, 'UpdatePresetName', value);
-}
-
-  
   
 
 // Shadows
@@ -307,10 +274,6 @@ const handleHighlights = (value: number) => {
       trigger(mod.id, 'SetHighlightsCheckbox'); 
     }
 
-    const OpenPresetFolder = () => {
-      trigger(mod.id, 'OpenPresetFolder'); 
-    }
-
 
 
 
@@ -325,7 +288,8 @@ const handleHighlights = (value: number) => {
       const id = planetstart + (value * planetstepSize);
       trigger(mod.id, 'SetLongitude', id);
     };
-
+    
+    
 
     
 
@@ -346,7 +310,7 @@ return (
   className="custom-tooltip" // Specify additional class names for styling purposes
 >
 <button 
-  className={tab1 ? 'ColorAdjustmentsButtonDeselected' : 'ColorAdjustmentsButton'} 
+  className={tab1 ? 'button_iZC button_iZC button_i0V ColorAdjustmentsButtonDeselected' : 'button_iZC button_iZC button_i0V ColorAdjustmentsButton'} 
   onSelect={() => {
     setTab1(!tab1);
     console.log("[LUMINA] Toggled Color panel.");
@@ -365,7 +329,7 @@ return (
   className="custom-tooltip" // Specify additional class names for styling purposes
 >
 <button 
-  className={tab1 ? 'SettingsButtonDeselected' : 'SettingsButton'} 
+  className={tab1 ? 'button_iZC button_iZC button_i0V SettingsButtonDeselected' : 'button_iZC button_iZC button_i0V SettingsButton'} 
   onSelect={() => {
     console.log("[LUMINA] Toggled Settings panel.");
   }}
@@ -388,7 +352,7 @@ return (
   className="custom-tooltip" // Specify additional class names for styling purposes
 >
 <button 
-  className={tab1 ? 'PlanetaryButtonDeselected' : 'PlanetaryButton'} 
+  className={tab1 ? 'button_iZC button_iZC button_i0V PlanetaryButtonDeselected' : 'button_iZC button_iZC button_i0V PlanetaryButton'} 
   onSelect={() => {
     console.log("[LUMINA] Toggled Planetary panel.");
   }}
@@ -422,7 +386,7 @@ return (
         <label className="title_SVH title_zQN PostExposureLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.postexposure")}</label>
         <label className="title_SVH title_zQN PostExposureValue" >{PEValue.toString()} </label>
 
-
+   
      
         <div className="pecheckbox">
   {PostExposureActive && (
@@ -763,49 +727,7 @@ return (
     onClick={ResetToDefault}
     className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LuminaResetSettingsButton">{translate("LUMINA.resettodefault")}</button>
 
-<h1 className="title_SVH title_zQN PresetManagementLabel">{translate("LUMINA.presetmanagement")}</h1>
-
-<button
-onClick={() => OnImportChange(true)}
-className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LuminaImportPresetButton">{translate("LUMINA.importpreset")}
-  
-  
-   </button>
-
-   <button
-onClick={ExportPreset}
-className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LuminaExportPresetButton">{translate("LUMINA.exportpresetlabel")}
-   </button>
-
-   {OnImport && (
-  <div className="PresetConfirmation">
-    <ConfirmationDialog
-      onConfirm={() => {
-        ImportPreset();
-        OnImportChange(false);
-      }}
-      onCancel={() => OnImportChange(false)}
-      message={translate("LUMINA.confirmationonpreset")}
-    />
-  </div>
-)}
-
-
-
-<input
-  type="text"
-  onChange={(event) => UpdatePresetName(String(event.target.value))}
-  className="toggle_cca item-mouse-states_Fmi toggle_th_ PresetInputText"
-/>
-
-<button
-onClick={OpenPresetFolder}
-className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LuminaOpenFolder">{translate("LUMINA.openfolderlabel")}
-   </button>
-
-
-
-      
+<h1 className="title_SVH title_zQN VersionCheckLabel">v1.5.1</h1>
 
 
 
@@ -880,6 +802,9 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
 />
 
 
+
+  
+  
    </div>
 }
 

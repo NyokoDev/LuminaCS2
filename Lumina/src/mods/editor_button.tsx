@@ -6,9 +6,9 @@ import { getModule, ModuleRegistryExtend } from "cs2/modding";
 import { VanillaComponentResolver } from "classes/VanillaComponentResolver";
 //import { LocalizedString, useLocalization } from "cs2/l10n";
 import mod from "../../mod.json";
-import { isInstalled$ as originalIsInstalled$ } from './panel';
-
-import { YourPanelComponent } from "./panel";
+import { EditorEnabled$ as isEditor$ } from './editor_panel';
+import { Editor_Panel } from "./editor_panel";
+import "editor_lumina.scss";
 
 let showModeRow$: boolean; // Assuming this is initialized somewhere
 
@@ -27,39 +27,41 @@ import iconActive from "../img/Lumina.svg";
 import styles from "../lumina.module.scss";
 
 
-let isInstalled$ = originalIsInstalled$; 
+export let EditorPanel$ = isEditor$;
 
-
-export const LuminaButton: ModuleRegistryExtend = (Component) => {
+export const Editor_Button: ModuleRegistryExtend = (Component) => {
     return (props) => {
         const { children, ...otherProps } = props || {};
-        const MIT_ToolEnabled = isInstalled$
-        const moveItIconSrc = MIT_ToolEnabled ? "https://svgshare.com/i/15rV.svg" : "https://svgshare.com/i/15rV.svg";
-        const [isInstalled, setIsInstalled] = useState(false); // assuming you meant to use useState to manage isInstalled state
+        const [isEditor$, setIsEditor] = useState(false); // assuming you meant to use useState to manage isInstalled state
+        const moveItIconSrc = isEditor$ ? "https://svgshare.com/i/15rV.svg" : "https://svgshare.com/i/15rV.svg";
 
         return (
             <>    
             
                 <Button
                     src={moveItIconSrc}
-                    className={ToolBarButtonTheme.button + ' ' + styles.LuminaIcon}
+                    className={"button_iZC button_iZC button_i0V EditorIcon"}
                     variant="icon"
                     focusKey={VanillaComponentResolver.instance.FOCUS_DISABLED}
                     onClick={() => {
-                        setIsInstalled(!isInstalled); // update isInstalled state
+                        setIsEditor(!isEditor$); // update isInstalled state
                     }}
                       
                     onSelect={() => {
           
-                        console.log("[LUMINA] Toggled panel");
+                        console.log("[LUMINA] Toggled editor panel");
                     }}
                   
 
                 />
                 <div className={ToolBarTheme.divider}></div>
-                <Component {...otherProps} />
-                {isInstalled && <YourPanelComponent />}
+
+                <Component {...otherProps}></Component>
+                {isEditor$ && <Editor_Panel />}
+
             </>
         );
     };
-};
+
+}
+

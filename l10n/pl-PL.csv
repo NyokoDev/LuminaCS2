@@ -17,3 +17,7 @@
 "LUMINA.latitude","Szerokość geograficzna"
 "LUMINA.longitude","Długość geograficzna"
 "LUMINA.planetarytooltip","Opis planety"
+"LUMINA.presetmanagement","Zarządzanie Presetami"
+"LUMINA.importpreset","Importuj Preset"
+"LUMINA.confirmationonpreset","Czy chcesz zaimportować wybrany preset? Proszę zauważyć, że ta akcja zastąpi istniejące ustawienia."
+"LUMINA.openfolderlabel","Otwórz folder z Presetami"

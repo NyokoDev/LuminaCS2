@@ -17,3 +17,7 @@
 "LUMINA.latitude","緯度"
 "LUMINA.longitude","経度"
 "LUMINA.planetarytooltip","惑星ツールチップ"
+"LUMINA.presetmanagement","プリセット管理"
+"LUMINA.importpreset","プリセットのインポート"
+"LUMINA.confirmationonpreset","選択したプリセットをインポートしますか？ この操作は既存の設定を置き換えますので、ご注意ください。"
+"LUMINA.openfolderlabel","プリセットフォルダを開く"

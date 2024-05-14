@@ -17,3 +17,7 @@
 "LUMINA.latitude","Breitengrad"
 "LUMINA.longitude","Längengrad"
 "LUMINA.planetarytooltip","Planeteinstellungen"
+"LUMINA.presetmanagement","Presetbeheer"
+"LUMINA.importpreset","Preset Importeren"
+"LUMINA.confirmationonpreset","Wil je het geselecteerde voorinstelling importeren? Let op: deze actie zal de bestaande instellingen vervangen."
+"LUMINA.openfolderlabel","Open Voorinstellingenmap"

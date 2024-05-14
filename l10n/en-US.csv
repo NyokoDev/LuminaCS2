@@ -13,12 +13,18 @@
 "LUMINA.midtones","Midtones"
 "LUMINA.highlights","Highlights"
 "LUMINA.save","Save"
+"LUMINA.exportpresetlabel","Export Preset"
 "LUMINA.resettodefault","Reset to Default"
 "LUMINA.legacyUI","Use LegacyUI"
 "LUMINA.legacyuitooltip","Opens the Unity IMGUR Legacy UI"
 "LUMINA.latitude","Latitude"
 "LUMINA.longitude","Longitude"
 "LUMINA.planetarytooltip","Planetary Settings"
+"LUMINA.presetmanagement","Preset Management"
+"LUMINA.importpreset","Import Preset"
+"LUMINA.confirmationonpreset","Do you want to import the selected preset? Please note that this action will replace the existing settings."
+"LUMINA.openfolderlabel","Open Preset Folder"
+
 
 
 

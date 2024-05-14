@@ -17,3 +17,7 @@
 "LUMINA.latitude","Latitude"
 "LUMINA.longitude","Longitude"
 "LUMINA.planetarytooltip","Dica de planeta"
+"LUMINA.presetmanagement","Gestão de Presets"
+"LUMINA.importpreset","Importar Preset"
+"LUMINA.confirmationonpreset","Deseja importar o preset selecionado? Por favor, note que esta ação irá substituir as configurações existentes."
+"LUMINA.openfolderlabel","Abrir Pasta de Presets"

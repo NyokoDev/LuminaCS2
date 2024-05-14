@@ -17,3 +17,7 @@
 "LUMINA.latitude","위도"
 "LUMINA.longitude","경도"
 "LUMINA.planetarytooltip","행성 툴팁"
+"LUMINA.presetmanagement","프리셋 관리"
+"LUMINA.importpreset","프리셋 가져오기"
+"LUMINA.confirmationonpreset","선택한 프리셋을 가져오시겠습니까? 이 작업은 기존 설정을 대체하므로 주의하십시오."
+"LUMINA.openfolderlabel","프리셋 폴더 열기"

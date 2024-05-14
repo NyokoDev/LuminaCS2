@@ -17,3 +17,7 @@
 "LUMINA.latitude","纬度"
 "LUMINA.longitude","经度"
 "LUMINA.planetarytooltip","行星工具提示"
+"LUMINA.presetmanagement","预设管理"
+"LUMINA.importpreset","导入预设"
+"LUMINA.confirmationonpreset","您要导入所选的预设吗？请注意，此操作将替换现有设置。"
+"LUMINA.openfolderlabel","打开预设文件夹"

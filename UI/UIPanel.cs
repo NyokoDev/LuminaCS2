@@ -50,6 +50,8 @@ namespace Lumina.UI
 
         public static bool buttonVisible { get; set; }
         public static bool AllGood { get; set; }
+        public static bool ImportPreset { get; set; }
+
         public static Dictionary<string, PhotoModeProperty> PhotoModePropertiesCopy = new Dictionary<string, PhotoModeProperty>();
 
 
@@ -88,6 +90,12 @@ namespace Lumina.UI
 
         private void OnGUI()
         {
+
+            if (ImportPreset)
+            {
+
+            }
+
             if (buttonVisible)
             {
                 buttonRect = GUI.Window(1, buttonRect, ButtonWindow, "Lumina");

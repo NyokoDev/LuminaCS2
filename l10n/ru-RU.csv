@@ -17,3 +17,7 @@
 "LUMINA.latitude","Широта"
 "LUMINA.longitude","Долгота"
 "LUMINA.planetarytooltip","Планетарная подсказка"
+"LUMINA.presetmanagement","Управление пресетами"
+"LUMINA.importpreset","Импорт пресета"
+"LUMINA.confirmationonpreset","Хотите импортировать выбранный пресет? Обратите внимание, что это действие заменит существующие настройки."
+"LUMINA.openfolderlabel","Открыть папку с пресетами"
