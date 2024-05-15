@@ -57,13 +57,13 @@ namespace Lumina.Locale
                             log.Info($"Reading embedded translation file {resourceName}");
 
                             // Read embedded file.
-                            using StreamReader reader = new(thisAssembly.GetManifestResourceStream(resourceName));
+                            using StreamReader reader = new (thisAssembly.GetManifestResourceStream(resourceName));
                             {
                                 // Dictionary to store translations.
-                                Dictionary<string, string> translations = new();
+                                Dictionary<string, string> translations = new ();
 
                                 // Parsing fields.
-                                StringBuilder builder = new();
+                                StringBuilder builder = new ();
                                 string key = null;
                                 bool parsingKey = true;
                                 bool quoting = false;

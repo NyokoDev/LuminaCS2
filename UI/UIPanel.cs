@@ -23,7 +23,7 @@ namespace Lumina.UI
     {
         public static float slider1Value { get; set; } = GlobalVariables.Instance.PostExposure;
         public static float slider2Value { get; set; } = GlobalVariables.Instance.Contrast;
-        public static float slider3Value { get; set; } = GlobalVariables.Instance.hueShift;
+        public static float slider3Value { get; set; } = GlobalVariables.Instance.HueShift;
         public static float slider4Value { get; set; } = GlobalVariables.Instance.Saturation;
         public static float LongitudeValue { get; set; } = GlobalVariables.Instance.Longitude;
         public static float LatitudeValue { get; set; } = GlobalVariables.Instance.Latitude;
@@ -78,7 +78,7 @@ namespace Lumina.UI
             // Iterate through each volume and log its information
             foreach (Volume volume in volumes)
             {
-                Mod.log.Info("Volume found: " + volume.gameObject.name);
+                Mod.Log.Info("Volume found: " + volume.gameObject.name);
 
                 // You can access and log various properties of the volume here
                 // For example, you can access its profile, parameters, etc.
@@ -221,7 +221,7 @@ namespace Lumina.UI
             Rect Slider3Rect = new Rect(20, YControl += 30, 300, 20);
             slider3Value = GUI.HorizontalSlider(Slider3Rect, slider3Value, -180f, 180f);
             slider3Value = Mathf.Round(slider3Value * 1000f) / 1000f; // Set step size
-            GlobalVariables.Instance.hueShift = slider3Value;
+            GlobalVariables.Instance.HueShift = slider3Value;
 
             GUI.Label(new Rect(20, YControl += 30, 100, 20), "Saturation");
             Rect Slider4Rect = new Rect(20, YControl += 30, 300, 20);
@@ -453,11 +453,11 @@ namespace Lumina.UI
             GlobalVariables.Instance.PostExposure = -1.431f;
             GlobalVariables.Instance.PostExposureActive = false;
             GlobalVariables.Instance.Contrast = 1f;
-            GlobalVariables.Instance.contrastActive = false;
-            GlobalVariables.Instance.hueShift = 1f;
-            GlobalVariables.Instance.hueShiftActive = false;
+            GlobalVariables.Instance.ContrastActive = false;
+            GlobalVariables.Instance.HueShift = 1f;
+            GlobalVariables.Instance.HueShiftActive = false;
             GlobalVariables.Instance.Saturation = 1f;
-            GlobalVariables.Instance.saturationActive = false;
+            GlobalVariables.Instance.SaturationActive = false;
             GlobalVariables.Instance.Latitude = 41.9028f;
             GlobalVariables.Instance.Longitude = 12.4964f;
 
@@ -513,7 +513,7 @@ namespace Lumina.UI
                     {
                         // Handle ColorAdjustments.contrast property
                         float contrastValue = property.getValue();
-                        Mod.log.Info("Contrast value " + contrastValue);
+                        Mod.Log.Info("Contrast value " + contrastValue);
                     }
                     else if (propertyName == "ColorAdjustments.hueShift")
                     {

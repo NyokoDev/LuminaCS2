@@ -1,94 +1,163 @@
-﻿using System;
-using System.IO;
-using System.Xml.Serialization;
-using UnityEngine.Rendering;
-using UnityEngine;
-using UnityEngine.Rendering.HighDefinition;
-using Lumina;
-using System.Threading;
-using Game.PSI;
-using Game.Rendering;
-using Lumina.XML;
+﻿// <copyright file="GlobalVariables.cs" company="NyokoDev">
+// Copyright (c) NyokoDev. All rights reserved.
+// </copyright>
 
 namespace LuminaMod.XML
 {
+    using System;
+    using System.IO;
+    using System.Reflection;
+    using System.Threading;
+    using System.Xml.Serialization;
+    using Game.PSI;
+    using Game.Rendering;
+    using Lumina;
+    using Lumina.XML;
+    using UnityEngine;
+    using UnityEngine.Rendering;
+    using UnityEngine.Rendering.HighDefinition;
+
+    /// <summary>
+    /// GlobalVariables class.
+    /// </summary>
     [Serializable]
     public class GlobalVariables
     {
         /// <summary>
-        /// PostExposure
+        /// Gets or sets postExposure.
         /// </summary>
         [XmlElement]
-        public float PostExposure { get; set; } 
+        public float PostExposure { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether postExposure is enabled.
+        /// </summary>
         [XmlElement]
-        public bool PostExposureActive { get; set; } 
+        public bool PostExposureActive { get; set; }
 
+        /// <summary>
+        /// Gets or sets contrast.
+        /// </summary>
         [XmlElement]
         public float Contrast { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether contrast is enabled.
+        /// </summary>
         [XmlElement]
-        public bool contrastActive { get; set; }
+        public bool ContrastActive { get; set; }
 
+        /// <summary>
+        /// Gets or sets hueshift.
+        /// </summary>
         [XmlElement]
-        public float hueShift { get; set; }
+        public float HueShift { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether hueshift is enabled.
+        /// </summary>
         [XmlElement]
-        public bool hueShiftActive { get; set; }
+        public bool HueShiftActive { get; set; }
 
+        /// <summary>
+        /// Gets or sets saturation.
+        /// </summary>
         [XmlElement]
         public float Saturation { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether saturation is enabled.
+        /// </summary>
         [XmlElement]
-        public bool saturationActive { get; set; }
+        public bool SaturationActive { get; set; }
 
+        /// <summary>
+        /// Gets or sets longitude.
+        /// </summary>
         [XmlElement]
         public float Longitude { get; set; }
 
+        /// <summary>
+        /// Gets or sets latitude.
+        /// </summary>
         [XmlElement]
         public float Latitude { get; set; }
 
+        /// <summary>
+        /// Gets or sets temperature.
+        /// </summary>
         [XmlElement]
         public float Temperature { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether temperature is enabled.
+        /// </summary>
         [XmlElement]
         public bool TemperatureActive { get; set; }
 
+        /// <summary>
+        /// Gets or sets tint.
+        /// </summary>
         [XmlElement]
         public float Tint { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether tint is enabled.
+        /// </summary>
         [XmlElement]
         public bool TintActive { get; set; }
 
+        /// <summary>
+        /// Gets or sets shadows.
+        /// </summary>
         [XmlElement]
         public float Shadows { get; set; } = 1f;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether shadows is enabled.
+        /// </summary>
         [XmlElement]
-        public bool ShadowsActive { get; set;}
+        public bool ShadowsActive { get; set; }
 
+        /// <summary>
+        /// Gets or sets midtones.
+        /// </summary>
         [XmlElement]
         public float Midtones { get; set; } = 1f;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether midtones is enabled.
+        /// </summary>
         [XmlElement]
         public bool MidtonesActive { get; set; }
 
+        /// <summary>
+        /// Gets or sets highlights.
+        /// </summary>
         [XmlElement]
         public float Highlights { get; set; } = 1f;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether highlights is enabled.
+        /// </summary>
         [XmlElement]
         public bool HighlightsActive { get; set; }
 
+        /// <summary>
+        /// Gets or sets volumetric Clouds data.
+        /// </summary>
+        [XmlElement]
+        public VolumetricCloudsData VolumetricCloudsData { get; set; }
 
-   
-
-
-
+        /// <summary>
+        /// Serializes to a file.
+        /// </summary>
+        /// <param name="filePath">Filepath parameter.</param>
         public static void SaveToFile(string filePath)
         {
-
-            if (!Directory.Exists(GlobalPaths.assemblyDirectory))
+            if (!Directory.Exists(GlobalPaths.AssemblyDirectory))
             {
-                Directory.CreateDirectory(GlobalPaths.assemblyDirectory);
+                Directory.CreateDirectory(GlobalPaths.AssemblyDirectory);
             }
 
             const int maxRetries = 3;
@@ -103,18 +172,19 @@ namespace LuminaMod.XML
                     {
                         serializer.Serialize(writer, Instance);
                     }
+
                     break; // Break out of the loop if the write operation is successful
                 }
                 catch (IOException ex) when (ex.HResult == -2147024864) // Sharing violation error code
                 {
                     // Log the error and retry after a short delay
-                    Mod.log.Info($"Sharing violation encountered. Retrying in 1 second...");
+                    Mod.Log.Info($"Sharing violation encountered. Retrying in 1 second...");
                     Thread.Sleep(1000); // Wait for 1 second before retrying
                     retries++;
                 }
                 catch (Exception ex)
                 {
-                    Mod.log.Info($"Error saving settings to file: {ex.Message}");
+                    Mod.Log.Info($"Error saving settings to file: {ex.Message}");
                     NotificationSystem.Push(
     "lumina",
     thumbnail: "https://i.imgur.com/C9fZDiA.png",
@@ -126,19 +196,23 @@ namespace LuminaMod.XML
 
             if (retries >= maxRetries)
             {
-                Mod.log.Info($"Failed to save settings to file after {maxRetries} retries.");
+                Mod.Log.Info($"Failed to save settings to file after {maxRetries} retries.");
             }
         }
 
-
+        /// <summary>
+        /// Loads from file.
+        /// </summary>
+        /// <param name="filePath">File path parameter.</param>
+        /// <returns>Loaded variables.</returns>
         public static GlobalVariables LoadFromFile(string filePath)
         {
             try
             {
                 // Ensure directory exists
-                if (!Directory.Exists(GlobalPaths.assemblyDirectory))
+                if (!Directory.Exists(GlobalPaths.AssemblyDirectory))
                 {
-                    Directory.CreateDirectory(GlobalPaths.assemblyDirectory);
+                    Directory.CreateDirectory(GlobalPaths.AssemblyDirectory);
                 }
 
                 // Create an XmlSerializer for the GlobalVariables type.
@@ -150,57 +224,42 @@ namespace LuminaMod.XML
                     // Deserialize the object from the file.
                     GlobalVariables loadedVariables = (GlobalVariables)serializer.Deserialize(reader);
 
-                    // Set the loaded values to the corresponding properties.
-                    GlobalVariables.Instance.PostExposure = loadedVariables.PostExposure;
-                    GlobalVariables.Instance.PostExposureActive = loadedVariables.PostExposureActive;
-                    GlobalVariables.Instance.Contrast = loadedVariables.Contrast;
-                    GlobalVariables.Instance.contrastActive = loadedVariables.contrastActive;
-                    GlobalVariables.Instance.hueShift = loadedVariables.hueShift;
-                    GlobalVariables.Instance.hueShiftActive = loadedVariables.hueShiftActive;
-                    GlobalVariables.Instance.Saturation = loadedVariables.Saturation;
-                    GlobalVariables.Instance.saturationActive = loadedVariables.saturationActive;
+                    // Get the properties of GlobalVariables class
+                    PropertyInfo[] properties = typeof(GlobalVariables).GetProperties();
 
-                    GlobalVariables.Instance.Latitude = loadedVariables.Latitude;
-                    GlobalVariables.Instance.Longitude = loadedVariables.Longitude; 
-
-                    GlobalVariables.Instance.Temperature = loadedVariables.Temperature;
-                    GlobalVariables.Instance.TemperatureActive = loadedVariables.TemperatureActive;
-                    GlobalVariables.Instance.Tint = loadedVariables.Tint;
-                    GlobalVariables.Instance.TintActive = loadedVariables.TintActive;
-
-                    GlobalVariables.Instance.Shadows = loadedVariables.Shadows;
-                    GlobalVariables.Instance.ShadowsActive = loadedVariables.ShadowsActive;
-                    GlobalVariables.Instance.Midtones = loadedVariables.Midtones;
-                    GlobalVariables.Instance.MidtonesActive = loadedVariables.MidtonesActive;
-                    GlobalVariables.Instance.Highlights = loadedVariables.Highlights;
-                    GlobalVariables.Instance.HighlightsActive = loadedVariables.HighlightsActive;
-
-             
-
-
-
+                    // Iterate through properties and set values from loadedVariables
+                    foreach (PropertyInfo property in properties)
+                    {
+                        // Find the corresponding property in loadedVariables
+                        PropertyInfo loadedProperty = typeof(GlobalVariables).GetProperty(property.Name);
+                        if (loadedProperty != null)
+                        {
+                            // Set the value from loadedVariables to the corresponding property in GlobalVariables.Instance
+                            property.SetValue(GlobalVariables.Instance, loadedProperty.GetValue(loadedVariables));
+                        }
+                    }
 
                     return loadedVariables;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Mod.log.Info("Failed to load Lumina settings. Ensure that at least one setting is set.");
+                Mod.Log.Info("Failed to load Lumina settings. Ensure that at least one setting is set.");
                 NotificationSystem.Push(
-    "mod-check",
-    thumbnail: "https://i.imgur.com/C9fZDiA.png",
-    title: "Lumina",
-    text: $"Please set a setting or verify the settings file."
-);
+                    "lumina",
+                    thumbnail: "https://i.imgur.com/C9fZDiA.png",
+                    title: "Lumina",
+                    text: $"Please set a setting or verify the settings file.");
 
                 return null;
             }
         }
 
-
-
-        // Singleton pattern to ensure only one instance of GlobalVariables exists.
         private static GlobalVariables instance;
+
+        /// <summary>
+        /// Gets singleton pattern to ensure only one instance of GlobalVariables exists.
+        /// </summary>
         public static GlobalVariables Instance
         {
             get
@@ -209,10 +268,9 @@ namespace LuminaMod.XML
                 {
                     instance = new GlobalVariables();
                 }
+
                 return instance;
             }
         }
-
-
     }
 }

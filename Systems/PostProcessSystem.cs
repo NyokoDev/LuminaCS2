@@ -15,6 +15,9 @@ using Game.Simulation;
 using JetBrains.Annotations;
 using Game.Assets;
 using System.Drawing.Text;
+using static UnityEngine.Rendering.HighDefinition.VolumetricClouds;
+using static UnityEngine.Rendering.DebugUI;
+using static UnityEngine.Rendering.HighDefinition.WindParameter;
 
 namespace Lumina.Systems
 {
@@ -31,6 +34,7 @@ namespace Lumina.Systems
         public ColorAdjustments m_ColorAdjustments;
         private WhiteBalance m_WhiteBalance;
         private ShadowsMidtonesHighlights m_ShadowsMidtonesHighlights;
+        public VolumetricClouds m_VolumetricClouds;
 
         private UnityEngine.Rendering.HighDefinition.ColorAdjustments colorAdjustments;
         private PhotoModeRenderSystem PhotoModeRenderSystem;
@@ -58,7 +62,6 @@ namespace Lumina.Systems
 
         }
 
-      
         private void ColorAdjustments()
         {
             // Use reflection to get the private ColorAdjustments field from LightingSystem
@@ -78,13 +81,13 @@ namespace Lumina.Systems
 
 
                     colorAdjustments.contrast.Override(GlobalVariables.Instance.Contrast);
-                    colorAdjustments.contrast.overrideState = GlobalVariables.Instance.contrastActive;
+                    colorAdjustments.contrast.overrideState = GlobalVariables.Instance.ContrastActive;
 
-                    colorAdjustments.hueShift.Override(GlobalVariables.Instance.hueShift);
-                    colorAdjustments.hueShift.overrideState = GlobalVariables.Instance.hueShiftActive;
+                    colorAdjustments.hueShift.Override(GlobalVariables.Instance.HueShift);
+                    colorAdjustments.hueShift.overrideState = GlobalVariables.Instance.HueShiftActive;
 
                     colorAdjustments.saturation.Override(GlobalVariables.Instance.Saturation);
-                    colorAdjustments.saturation.overrideState = GlobalVariables.Instance.saturationActive;
+                    colorAdjustments.saturation.overrideState = GlobalVariables.Instance.SaturationActive;
 
                 }
             }
@@ -126,6 +129,7 @@ namespace Lumina.Systems
                 LuminaVolume = globalVolume.AddComponent<Volume>();
                 LuminaVolume.priority = 1980f;
                 LuminaVolume.enabled = true;
+                
 
                 // Access the Volume Profile
                 m_Profile = LuminaVolume.profile;
@@ -138,11 +142,19 @@ namespace Lumina.Systems
                 m_Exposure.limitMax.Override(14f);
                 m_Exposure.fixedExposure.Override(100f);
 
+                // Add Volumetric Clouds
+                SetUpVolumetricClouds();
+
+    
                 // Add and configure White Balance effect
                 m_WhiteBalance = m_Profile.Add<WhiteBalance>();
                 m_WhiteBalance.active = true;
                 m_WhiteBalance.temperature.Override(GlobalVariables.Instance.Temperature);
                 m_WhiteBalance.tint.Override(GlobalVariables.Instance.Tint);
+
+
+
+               
 
 
 
@@ -157,8 +169,186 @@ namespace Lumina.Systems
                 m_ShadowsMidtonesHighlights.shadows.Override(new Vector4(GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows));
                 m_ShadowsMidtonesHighlights.midtones.Override(new Vector4(GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones));
 
-                Mod.log.Info("[LUMINA] Successfully added HDRP volume.");
+                Mod.Log.Info("[LUMINA] Successfully added HDRP volume.");
             }
+        }
+
+        public void SetUpVolumetricClouds()
+        {
+            m_VolumetricClouds = m_Profile.Add<VolumetricClouds>();
+
+            // Enable/Disable the volumetric clouds effect
+            m_VolumetricClouds.enable.value = VolumetricCloudsData.vmcactive;
+
+            // Renders the volumetric clouds effect pre or post transparent
+            m_VolumetricClouds.renderHook.value = VolumetricCloudsData.cloudhook;
+
+            // Controls whether clouds are local or part of the skybox
+            m_VolumetricClouds.localClouds.Override(VolumetricCloudsData.localclouds);
+            Mod.Log.Info("Override");
+
+            // Controls the curvature of the cloud volume which defines the distance at which the clouds intersect with the horizon
+            m_VolumetricClouds.earthCurvature.value = VolumetricCloudsData.earthCurvature;
+            Mod.Log.Info("earthcurvature");
+
+            // Tiling (x,y) of the cloud map
+            m_VolumetricClouds.cloudTiling.value = VolumetricCloudsData.cloudtiling;
+
+            // Offset (x,y) of the cloud map
+            m_VolumetricClouds.cloudOffset.value = VolumetricCloudsData.cloudOffset;
+
+            // Controls the altitude of the bottom of the volumetric clouds volume in meters
+            m_VolumetricClouds.bottomAltitude.value = VolumetricCloudsData.bottomAltitude;
+
+            // Controls the size of the volumetric clouds volume in meters
+            m_VolumetricClouds.altitudeRange.value = VolumetricCloudsData.altitudeRange;
+
+            // Controls the mode in which the clouds fade in when close to the camera's near plane
+            m_VolumetricClouds.fadeInMode.value = VolumetricCloudsData.fadeInMode;
+
+            // Controls the minimal distance at which clouds start appearing
+            m_VolumetricClouds.fadeInStart.value = VolumetricCloudsData.fadeInStart;
+
+            // Controls the distance that it takes for the clouds to reach their complete density
+            m_VolumetricClouds.fadeInDistance.value = VolumetricCloudsData.fadeInDistance;
+
+            // Controls the number of steps when evaluating the clouds' transmittance
+            m_VolumetricClouds.numPrimarySteps.value = VolumetricCloudsData.numPrimarySteps;
+
+            // Controls the number of steps when evaluating the clouds' lighting
+            m_VolumetricClouds.numLightSteps.value = VolumetricCloudsData.numLightSteps;
+
+            // Specifies the cloud map - Coverage (R), Rain (G), Type (B)
+            m_VolumetricClouds.cloudMap.value = VolumetricCloudsData.cloudMap;
+
+            // Specifies the lookup table for the clouds - Profile Coverage (R), Erosion (G), Ambient Occlusion (B)
+            m_VolumetricClouds.cloudLut.value = VolumetricCloudsData.cloudLut;
+
+            // Specifies the cloud control Mode: Simple, Advanced or Manual
+            m_VolumetricClouds.cloudControl.value = VolumetricCloudsData.cloudControl;
+
+            // Specifies the lower cloud layer distribution in the advanced mode
+            m_VolumetricClouds.cumulusMap.value = VolumetricCloudsData.cumulusMap;
+
+            // Overrides the coverage of the lower cloud layer specified in the cumulus map in the advanced mode
+            m_VolumetricClouds.cumulusMapMultiplier.value = 1f;
+
+            // Specifies the higher cloud layer distribution in the advanced mode
+            m_VolumetricClouds.altoStratusMap.value = VolumetricCloudsData.altoStratusMap;
+
+            // Overrides the coverage of the higher cloud layer specified in the alto stratus map in the advanced mode
+            m_VolumetricClouds.altoStratusMapMultiplier.value = 1f;
+
+            // Specifies the anvil shaped clouds distribution in the advanced mode
+            m_VolumetricClouds.cumulonimbusMap.value = VolumetricCloudsData.cumulonimbusMap;
+
+            // Overrides the coverage of the anvil shaped clouds specified in the cumulonimbus map in the advanced mode
+            m_VolumetricClouds.cumulonimbusMapMultiplier.value = 1f;
+
+            // Specifies the rain distribution in the advanced mode
+            m_VolumetricClouds.rainMap.value = VolumetricCloudsData.rainMap;
+
+            // Specifies the internal texture resolution used for the cloud map in the advanced mode
+            m_VolumetricClouds.cloudMapResolution.value = VolumetricCloudsData.cloudMapResolution;
+
+            // Controls the density (Y axis) of the volumetric clouds as a function of the height (X Axis) inside the cloud volume
+            m_VolumetricClouds.densityCurve.value = VolumetricCloudsData.densityCurve;
+
+            // Controls the erosion (Y axis) of the volumetric clouds as a function of the height (X Axis) inside the cloud volume
+            m_VolumetricClouds.erosionCurve.value = VolumetricCloudsData.erosionCurve;
+
+            // Controls the ambient occlusion (Y axis) of the volumetric clouds as a function of the height (X Axis) inside the cloud volume
+            m_VolumetricClouds.ambientOcclusionCurve.value = VolumetricCloudsData.ambientOcclusionCurve;
+
+            // Specifies the tint of the cloud scattering color
+            m_VolumetricClouds.scatteringTint.value = VolumetricCloudsData.scatteringTint;
+
+            // Controls the amount of local scattering in the clouds
+            m_VolumetricClouds.powderEffectIntensity.value = VolumetricCloudsData.powderEffectIntensity;
+
+            // Controls the amount of multi-scattering inside the cloud
+            m_VolumetricClouds.multiScattering.value = VolumetricCloudsData.multiScattering;
+
+            // Controls the global density of the cloud volume
+            m_VolumetricClouds.densityMultiplier.value = VolumetricCloudsData.densityMultiplier;
+
+            // Controls the larger noise passing through the cloud coverage
+            m_VolumetricClouds.shapeFactor.value = VolumetricCloudsData.shapeFactor;
+
+            // Controls the size of the larger noise passing through the cloud coverage
+            m_VolumetricClouds.shapeScale.value = VolumetricCloudsData.shapeScale;
+
+            // Controls the world space offset applied when evaluating the larger noise passing through the cloud coverage
+            m_VolumetricClouds.shapeOffset.value = VolumetricCloudsData.shapeOffset;
+
+            // Controls the smaller noise on the edge of the clouds
+            m_VolumetricClouds.erosionFactor.value = VolumetricCloudsData.erosionFactor;
+
+            // Controls the size of the smaller noise passing through the cloud coverage
+            m_VolumetricClouds.erosionScale.value = VolumetricCloudsData.erosionScale;
+
+            // Controls the type of noise used to generate the smaller noise passing through the cloud coverage
+            m_VolumetricClouds.erosionNoiseType.value = VolumetricCloudsData.erosionNoiseType;
+
+            // Controls the influence of the light probes on the cloud volume
+            m_VolumetricClouds.ambientLightProbeDimmer.value = VolumetricCloudsData.ambientLightProbeDimmer;
+
+            // Controls the influence of the sun light on the cloud volume
+            m_VolumetricClouds.sunLightDimmer.value = VolumetricCloudsData.sunLightDimmer;
+
+            // Controls how much Erosion Factor is taken into account when computing ambient occlusion
+            m_VolumetricClouds.erosionOcclusion.value = VolumetricCloudsData.erosionOcclusion;
+
+            // Sets the global horizontal wind speed in kilometers per hour
+            m_VolumetricClouds.globalWindSpeed.value = VolumetricCloudsData.globalWindSpeed;
+
+            // Controls the orientation of the wind relative to the X world vector
+            m_VolumetricClouds.orientation.value = VolumetricCloudsData.orientation;
+
+            // Controls the intensity of the wind-based altitude distortion of the clouds
+            m_VolumetricClouds.altitudeDistortion.value = VolumetricCloudsData.altitudeDistortion;
+
+            // Controls the multiplier to the speed of the cloud map
+            m_VolumetricClouds.cloudMapSpeedMultiplier.value = VolumetricCloudsData.cloudMapSpeedMultiplier;
+
+            // Controls the multiplier to the speed of the larger cloud shapes
+            m_VolumetricClouds.shapeSpeedMultiplier.value = VolumetricCloudsData.shapeSpeedMultiplier;
+
+            // Controls the multiplier to the speed of the erosion cloud shapes
+            m_VolumetricClouds.erosionSpeedMultiplier.value = VolumetricCloudsData.erosionSpeedMultiplier;
+
+            // Controls the vertical wind speed of the larger cloud shapes
+            m_VolumetricClouds.verticalShapeWindSpeed.value = VolumetricCloudsData.verticalShapeWindSpeed;
+
+            // Controls the vertical wind speed of the erosion cloud shapes
+            m_VolumetricClouds.verticalErosionWindSpeed.value = VolumetricCloudsData.verticalErosionWindSpeed;
+
+            // Temporal accumulation increases the visual quality of clouds by decreasing the noise
+            m_VolumetricClouds.temporalAccumulationFactor.value = VolumetricCloudsData.temporalAccumulationFactor;
+
+            // Enable/Disable the volumetric clouds ghosting reduction
+            m_VolumetricClouds.ghostingReduction.value = VolumetricCloudsData.ghostingReduction;
+
+            // Specifies the strength of the perceptual blending for the volumetric clouds
+            m_VolumetricClouds.perceptualBlending.value = VolumetricCloudsData.perceptualBlending;
+
+            // Enable/Disable the volumetric clouds shadow
+            m_VolumetricClouds.shadows.value = VolumetricCloudsData.shadows;
+
+            // Specifies the resolution of the volumetric clouds shadow map
+            m_VolumetricClouds.shadowResolution.value = VolumetricCloudsData.shadowResolution;
+
+            // Controls the vertical offset applied to compute the volumetric clouds shadow in meters
+            m_VolumetricClouds.shadowPlaneHeightOffset.value = VolumetricCloudsData.shadowPlaneHeightOffset;
+
+            // Sets the size of the area covered by shadow around the camera
+            m_VolumetricClouds.shadowDistance.value = VolumetricCloudsData.shadowDistance;
+
+            // Controls the opacity of the volumetric clouds shadow
+            m_VolumetricClouds.shadowOpacity.value = VolumetricCloudsData.shadowOpacity;
+
+            // Controls the shadow opacity when outside the area covered by the volumetric clouds shadow
+            m_VolumetricClouds.shadowOpacityFallback.value = VolumetricCloudsData.shadowOpacityFallback;
         }
 
 

@@ -43,6 +43,10 @@
 	  <None Remove="l10n\ru-RU.csv" />
 	  <None Remove="l10n\zh-HANS.csv" />
 	  <None Remove="l10n\zh-HANT.csv" />
+	  <None Remove="stylecop.json" />
+	</ItemGroup>
+	<ItemGroup>
+	  <AdditionalFiles Include="stylecop.json" />
 	</ItemGroup>
 	<ItemGroup>
 	  <EmbeddedResource Include="l10n\de-DE.csv" />
@@ -142,6 +146,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="Lib.Harmony" Version="2.2.2" />
+		<PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>

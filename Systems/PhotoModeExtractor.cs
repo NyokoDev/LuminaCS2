@@ -51,7 +51,7 @@ namespace Lumina.Systems
 
             GlobalVariables.Instance.PostExposure = SavedColorAdjustments.postExposure.value;
             GlobalVariables.Instance.Contrast = SavedColorAdjustments.contrast.value;
-            GlobalVariables.Instance.hueShift = SavedColorAdjustments.hueShift.value;
+            GlobalVariables.Instance.HueShift = SavedColorAdjustments.hueShift.value;
             GlobalVariables.Instance.Saturation = SavedColorAdjustments.saturation.value;
         }
 

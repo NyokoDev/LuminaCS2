@@ -49,34 +49,34 @@ namespace Lumina.Systems
           
 
             //LegacyUI
-            AddBinding(new TriggerBinding(Mod.MOD_UI, "OpenLegacyUI", OpenLegacyUI));
-            AddBinding(new TriggerBinding(Mod.MOD_UI, "ImportLuminaPreset", PresetManagement.ExecuteImport));
-            AddBinding(new TriggerBinding(Mod.MOD_UI, "ExportLuminaPreset", PresetManagement.ExportLuminaPreset));
-            AddBinding(new TriggerBinding<string>(Mod.MOD_UI, "UpdatePresetName", PresetManagement.UpdatePresetName));
-            AddBinding(new TriggerBinding(Mod.MOD_UI, "OpenPresetFolder", PresetManagement.OpenPresetFolder));
+            AddBinding(new TriggerBinding(Mod.MODUI, "OpenLegacyUI", OpenLegacyUI));
+            AddBinding(new TriggerBinding(Mod.MODUI, "ImportLuminaPreset", PresetManagement.ExecuteImport));
+            AddBinding(new TriggerBinding(Mod.MODUI, "ExportLuminaPreset", PresetManagement.ExportLuminaPreset));
+            AddBinding(new TriggerBinding<string>(Mod.MODUI, "UpdatePresetName", PresetManagement.UpdatePresetName));
+            AddBinding(new TriggerBinding(Mod.MODUI, "OpenPresetFolder", PresetManagement.OpenPresetFolder));
 
 
         }
 
         private void PlanetarySettings()
         {
-            AddBinding(new TriggerBinding<float>(Mod.MOD_UI, "SetLatitude", PlanetarySettingsMerger.SetLatitude));
-            AddUpdateBinding(new GetterValueBinding<float>(Mod.MOD_UI, "LatitudeValue", () => PlanetarySettingsMerger.LatitudeValue()));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetLatitude", PlanetarySettingsMerger.SetLatitude));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "LatitudeValue", () => PlanetarySettingsMerger.LatitudeValue()));
 
-            AddBinding(new TriggerBinding<float>(Mod.MOD_UI, "SetLongitude", PlanetarySettingsMerger.SetLongitude));
-            AddUpdateBinding(new GetterValueBinding<float>(Mod.MOD_UI, "LongitudeValue", () => PlanetarySettingsMerger.LongitudeValue()));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetLongitude", PlanetarySettingsMerger.SetLongitude));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "LongitudeValue", () => PlanetarySettingsMerger.LongitudeValue()));
         }
 
         private void ShadowsMidtonesHighlightsCheckboxes()
         {
-            AddBinding(new TriggerBinding(Mod.MOD_UI, "SetShadowsCheckbox", SetShadowsCheckbox));
-            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MOD_UI, "GetShadowsCheckbox", () => GetShadowsCheckbox()));
+            AddBinding(new TriggerBinding(Mod.MODUI, "SetShadowsCheckbox", SetShadowsCheckbox));
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "GetShadowsCheckbox", () => GetShadowsCheckbox()));
 
-            AddBinding(new TriggerBinding(Mod.MOD_UI, "SetMidtonesCheckbox", SetMidtonesCheckbox));
-            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MOD_UI, "GetMidtonesCheckbox", () => GetMidtonesCheckbox()));
+            AddBinding(new TriggerBinding(Mod.MODUI, "SetMidtonesCheckbox", SetMidtonesCheckbox));
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "GetMidtonesCheckbox", () => GetMidtonesCheckbox()));
 
-            AddBinding(new TriggerBinding(Mod.MOD_UI, "SetHighlightsCheckbox", SetHighlightsCheckbox));
-            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MOD_UI, "GetHighlightsCheckbox", () => GetHighlightsCheckbox()));
+            AddBinding(new TriggerBinding(Mod.MODUI, "SetHighlightsCheckbox", SetHighlightsCheckbox));
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "GetHighlightsCheckbox", () => GetHighlightsCheckbox()));
 
 
 
@@ -116,31 +116,31 @@ namespace Lumina.Systems
         private void StartShadowsMidtonesHighlights()
         {
 
-            AddUpdateBinding(new GetterValueBinding<float>(Mod.MOD_UI, "GetShadows", () => GetShadows()));
-            AddUpdateBinding(new GetterValueBinding<float>(Mod.MOD_UI, "GetMidtones", () => GetMidtones()));
-            AddUpdateBinding(new GetterValueBinding<float>(Mod.MOD_UI, "GetHighlights", () => GetHighlights()));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetShadows", () => GetShadows()));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetMidtones", () => GetMidtones()));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetHighlights", () => GetHighlights()));
 
-            AddBinding(new TriggerBinding<float>(Mod.MOD_UI, "SetShadows", SetShadows));
-            AddBinding(new TriggerBinding<float>(Mod.MOD_UI, "SetMidtones", SetMidtones));
-            AddBinding(new TriggerBinding<float>(Mod.MOD_UI, "SetHighlights", SetHighlights));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetShadows", SetShadows));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetMidtones", SetMidtones));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetHighlights", SetHighlights));
         }
 
         private void WhiteBalance()
         {
-            AddUpdateBinding(new GetterValueBinding<float>(Mod.MOD_UI, "GetTemperature", () => GetTemperature()));
-            AddUpdateBinding(new GetterValueBinding<float>(Mod.MOD_UI, "GetTint", () => GetTint()));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetTemperature", () => GetTemperature()));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetTint", () => GetTint()));
 
-            AddBinding(new TriggerBinding<float>(Mod.MOD_UI, "SetTemperature", SetTemperature));
-            AddBinding(new TriggerBinding<float>(Mod.MOD_UI, "SetTint", SetTint));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetTemperature", SetTemperature));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetTint", SetTint));
         }
 
         private void WhiteBalanceCheckboxes()
         {
-            AddBinding(new TriggerBinding(Mod.MOD_UI, "SetTempCheckbox", SetTempCheckbox));
-            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MOD_UI, "GetTempCheckbox", () => GetTempCheckbox()));
+            AddBinding(new TriggerBinding(Mod.MODUI, "SetTempCheckbox", SetTempCheckbox));
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "GetTempCheckbox", () => GetTempCheckbox()));
 
-            AddBinding(new TriggerBinding(Mod.MOD_UI, "SetTintCheckbox", SetTintCheckbox));
-            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MOD_UI, "GetTintCheckbox", () => GetTintCheckbox()));
+            AddBinding(new TriggerBinding(Mod.MODUI, "SetTintCheckbox", SetTintCheckbox));
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "GetTintCheckbox", () => GetTintCheckbox()));
 
 
         }
@@ -168,69 +168,69 @@ namespace Lumina.Systems
         private void ColorAdjustments()
         {
             //AddBinding(_ShowUI = new(Mod.MOD_UI, "MIT_ShowUI", false));
-            AddBinding(new TriggerBinding(Mod.MOD_UI, "MIT_EnableToggle", SliderPanel.Toggle));
-            AddBinding(new TriggerBinding(Mod.MOD_UI, "LUM_SendToLumina", SliderPanel.SendToLumina));
+            AddBinding(new TriggerBinding(Mod.MODUI, "MIT_EnableToggle", SliderPanel.Toggle));
+            AddBinding(new TriggerBinding(Mod.MODUI, "LUM_SendToLumina", SliderPanel.SendToLumina));
 
-            AddBinding(new TriggerBinding<float>(Mod.MOD_UI, "SetPostExposure", SetPostExposure));
-            AddUpdateBinding(new GetterValueBinding<float>(Mod.MOD_UI, "PostExposure", () => GetSetPostExposure()));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetPostExposure", SetPostExposure));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "PostExposure", () => GetSetPostExposure()));
 
-            AddBinding(new TriggerBinding<float>(Mod.MOD_UI, "SetContrast", SetContrast));
-            AddUpdateBinding(new GetterValueBinding<float>(Mod.MOD_UI, "GetContrast", () => GetContrast()));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetContrast", SetContrast));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetContrast", () => GetContrast()));
 
-            AddUpdateBinding(new GetterValueBinding<float>(Mod.MOD_UI, "GetHueShift", () => GetHueShift()));
-            AddBinding(new TriggerBinding<float>(Mod.MOD_UI, "SetHueShift", SetHueShift));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetHueShift", () => GetHueShift()));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetHueShift", SetHueShift));
 
-            AddUpdateBinding(new GetterValueBinding<float>(Mod.MOD_UI, "GetSaturation", () => GetSaturation()));
-            AddBinding(new TriggerBinding<float>(Mod.MOD_UI, "SetSaturation", SetSaturation));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetSaturation", () => GetSaturation()));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetSaturation", SetSaturation));
 
-            AddBinding(new TriggerBinding(Mod.MOD_UI, "Save", SaveToFile));
-            AddBinding(new TriggerBinding(Mod.MOD_UI, "ResetLuminaSettings", Reset));
+            AddBinding(new TriggerBinding(Mod.MODUI, "Save", SaveToFile));
+            AddBinding(new TriggerBinding(Mod.MODUI, "ResetLuminaSettings", Reset));
         }
 
         private void Checkboxes()
         {
-            AddBinding(new TriggerBinding(Mod.MOD_UI, "SetPostExposureCheckbox", SetPostExposureCheckbox));
-            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MOD_UI, "GetPostExposureCheckbox", () => GetPostExposureCheckbox()));
+            AddBinding(new TriggerBinding(Mod.MODUI, "SetPostExposureCheckbox", SetPostExposureCheckbox));
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "GetPostExposureCheckbox", () => GetPostExposureCheckbox()));
 
 
-            AddBinding(new TriggerBinding(Mod.MOD_UI, "SetcontrastCheckbox", SetcontrastCheckbox));
-            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MOD_UI, "GetcontrastCheckbox", () => GetcontrastCheckbox()));
+            AddBinding(new TriggerBinding(Mod.MODUI, "SetcontrastCheckbox", SetcontrastCheckbox));
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "GetcontrastCheckbox", () => GetcontrastCheckbox()));
 
-            AddBinding(new TriggerBinding(Mod.MOD_UI, "SethueshiftCheckbox", SethueshiftCheckbox));
-            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MOD_UI, "GethueshiftCheckbox", () => GethueshiftCheckbox()));
+            AddBinding(new TriggerBinding(Mod.MODUI, "SethueshiftCheckbox", SethueshiftCheckbox));
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "GethueshiftCheckbox", () => GethueshiftCheckbox()));
 
-            AddBinding(new TriggerBinding(Mod.MOD_UI, "SetsaturationCheckbox", SetsaturationCheckbox));
-            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MOD_UI, "GetsaturationCheckbox", () => GetsaturationCheckbox()));
+            AddBinding(new TriggerBinding(Mod.MODUI, "SetsaturationCheckbox", SetsaturationCheckbox));
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "GetsaturationCheckbox", () => GetsaturationCheckbox()));
         }
 
         private bool GetsaturationCheckbox()
         {
-            return GlobalVariables.Instance.saturationActive;
+            return GlobalVariables.Instance.SaturationActive;
         }
 
         private void SetsaturationCheckbox()
         {
-            GlobalVariables.Instance.saturationActive = !GlobalVariables.Instance.saturationActive;
+            GlobalVariables.Instance.SaturationActive = !GlobalVariables.Instance.SaturationActive;
         }
 
         private bool GethueshiftCheckbox()
         {
-            return GlobalVariables.Instance.hueShiftActive;
+            return GlobalVariables.Instance.HueShiftActive;
         }
 
         private void SethueshiftCheckbox()
         {
-           GlobalVariables.Instance.hueShiftActive = !GlobalVariables.Instance.hueShiftActive;
+           GlobalVariables.Instance.HueShiftActive = !GlobalVariables.Instance.HueShiftActive;
         }
 
         private bool GetcontrastCheckbox()
         {
-            return GlobalVariables.Instance.contrastActive;
+            return GlobalVariables.Instance.ContrastActive;
         }
 
         private void SetcontrastCheckbox()
         {
-            GlobalVariables.Instance.contrastActive = !GlobalVariables.Instance.contrastActive;
+            GlobalVariables.Instance.ContrastActive = !GlobalVariables.Instance.ContrastActive;
         }
 
         private bool GetPostExposureCheckbox()
@@ -321,12 +321,12 @@ namespace Lumina.Systems
 
         private void SetHueShift(float obj)
         {
-            GlobalVariables.Instance.hueShift = obj; 
+            GlobalVariables.Instance.HueShift = obj; 
         }
 
         private float GetHueShift()
         {
-            return GlobalVariables.Instance.hueShift;
+            return GlobalVariables.Instance.HueShift;
         }
 
         private float GetContrast()
