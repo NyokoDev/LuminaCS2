@@ -134,17 +134,10 @@ namespace Lumina.Systems
                 // Access the Volume Profile
                 m_Profile = LuminaVolume.profile;
 
-                // Add and configure Exposure effect
-                m_Exposure = m_Profile.Add<Exposure>();
-                m_Exposure.active = true;
-                m_Exposure.mode.value = ExposureMode.Automatic;
-                m_Exposure.limitMin.Override(-5f);
-                m_Exposure.limitMax.Override(14f);
-                m_Exposure.fixedExposure.Override(100f);
-
+#if DEBUG
                 // Add Volumetric Clouds
                 SetUpVolumetricClouds();
-
+#endif
     
                 // Add and configure White Balance effect
                 m_WhiteBalance = m_Profile.Add<WhiteBalance>();
@@ -173,6 +166,8 @@ namespace Lumina.Systems
             }
         }
 
+
+#if DEBUG
         public void SetUpVolumetricClouds()
         {
             m_VolumetricClouds = m_Profile.Add<VolumetricClouds>();
@@ -350,7 +345,7 @@ namespace Lumina.Systems
             // Controls the shadow opacity when outside the area covered by the volumetric clouds shadow
             m_VolumetricClouds.shadowOpacityFallback.value = VolumetricCloudsData.shadowOpacityFallback;
         }
-
+#endif
 
 
         private void PlanetarySettings()
@@ -358,7 +353,7 @@ namespace Lumina.Systems
             try
             {
 #if DEBUG
-                Mod.log.Info("Entered PlanetarySettings");
+                Mod.Log.Info("Entered PlanetarySettings");
 #endif
                 LightingSystem lightingSystemInstance = World.GetExistingSystemManaged<LightingSystem>();
                 if (lightingSystemInstance != null)
@@ -391,35 +386,35 @@ namespace Lumina.Systems
                             else
                             {
 #if DEBUG
-                                Mod.log.Info("Latitude or longitude field not found.");
+                                Mod.Log.Info("Latitude or longitude field not found.");
 #endif
                             }
                         }
                         else
                         {
 #if DEBUG
-                            Mod.log.Info("PlanetarySystemInstance is null.");
+                            Mod.Log.Info("PlanetarySystemInstance is null.");
 #endif
                         }
                     }
                     else
                     {
 #if DEBUG
-                        Mod.log.Info("m_PlanetarySystem field not found in LightingSystem.");
+                        Mod.Log.Info("m_PlanetarySystem field not found in LightingSystem.");
 #endif
                     }
                 }
                 else
                 {
 #if DEBUG
-                    Mod.log.Info("LightingSystemInstance is null.");
+                    Mod.Log.Info("LightingSystemInstance is null.");
 #endif
                 }
             }
             catch (Exception ex)
             {
 #if DEBUG
-                Mod.log.Info("An error occurred: " + ex.Message);
+                Mod.Log.Info("An error occurred: " + ex.Message);
 #endif
             }
         }
