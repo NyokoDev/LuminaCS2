@@ -19,6 +19,9 @@ You can also open this folder directly from the Lumina UI.
 - You can copy and paste the name from your file explorer for convenience.
 - Click "Load LUT."
 
+**Included LUTs**
+Lumina v1.5.4 also includes 10 LUTs from on1.com for you to use. These LUTs are pre-loaded and ready to enhance your game visuals.
+
 ![Load LUT](https://i.imgur.com/yJ8X9ff.png)
 
 
