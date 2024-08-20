@@ -6,6 +6,8 @@ using Lumina.XML;
 using LuminaMod.XML;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -63,12 +65,19 @@ namespace Lumina.Systems
 
             AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "LUTValue", () => LUTValue()));
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleLUTContribution", HandleLUTContribution));
+            AddBinding(new TriggerBinding(Mod.MODUI, "OpenLUTFolder", OpenLUTFolder)); 
             AddBinding(new TriggerBinding(Mod.MODUI, "UpdateLUT", UpdateLUT));
+        }
+
+        private void OpenLUTFolder()
+        {
+            string luminaLUTSDirectory = GlobalPaths.LuminaLUTSDirectory;
+            Process.Start(luminaLUTSDirectory);
         }
 
         private void UpdateLUTName(string obj)
         {
-            GlobalVariables.Instance.LUTName = obj;
+            PostProcessSystem.LutName_Example = obj;
         }
 
 

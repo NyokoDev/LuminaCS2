@@ -38,6 +38,7 @@ namespace Lumina.Systems
         private WhiteBalance m_WhiteBalance;
         private ShadowsMidtonesHighlights m_ShadowsMidtonesHighlights;
         public VolumetricClouds m_VolumetricClouds;
+        public static string LutName_Example;
 
         private UnityEngine.Rendering.HighDefinition.ColorAdjustments colorAdjustments;
         private PhotoModeRenderSystem PhotoModeRenderSystem;
@@ -82,6 +83,8 @@ namespace Lumina.Systems
         {
             try
             {
+                var lutFilePath = Path.Combine(GlobalPaths.LuminaLUTSDirectory, LutName_Example + ".cube");
+
                 // Ensure tonemapping is active and properly configured
                 m_Tonemapping.active = true;
                 m_Tonemapping.mode.overrideState = true;
@@ -99,11 +102,9 @@ namespace Lumina.Systems
                 // Set the loaded LUT texture
                 m_Tonemapping.lutTexture.value = lutTexture;
 
-
-              
-
                 Mod.Log.Info($"LUT successfully set to: {lutFilePath}");
 
+                GlobalVariables.Instance.LUTName = LutName_Example;
                 // Save global variables to file, with error handling
                 GlobalVariables.SaveToFile(GlobalPaths.GlobalModSavingPath);
             }

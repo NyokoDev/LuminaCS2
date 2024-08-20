@@ -184,6 +184,22 @@
    top: 85rem;
 }
 
+.OpenLUTButton {
+   position: absolute;
+   left: 20rem;
+   width: 300rem;
+   top: 132rem;
+}
+
+.LutLabel {
+   color: rgb(255, 255, 255);
+   position: absolute;
+   top: 15rem;
+   left: -300rem;
+   width: 100%;
+   font-size: 18rem;
+}
+
 
 
 .ColorAdjustmentsButton:hover {
@@ -1017,7 +1033,7 @@ $hueshift-top: 80rem;
    width: 500rem;
    background-size: cover;
    background-repeat: no-repeat;
-   background-image: url("https://i.imgur.com/V0dM2sT.png");
+   background-image: url("https://i.imgur.com/gWqsHNg.png");
    
    border: 5px solid #000; /* Example border: 5px solid black */
    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Example box shadow: offset-x, offset-y, blur-radius, color */

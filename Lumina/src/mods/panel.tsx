@@ -327,6 +327,12 @@ const handleHighlights = (value: number) => {
       trigger(mod.id, 'UpdateLUT'); 
     }
 
+    const OpenLUTFolder= () => {
+      trigger(mod.id, 'OpenLUTFolder'); 
+    }
+
+
+
 
 
 
@@ -941,6 +947,14 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
 onClick={UpdateLUT}
 className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LoadLUTButton">{translate("LUMINA.loadlutbutton")}
    </button>
+
+   <button
+onClick={OpenLUTFolder}
+className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS OpenLUTButton">{translate("LUMINA.openlutbutton")}
+   </button>
+
+   <label className="title_SVH title_zQN LutLabel" style={{ whiteSpace: 'nowrap' }}>TONEMAPPING - LUT SELECTION (BETA)</label>
+
 
 
 
