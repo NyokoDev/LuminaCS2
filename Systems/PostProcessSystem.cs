@@ -66,7 +66,6 @@ namespace Lumina.Systems
             PlanetarySettings();
 
 
-            // Replace `condition` with your actual boolean variable name
             if (!LUTloaded)
             {
                 TonemappingLUT();

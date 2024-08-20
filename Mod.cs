@@ -59,6 +59,8 @@ namespace Lumina
 
             updateSystem.UpdateAt<UISystem>(SystemUpdatePhase.MainLoop);
 
+            updateSystem.UpdateAt<TimeOfDayProccessor>(SystemUpdatePhase.GameSimulation);
+
             // Load translations.
             Localization.LoadTranslations(null, Log);
 

@@ -155,6 +155,9 @@ namespace LuminaMod.XML
         [XmlElement]
         public string LUTName { get; set; }
 
+        [XmlElement]
+        public bool TimeOfDayLocked { get; set; }
+
         /// <summary>
         /// Serializes to a file.
         /// </summary>

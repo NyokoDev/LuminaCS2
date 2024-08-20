@@ -67,6 +67,26 @@ namespace Lumina.Systems
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleLUTContribution", HandleLUTContribution));
             AddBinding(new TriggerBinding(Mod.MODUI, "OpenLUTFolder", OpenLUTFolder)); 
             AddBinding(new TriggerBinding(Mod.MODUI, "UpdateLUT", UpdateLUT));
+
+            //Time of day
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "TimeFloatIsActive", () => TimeFloatIsActive()));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "TimeFloatValue", () => TimeFloatValue()));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleTimeFloatValue", HandleTimeFloatValue));
+        }
+
+        private bool TimeFloatIsActive()
+        {
+            return TimeOfDayProccessor.Locked;
+        }
+
+        private void HandleTimeFloatValue(float obj)
+        {
+            TimeOfDayProccessor.TimeFloat = obj;
+        }
+
+        private float TimeFloatValue()
+        {
+            return TimeOfDayProccessor.TimeFloat;
         }
 
         private void OpenLUTFolder()

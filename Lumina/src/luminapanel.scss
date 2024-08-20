@@ -1021,8 +1021,23 @@ $hueshift-top: 80rem;
    top: $global-height + $distance + 31rem;
    white-space: nowrap;
 }
- 
 
+
+.TimeOfDaySlider {
+   position: absolute;
+   display: flex;
+   top: 20rem;
+   width:300rem;
+   box-shadow: #000;
+}
+
+.TimeOfDaySlider {
+   font-size: 20rem;
+   left: 250rem;
+   color: white;
+   box-shadow: #000;
+
+}
 
 .LuminaVersion_Image {
    display: flex;
@@ -1033,7 +1048,7 @@ $hueshift-top: 80rem;
    width: 500rem;
    background-size: cover;
    background-repeat: no-repeat;
-   background-image: url("https://i.imgur.com/gWqsHNg.png");
+   background-image: url("https://i.imgur.com/7poVzFP.png");
    
    border: 5px solid #000; /* Example border: 5px solid black */
    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Example box shadow: offset-x, offset-y, blur-radius, color */

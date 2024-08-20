@@ -16,6 +16,7 @@ namespace Lumina
     using Game.Settings;
     using Game.UI;
     using Game.UI.Widgets;
+    using Lumina.Systems;
     using Lumina.UI;
     using Lumina.XML;
     using LuminaMod.XML;
@@ -126,6 +127,16 @@ namespace Lumina
             set
             {
                 OpenPaypal();
+            }
+        }
+
+        [SettingsUISection(KSection, KToggleGroup)]
+        public bool UseTimeOfDaySlider
+        {
+            get => TimeOfDayProccessor.Locked;
+            set
+            {
+                TimeOfDayProccessor.Locked = value;
             }
         }
 
@@ -317,8 +328,20 @@ namespace Lumina
           {
             setting.GetOptionDescLocaleID(nameof(Lumina.Setting.OpenLocationButton)),
             "Opens the saved settings file in a new tab."
+                    },
+                    {
+            setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.UseTimeOfDaySlider)),
+            "Use Time Of Day Slider"
           },
+                    {
+            setting.GetOptionDescLocaleID(nameof(Lumina.Setting.UseTimeOfDaySlider)),
+            "Shows a time of day slider to switch between day/night. Disabled by default if Weather Plus or other time changing mode is detected."
+                    }
+                    
+
+
                 };
+
             }
 
             /// <inheritdoc/>
