@@ -118,6 +118,74 @@
    transform: translateY(-15%);
 }
 
+
+//Tonemapping
+
+.TonemappingButton {
+   position: absolute;
+   background-image: url('https://i.imgur.com/CwrbLHu.png');
+   background-size: cover; /* Make sure the background image covers the entire area */
+   width: 43rem;
+   height: 43rem;
+   left: 800rem; 
+   transition: transform 0.01s ease-in-out;
+   border-radius: 50%; /* Make it round */
+   filter: invert(100%); /* Invert the colors to turn black to white */
+}
+
+.TonemappingButtonDeselected {
+   position: absolute;
+   background-image: url('https://i.imgur.com/CwrbLHu.png');
+   background-size: cover; /* Make sure the background image covers the entire area */
+   width: 43rem;
+   height: 43rem;
+   left: 800rem; /* Adjusted left position */
+   transition: transform 2s ease-in-out;
+   border-radius: 50%; /* Make it round */
+   filter: invert(100%); /* Invert the colors to turn black to white */
+}
+
+.TonemappingButton:hover {
+   transform: translateY(-15%);
+}
+
+
+.LUTInputText {
+   position: absolute;
+   color: white;
+   width:500rem;
+   top: 50rem;
+   left: 20rem;
+}
+
+.LUTContributionSlider {
+   position: absolute;
+   height: 30rem;
+   top:250rem;
+   right: -120rem;
+   left: 250rem;
+   width: 500rem;
+   background-color: rgba(0, 0, 0, 0.5);
+}
+
+.LUTContributionInput {
+   position: absolute;
+   color: rgb(118, 118, 118);
+   font-size: 20rem;
+   top:250rem;
+   left: 155rem;
+   width: 50rem;
+}
+
+.LoadLUTButton {
+   position: absolute;
+   left: 20rem;
+   width: 300rem;
+   top: 85rem;
+}
+
+
+
 .ColorAdjustmentsButton:hover {
    transform: translateY(-15%);
 }

@@ -43,6 +43,16 @@
 	  <None Remove="l10n\ru-RU.csv" />
 	  <None Remove="l10n\zh-HANS.csv" />
 	  <None Remove="l10n\zh-HANT.csv" />
+	  <None Remove="LUTS\Aqua and Orange Dark.cube" />
+	  <None Remove="LUTS\Aqua.cube" />
+	  <None Remove="LUTS\Blues.cube" />
+	  <None Remove="LUTS\Earth Tone Boost.cube" />
+	  <None Remove="LUTS\Green_Blues.cube" />
+	  <None Remove="LUTS\Green_Yellow.cube" />
+	  <None Remove="LUTS\Oranges.cube" />
+	  <None Remove="LUTS\Purple.cube" />
+	  <None Remove="LUTS\Reds.cube" />
+	  <None Remove="LUTS\Reds_Oranges_Yellows.cube" />
 	  <None Remove="stylecop.json" />
 	</ItemGroup>
 	<ItemGroup>
@@ -63,6 +73,16 @@
 	  <EmbeddedResource Include="l10n\ru-RU.csv" />
 	  <EmbeddedResource Include="l10n\zh-HANS.csv" />
 	  <EmbeddedResource Include="l10n\zh-HANT.csv" />
+	  <EmbeddedResource Include="LUTS\Aqua and Orange Dark.cube" />
+	  <EmbeddedResource Include="LUTS\Aqua.cube" />
+	  <EmbeddedResource Include="LUTS\Blues.cube" />
+	  <EmbeddedResource Include="LUTS\Earth Tone Boost.cube" />
+	  <EmbeddedResource Include="LUTS\Green_Blues.cube" />
+	  <EmbeddedResource Include="LUTS\Green_Yellow.cube" />
+	  <EmbeddedResource Include="LUTS\Oranges.cube" />
+	  <EmbeddedResource Include="LUTS\Purple.cube" />
+	  <EmbeddedResource Include="LUTS\Reds.cube" />
+	  <EmbeddedResource Include="LUTS\Reds_Oranges_Yellows.cube" />
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="Colossal.Collections">

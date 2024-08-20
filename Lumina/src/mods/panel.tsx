@@ -21,6 +21,7 @@ import FilePicker from "./FilePicker";
 
 export let isInstalled$ = false;
 export let ColorAdjustmentsEnabled = true;
+export let ToneMappingEnabled = false;
 
 
 // ColorAdjustments
@@ -53,6 +54,9 @@ export const HighlightsActive$ =  bindValue<boolean>(mod.id, 'GetHighlightsCheck
 // Planetary Settings
 export const LatitudeValue$ = bindValue<number>(mod.id, 'LatitudeValue');
 export const LongitudeValue$ = bindValue<number>(mod.id, 'LongitudeValue');
+
+//Tonemapping
+export const LUTValue$ = bindValue<number>(mod.id, 'LUTValue');
 
 const theme = createTheme({
   palette: {
@@ -113,11 +117,15 @@ const HighlightsActive = useValue(HighlightsActive$);
 const LatitudeValue = useValue(LatitudeValue$);
 const LongitudeValue = useValue(LongitudeValue$);
 
+//Tonemapping
+const LUTValue = useValue(LUTValue$);
+
 
 
 // Initialize state variables using useState hook
 const [ColorAdjustmentsEnabled$, setCA] = useState(true);
 const [SettingsEnabled$, setSettings] = useState(false);
+const [ToneMappingEnabled$, setTonemapping] = useState(false);
 const [PlanetaryEnabled$, setPlanetaryTab] = useState(false);
 const [OnImport, OnImportChange] = useState(false);
 
@@ -234,6 +242,10 @@ function UpdatePresetName(value: string) {
   trigger(mod.id, 'UpdatePresetName', value);
 }
 
+function UpdateLUTName(value: string) {
+  trigger(mod.id, 'UpdateLUTName', value);
+}
+
   
   
 
@@ -311,6 +323,10 @@ const handleHighlights = (value: number) => {
       trigger(mod.id, 'OpenPresetFolder'); 
     }
 
+    const UpdateLUT = () => {
+      trigger(mod.id, 'UpdateLUT'); 
+    }
+
 
 
 
@@ -326,6 +342,10 @@ const handleHighlights = (value: number) => {
       trigger(mod.id, 'SetLongitude', id);
     };
 
+    const handleLUTContribution = (value: number) => {
+      const id = planetstart + (value * planetstepSize);
+      trigger(mod.id, 'HandleLUTContribution', id);
+    };
 
     
 
@@ -372,6 +392,7 @@ return (
   onClick={() => { setCA(false)
     setSettings(true)
     setPlanetaryTab(false)
+    setTonemapping(false)
  ;}}>
 </button>
 
@@ -395,6 +416,26 @@ return (
   onClick={() => { setCA(false)
     setSettings(false)
     setPlanetaryTab(true)
+    setTonemapping(false)
+ ;}}>
+</button>
+</Tooltip>
+
+<Tooltip
+  tooltip={translate("LUMINA.tonemappingtooltip")}// Specify the content of the tooltip
+  disabled={false} // Specify whether the tooltip is disabled (default: false)
+  alignment="center" // Specify the alignment of the tooltip (e.g., "start", "center", "end")
+  className="custom-tooltip" // Specify additional class names for styling purposes
+>
+<button 
+  className={tab1 ? 'TonemappingButtonDeselected' : 'TonemappingButton'} 
+  onSelect={() => {
+    console.log("[LUMINA] Toggled Planetary panel.");
+  }}
+  onClick={() => { setCA(false)
+    setSettings(false)
+    setPlanetaryTab(false)
+    setTonemapping(true)
  ;}}>
 </button>
 </Tooltip>
@@ -883,7 +924,32 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
    </div>
 }
 
+
+
+{ToneMappingEnabled$ && 
+  <div className="TonemappingPanel">
+
+
+<input
+  type="text"
+  onChange={(event) => UpdateLUTName(String(event.target.value))}
+  className="toggle_cca item-mouse-states_Fmi toggle_th_ LUTInputText"
+/>
+
+
+<button
+onClick={UpdateLUT}
+className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LoadLUTButton">{translate("LUMINA.loadlutbutton")}
+   </button>
+
+
+
 </div>
+
+}
+</div>
+
+
 
 </div>
 )}

@@ -23,3 +23,5 @@
 "LUMINA.importpreset","Importar Preset"
 "LUMINA.confirmationonpreset","¿Deseas importar el preset seleccionado? Ten en cuenta que esta acción reemplazará la configuración existente."
 "LUMINA.openfolderlabel","Abrir Carpeta de Presets"
+"LUMINA.loadlutbutton","Cargar LUT"
+"LUMINA.tonemappingtooltip","Tonemapping"

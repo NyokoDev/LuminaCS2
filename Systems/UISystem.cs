@@ -53,9 +53,38 @@ namespace Lumina.Systems
             AddBinding(new TriggerBinding(Mod.MODUI, "ImportLuminaPreset", PresetManagement.ExecuteImport));
             AddBinding(new TriggerBinding(Mod.MODUI, "ExportLuminaPreset", PresetManagement.ExportLuminaPreset));
             AddBinding(new TriggerBinding<string>(Mod.MODUI, "UpdatePresetName", PresetManagement.UpdatePresetName));
+         
             AddBinding(new TriggerBinding(Mod.MODUI, "OpenPresetFolder", PresetManagement.OpenPresetFolder));
 
+            //Tonemapping
+            AddBinding(new TriggerBinding<string>(Mod.MODUI,"UpdateLUTName", UpdateLUTName));
 
+
+
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "LUTValue", () => LUTValue()));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleLUTContribution", HandleLUTContribution));
+            AddBinding(new TriggerBinding(Mod.MODUI, "UpdateLUT", UpdateLUT));
+        }
+
+        private void UpdateLUTName(string obj)
+        {
+            GlobalVariables.Instance.LUTName = obj;
+        }
+
+
+        private void UpdateLUT()
+        {
+            PostProcessSystem.UpdateLUT();
+        }
+
+        private void HandleLUTContribution(float obj)
+        {
+            GlobalVariables.Instance.LUTContribution = obj;
+        }
+
+        private float LUTValue()
+        {
+            return GlobalVariables.Instance.LUTContribution;
         }
 
         private void PlanetarySettings()

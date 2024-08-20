@@ -28,6 +28,12 @@ namespace Lumina.XML
         /// LuminaPresetsDirectory. Returns presets directory.
         /// </summary>
         public static string LuminaPresetsDirectory = Path.Combine(AssemblyDirectory, "LuminaPresets");
+
+        /// <summary>
+        /// Returns LUTS directory.
+        /// </summary>
+        public static string LuminaLUTSDirectory = Path.Combine(AssemblyDirectory, "LUTS");
+
         private static string assemblyPDXDirectory = Path.Combine(localLowDirectory, "Colossal Order", "Cities Skylines II", "ModsData", "Lumina");
         private static string settingsFilePath = Path.Combine(AssemblyDirectory, "Lumina.xml");
 

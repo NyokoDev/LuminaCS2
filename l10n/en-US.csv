@@ -24,6 +24,8 @@
 "LUMINA.importpreset","Import Preset"
 "LUMINA.confirmationonpreset","Do you want to import the selected preset? Please note that this action will replace the existing settings."
 "LUMINA.openfolderlabel","Open Preset Folder"
+"LUMINA.loadlutbutton","Load LUT"
+"LUMINA.tonemappingtooltip","Tonemapping"
 
 
 

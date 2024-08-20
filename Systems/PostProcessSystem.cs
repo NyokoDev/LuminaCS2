@@ -18,13 +18,15 @@ using System.Drawing.Text;
 using static UnityEngine.Rendering.HighDefinition.VolumetricClouds;
 using static UnityEngine.Rendering.DebugUI;
 using static UnityEngine.Rendering.HighDefinition.WindParameter;
+using System.IO;
+using Lumina.XML;
 
 namespace Lumina.Systems
 {
 
     internal partial class PostProcessSystem : SystemBase
     {
-
+        public static string lutFilePath = Path.Combine(GlobalPaths.LuminaLUTSDirectory, GlobalVariables.Instance.LUTName + ".cube");
         bool m_SetupDone = false;
         Volume LuminaVolume;
         private VolumeProfile m_Profile;
@@ -32,6 +34,7 @@ namespace Lumina.Systems
         public Exposure m_Exposure;
         public Vignette m_Vignette;
         public ColorAdjustments m_ColorAdjustments;
+        public static Tonemapping m_Tonemapping;
         private WhiteBalance m_WhiteBalance;
         private ShadowsMidtonesHighlights m_ShadowsMidtonesHighlights;
         public VolumetricClouds m_VolumetricClouds;
@@ -40,9 +43,13 @@ namespace Lumina.Systems
         private PhotoModeRenderSystem PhotoModeRenderSystem;
 
         public static bool InitializedVolume = false;
+        public static bool LUTSValidated = false;
         public static bool PanelInitialized = false;
 
         public static bool Panel = true;
+
+        public bool LUTloaded = false;
+
         protected override void OnUpdate()
         {
 
@@ -54,15 +61,200 @@ namespace Lumina.Systems
                 Panel = false;
             }
 
-
+            // Start everything else
             PlanetarySettings();
+
+
+            // Replace `condition` with your actual boolean variable name
+            if (!LUTloaded)
+            {
+                TonemappingLUT();
+                LUTloaded = true;
+            }
+
             ColorAdjustments();
             WhiteBalance();
             ShadowsMidTonesHighlights();
 
         }
 
-        private void ColorAdjustments()
+        public static void UpdateLUT()
+        {
+            try
+            {
+                // Ensure tonemapping is active and properly configured
+                m_Tonemapping.active = true;
+                m_Tonemapping.mode.overrideState = true;
+                m_Tonemapping.mode.value = TonemappingMode.External;
+                m_Tonemapping.lutTexture.overrideState = true;
+
+                // Attempt to load the LUT texture from file
+                Texture3D lutTexture = CubeLutLoader.LoadLutFromFile(lutFilePath);
+                if (lutTexture == null)
+                {
+                    Mod.Log.Error($"Failed to load LUT texture from file: {lutFilePath}");
+                    return;
+                }
+
+                // Set the loaded LUT texture
+                m_Tonemapping.lutTexture.value = lutTexture;
+
+
+              
+
+                Mod.Log.Info($"LUT successfully set to: {lutFilePath}");
+
+                // Save global variables to file, with error handling
+                GlobalVariables.SaveToFile(GlobalPaths.GlobalModSavingPath);
+            }
+            catch (Exception ex)
+            {
+                Mod.Log.Error($"An error occurred while updating LUT: {ex.Message}\n{ex.StackTrace}");
+            }
+        }
+    
+
+
+        private void TonemappingLUT()
+        {
+            
+
+            Mod.Log.Info("Starting TonemappingLUT process.");
+
+            ValidateLUTSDirectory();
+
+            if (m_Tonemapping == null)
+            {
+                Mod.Log.Info("Tonemapping component is null.");
+                return;
+            }
+            Mod.Log.Info("Tonemapping component found.");
+
+            if (string.IsNullOrEmpty(lutFilePath))
+            {
+                Mod.Log.Info("LUT file path is null or empty.");
+                return;
+            }
+            Mod.Log.Info("LUT file path is valid: " + lutFilePath);
+
+            m_Tonemapping.active = true;
+            Mod.Log.Info("Tonemapping activated.");
+
+            m_Tonemapping.mode.value = TonemappingMode.External;
+            m_Tonemapping.lutTexture.overrideState = true;
+            m_Tonemapping.mode.overrideState = true;
+            Mod.Log.Info("Tonemapping mode set to External and overrideState enabled.");
+
+            Texture3D lutTexture = CubeLutLoader.LoadLutFromFile(lutFilePath);
+            if (lutTexture == null)
+            {
+                Mod.Log.Info("Failed to load LUT texture from file: " + lutFilePath);
+                return;
+            }
+            Mod.Log.Info("LUT texture loaded successfully.");
+
+            if (LUTSValidated)
+            {
+                m_Tonemapping.lutTexture.value = lutTexture;
+                Mod.Log.Info("LUT texture applied to the tonemapping component.");
+            }
+            else
+            {
+                Mod.Log.Info("LUT texture validation failed.");
+                return;
+            }
+
+            m_Tonemapping.lutContribution.overrideState = true;
+            m_Tonemapping.lutContribution.Override(GlobalVariables.Instance.LUTContribution);
+            Mod.Log.Info("LUT contribution set with value: " + GlobalVariables.Instance.LUTContribution);
+
+            bool isLUTValid = m_Tonemapping.ValidateLUT();
+            Mod.Log.Info("LUT validation result: " + isLUTValid);
+
+            if (!isLUTValid)
+            {
+                Mod.Log.Info("Final LUT validation failed after assignment.");
+            }
+
+  
+        }
+
+
+
+        private void ValidateLUTSDirectory()
+        {
+            try
+            {
+                // Ensure the directory path for LUTs is valid
+                string directoryPath = GlobalPaths.LuminaLUTSDirectory;
+
+                if (string.IsNullOrWhiteSpace(directoryPath))
+                {
+                    throw new InvalidOperationException("The directory path for LUTs is not set.");
+                }
+
+                // Create the directory if it doesn't exist
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+
+                // Copy all embedded resources
+                CopyAllEmbeddedResourcesToDirectory(directoryPath);
+            }
+            catch (Exception ex)
+            {
+                Mod.Log.Error($"Failed to validate or create the LUTs directory: {ex.Message}");
+            }
+        }
+
+        private void CopyAllEmbeddedResourcesToDirectory(string directoryPath)
+        {
+            var assembly = GetType().Assembly;
+            var resourceNamespace = "Lumina.LUTS"; // Replace with your actual namespace
+
+            // Get all resource names
+            var resourceNames = assembly.GetManifestResourceNames();
+
+            foreach (var resourceName in resourceNames)
+            {
+                // Check if the resource belongs to the correct namespace
+                if (resourceName.StartsWith(resourceNamespace))
+                {
+                    using (var resourceStream = assembly.GetManifestResourceStream(resourceName))
+                    {
+                        if (resourceStream == null)
+                        {
+                            Mod.Log.Error($"Embedded resource '{resourceName}' not found.");
+                            continue;
+                        }
+
+                        // Determine the destination path
+                        var relativePath = resourceName.Substring(resourceNamespace.Length + 1); // Remove namespace prefix
+                        var destinationPath = Path.Combine(directoryPath, relativePath);
+
+                        // Create the directory if it doesn't exist
+                        var destinationDirectory = Path.GetDirectoryName(destinationPath);
+                        if (!Directory.Exists(destinationDirectory))
+                        {
+                            Directory.CreateDirectory(destinationDirectory);
+                        }
+
+                        // Copy the resource to the destination
+                        using (var fileStream = new FileStream(destinationPath, FileMode.Create, FileAccess.Write))
+                        {
+                            resourceStream.CopyTo(fileStream);
+                        }
+
+                        LUTSValidated = true;
+                    }
+                }
+            }
+        }
+
+      
+
+    private void ColorAdjustments()
         {
             // Use reflection to get the private ColorAdjustments field from LightingSystem
             Type lightingSystemType = typeof(LightingSystem);
@@ -138,6 +330,11 @@ namespace Lumina.Systems
                 // Add Volumetric Clouds
                 SetUpVolumetricClouds();
 #endif
+
+
+                // Add Tonemapping
+                m_Tonemapping = m_Profile.Add<Tonemapping>();
+
     
                 // Add and configure White Balance effect
                 m_WhiteBalance = m_Profile.Add<WhiteBalance>();

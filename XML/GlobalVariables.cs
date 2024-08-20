@@ -149,6 +149,12 @@ namespace LuminaMod.XML
         [XmlElement]
         public VolumetricCloudsData VolumetricCloudsData { get; set; }
 
+        [XmlElement]
+        public float LUTContribution { get; set; } = 1f;
+
+        [XmlElement]
+        public string LUTName { get; set; }
+
         /// <summary>
         /// Serializes to a file.
         /// </summary>
@@ -224,20 +230,34 @@ namespace LuminaMod.XML
                     // Deserialize the object from the file.
                     GlobalVariables loadedVariables = (GlobalVariables)serializer.Deserialize(reader);
 
-                    // Get the properties of GlobalVariables class
-                    PropertyInfo[] properties = typeof(GlobalVariables).GetProperties();
+                    // Set the loaded values to the corresponding properties.
+                    GlobalVariables.Instance.PostExposure = loadedVariables.PostExposure;
+                    GlobalVariables.Instance.PostExposureActive = loadedVariables.PostExposureActive;
+                    GlobalVariables.Instance.Contrast = loadedVariables.Contrast;
+                    GlobalVariables.Instance.ContrastActive = loadedVariables.ContrastActive;
+                    GlobalVariables.Instance.HueShift = loadedVariables.HueShift;
+                    GlobalVariables.Instance.HueShiftActive = loadedVariables.HueShiftActive;
+                    GlobalVariables.Instance.Saturation = loadedVariables.Saturation;
+                    GlobalVariables.Instance.SaturationActive = loadedVariables.SaturationActive;
 
-                    // Iterate through properties and set values from loadedVariables
-                    foreach (PropertyInfo property in properties)
-                    {
-                        // Find the corresponding property in loadedVariables
-                        PropertyInfo loadedProperty = typeof(GlobalVariables).GetProperty(property.Name);
-                        if (loadedProperty != null)
-                        {
-                            // Set the value from loadedVariables to the corresponding property in GlobalVariables.Instance
-                            property.SetValue(GlobalVariables.Instance, loadedProperty.GetValue(loadedVariables));
-                        }
-                    }
+                    GlobalVariables.Instance.Latitude = loadedVariables.Latitude;
+                    GlobalVariables.Instance.Longitude = loadedVariables.Longitude;
+
+                    GlobalVariables.Instance.Temperature = loadedVariables.Temperature;
+                    GlobalVariables.Instance.TemperatureActive = loadedVariables.TemperatureActive;
+                    GlobalVariables.Instance.Tint = loadedVariables.Tint;
+                    GlobalVariables.Instance.TintActive = loadedVariables.TintActive;
+
+                    GlobalVariables.Instance.Shadows = loadedVariables.Shadows;
+                    GlobalVariables.Instance.ShadowsActive = loadedVariables.ShadowsActive;
+                    GlobalVariables.Instance.Midtones = loadedVariables.Midtones;
+                    GlobalVariables.Instance.MidtonesActive = loadedVariables.MidtonesActive;
+                    GlobalVariables.Instance.Highlights = loadedVariables.Highlights;
+                    GlobalVariables.Instance.HighlightsActive = loadedVariables.HighlightsActive;
+
+                    // Tonemapping
+                    GlobalVariables.Instance.LUTContribution = loadedVariables.LUTContribution;
+                    GlobalVariables.Instance.LUTName = loadedVariables.LUTName;
 
                     return loadedVariables;
                 }
@@ -272,5 +292,7 @@ namespace LuminaMod.XML
                 return instance;
             }
         }
+
+
     }
 }
