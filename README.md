@@ -4,7 +4,7 @@
 ## Documentation
 
 - [Installation](https://github.com/NyokoDev/LuminaCS2/blob/master/Documentation/Installation.md)
-- [LUTs and Color Grading (Not ready)](#luts-and-color-grading-not-ready)
+- [How to use LUTs (Look-up-tables)](https://github.com/NyokoDev/LuminaCS2/blob/master/Documentation/LUTS.md)
 - [How to Use the "Send to Lumina" Button (Not ready)](#how-to-use-the-send-to-lumina-button-not-ready)
 
 ## FAQ
