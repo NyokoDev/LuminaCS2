@@ -54,13 +54,6 @@ namespace Lumina
             this.setting.RegisterInOptionsUI();
             GameManager.instance.localizationManager.AddSource("en-US", new Setting.LocaleEN(setting));
 
-            // Update system after PostProcessSystem but before culling
-            updateSystem.UpdateAfter<PostProcessSystem>(SystemUpdatePhase.PreCulling);
-
-            updateSystem.UpdateAt<UISystem>(SystemUpdatePhase.MainLoop);
-
-            updateSystem.UpdateAt<TimeOfDayProccessor>(SystemUpdatePhase.GameSimulation);
-
             // Load translations.
             Localization.LoadTranslations(null, Log);
 
@@ -68,6 +61,13 @@ namespace Lumina
             {
                 // Load global settings
                 GlobalVariables.LoadFromFile(GlobalPaths.GlobalModSavingPath);
+
+                // Update system after PostProcessSystem but before culling
+                updateSystem.UpdateAfter<PostProcessSystem>(SystemUpdatePhase.PreCulling);
+
+                updateSystem.UpdateAt<UISystem>(SystemUpdatePhase.MainLoop);
+
+                updateSystem.UpdateAt<TimeOfDayProccessor>(SystemUpdatePhase.GameSimulation);
             }
             catch
             {

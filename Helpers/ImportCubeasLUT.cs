@@ -17,7 +17,7 @@ public class CubeLutLoader : MonoBehaviour
             var result = LoadCubeFile(cubeFilePath);
             if (result != null)
             {
-                var texture = new Texture3D(result.LutSize, result.LutSize, result.LutSize, TextureFormat.RGBAHalf, false);
+                var texture = new Texture3D(result.LutSize, result.LutSize, result.LutSize, TextureFormat.RGBA64, false);
                 texture.SetPixels(result.Pixels);
                 texture.Apply();
 
@@ -50,7 +50,7 @@ public class CubeLutLoader : MonoBehaviour
     {
         bool Error(string msg)
         {
-            Debug.LogError(msg);
+            Lumina.Mod.Log.Info(msg);
             return false;
         }
 
@@ -75,7 +75,7 @@ public class CubeLutLoader : MonoBehaviour
 
                 if (!int.TryParse(sizeStr, out var size))
                 {
-                    Debug.LogError($"Invalid data on line {i}");
+                    Lumina.Mod.Log.Info($"Invalid data on line {i}");
                     return null;
                 }
 
@@ -92,7 +92,7 @@ public class CubeLutLoader : MonoBehaviour
 
             if (row.Length != 3)
             {
-                Debug.LogError($"Invalid data on line {i}");
+                Lumina.Mod.Log.Info($"Invalid data on line {i}");
                 return null;
             }
 
@@ -102,7 +102,7 @@ public class CubeLutLoader : MonoBehaviour
             {
                 if (!float.TryParse(row[j], NumberStyles.Float, CultureInfo.InvariantCulture.NumberFormat, out var d))
                 {
-                    Debug.LogError($"Invalid data on line {i}");
+                    Lumina.Mod.Log.Info($"Invalid data on line {i}");
                     return null;
                 }
 
@@ -114,7 +114,7 @@ public class CubeLutLoader : MonoBehaviour
 
         if (sizeCube != table.Count)
         {
-            Debug.LogError($"Wrong table size - Expected {sizeCube} elements, got {table.Count}");
+            Lumina.Mod.Log.Info($"Wrong table size - Expected {sizeCube} elements, got {table.Count}");
             return null;
         }
 
