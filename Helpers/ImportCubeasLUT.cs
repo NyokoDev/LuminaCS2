@@ -1,4 +1,5 @@
 ﻿using Colossal.PSI.Common;
+using LuminaMod.XML;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -8,6 +9,7 @@ using UnityEngine;
 public class CubeLutLoader : MonoBehaviour
 {
     public static Texture3D LutTexture { get; set; } // Static property to access the texture
+    public static TextureFormat TextureFormat { get; set; }
 
     // Public method to load a LUT from a .cube file
     public static Texture3D LoadLutFromFile(string cubeFilePath)
@@ -17,11 +19,11 @@ public class CubeLutLoader : MonoBehaviour
             var result = LoadCubeFile(cubeFilePath);
             if (result != null)
             {
-                var texture = new Texture3D(result.LutSize, result.LutSize, result.LutSize, TextureFormat.RGBA64, false);
+                var texture = new Texture3D(result.LutSize, result.LutSize, result.LutSize, TextureFormat, false);
                 texture.SetPixels(result.Pixels);
                 texture.Apply();
 
-                Lumina.Mod.Log.Info($"LUT Texture created successfully with size {result.LutSize}x{result.LutSize}x{result.LutSize}");
+                Lumina.Mod.Log.Info($"LUT Texture created successfully with size {result.LutSize}x{result.LutSize}x{result.LutSize} with texture format " + GlobalVariables.Instance.TextureFormat.ToString());
 
                 return texture;
             }

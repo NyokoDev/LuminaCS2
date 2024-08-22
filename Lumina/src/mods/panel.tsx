@@ -17,6 +17,8 @@ import { Slider as Slider2, TextField, createTheme } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import red from "@mui/material/colors/red";
 import FilePicker from "./FilePicker";
+import { TonemappingDropdown } from "./dropdown";
+import { TextureFormatDropdown } from "./textureformat_dropdown";
 
 
 export let isInstalled$ = false;
@@ -50,13 +52,19 @@ export const MidtonesActive$ = bindValue<boolean>(mod.id, 'GetMidtonesCheckbox')
 export const Highlights$ =  bindValue<number>(mod.id, 'GetHighlights');
 export const HighlightsActive$ =  bindValue<boolean>(mod.id, 'GetHighlightsCheckbox');
 
+// Tonemapping
+const TonemappingMode$ = bindValue<string>(mod.id, "TonemappingMode");
+const TextureFormatMode$ = bindValue<string>(mod.id, "TextureFormat");
+
 
 // Planetary Settings
+
 export const LatitudeValue$ = bindValue<number>(mod.id, 'LatitudeValue');
 export const LongitudeValue$ = bindValue<number>(mod.id, 'LongitudeValue');
 
 //Tonemapping
 export const LUTValue$ = bindValue<number>(mod.id, 'LUTValue');
+export const LUTName$ = bindValue<string>(mod.id, 'LUTName');
 
 const theme = createTheme({
   palette: {
@@ -117,8 +125,12 @@ const HighlightsActive = useValue(HighlightsActive$);
 const LatitudeValue = useValue(LatitudeValue$);
 const LongitudeValue = useValue(LongitudeValue$);
 
+
 //Tonemapping
 const LUTValue = useValue(LUTValue$);
+const LUTName = useValue(LUTName$);
+const TonemappingMode = useValue(TonemappingMode$);
+const TextureFormatMode = useValue(TextureFormatMode$);
 
 
 
@@ -936,13 +948,17 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
   <div className="TonemappingPanel">
 
 
+
 <input
   type="text"
   onChange={(event) => UpdateLUTName(String(event.target.value))}
   className="toggle_cca item-mouse-states_Fmi toggle_th_ LUTInputText"
 />
 
-
+<div className="TonemappingDropdown">
+  <h1>{TonemappingMode}</h1>
+<TonemappingDropdown />
+</div>
 <button
 onClick={UpdateLUT}
 className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LoadLUTButton">{translate("LUMINA.loadlutbutton")}
@@ -953,10 +969,18 @@ onClick={OpenLUTFolder}
 className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS OpenLUTButton">{translate("LUMINA.openlutbutton")}
    </button>
 
-   <label className="title_SVH title_zQN LutLabel" style={{ whiteSpace: 'nowrap' }}>TONEMAPPING - LUT SELECTION (BETA)</label>
+   <label className="title_SVH title_zQN LutLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.tonemappingtitle")}</label>
 
+   <label className="title_SVH title_zQN LutLabelInUse" style={{ whiteSpace: 'nowrap' }}>{LUTName}</label>
 
+   <Tooltip tooltip={translate("LUMINA.textureformatdropdowntooltip")}>
+<div className="TextureFormatDropdown"> 
+<h1>{TextureFormatMode}</h1>
+<TextureFormatDropdown
 
+/>
+</div>
+</Tooltip>
 
 </div>
 

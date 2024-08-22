@@ -19,7 +19,7 @@
 		<!--The file where mod information which is required for publishing mod on PDX mods are stored-->
 		<PublishConfigurationPath>Properties\PublishConfiguration.xml</PublishConfigurationPath>
 		<SignAssembly>False</SignAssembly>
-		<AssemblyVersion>1.5.5</AssemblyVersion>
+		<AssemblyVersion>1.5.6</AssemblyVersion>
 	</PropertyGroup>
 	
 	<!--Imports must be after PropertyGroup block-->
@@ -46,6 +46,7 @@
 	  <None Remove="LUTS\Aqua and Orange Dark.cube" />
 	  <None Remove="LUTS\Aqua.cube" />
 	  <None Remove="LUTS\Blues.cube" />
+	  <None Remove="LUTS\BW1.cube" />
 	  <None Remove="LUTS\Earth Tone Boost.cube" />
 	  <None Remove="LUTS\Green_Blues.cube" />
 	  <None Remove="LUTS\Green_Yellow.cube" />
@@ -76,6 +77,7 @@
 	  <EmbeddedResource Include="LUTS\Aqua and Orange Dark.cube" />
 	  <EmbeddedResource Include="LUTS\Aqua.cube" />
 	  <EmbeddedResource Include="LUTS\Blues.cube" />
+	  <EmbeddedResource Include="LUTS\BW1.cube" />
 	  <EmbeddedResource Include="LUTS\Earth Tone Boost.cube" />
 	  <EmbeddedResource Include="LUTS\Green_Blues.cube" />
 	  <EmbeddedResource Include="LUTS\Green_Yellow.cube" />

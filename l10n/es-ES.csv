@@ -24,4 +24,7 @@
 "LUMINA.confirmationonpreset","¿Deseas importar el preset seleccionado? Ten en cuenta que esta acción reemplazará la configuración existente."
 "LUMINA.openfolderlabel","Abrir Carpeta de Presets"
 "LUMINA.loadlutbutton","Cargar LUT"
-"LUMINA.tonemappingtooltip","Tonemapping"
+"LUMINA.tonemappingtooltip","Mapeo de tonos"
+"LUMINA.tonemappingtitle","Mapeo de tonos"
+"LUMINA.textureformatdropdowntooltip","Formato de textura"
+"LUMINA.tonemappingmodedropdowntooltip","Modo de mapeo de tonos"

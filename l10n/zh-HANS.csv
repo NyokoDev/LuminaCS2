@@ -21,3 +21,5 @@
 "LUMINA.importpreset","导入预设"
 "LUMINA.confirmationonpreset","您要导入所选的预设吗？请注意，此操作将替换现有设置。"
 "LUMINA.openfolderlabel","打开预设文件夹"
+"LUMINA.textureformatdropdowntooltip","纹理格式"
+"LUMINA.tonemappingmodedropdowntooltip","色调映射模式"

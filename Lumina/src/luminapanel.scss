@@ -152,7 +152,7 @@
 
 .LUTInputText {
    position: absolute;
-   color: white;
+   color: transparent; 
    width:500rem;
    top: 50rem;
    left: 20rem;
@@ -1048,9 +1048,50 @@ $hueshift-top: 80rem;
    width: 500rem;
    background-size: cover;
    background-repeat: no-repeat;
-   background-image: url("https://i.imgur.com/7poVzFP.png");
+   background-image: url("https://i.imgur.com/Cvy4Amx.png");
    
    border: 5px solid #000; /* Example border: 5px solid black */
    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Example box shadow: offset-x, offset-y, blur-radius, color */
  }
  
+
+ .TonemappingDropdown {
+   position: absolute;
+   color: white;
+   width:200rem;
+   top: 45rem;
+   left: 550rem;
+ }
+
+ .TonemappingDropdown h1 {
+   position: absolute;
+   color: white;
+   font-size: 16rem;
+   top: 0rem;
+   left: 10rem;
+ }
+
+ 
+ .TextureFormatDropdown {
+   position: absolute;
+   color: white;
+   width:200rem;
+   top: 10rem;
+   left: 550rem;
+ }
+
+ .TextureFormatDropdown h1 {
+   position: absolute;
+   color: white;
+   font-size: 16rem;
+   top: 0rem;
+   left: 10rem;
+ }
+
+ .LutLabelInUse {
+   position: absolute;
+   color: white;
+   font-size: 16rem;
+   top: 50rem;
+   left: 25rem;
+ }

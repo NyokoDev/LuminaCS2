@@ -21,3 +21,7 @@
 "LUMINA.importpreset","프리셋 가져오기"
 "LUMINA.confirmationonpreset","선택한 프리셋을 가져오시겠습니까? 이 작업은 기존 설정을 대체하므로 주의하십시오."
 "LUMINA.openfolderlabel","프리셋 폴더 열기"
+"LUMINA.tonemappingtooltip","톤 매핑"
+"LUMINA.tonemappingtitle","톤 매핑"
+"LUMINA.textureformatdropdowntooltip","텍스처 형식"
+"LUMINA.tonemappingmodedropdowntooltip","톤 매핑 모드"

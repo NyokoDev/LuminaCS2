@@ -14,6 +14,7 @@ namespace LuminaMod.XML
     using Lumina;
     using Lumina.XML;
     using UnityEngine;
+    using UnityEngine.Experimental.Rendering;
     using UnityEngine.Rendering;
     using UnityEngine.Rendering.HighDefinition;
 
@@ -158,6 +159,12 @@ namespace LuminaMod.XML
         [XmlElement]
         public bool TimeOfDayLocked { get; set; }
 
+        [XmlElement]
+        public TonemappingMode TonemappingMode { get; set; } = TonemappingMode.None;
+
+        [XmlElement]
+        public TextureFormat TextureFormat { get; set; } = TextureFormat.RGBA64;
+
         /// <summary>
         /// Serializes to a file.
         /// </summary>
@@ -259,8 +266,11 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.HighlightsActive = loadedVariables.HighlightsActive;
 
                     // Tonemapping
+                    GlobalVariables.Instance.TonemappingMode = loadedVariables.TonemappingMode;
                     GlobalVariables.Instance.LUTContribution = loadedVariables.LUTContribution;
                     GlobalVariables.Instance.LUTName = loadedVariables.LUTName;
+                    GlobalVariables.Instance.TextureFormat = loadedVariables.TextureFormat;
+           
 
                     return loadedVariables;
                 }

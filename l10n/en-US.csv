@@ -27,6 +27,9 @@
 "LUMINA.loadlutbutton","Load LUT"
 "LUMINA.tonemappingtooltip","Tonemapping (Beta)"
 "LUMINA.openlutbutton","Open LUT Folder"
+"LUMINA.tonemappingtitle","Tonemapping"
+"LUMINA.textureformatdropdowntooltip","Texture Format"
+"LUMINA.tonemappingmodedropdowntooltip","Tonemapping Mode"
 
 
 

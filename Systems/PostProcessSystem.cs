@@ -20,6 +20,7 @@ using static UnityEngine.Rendering.DebugUI;
 using static UnityEngine.Rendering.HighDefinition.WindParameter;
 using System.IO;
 using Lumina.XML;
+using System.Runtime.InteropServices;
 
 namespace Lumina.Systems
 {
@@ -39,6 +40,7 @@ namespace Lumina.Systems
         private ShadowsMidtonesHighlights m_ShadowsMidtonesHighlights;
         public VolumetricClouds m_VolumetricClouds;
         public static string LutName_Example;
+        public static string ToneMappingMode;
 
         private UnityEngine.Rendering.HighDefinition.ColorAdjustments colorAdjustments;
         private PhotoModeRenderSystem PhotoModeRenderSystem;
@@ -50,6 +52,8 @@ namespace Lumina.Systems
         public static bool Panel = true;
 
         public bool LUTloaded = false;
+
+        public static string TextureFormat;
 
         protected override void OnUpdate()
         {
@@ -65,6 +69,7 @@ namespace Lumina.Systems
             // Start everything else
             PlanetarySettings();
 
+            UpdateNames();
 
             if (!LUTloaded)
             {
@@ -72,11 +77,19 @@ namespace Lumina.Systems
                 LUTloaded = true;
             }
 
+ 
             ColorAdjustments();
             WhiteBalance();
             ShadowsMidTonesHighlights();
 
         }
+
+        private void UpdateNames()
+        {
+            PostProcessSystem.ToneMappingMode = GlobalVariables.Instance.TonemappingMode.ToString();
+            PostProcessSystem.TextureFormat = GlobalVariables.Instance.TextureFormat.ToString();
+            CubeLutLoader.TextureFormat = GlobalVariables.Instance.TextureFormat;
+    }
 
         public static void UpdateLUT()
         {
@@ -87,7 +100,7 @@ namespace Lumina.Systems
                 // Ensure tonemapping is active and properly configured
                 m_Tonemapping.active = true;
                 m_Tonemapping.mode.overrideState = true;
-                m_Tonemapping.mode.value = TonemappingMode.External;
+                m_Tonemapping.mode.value = GlobalVariables.Instance.TonemappingMode;
                 m_Tonemapping.lutTexture.overrideState = true;
 
                 // Attempt to load the LUT texture from file
@@ -112,12 +125,12 @@ namespace Lumina.Systems
                 Mod.Log.Error($"An error occurred while updating LUT: {ex.Message}\n{ex.StackTrace}");
             }
         }
-    
+
 
 
         private void TonemappingLUT()
         {
-            
+
 
             Mod.Log.Info("Starting TonemappingLUT process.");
 
@@ -140,10 +153,10 @@ namespace Lumina.Systems
             m_Tonemapping.active = true;
             Mod.Log.Info("Tonemapping activated.");
 
-            m_Tonemapping.mode.value = TonemappingMode.External;
+            m_Tonemapping.mode.value = GlobalVariables.Instance.TonemappingMode;
             m_Tonemapping.lutTexture.overrideState = true;
             m_Tonemapping.mode.overrideState = true;
-            Mod.Log.Info("Tonemapping mode set to External and overrideState enabled.");
+            Mod.Log.Info("Tonemapping mode set to" + GlobalVariables.Instance.TonemappingMode + " and overrideState enabled.");
 
             Texture3D lutTexture = CubeLutLoader.LoadLutFromFile(lutFilePath);
             if (lutTexture == null)
@@ -176,7 +189,7 @@ namespace Lumina.Systems
                 Mod.Log.Info("Final LUT validation failed after assignment.");
             }
 
-  
+
         }
 
 
@@ -252,9 +265,9 @@ namespace Lumina.Systems
             }
         }
 
-      
 
-    private void ColorAdjustments()
+
+        private void ColorAdjustments()
         {
             // Use reflection to get the private ColorAdjustments field from LightingSystem
             Type lightingSystemType = typeof(LightingSystem);
@@ -321,7 +334,7 @@ namespace Lumina.Systems
                 LuminaVolume = globalVolume.AddComponent<Volume>();
                 LuminaVolume.priority = 1980f;
                 LuminaVolume.enabled = true;
-                
+
 
                 // Access the Volume Profile
                 m_Profile = LuminaVolume.profile;
@@ -335,7 +348,7 @@ namespace Lumina.Systems
                 // Add Tonemapping
                 m_Tonemapping = m_Profile.Add<Tonemapping>();
 
-    
+
                 // Add and configure White Balance effect
                 m_WhiteBalance = m_Profile.Add<WhiteBalance>();
                 m_WhiteBalance.active = true;
@@ -344,7 +357,7 @@ namespace Lumina.Systems
 
 
 
-               
+
 
 
 
@@ -615,6 +628,82 @@ namespace Lumina.Systems
 #endif
             }
         }
+
+        /// <summary>
+        /// Sets tonemapping mode from dropdown.
+        /// </summary>
+        /// <param name="obj"></param>
+        internal static void SetTonemappingMode(float obj)
+        {
+            // Default to an invalid mode or a fallback mode if the float doesn't match any known mode
+            TonemappingMode mode = TonemappingMode.External;
+
+            // Check the input float and set the appropriate TonemappingMode
+            switch (obj)
+            {
+                case 0f: // Represents "None"
+                    mode = TonemappingMode.None;
+                    break;
+                case 1f: // Represents "External"
+                    mode = TonemappingMode.External;
+                    break;
+                case 2f: // Represents "Custom"
+                    mode = TonemappingMode.Custom;
+                    break;
+                case 3f: // Represents "Neutral"
+                    mode = TonemappingMode.Neutral;
+                    break;
+                case 4f: // Represents "ACES"
+                    mode = TonemappingMode.ACES;
+                    break;
+                default:
+                    // Handle unknown mode or log an error
+                    Lumina.Mod.Log.Info($"Unknown tonemapping mode value: {obj}");
+                    return;
+            }
+
+            // Set the mode in the global variables
+            GlobalVariables.Instance.TonemappingMode = mode;
+            PostProcessSystem.UpdateTonemapping();
+        }
+
+        private static void UpdateTonemapping()
+        {
+            m_Tonemapping.mode.value = GlobalVariables.Instance.TonemappingMode;
+        }
+
+        /// <summary>
+        /// Sets texture format to RGBA64 OR 32 based on user choice.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <exception cref="Exception"></exception>
+        internal static void SetTextureFormat(float obj)
+        {
+            TextureFormat mode;
+
+            switch (obj)
+            {
+                case 0f:
+                    mode = UnityEngine.TextureFormat.RGBA64;
+                    break;
+                case 1f:
+                    mode = UnityEngine.TextureFormat.RGBA32;
+                    break;
+                default:
+                    // Optionally, handle the default case (e.g., log a warning or set a fallback mode)
+                    return;
+            }
+
+            // Ensure GlobalVariables.Instance is not null before setting the value
+            if (GlobalVariables.Instance != null)
+            {
+                GlobalVariables.Instance.TextureFormat = mode;
+                Mod.Log.Info("Texture format set to: " + mode);
+            }
+            else
+            {
+                throw new Exception("Null reference.");
+            }
+        }
     }
 }
-

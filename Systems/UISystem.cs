@@ -20,10 +20,12 @@ namespace Lumina.Systems
     internal partial class UISystem : UISystemBase
     {
         public bool Visible { get; set; }
+       
 
         protected override void OnCreate()
         {
             base.OnCreate();
+            InitializeLutName();
             CreateBindings();
 
 
@@ -36,7 +38,7 @@ namespace Lumina.Systems
         /// </summary>
         private void CreateBindings()
         {
-           
+
             Checkboxes();
             ColorAdjustments();
 
@@ -48,31 +50,77 @@ namespace Lumina.Systems
             PlanetarySettings();
 
 
-          
+
 
             //LegacyUI
             AddBinding(new TriggerBinding(Mod.MODUI, "OpenLegacyUI", OpenLegacyUI));
             AddBinding(new TriggerBinding(Mod.MODUI, "ImportLuminaPreset", PresetManagement.ExecuteImport));
             AddBinding(new TriggerBinding(Mod.MODUI, "ExportLuminaPreset", PresetManagement.ExportLuminaPreset));
             AddBinding(new TriggerBinding<string>(Mod.MODUI, "UpdatePresetName", PresetManagement.UpdatePresetName));
-         
+
             AddBinding(new TriggerBinding(Mod.MODUI, "OpenPresetFolder", PresetManagement.OpenPresetFolder));
 
             //Tonemapping
-            AddBinding(new TriggerBinding<string>(Mod.MODUI,"UpdateLUTName", UpdateLUTName));
+            AddBinding(new TriggerBinding<string>(Mod.MODUI, "UpdateLUTName", UpdateLUTName));
+            AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "TonemappingMode", GetTonemappingMode));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetTonemappingMode", SetTonemappingMode));
 
 
+            AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "LUTName", GetLUTName));
 
             AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "LUTValue", () => LUTValue()));
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleLUTContribution", HandleLUTContribution));
             AddBinding(new TriggerBinding(Mod.MODUI, "OpenLUTFolder", OpenLUTFolder)); 
             AddBinding(new TriggerBinding(Mod.MODUI, "UpdateLUT", UpdateLUT));
 
+            // Texture Format
+            AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "TextureFormat", GetTextureFormatMode));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetTextureFormat", SetTextureFormat));
+
+
+
+
             //Time of day
             AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "TimeFloatIsActive", () => TimeFloatIsActive()));
             AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "TimeFloatValue", () => TimeFloatValue()));
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleTimeFloatValue", HandleTimeFloatValue));
+
+
+
         }
+
+        private void SetTextureFormat(float obj)
+        {
+            PostProcessSystem.SetTextureFormat(obj);
+        }
+
+        private string GetLUTName()
+        {
+            
+            return PostProcessSystem.LutName_Example;
+        }
+
+        private void InitializeLutName()
+        {
+            PostProcessSystem.LutName_Example = GlobalVariables.Instance.LUTName;
+        }
+
+        private void SetTonemappingMode(float obj)
+        {
+          PostProcessSystem.SetTonemappingMode(obj);
+        }
+
+        private string GetTonemappingMode()
+        {
+            return PostProcessSystem.ToneMappingMode;
+        }
+
+        private string GetTextureFormatMode()
+        {
+            return PostProcessSystem.TextureFormat;
+        }
+
+
 
         private bool TimeFloatIsActive()
         {
@@ -99,6 +147,8 @@ namespace Lumina.Systems
         {
             PostProcessSystem.LutName_Example = obj;
         }
+
+   
 
 
         private void UpdateLUT()
