@@ -89,7 +89,19 @@ namespace Lumina.Systems
             PostProcessSystem.ToneMappingMode = GlobalVariables.Instance.TonemappingMode.ToString();
             PostProcessSystem.TextureFormat = GlobalVariables.Instance.TextureFormat.ToString();
             CubeLutLoader.TextureFormat = GlobalVariables.Instance.TextureFormat;
+
+            CheckForNullLUTName();
     }
+
+        private void CheckForNullLUTName()
+        {
+            // Access the instance of GlobalVariables and check if LUTName is null
+            if (GlobalVariables.Instance.LUTName == null)
+            {
+                // If LUTName is null, assign it a default value of "none"
+                GlobalVariables.Instance.LUTName = "None";
+            }
+        }
 
         public static void UpdateLUT()
         {

@@ -1,6 +1,6 @@
 ### LUT Selection Guide (Beta)
 
-We're excited to introduce and expand the LUT Selection feature in Lumina, starting from v1.5.4 and enhanced in v1.5.6. This feature allows you to apply custom LUTs to enhance your game visuals, providing greater control over the visual style of your game.
+We're excited to introduce and expand the LUT Selection feature in Lumina, starting from v1.5.4 and enhanced in v1.5.6r1. This feature allows you to apply custom LUTs to enhance your game visuals, providing greater control over the visual style of your game.
 
 #### Understanding LUT Selection
 
@@ -31,7 +31,7 @@ Lumina v1.5.4 includes 10 pre-loaded LUTs from on1.com, ready to enhance your ga
 
 #### Tonemapping Mode Selection
 
-Starting in Lumina v1.5.6, a new feature allows users to switch between different tonemapping modes:
+Starting in Lumina v1.5.6r1, a new feature allows users to switch between different tonemapping modes:
 
 - **None**: No tonemapping is applied.
 - **External**: Displays the LUTs (this is the mode required to see the effects of LUTs).
@@ -43,7 +43,7 @@ Starting in Lumina v1.5.6, a new feature allows users to switch between differen
 
 ![Modes](https://i.imgur.com/ww1V5oo.png)
 
-#### Improvements in Lumina v1.5.6
+#### Improvements in Lumina v1.5.6r1
 
 - **LUTs Texture Format**:
   - The default color texture format for LUTs has been switched to `RGBA64` to resolve inconsistencies with other LUTs.
