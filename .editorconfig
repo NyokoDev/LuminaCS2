@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# SA1307: Accessible fields should begin with upper-case letter
+dotnet_diagnostic.SA1307.severity = none

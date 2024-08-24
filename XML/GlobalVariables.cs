@@ -163,7 +163,7 @@ namespace LuminaMod.XML
         public TonemappingMode TonemappingMode { get; set; } = TonemappingMode.None;
 
         [XmlElement]
-        public TextureFormat TextureFormat { get; set; } = TextureFormat.RGBA64;
+        public TextureFormat TextureFormat { get; set; }
 
         /// <summary>
         /// Serializes to a file.
@@ -270,8 +270,6 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.LUTContribution = loadedVariables.LUTContribution;
                     GlobalVariables.Instance.LUTName = loadedVariables.LUTName;
                     GlobalVariables.Instance.TextureFormat = loadedVariables.TextureFormat;
-           
-
                     return loadedVariables;
                 }
             }

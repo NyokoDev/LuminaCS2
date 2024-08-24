@@ -8,6 +8,7 @@ const TonemappingModes = ["None", "External", "Custom", "Neutral", "ACES"];
 
 // This functions trigger an event on C# side and C# designates the method to implement.
 const TonemappingMode$ = bindValue<number>(mod.id, "TonemappingMode", 0);
+const TonemappingModeValue = bindValue<string>(mod.id, "TonemappingMode")
 
 
 const DropdownStyle: Theme | any = getModule("game-ui/menu/themes/dropdown.module.scss", "classes");
@@ -22,6 +23,7 @@ const handleToggleSelected = (index: number) => {
 
 export const TonemappingDropdown = () => {
   const ColorMode = useValue(TonemappingMode$);
+  const TonemappingMode = useValue(TonemappingModeValue);
   const dropDownItems = TonemappingModes.map((mode, index) => (
     <DropdownItem<Number>
       theme={DropdownStyle}

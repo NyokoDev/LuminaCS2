@@ -11,19 +11,25 @@ public class CubeLutLoader : MonoBehaviour
     public static Texture3D LutTexture { get; set; } // Static property to access the texture
     public static TextureFormat TextureFormat { get; set; }
 
-    // Public method to load a LUT from a .cube file
-    public static Texture3D LoadLutFromFile(string cubeFilePath)
+
+
+    /// <summary>
+    /// Loads LUT as RGBA64.
+    /// </summary>
+    /// <param name="cubeFilePath">Cube file path.</param>
+    /// <returns>Returns a texture 3d.</returns>
+    public static Texture3D LoadLutFromFileRGBA64(string cubeFilePath)
     {
         if (File.Exists(cubeFilePath))
         {
             var result = LoadCubeFile(cubeFilePath);
             if (result != null)
             {
-                var texture = new Texture3D(result.LutSize, result.LutSize, result.LutSize, TextureFormat, false);
+                var texture = new Texture3D(result.LutSize, result.LutSize, result.LutSize, TextureFormat.RGBA64, false);
                 texture.SetPixels(result.Pixels);
                 texture.Apply();
 
-                Lumina.Mod.Log.Info($"LUT Texture created successfully with size {result.LutSize}x{result.LutSize}x{result.LutSize} with texture format " + GlobalVariables.Instance.TextureFormat.ToString());
+                Lumina.Mod.Log.Info($"LUT Texture created successfully with size {result.LutSize}x{result.LutSize}x{result.LutSize} with texture format with texture format RGBA64");
 
                 return texture;
             }
@@ -39,6 +45,42 @@ public class CubeLutLoader : MonoBehaviour
             return null;
         }
     }
+
+
+    /// <summary>
+    /// Loads LUT as RGBAHalf.
+    /// </summary>
+    /// <param name="cubeFilePath">Cube file path.</param>
+    /// <returns>Returns a texture 3d.</returns>
+    public static Texture3D LoadLutFromFileRGBAHalf(string cubeFilePath)
+    {
+        if (File.Exists(cubeFilePath))
+        {
+            var result = LoadCubeFile(cubeFilePath);
+            if (result != null)
+            {
+                var texture = new Texture3D(result.LutSize, result.LutSize, result.LutSize, TextureFormat.RGBAHalf, false);
+                texture.SetPixels(result.Pixels);
+                texture.Apply();
+
+                Lumina.Mod.Log.Info($"LUT Texture created successfully with size {result.LutSize}x{result.LutSize}x{result.LutSize} with texture format RGBAHALF");
+
+                return texture;
+            }
+            else
+            {
+                Lumina.Mod.Log.Info("Failed to parse the .cube file.");
+                return null;
+            }
+        }
+        else
+        {
+            Lumina.Mod.Log.Info($"File not found: {cubeFilePath}");
+            return null;
+        }
+    }
+
+
 
 
     // Load and process the LUT file

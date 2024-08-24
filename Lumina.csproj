@@ -19,7 +19,7 @@
 		<!--The file where mod information which is required for publishing mod on PDX mods are stored-->
 		<PublishConfigurationPath>Properties\PublishConfiguration.xml</PublishConfigurationPath>
 		<SignAssembly>False</SignAssembly>
-		<AssemblyVersion>1.5.6r1</AssemblyVersion>
+		<AssemblyVersion>1.5.6</AssemblyVersion>
 	</PropertyGroup>
 	
 	<!--Imports must be after PropertyGroup block-->
@@ -89,6 +89,9 @@
 	<ItemGroup>
 		<Reference Include="Colossal.Collections">
 			<Private>false</Private>
+		</Reference>
+		<Reference Include="Colossal.Mathematics">
+		  <HintPath>..\..\Program Files (x86)\Steam\steamapps\common\Cities Skylines II\Cities2_Data\Managed\Colossal.Mathematics.dll</HintPath>
 		</Reference>
 		<Reference Include="Colossal.PSI.Common">
 		  <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Cities Skylines II\Cities2_Data\Managed\Colossal.PSI.Common.dll</HintPath>

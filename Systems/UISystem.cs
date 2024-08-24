@@ -1,25 +1,27 @@
-﻿using Colossal.UI.Binding;
-using Game.UI;
-using Game.UI.InGame;
-using Lumina.UI;
-using Lumina.XML;
-using LuminaMod.XML;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.HighDefinition;
-using static UnityEngine.Rendering.DebugUI;
-
-namespace Lumina.Systems
+﻿namespace Lumina.Systems
 {
-    internal partial class UISystem : UISystemBase
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Colossal.UI.Binding;
+    using Game.UI;
+    using Game.UI.InGame;
+    using Lumina.UI;
+    using Lumina.XML;
+    using LuminaMod.XML;
+    using UnityEngine.Rendering;
+    using UnityEngine.Rendering.HighDefinition;
+    using static UnityEngine.Rendering.DebugUI;
+
+    internal partial class UISystem : ExtendedUISystemBase
     {
         public bool Visible { get; set; }
+        private ValueBindingHelper<string[]> LutArrayExtended;
+        private ValueBindingHelper<string> LutName;
        
 
         protected override void OnCreate()
@@ -84,10 +86,92 @@ namespace Lumina.Systems
             AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "TimeFloatIsActive", () => TimeFloatIsActive()));
             AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "TimeFloatValue", () => TimeFloatValue()));
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleTimeFloatValue", HandleTimeFloatValue));
+            // Array
+            LutArrayExtended = CreateBinding("LUTArray", LUTArray());
+
+
+
+
+
 
 
 
         }
+
+        private void PopulateLUTSArray()
+        {
+            try
+            {
+                AddBinding(new GetterValueBinding<string[]>(
+                    Mod.MODUI,
+                    "LUTArray",
+                    () => LUTArray()
+                ));
+            }
+            catch (Exception ex)
+            {
+                Lumina.Mod.Log.Info("[FAILURE] Failed to add or update binding for LUTArray: " + ex.Message);
+         
+            }
+
+        }
+
+        private void SendLUTName(string obj)
+        {
+            try
+            {
+                // Log the incoming value for debugging
+                Lumina.Mod.Log.Info($"SendLUTName() called with value: {obj}");
+
+                // Assign the value to PostProcessSystem.LutName_Example
+                PostProcessSystem.LutName_Example = obj;
+
+                // Log the successful update
+                Lumina.Mod.Log.Info($"LutName_Example successfully updated to: {PostProcessSystem.LutName_Example}");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception details for debugging
+                Lumina.Mod.Log.Error($"An error occurred in SendLUTName(): {ex.Message}");
+                Lumina.Mod.Log.Error($"Stack Trace: {ex.StackTrace}");
+            }
+        }
+
+
+        private string[] LUTArray()
+        {
+            // Retrieve the LUT files array
+            var lutFiles = PostProcessSystem.LutFiles;
+
+            // Check if lutFiles is null and update it with the directory files if necessary
+            if (lutFiles == null)
+            {
+                Lumina.Mod.Log.Info("LUTArray() returned null from PostProcessSystem.LutFiles. Populating with files from the directory.");
+
+                // Populate PostProcessSystem.LutFiles with files from the specified directory
+                var filesWithFullPath = Directory.GetFiles(GlobalPaths.LuminaLUTSDirectory, "*.cube");
+
+                // Extract only the file names without the extension
+                var fileNames = filesWithFullPath
+                    .Select(filePath => Path.GetFileNameWithoutExtension(filePath))
+                    .ToArray();
+
+                // Update PostProcessSystem.LutFiles with only the file names
+                PostProcessSystem.LutFiles = fileNames;
+
+                Lumina.Mod.Log.Info(string.Join(", ", PostProcessSystem.LutFiles)); // Log the result for debugging
+            }
+
+            // Optionally, check if the array is empty and handle it if needed
+            if (PostProcessSystem.LutFiles.Length == 0)
+            {
+                Lumina.Mod.Log.Info("LUTArray() returned an empty array from PostProcessSystem.LutFiles.");
+            }
+
+            // Return the array
+            return PostProcessSystem.LutFiles;
+        }
+
 
         private void SetTextureFormat(float obj)
         {
@@ -145,12 +229,36 @@ namespace Lumina.Systems
 
         private void UpdateLUTName(string obj)
         {
-            PostProcessSystem.LutName_Example = obj;
+            // Log the incoming value
+            Lumina.Mod.Log.Info($"[DEBUG] UpdateLUTName called with obj: {obj}");
+
+            // Check if obj is null or empty
+            if (string.IsNullOrEmpty(obj))
+            {
+                Lumina.Mod.Log.Info("[DEBUG] UpdateLUTName received an empty or null value.");
+            }
+            else
+            {
+                // Log the values before assignment
+                Lumina.Mod.Log.Info($"[DEBUG] Setting PostProcessSystem.LutName_Example to: {obj}");
+                Lumina.Mod.Log.Info($"[DEBUG] Setting GlobalVariables.Instance.LUTName to: {obj}");
+            }
+
+            try
+            {
+                // Assign the values
+                PostProcessSystem.LutName_Example = obj;
+                GlobalVariables.Instance.LUTName = obj;
+
+                // Confirm successful assignment
+                Lumina.Mod.Log.Info($"[DEBUG] Successfully updated LUT names: PostProcessSystem.LutName_Example = {PostProcessSystem.LutName_Example}, GlobalVariables.Instance.LUTName = {GlobalVariables.Instance.LUTName}");
+            }
+            catch (Exception ex)
+            {
+                // Log any exceptions
+                Lumina.Mod.Log.Info($"[ERROR] Exception occurred in UpdateLUTName: {ex.Message}\n{ex.StackTrace}");
+            }
         }
-
-   
-
-
         private void UpdateLUT()
         {
             PostProcessSystem.UpdateLUT();

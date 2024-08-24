@@ -17,8 +17,10 @@ import { Slider as Slider2, TextField, createTheme } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import red from "@mui/material/colors/red";
 import FilePicker from "./FilePicker";
-import { TonemappingDropdown } from "./dropdown";
+import { TonemappingDropdown } from "./TonemappingDropdown";
 import { TextureFormatDropdown } from "./textureformat_dropdown";
+import { LUTSDropdown } from "./LUTSDropdown";
+
 
 
 export let isInstalled$ = false;
@@ -868,6 +870,10 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
 
 
 <div className="LuminaVersion_Image">
+  <div className="Version_Text"
+  ><h1>v1.5.6r3</h1> 
+  
+  </div>
 </div>
 
 
@@ -949,16 +955,13 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
 
 
 
-<input
-  type="text"
-  onChange={(event) => UpdateLUTName(String(event.target.value))}
-  className="toggle_cca item-mouse-states_Fmi toggle_th_ LUTInputText"
-/>
 
+<Tooltip tooltip={translate("LUMINA.tonemappingmodedropdowntooltip")}>
 <div className="TonemappingDropdown">
   <h1>{TonemappingMode}</h1>
 <TonemappingDropdown />
 </div>
+</Tooltip>
 <button
 onClick={UpdateLUT}
 className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LoadLUTButton">{translate("LUMINA.loadlutbutton")}
@@ -971,7 +974,7 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
 
    <label className="title_SVH title_zQN LutLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.tonemappingtitle")}</label>
 
-   <label className="title_SVH title_zQN LutLabelInUse" style={{ whiteSpace: 'nowrap' }}>{LUTName}</label>
+   <label className="title_SVH title_zQN LutLabelInUse" style={{ whiteSpace: 'nowrap' }}>Lut Texture</label>
 
    <Tooltip tooltip={translate("LUMINA.textureformatdropdowntooltip")}>
 <div className="TextureFormatDropdown"> 
@@ -981,6 +984,17 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
 />
 </div>
 </Tooltip>
+
+<div className="LUTSDropdown">
+<LUTSDropdown
+
+/>
+</div>
+
+<div  className="title_SVH PublicServiceAnnouncement">
+  <h1>BEWARE. Tonemapping features are on early development.</h1>
+  <h2>To use LUTs, mode must be set to 'External'</h2>
+   </div>
 
 </div>
 

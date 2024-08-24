@@ -4,7 +4,7 @@ import { getModule } from "cs2/modding";
 import mod from "../../mod.json";
 import { Dropdown, DropdownItem, DropdownToggle, UISound, FOCUS_AUTO } from "cs2/ui";
 
-const TonemappingModes = ["RGBA64","RGBA32"];
+const TonemappingModes = ["RGBA64","RGBAHalf"];
 
 // This functions trigger an event on C# side and C# designates the method to implement.
 const TonemappingMode$ = bindValue<number>(mod.id, "TextureFormat", 0);

@@ -17,12 +17,12 @@ namespace Lumina.XML
     public class GlobalPaths
     {
         private static string localAppDataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-        private static string localLowDirectory = Path.Combine(localAppDataDirectory, "..", "LocalLow");
+        public static string LocalLowDirectory = Path.Combine(localAppDataDirectory, "..", "LocalLow");
 
         /// <summary>
         /// AssemblyDirectory, returns mod path to Local App Data.
         /// </summary>
-        public static string AssemblyDirectory = Path.Combine(localLowDirectory, "Colossal Order", "Cities Skylines II", "ModsData", "Lumina");
+        public static string AssemblyDirectory = Path.Combine(LocalLowDirectory, "Colossal Order", "Cities Skylines II", "ModsData", "Lumina");
 
         /// <summary>
         /// LuminaPresetsDirectory. Returns presets directory.
@@ -34,7 +34,7 @@ namespace Lumina.XML
         /// </summary>
         public static string LuminaLUTSDirectory = Path.Combine(AssemblyDirectory, "LUTS");
 
-        private static string assemblyPDXDirectory = Path.Combine(localLowDirectory, "Colossal Order", "Cities Skylines II", "ModsData", "Lumina");
+        private static string assemblyPDXDirectory = Path.Combine(LocalLowDirectory, "Colossal Order", "Cities Skylines II", "ModsData", "Lumina");
         private static string settingsFilePath = Path.Combine(AssemblyDirectory, "Lumina.xml");
 
         /// <summary>
@@ -50,6 +50,6 @@ namespace Lumina.XML
         /// <summary>
         /// Returns the version.
         /// </summary>
-        public static string Version = "1.5.6r1";
+        public static string Version = "1.5.6r2";
     }
 }

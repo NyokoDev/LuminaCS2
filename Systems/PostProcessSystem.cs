@@ -28,9 +28,12 @@ namespace Lumina.Systems
     internal partial class PostProcessSystem : SystemBase
     {
         public static string lutFilePath = Path.Combine(GlobalPaths.LuminaLUTSDirectory, GlobalVariables.Instance.LUTName + ".cube");
+        public static string[] LutFiles;
         bool m_SetupDone = false;
         Volume LuminaVolume;
         private VolumeProfile m_Profile;
+
+        public PostProcessSystem PPS;
 
         public Exposure m_Exposure;
         public Vignette m_Vignette;
@@ -55,8 +58,33 @@ namespace Lumina.Systems
 
         public static string TextureFormat;
 
+
+        /// <summary>
+        /// Logs current LUT log size.
+        /// </summary>
+        private static void LogSize()
+        {
+            // Assuming you already have a reference to the current HDRenderPipelineAsset
+            HDRenderPipelineAsset currentAsset = GraphicsSettings.currentRenderPipeline as HDRenderPipelineAsset;
+
+            if (currentAsset != null)
+            {
+                int lutSize = currentAsset.currentPlatformRenderPipelineSettings.postProcessSettings.lutSize;
+                Lumina.Mod.Log.Info($"Current LUT size: {lutSize}");
+            }
+            else
+            {
+                Lumina.Mod.Log.Info("Failed to retrieve the current HDRenderPipelineAsset.");
+            }
+        }
+
+        /// <summary>
+        /// OnUpdate method.
+        /// </summary>
         protected override void OnUpdate()
         {
+
+            SceneFlowChecker.CheckForErrors();
 
             if (Panel)
             {
@@ -77,11 +105,9 @@ namespace Lumina.Systems
                 LUTloaded = true;
             }
 
- 
             ColorAdjustments();
             WhiteBalance();
             ShadowsMidTonesHighlights();
-
         }
 
         private void UpdateNames()
@@ -89,19 +115,9 @@ namespace Lumina.Systems
             PostProcessSystem.ToneMappingMode = GlobalVariables.Instance.TonemappingMode.ToString();
             PostProcessSystem.TextureFormat = GlobalVariables.Instance.TextureFormat.ToString();
             CubeLutLoader.TextureFormat = GlobalVariables.Instance.TextureFormat;
-
-            CheckForNullLUTName();
-    }
-
-        private void CheckForNullLUTName()
-        {
-            // Access the instance of GlobalVariables and check if LUTName is null
-            if (GlobalVariables.Instance.LUTName == null)
-            {
-                // If LUTName is null, assign it a default value of "none"
-                GlobalVariables.Instance.LUTName = "None";
-            }
         }
+
+
 
         public static void UpdateLUT()
         {
@@ -116,19 +132,36 @@ namespace Lumina.Systems
                 m_Tonemapping.lutTexture.overrideState = true;
 
                 // Attempt to load the LUT texture from file
-                Texture3D lutTexture = CubeLutLoader.LoadLutFromFile(lutFilePath);
+                Texture3D lutTexture = null;
+
+                if (GlobalVariables.Instance.TextureFormat == UnityEngine.TextureFormat.RGBA64)
+                {
+                    lutTexture = CubeLutLoader.LoadLutFromFileRGBA64(lutFilePath);
+                    UpdateLutTextureFormat(UnityEngine.TextureFormat.RGBA64);
+                }
+                else if (GlobalVariables.Instance.TextureFormat == UnityEngine.TextureFormat.RGBAHalf)
+                {
+                    lutTexture = CubeLutLoader.LoadLutFromFileRGBAHalf(lutFilePath);
+                    UpdateLutTextureFormat(UnityEngine.TextureFormat.RGBAHalf);
+                }
+
                 if (lutTexture == null)
                 {
                     Mod.Log.Error($"Failed to load LUT texture from file: {lutFilePath}");
                     return;
                 }
 
+
+
                 // Set the loaded LUT texture
                 m_Tonemapping.lutTexture.value = lutTexture;
+                m_Tonemapping.ValidateLUT();
+
 
                 Mod.Log.Info($"LUT successfully set to: {lutFilePath}");
 
                 GlobalVariables.Instance.LUTName = LutName_Example;
+
                 // Save global variables to file, with error handling
                 GlobalVariables.SaveToFile(GlobalPaths.GlobalModSavingPath);
             }
@@ -138,12 +171,50 @@ namespace Lumina.Systems
             }
         }
 
+        /// <summary>
+        /// Updates LUT texture format to desired.
+        /// </summary>
+        /// <param name="newFormat">New format.</param>
+        public static void UpdateLutTextureFormat(TextureFormat newFormat)
+        {
+            // Ensure the LUT texture is not null
+            if (m_Tonemapping.lutTexture.value != null)
+            {
+                // Create a new texture with the desired format
+                Texture3D newLutTexture = ChangeTextureFormat((Texture3D)m_Tonemapping.lutTexture.value, newFormat);
 
+                // Set the new texture
+                m_Tonemapping.lutTexture.value = newLutTexture;
+
+                // Validate the new LUT texture
+                m_Tonemapping.ValidateLUT();
+
+                Lumina.Mod.Log.Info($"LUT Texture format changed to {newFormat} and validated successfully.");
+            }
+            else
+            {
+                Lumina.Mod.Log.Info("LUT Texture is null, cannot change format.");
+            }
+        }
+
+        private static Texture3D ChangeTextureFormat(Texture3D sourceTexture, TextureFormat newFormat)
+        {
+            if (sourceTexture == null)
+            {
+                Lumina.Mod.Log.Info("Source texture is null.");
+                return null;
+            }
+
+            // Create a new texture with the new format
+            Texture3D newTexture = new Texture3D(sourceTexture.width, sourceTexture.height, sourceTexture.depth, newFormat, false);
+            newTexture.SetPixels(sourceTexture.GetPixels());
+            newTexture.Apply();
+
+            return newTexture;
+        }
 
         private void TonemappingLUT()
         {
-
-
             Mod.Log.Info("Starting TonemappingLUT process.");
 
             ValidateLUTSDirectory();
@@ -166,16 +237,29 @@ namespace Lumina.Systems
             Mod.Log.Info("Tonemapping activated.");
 
             m_Tonemapping.mode.value = GlobalVariables.Instance.TonemappingMode;
+
             m_Tonemapping.lutTexture.overrideState = true;
             m_Tonemapping.mode.overrideState = true;
             Mod.Log.Info("Tonemapping mode set to" + GlobalVariables.Instance.TonemappingMode + " and overrideState enabled.");
 
-            Texture3D lutTexture = CubeLutLoader.LoadLutFromFile(lutFilePath);
+            // Attempt to load the LUT texture from file
+            Texture3D lutTexture = null;
+
+            if (GlobalVariables.Instance.TextureFormat == UnityEngine.TextureFormat.RGBA64)
+            {
+                lutTexture = CubeLutLoader.LoadLutFromFileRGBA64(lutFilePath);
+            }
+            else if (GlobalVariables.Instance.TextureFormat == UnityEngine.TextureFormat.RGBAHalf)
+            {
+                lutTexture = CubeLutLoader.LoadLutFromFileRGBAHalf(lutFilePath);
+            }
+
             if (lutTexture == null)
             {
-                Mod.Log.Info("Failed to load LUT texture from file: " + lutFilePath);
+                Mod.Log.Error($"Failed to load LUT texture from file: {lutFilePath}");
                 return;
             }
+
             Mod.Log.Info("LUT texture loaded successfully.");
 
             if (LUTSValidated)
@@ -191,22 +275,23 @@ namespace Lumina.Systems
 
             m_Tonemapping.lutContribution.overrideState = true;
             m_Tonemapping.lutContribution.Override(GlobalVariables.Instance.LUTContribution);
+
             Mod.Log.Info("LUT contribution set with value: " + GlobalVariables.Instance.LUTContribution);
 
             bool isLUTValid = m_Tonemapping.ValidateLUT();
+            LogSize();
             Mod.Log.Info("LUT validation result: " + isLUTValid);
 
             if (!isLUTValid)
             {
                 Mod.Log.Info("Final LUT validation failed after assignment.");
             }
-
-
         }
 
-
-
-        private void ValidateLUTSDirectory()
+        /// <summary>
+        /// Validates and ensures predetermined LUTs are available in ModsData.
+        /// </summary>
+        public void ValidateLUTSDirectory()
         {
             try
             {
@@ -222,6 +307,7 @@ namespace Lumina.Systems
                 if (!Directory.Exists(directoryPath))
                 {
                     Directory.CreateDirectory(directoryPath);
+                    PostProcessSystem.LutFiles = Directory.GetFiles(GlobalPaths.LuminaLUTSDirectory);
                 }
 
                 // Copy all embedded resources
@@ -305,10 +391,10 @@ namespace Lumina.Systems
 
                     colorAdjustments.saturation.Override(GlobalVariables.Instance.Saturation);
                     colorAdjustments.saturation.overrideState = GlobalVariables.Instance.SaturationActive;
-
                 }
             }
         }
+
         private void WhiteBalance()
         {
             m_WhiteBalance.temperature.Override(GlobalVariables.Instance.Temperature);
@@ -325,15 +411,20 @@ namespace Lumina.Systems
             m_ShadowsMidtonesHighlights.midtones.overrideState = GlobalVariables.Instance.MidtonesActive;
             m_ShadowsMidtonesHighlights.highlights.Override(new Vector4(GlobalVariables.Instance.Highlights, GlobalVariables.Instance.Highlights, GlobalVariables.Instance.Highlights, GlobalVariables.Instance.Highlights));
             m_ShadowsMidtonesHighlights.highlights.overrideState = GlobalVariables.Instance.HighlightsActive;
-
-
         }
+
+        /// <summary>
+        /// Called when the system is created.
+        /// </summary>
         protected override void OnCreate()
         {
             base.OnCreate();
             ConvertToHDRP();
         }
 
+        /// <summary>
+        /// Initializes Lumina's volume into the Scene.
+        /// </summary>
         public void ConvertToHDRP()
         {
             if (!m_SetupDone)
@@ -347,7 +438,6 @@ namespace Lumina.Systems
                 LuminaVolume.priority = 1980f;
                 LuminaVolume.enabled = true;
 
-
                 // Access the Volume Profile
                 m_Profile = LuminaVolume.profile;
 
@@ -356,22 +446,14 @@ namespace Lumina.Systems
                 SetUpVolumetricClouds();
 #endif
 
-
                 // Add Tonemapping
                 m_Tonemapping = m_Profile.Add<Tonemapping>();
-
 
                 // Add and configure White Balance effect
                 m_WhiteBalance = m_Profile.Add<WhiteBalance>();
                 m_WhiteBalance.active = true;
                 m_WhiteBalance.temperature.Override(GlobalVariables.Instance.Temperature);
                 m_WhiteBalance.tint.Override(GlobalVariables.Instance.Tint);
-
-
-
-
-
-
 
                 // Add and configure Color Adjustments effect
                 m_ColorAdjustments = m_Profile.Add<ColorAdjustments>();
@@ -387,8 +469,6 @@ namespace Lumina.Systems
                 Mod.Log.Info("[LUMINA] Successfully added HDRP volume.");
             }
         }
-
-
 #if DEBUG
         public void SetUpVolumetricClouds()
         {
@@ -644,7 +724,7 @@ namespace Lumina.Systems
         /// <summary>
         /// Sets tonemapping mode from dropdown.
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="obj">Tonemapping mode.</param>
         internal static void SetTonemappingMode(float obj)
         {
             // Default to an invalid mode or a fallback mode if the float doesn't match any known mode
@@ -687,8 +767,8 @@ namespace Lumina.Systems
         /// <summary>
         /// Sets texture format to RGBA64 OR 32 based on user choice.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <exception cref="Exception"></exception>
+        /// <param name="obj">Texture format.</param>
+        /// <exception cref="Exception">Throws an exception.</exception>
         internal static void SetTextureFormat(float obj)
         {
             TextureFormat mode;
@@ -699,7 +779,7 @@ namespace Lumina.Systems
                     mode = UnityEngine.TextureFormat.RGBA64;
                     break;
                 case 1f:
-                    mode = UnityEngine.TextureFormat.RGBA32;
+                    mode = UnityEngine.TextureFormat.RGBAHalf;
                     break;
                 default:
                     // Optionally, handle the default case (e.g., log a warning or set a fallback mode)

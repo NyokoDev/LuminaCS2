@@ -14,6 +14,9 @@ namespace Lumina
     using Lumina.Systems;
     using Lumina.XML;
     using LuminaMod.XML;
+    using System;
+    using System.IO;
+    using UnityEngine;
 
     /// <summary>
     /// Main mod class.
@@ -61,6 +64,8 @@ namespace Lumina
             {
                 // Load global settings
                 GlobalVariables.LoadFromFile(GlobalPaths.GlobalModSavingPath);
+                CheckForNullLUTName();
+
 
                 // Update system after PostProcessSystem but before culling
                 updateSystem.UpdateAfter<PostProcessSystem>(SystemUpdatePhase.PreCulling);
@@ -79,6 +84,27 @@ namespace Lumina
                   text: $"Wasn't possible to retrieve settings.");
             }
         }
+
+
+
+
+        private static void CheckForNullLUTName()
+        {
+            // Access the instance of GlobalVariables and check if LUTName is null or empty
+            if (GlobalVariables.Instance == null)
+            {
+                Lumina.Mod.Log.Error("GlobalVariables.Instance is null.");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(GlobalVariables.Instance.LUTName))
+            {
+                // If LUTName is null or empty, assign it a default value
+                GlobalVariables.Instance.LUTName = "None"; // Consider defining this as a constant or configurable
+                Lumina.Mod.Log.Info("LUTName was null or empty, assigned default value 'None'.");
+            }
+        }
+
 
         /// <inheritdoc/>
         public void OnDispose()
