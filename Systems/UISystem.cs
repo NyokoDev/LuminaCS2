@@ -123,11 +123,11 @@
                 // Log the incoming value for debugging
                 Lumina.Mod.Log.Info($"SendLUTName() called with value: {obj}");
 
-                // Assign the value to PostProcessSystem.LutName_Example
-                PostProcessSystem.LutName_Example = obj;
+                // Assign the value to RenderEffectsSystem.LutName_Example
+                RenderEffectsSystem.LutName_Example = obj;
 
                 // Log the successful update
-                Lumina.Mod.Log.Info($"LutName_Example successfully updated to: {PostProcessSystem.LutName_Example}");
+                Lumina.Mod.Log.Info($"LutName_Example successfully updated to: {RenderEffectsSystem.LutName_Example}");
             }
             catch (Exception ex)
             {
@@ -137,18 +137,16 @@
             }
         }
 
-
-        private string[] LUTArray()
+            public static void UpdateArray()
         {
-            // Retrieve the LUT files array
-            var lutFiles = PostProcessSystem.LutFiles;
+            var lutFiles = RenderEffectsSystem.LutFiles;
 
             // Check if lutFiles is null and update it with the directory files if necessary
             if (lutFiles == null)
             {
-                Lumina.Mod.Log.Info("LUTArray() returned null from PostProcessSystem.LutFiles. Populating with files from the directory.");
+                Lumina.Mod.Log.Info("LUTArray() returned null from RenderEffectsSystem.LutFiles. Populating with files from the directory.");
 
-                // Populate PostProcessSystem.LutFiles with files from the specified directory
+                // Populate RenderEffectsSystem.LutFiles with files from the specified directory
                 var filesWithFullPath = Directory.GetFiles(GlobalPaths.LuminaLUTSDirectory, "*.cube");
 
                 // Extract only the file names without the extension
@@ -156,52 +154,84 @@
                     .Select(filePath => Path.GetFileNameWithoutExtension(filePath))
                     .ToArray();
 
-                // Update PostProcessSystem.LutFiles with only the file names
-                PostProcessSystem.LutFiles = fileNames;
+                // Update RenderEffectsSystem.LutFiles with only the file names
+                RenderEffectsSystem.LutFiles = fileNames;
 
-                Lumina.Mod.Log.Info(string.Join(", ", PostProcessSystem.LutFiles)); // Log the result for debugging
+                Lumina.Mod.Log.Info(string.Join(", ", RenderEffectsSystem.LutFiles)); // Log the result for debugging
             }
 
             // Optionally, check if the array is empty and handle it if needed
-            if (PostProcessSystem.LutFiles.Length == 0)
+            if (RenderEffectsSystem.LutFiles.Length == 0)
             {
-                Lumina.Mod.Log.Info("LUTArray() returned an empty array from PostProcessSystem.LutFiles.");
+                Lumina.Mod.Log.Info("LUTArray() returned an empty array from RenderEffectsSystem.LutFiles.");
+            }
+        }
+
+        private string[] LUTArray()
+        {
+
+            // Retrieve the LUT files array
+            var lutFiles = RenderEffectsSystem.LutFiles;
+
+            // Check if lutFiles is null and update it with the directory files if necessary
+            if (lutFiles == null)
+            {
+                Lumina.Mod.Log.Info("LUTArray() returned null from RenderEffectsSystem.LutFiles. Populating with files from the directory.");
+
+                // Populate RenderEffectsSystem.LutFiles with files from the specified directory
+                var filesWithFullPath = Directory.GetFiles(GlobalPaths.LuminaLUTSDirectory, "*.cube");
+
+                // Extract only the file names without the extension
+                var fileNames = filesWithFullPath
+                    .Select(filePath => Path.GetFileNameWithoutExtension(filePath))
+                    .ToArray();
+
+                // Update RenderEffectsSystem.LutFiles with only the file names
+                RenderEffectsSystem.LutFiles = fileNames;
+
+                Lumina.Mod.Log.Info(string.Join(", ", RenderEffectsSystem.LutFiles)); // Log the result for debugging
+            }
+
+            // Optionally, check if the array is empty and handle it if needed
+            if (RenderEffectsSystem.LutFiles.Length == 0)
+            {
+                Lumina.Mod.Log.Info("LUTArray() returned an empty array from RenderEffectsSystem.LutFiles.");
             }
 
             // Return the array
-            return PostProcessSystem.LutFiles;
+            return RenderEffectsSystem.LutFiles;
         }
 
 
         private void SetTextureFormat(float obj)
         {
-            PostProcessSystem.SetTextureFormat(obj);
+            RenderEffectsSystem.SetTextureFormat(obj);
         }
 
         private string GetLUTName()
         {
             
-            return PostProcessSystem.LutName_Example;
+            return RenderEffectsSystem.LutName_Example;
         }
 
         private void InitializeLutName()
         {
-            PostProcessSystem.LutName_Example = GlobalVariables.Instance.LUTName;
+            RenderEffectsSystem.LutName_Example = GlobalVariables.Instance.LUTName;
         }
 
         private void SetTonemappingMode(float obj)
         {
-          PostProcessSystem.SetTonemappingMode(obj);
+          RenderEffectsSystem.SetTonemappingMode(obj);
         }
 
         private string GetTonemappingMode()
         {
-            return PostProcessSystem.ToneMappingMode;
+            return RenderEffectsSystem.ToneMappingMode;
         }
 
         private string GetTextureFormatMode()
         {
-            return PostProcessSystem.TextureFormat;
+            return RenderEffectsSystem.TextureFormat;
         }
 
 
@@ -240,18 +270,18 @@
             else
             {
                 // Log the values before assignment
-                Lumina.Mod.Log.Info($"[DEBUG] Setting PostProcessSystem.LutName_Example to: {obj}");
+                Lumina.Mod.Log.Info($"[DEBUG] Setting RenderEffectsSystem.LutName_Example to: {obj}");
                 Lumina.Mod.Log.Info($"[DEBUG] Setting GlobalVariables.Instance.LUTName to: {obj}");
             }
 
             try
             {
                 // Assign the values
-                PostProcessSystem.LutName_Example = obj;
+                RenderEffectsSystem.LutName_Example = obj;
                 GlobalVariables.Instance.LUTName = obj;
 
                 // Confirm successful assignment
-                Lumina.Mod.Log.Info($"[DEBUG] Successfully updated LUT names: PostProcessSystem.LutName_Example = {PostProcessSystem.LutName_Example}, GlobalVariables.Instance.LUTName = {GlobalVariables.Instance.LUTName}");
+                Lumina.Mod.Log.Info($"[DEBUG] Successfully updated LUT names: RenderEffectsSystem.LutName_Example = {RenderEffectsSystem.LutName_Example}, GlobalVariables.Instance.LUTName = {GlobalVariables.Instance.LUTName}");
             }
             catch (Exception ex)
             {
@@ -261,7 +291,7 @@
         }
         private void UpdateLUT()
         {
-            PostProcessSystem.UpdateLUT();
+            RenderEffectsSystem.UpdateLUT();
         }
 
         private void HandleLUTContribution(float obj)

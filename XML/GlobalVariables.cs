@@ -163,7 +163,10 @@ namespace LuminaMod.XML
         public TonemappingMode TonemappingMode { get; set; } = TonemappingMode.None;
 
         [XmlElement]
-        public TextureFormat TextureFormat { get; set; }
+        public TextureFormat TextureFormat { get; set; } = TextureFormat.RGBA64;
+
+        [XmlElement]
+        public bool SceneFlowCheckerEnabled { get; set; } = false;
 
         /// <summary>
         /// Serializes to a file.
@@ -270,6 +273,8 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.LUTContribution = loadedVariables.LUTContribution;
                     GlobalVariables.Instance.LUTName = loadedVariables.LUTName;
                     GlobalVariables.Instance.TextureFormat = loadedVariables.TextureFormat;
+                    GlobalVariables.Instance.SceneFlowCheckerEnabled = loadedVariables.SceneFlowCheckerEnabled;
+
                     return loadedVariables;
                 }
             }
@@ -303,7 +308,5 @@ namespace LuminaMod.XML
                 return instance;
             }
         }
-
-
     }
 }

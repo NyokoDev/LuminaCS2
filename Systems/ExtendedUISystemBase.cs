@@ -1,19 +1,19 @@
-﻿using Colossal.Reflection;
-using Colossal.UI.Binding;
-
-using Game.UI;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-
-using Unity.Entities;
-
-using UnityEngine;
-
-namespace Lumina.Systems
+﻿namespace Lumina.Systems
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using Colossal.Reflection;
+    using Colossal.UI.Binding;
+    using Game.UI;
+    using Unity.Entities;
+    using UnityEngine;
+
+    /// <summary>
+    /// ExtendedUISystemBase by T.D.W.
+    /// </summary>
     public abstract partial class ExtendedUISystemBase : UISystemBase
     {
         public ValueBindingHelper<T> CreateBinding<T>(string key, T initialValue)

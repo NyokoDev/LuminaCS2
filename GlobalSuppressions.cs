@@ -6,4 +6,4 @@
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "<Pending>", Scope = "member", Target = "~F:LuminaMod.XML.GlobalVariables.instance")]
-[assembly: SuppressMessage("StyleCop.CSharp.NamingRules", "SA1307:Accessible fields should begin with upper-case letter", Justification = "<Pending>", Scope = "member", Target = "~F:Lumina.Systems.PostProcessSystem.m_Vignette")]
+[assembly: SuppressMessage("StyleCop.CSharp.NamingRules", "SA1307:Accessible fields should begin with upper-case letter", Justification = "<Pending>", Scope = "member", Target = "~F:Lumina.Systems.RenderEffectsSystem.m_Vignette")]

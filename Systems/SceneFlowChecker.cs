@@ -6,6 +6,7 @@ using UnityEngine;
 /// <summary>
 /// SceneFlowChecker is a workaround to the lack of error files from the game itself. This class continously checks for errors and lets the user know if any happened.
 /// </summary>
+/// 
 public class SceneFlowChecker
 {
     private static readonly string LogFilePath = Path.Combine(GlobalPaths.LocalLowDirectory, @"Colossal Order\Cities Skylines II\Logs\SceneFlow.Log");

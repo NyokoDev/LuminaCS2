@@ -59,7 +59,7 @@ public class CubeLutLoader : MonoBehaviour
             var result = LoadCubeFile(cubeFilePath);
             if (result != null)
             {
-                var texture = new Texture3D(result.LutSize, result.LutSize, result.LutSize, TextureFormat.RGBAHalf, false);
+                var texture = new Texture3D(result.LutSize, result.LutSize, result.LutSize, TextureFormat.RGBA4444, false);
                 texture.SetPixels(result.Pixels);
                 texture.Apply();
 

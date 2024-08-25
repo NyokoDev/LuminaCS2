@@ -67,8 +67,8 @@ namespace Lumina
                 CheckForNullLUTName();
 
 
-                // Update system after PostProcessSystem but before culling
-                updateSystem.UpdateAfter<PostProcessSystem>(SystemUpdatePhase.PreCulling);
+                // Update system after RenderEffectsSystem but before culling
+                updateSystem.UpdateAfter<RenderEffectsSystem>(SystemUpdatePhase.PreCulling);
 
                 updateSystem.UpdateAt<UISystem>(SystemUpdatePhase.MainLoop);
 

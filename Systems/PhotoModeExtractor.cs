@@ -1,47 +1,38 @@
-﻿using System;
-using System.Reflection;
-using UnityEngine;
-using UnityEngine.Rendering.HighDefinition;
-using Unity.Entities;
-using Game.Rendering;
-using Lumina.UI;
-using static Game.Rendering.Debug.RenderPrefabRenderer;
-using System.Drawing.Text;
-using UnityEngine.Rendering;
-using Game.UI.Widgets;
-using HarmonyLib;
-using LuminaMod.XML;
-using Game.Simulation;
-using Game.Rendering.CinematicCamera;
-using System.Collections.Generic;
-using Colossal;
-
-namespace Lumina.Systems
+﻿namespace Lumina.Systems
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Drawing.Text;
+    using System.Reflection;
+    using Colossal;
+    using Game.Rendering;
+    using Game.Rendering.CinematicCamera;
+    using Game.Simulation;
+    using Game.UI.Widgets;
+    using HarmonyLib;
+    using Lumina.UI;
+    using LuminaMod.XML;
+    using Unity.Entities;
+    using UnityEngine;
+    using UnityEngine.Rendering;
+    using UnityEngine.Rendering.HighDefinition;
+    using static Game.Rendering.Debug.RenderPrefabRenderer;
+
+    /// <summary>
+    /// Extracts properties from Photo Mode.
+    /// </summary>
     public partial class PhotoModeExtractor : SystemBase
     {
 
-        private PhotoModeRenderSystem photoModeRenderSystem = null;
-        string[] EffectsMerged;
-
-        private ColorAdjustments m_ColorAdjustments;
-        private WhiteBalance m_WhiteBalance;
-        private ShadowsMidtonesHighlights m_ShadowsMidtonesHighlights;
-        private static PhotoModeExtractor instance;
-        public string volumeTag = "Post Processing Settings"; // Tag assigned to your Volume GameObject
-
-        private Volume PhotoModeVolume;
-
-        public bool WhiteBalancedExtracted = false;
-
-
         /// <summary>
-        /// Photo Mode ones.
+        /// ColorAdjustments properties from Photo Mode.
         /// </summary>
-        /// 
+        ///
         public static ColorAdjustments SavedColorAdjustments;
 
-
+        /// <summary>
+        /// Extracts ColorAdjustments from Photo Mode.
+        /// </summary>
         public static void ExtractColorAdjustments()
         {
             SliderPanel.slider1Value = SavedColorAdjustments.postExposure.value;
@@ -55,9 +46,11 @@ namespace Lumina.Systems
             GlobalVariables.Instance.Saturation = SavedColorAdjustments.saturation.value;
         }
 
+        /// <summary>
+        /// OnUpdate method.
+        /// </summary>
         protected override void OnUpdate()
         {
-        
         }
     }
 }
