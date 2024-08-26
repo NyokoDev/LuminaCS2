@@ -47,4 +47,6 @@ Starting in Lumina v1.5.6r4, a new feature allows users to switch between differ
 
 - **LUTs Texture Format**:
   - The default color texture format for LUTs has been switched to `RGBA64` to resolve inconsistencies with other LUTs.
-  - **Note:** Switching between `RGBA64` and `RGBA32` may require a restart of the application for the changes to take effect.
+  - **Note:** Switching between `RGBA64` and `RGBA32` may require a restart of the application for the changes to take effect.]
+
+See - [Publish LUT to PDXMods](https://github.com/NyokoDev/LuminaCS2/blob/master/Documentation/PublishLUTToPdxMods.md)

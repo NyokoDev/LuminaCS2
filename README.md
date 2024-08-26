@@ -5,7 +5,9 @@
 
 - [Installation](https://github.com/NyokoDev/LuminaCS2/blob/master/Documentation/Installation.md)
 - [How to use LUTs (Look-up-tables)](https://github.com/NyokoDev/LuminaCS2/blob/master/Documentation/LUTS.md)
+- [Publish LUT to PDXMods](https://github.com/NyokoDev/LuminaCS2/blob/master/Documentation/PublishLUTToPdxMods.md)
 - [How to Use the "Send to Lumina" Button (Not ready)](#how-to-use-the-send-to-lumina-button-not-ready)
+
 
 ## FAQ
 
