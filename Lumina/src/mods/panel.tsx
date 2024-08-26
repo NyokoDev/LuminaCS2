@@ -18,7 +18,6 @@ import { ThemeProvider } from '@mui/material/styles';
 import red from "@mui/material/colors/red";
 import FilePicker from "./FilePicker";
 import { TonemappingDropdown } from "./TonemappingDropdown";
-import { TextureFormatDropdown } from "./textureformat_dropdown";
 import { LUTSDropdown } from "./LUTSDropdown";
 
 
@@ -57,7 +56,7 @@ export const HighlightsActive$ =  bindValue<boolean>(mod.id, 'GetHighlightsCheck
 // Tonemapping
 const TonemappingMode$ = bindValue<string>(mod.id, "TonemappingMode");
 const TextureFormatMode$ = bindValue<string>(mod.id, "TextureFormat");
-
+const ExternalModeActivated$ = bindValue<boolean>(mod.id, "IsExternal");
 
 // Planetary Settings
 
@@ -132,14 +131,15 @@ const LongitudeValue = useValue(LongitudeValue$);
 const LUTValue = useValue(LUTValue$);
 const LUTName = useValue(LUTName$);
 const TonemappingMode = useValue(TonemappingMode$);
+const ExternalModeActivated = useValue(ExternalModeActivated$);
 const TextureFormatMode = useValue(TextureFormatMode$);
 
 
 
 // Initialize state variables using useState hook
-const [ColorAdjustmentsEnabled$, setCA] = useState(true);
+const [ColorAdjustmentsEnabled$, setCA] = useState(false);
 const [SettingsEnabled$, setSettings] = useState(false);
-const [ToneMappingEnabled$, setTonemapping] = useState(false);
+const [ToneMappingEnabled$, setTonemapping] = useState(true);
 const [PlanetaryEnabled$, setPlanetaryTab] = useState(false);
 const [OnImport, OnImportChange] = useState(false);
 
@@ -394,6 +394,7 @@ return (
   onClick={() => { setCA(true)
     setSettings(false)
     setPlanetaryTab(false)
+    setTonemapping(false)
    }}>
 </button>
 </Tooltip>
@@ -958,38 +959,45 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
 
 <Tooltip tooltip={translate("LUMINA.tonemappingmodedropdowntooltip")}>
 <div className="TonemappingDropdown">
-  <h1>{TonemappingMode}</h1>
 <TonemappingDropdown />
 </div>
 </Tooltip>
-<button
-onClick={UpdateLUT}
-className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LoadLUTButton">{translate("LUMINA.loadlutbutton")}
-   </button>
 
-   <button
-onClick={OpenLUTFolder}
-className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS OpenLUTButton">{translate("LUMINA.openlutbutton")}
-   </button>
 
-   <label className="title_SVH title_zQN LutLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.tonemappingtitle")}</label>
+{ExternalModeActivated$ && (
+  <div>
+    <div>
+      <button
+        onClick={UpdateLUT}
+        className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LoadLUTButton">
+        {translate("LUMINA.loadlutbutton")}
+      </button>
 
-   <label className="title_SVH title_zQN LutLabelInUse" style={{ whiteSpace: 'nowrap' }}>Lut Texture</label>
+      <button
+        onClick={OpenLUTFolder}
+        className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS OpenLUTButton">
+        {translate("LUMINA.openlutbutton")}
+      </button>
 
-   <Tooltip tooltip={translate("LUMINA.textureformatdropdowntooltip")}>
-<div className="TextureFormatDropdown"> 
-<h1>{TextureFormatMode}</h1>
-<TextureFormatDropdown
+      <label className="title_SVH title_zQN LutLabel" style={{ whiteSpace: 'nowrap' }}>
+        {translate("LUMINA.tonemappingtitle")}
+      </label>
+      <label className="title_SVH title_zQN ModeLabel" style={{ whiteSpace: 'nowrap' }}>
+        {translate("LUMINA.tonemappingmodedropdowntooltip")}
+      </label>
 
-/>
-</div>
-</Tooltip>
+      <label className="title_SVH title_zQN LutLabelInUse" style={{ whiteSpace: 'nowrap' }}>
+        Lut Texture
+      </label>
+    </div>
 
-<div className="LUTSDropdown">
-<LUTSDropdown
+    <div className="LUTSDropdown">
+      <LUTSDropdown />
+    </div>
+  </div>
+)}
 
-/>
-</div>
+
 
 <div  className="title_SVH PublicServiceAnnouncement">
   <h1>BEWARE. Tonemapping features are on early development.</h1>

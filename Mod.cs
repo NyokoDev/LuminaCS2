@@ -97,9 +97,6 @@ namespace Lumina
                 return;
             }
 
-            RenderEffectsSystem.TextureFormat = GlobalVariables.Instance.TextureFormat;
-            Lumina.Mod.Log.Info($"Initial Texture Format: {RenderEffectsSystem.TextureFormat} + {GlobalVariables.Instance.TextureFormat}");
-
             if (string.IsNullOrEmpty(GlobalVariables.Instance.LUTName))
             {
                 // If LUTName is null or empty, assign it a default value

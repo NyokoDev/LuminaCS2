@@ -49,6 +49,7 @@
 	  <None Remove="LUTS\BW1.cube" />
 	  <None Remove="LUTS\BW10.cube" />
 	  <None Remove="LUTS\BW2.cube" />
+	  <None Remove="LUTS\BW3.cube" />
 	  <None Remove="LUTS\Earth Tone Boost.cube" />
 	  <None Remove="LUTS\Green_Blues.cube" />
 	  <None Remove="LUTS\Green_Yellow.cube" />
@@ -84,6 +85,7 @@
 	  <EmbeddedResource Include="LUTS\BW1.cube" />
 	  <EmbeddedResource Include="LUTS\BW10.cube" />
 	  <EmbeddedResource Include="LUTS\BW2.cube" />
+	  <EmbeddedResource Include="LUTS\BW3.cube" />
 	  <EmbeddedResource Include="LUTS\Earth Tone Boost.cube" />
 	  <EmbeddedResource Include="LUTS\Green_Blues.cube" />
 	  <EmbeddedResource Include="LUTS\Green_Yellow.cube" />

@@ -177,28 +177,6 @@
    width: 50rem;
 }
 
-.LoadLUTButton {
-   position: absolute;
-   left: 20rem;
-   width: 300rem;
-   top: 85rem;
-}
-
-.OpenLUTButton {
-   position: absolute;
-   left: 20rem;
-   width: 300rem;
-   top: 132rem;
-}
-
-.LutLabel {
-   color: rgb(255, 255, 255);
-   position: absolute;
-   top: 15rem;
-   left: -300rem;
-   width: 100%;
-   font-size: 18rem;
-}
 
 
 
@@ -1063,45 +1041,21 @@ $hueshift-top: 80rem;
    width: 500rem;
  }
  
-
  .TonemappingDropdown {
    position: absolute;
    color: white;
-   width:200rem;
-   top: 45rem;
-   left: 550rem;
- }
-
- .TonemappingDropdown h1 {
-   position: absolute;
-   color: white;
-   font-size: 16rem;
-   top: 0rem;
-   left: 10rem;
- }
-
- 
- .TextureFormatDropdown {
-   position: absolute;
-   color: white;
-   width:200rem;
-   top: 10rem;
-   left: 550rem;
- }
-
- .TextureFormatDropdown h1 {
-   position: absolute;
-   color: white;
-   font-size: 16rem;
-   top: 0rem;
-   left: 10rem;
+   width:300rem;
+   top: 5rem;
+   left: 650rem;
+   pointer-events: auto;
+   z-index: 4000;
  }
 
  .LutLabelInUse {
    position: absolute;
    color: rgb(255, 255, 255);
    font-size: 16rem;
-   top: 50rem;
+   top: 45rem;
    left: 410rem;
  }
 
@@ -1109,7 +1063,7 @@ $hueshift-top: 80rem;
    position: absolute;
    color: white;
    width:500rem;
-   top: 10rem;
+   top: 60rem;
    left: 15rem;
  }
 
@@ -1144,5 +1098,38 @@ $hueshift-top: 80rem;
 
 
 }
+
+.LoadLUTButton {
+   position: absolute;
+   left: 20rem;
+   width: 300rem;
+   top: 105rem;
+}
+
+.OpenLUTButton {
+   position: absolute;
+   left: 20rem;
+   width: 300rem;
+   top: 155rem;
+}
+
+.LutLabel {
+   color: rgb(255, 255, 255);
+   position: absolute;
+   top: 15rem;
+   left: -390rem;
+   width: 100%;
+   font-size: 18rem;
+}
+
+.ModeLabel{
+   position: absolute;
+   display: flex;
+   top: 15rem;
+   left: 480rem;
+   width: 100%;
+   font-size: 18rem;
+}
+
 
 

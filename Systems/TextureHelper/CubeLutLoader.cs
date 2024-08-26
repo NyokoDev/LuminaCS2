@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -8,12 +9,13 @@ using Lumina.Systems;
 using Lumina.Systems.TextureHelper;
 using LuminaMod.XML;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering;
 
 public class CubeLutLoader : MonoBehaviour
 {
 
     /// <summary>
-    /// Loads LUT as RGBA64.
+    /// Loads LUT as GraphicsFormat.R16G16B16A16_SFloat.
     /// </summary>
     /// <param name="cubeFilePath">Cube file path.</param>
     /// <returns>Returns a texture 3d.</returns>
@@ -27,30 +29,17 @@ public class CubeLutLoader : MonoBehaviour
             var result = LoadCubeFile(cubeFilePath);
             if (result != null)
             {
-                // Check if the desired texture format is supported
-                var desiredFormat = RenderEffectsSystem.TextureFormat;
-                var supportedFormats = new[] { TextureFormat.RGBAHalf, TextureFormat.RGBA64 }; // Add other formats if needed
-
-                if (!supportedFormats.Contains(desiredFormat))
-                {
-                    Lumina.Mod.Log.Error($"Desired texture format {desiredFormat} is not supported.");
-                    return null;
-                }
-
                 // Create and configure the texture
-                var texture = new Texture3D(result.LutSize, result.LutSize, result.LutSize, desiredFormat, false);
-
-                // Check if the texture format matches the desired format
-                if (texture.format != desiredFormat)
+                var texture = new Texture3D(result.LutSize, result.LutSize, result.LutSize, GraphicsFormat.R16G16B16A16_SFloat, TextureCreationFlags.None)
                 {
-                    Lumina.Mod.Log.Error($"Texture format mismatch. Expected: {desiredFormat}, but got: {texture.format}");
-                    return null;
-                }
+                    filterMode = FilterMode.Bilinear, // Properties from CubeLutImporter
+                    wrapMode = TextureWrapMode.Clamp,
+                };
 
                 texture.SetPixels(result.Pixels);
                 texture.Apply();
 
-                Lumina.Mod.Log.Info($"LUT Texture created: {result.LutSize}³, format: {texture.format}");
+                Lumina.Mod.Log.Info($"LUT Texture created: {result.LutSize}³, format: {texture.graphicsFormat}");
 
                 return texture;
             }
@@ -71,7 +60,7 @@ public class CubeLutLoader : MonoBehaviour
     // Load and process the LUT file
     private static ParseResult LoadCubeFile(string path)
     {
-        
+
         return ParseCubeData(path);
     }
 
@@ -94,10 +83,14 @@ public class CubeLutLoader : MonoBehaviour
             var line = FilterLine(lines[i]);
 
             if (string.IsNullOrEmpty(line))
+            {
                 continue;
+            }
 
             if (line.StartsWith("TITLE"))
+            {
                 continue;
+            }
 
             if (line.StartsWith("LUT_3D_SIZE"))
             {
@@ -116,7 +109,9 @@ public class CubeLutLoader : MonoBehaviour
             }
 
             if (line.StartsWith("DOMAIN_"))
+            {
                 continue;
+            }
 
             var row = line.Split();
 

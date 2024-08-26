@@ -18,6 +18,7 @@
     using LuminaMod.XML;
     using Unity.Entities;
     using UnityEngine;
+    using UnityEngine.Experimental.Rendering;
     using UnityEngine.Rendering;
     using UnityEngine.Rendering.HighDefinition;
     using static UnityEngine.Rendering.DebugUI;
@@ -58,8 +59,15 @@
 
         public bool LUTloaded = false;
 
-        public static TextureFormat TextureFormat { get; set; } = TextureFormat.RGBAHalf;
+        /// <summary>
+        /// Gets or sets a value indicating whether Tonemapping mode is External.
+        /// </summary>
+        public static bool IsExternalMode { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether Tonemapping mode is Custom.
+        /// </summary>
+        public static bool IsCustomMode { get; set; }
 
         /// <summary>
         /// Logs current LUT log size.
@@ -150,7 +158,8 @@
                 m_Tonemapping.active = true;
                 m_Tonemapping.mode.overrideState = true;
                 m_Tonemapping.mode.value = GlobalVariables.Instance.TonemappingMode;
-                m_Tonemapping.lutTexture.overrideState = true;
+                m_Tonemapping.lutContribution.overrideState = GlobalVariables.Instance.LUTContributionOverrideState;
+                m_Tonemapping.lutContribution.Override(GlobalVariables.Instance.LUTContribution);
                 Mod.Log.Info($"Tonemapping mode set to: {m_Tonemapping.mode.value}");
 
                 // Find and delete the existing texture if it already exists
@@ -171,7 +180,7 @@
 
                 // Create a new Texture3D object to hold the LUT
                 Texture3D newLutTexture = null;
-                Mod.Log.Info($"Loading LUT with format: {GlobalVariables.Instance.TextureFormat}");
+                Mod.Log.Info($"Loading LUT with format: {GraphicsFormat.R16G16B16A16_SFloat}");
 
                 // Load the new LUT texture from the file based on the format
                 try
@@ -220,24 +229,6 @@
             {
                 Mod.Log.Error($"An error occurred while updating LUT: {ex.Message}\n{ex.StackTrace}");
             }
-        }
-
-
-
-        private static Texture3D ChangeTextureFormat(Texture3D sourceTexture, TextureFormat newFormat)
-        {
-            if (sourceTexture == null)
-            {
-                Lumina.Mod.Log.Info("Source texture is null.");
-                return null;
-            }
-
-            // Create a new texture with the new format
-            Texture3D newTexture = new Texture3D(sourceTexture.width, sourceTexture.height, sourceTexture.depth, newFormat, false);
-            newTexture.SetPixels(sourceTexture.GetPixels());
-            newTexture.Apply();
-
-            return newTexture;
         }
 
         private void TonemappingLUT()
@@ -792,6 +783,8 @@
         private static void UpdateTonemapping()
         {
             m_Tonemapping.mode.value = GlobalVariables.Instance.TonemappingMode;
+
+            IsExternalMode = GlobalVariables.Instance.TonemappingMode == TonemappingMode.External;
         }
     }
 }

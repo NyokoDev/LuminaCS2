@@ -15,6 +15,7 @@
     using Lumina.XML;
     using LuminaMod.XML;
     using UnityEngine;
+    using UnityEngine.Experimental.Rendering;
     using UnityEngine.Rendering;
     using UnityEngine.Rendering.HighDefinition;
     using static UnityEngine.Rendering.DebugUI;
@@ -78,7 +79,6 @@
 
             // Texture Format
             AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "TextureFormat", GetTextureFormatMode));
-            AddBinding(new TriggerBinding<string>(Mod.MODUI, "SetTextureFormat", SetTextureFormat));
 
 
 
@@ -90,7 +90,9 @@
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleTimeFloatValue", HandleTimeFloatValue));
             // Array
             LutArrayExtended = CreateBinding("LUTArray", LUTArray());
-   
+
+            //TonemappingExternalMode
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsExternal", () => IsExternalMode()));
 
 
 
@@ -103,29 +105,10 @@
 
         }
 
-        private void SetTextureFormat(string obj)
+        private bool IsExternalMode()
         {
-            Lumina.Mod.Log.Info("SetTextureFormat called with: " + obj);
-
-            // Check if the provided format is valid
-            if (obj == "RGBA64")
-            {
-                RenderEffectsSystem.TextureFormat = UnityEngine.TextureFormat.RGBA64;
-                GlobalVariables.Instance.TextureFormat = UnityEngine.TextureFormat.RGBA64;
-                Lumina.Mod.Log.Info("Texture format set to RGBA64.");
-            }
-            else if (obj == "RGBAHalf")
-            {
-                RenderEffectsSystem.TextureFormat = UnityEngine.TextureFormat.RGBAHalf;
-                GlobalVariables.Instance.TextureFormat = UnityEngine.TextureFormat.RGBAHalf;
-                Lumina.Mod.Log.Info("Texture format set to RGBAHalf.");
-            }
-            else
-            {
-                Lumina.Mod.Log.Error("Unhandled texture format: " + obj);
-            }
+            return RenderEffectsSystem.IsExternalMode;
         }
-
 
 
         private void PopulateLUTSArray()
@@ -258,7 +241,7 @@
 
         private string GetTextureFormatMode()
         {
-            return RenderEffectsSystem.TextureFormat.ToString();
+            return GraphicsFormat.R16G16B16A16_SFloat.ToString();
         }
 
 

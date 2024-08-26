@@ -9,6 +9,7 @@ namespace LuminaMod.XML
     using System.Reflection;
     using System.Threading;
     using System.Xml.Serialization;
+    using Game.Objects;
     using Game.PSI;
     using Game.Rendering;
     using Lumina;
@@ -154,6 +155,9 @@ namespace LuminaMod.XML
         public float LUTContribution { get; set; } = 1f;
 
         [XmlElement]
+        public bool LUTContributionOverrideState { get; set; } = true;
+
+        [XmlElement]
         public string LUTName { get; set; }
 
         [XmlElement]
@@ -163,10 +167,8 @@ namespace LuminaMod.XML
         public TonemappingMode TonemappingMode { get; set; } = TonemappingMode.None;
 
         [XmlElement]
-        public TextureFormat TextureFormat { get; set; } 
-
-        [XmlElement]
         public bool SceneFlowCheckerEnabled { get; set; } = false;
+
 
         /// <summary>
         /// Serializes to a file.
@@ -272,7 +274,6 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.TonemappingMode = loadedVariables.TonemappingMode;
                     GlobalVariables.Instance.LUTContribution = loadedVariables.LUTContribution;
                     GlobalVariables.Instance.LUTName = loadedVariables.LUTName;
-                    GlobalVariables.Instance.TextureFormat = loadedVariables.TextureFormat;
                     GlobalVariables.Instance.SceneFlowCheckerEnabled = loadedVariables.SceneFlowCheckerEnabled;
 
                     return loadedVariables;
@@ -308,5 +309,7 @@ namespace LuminaMod.XML
                 return instance;
             }
         }
+
+
     }
 }
