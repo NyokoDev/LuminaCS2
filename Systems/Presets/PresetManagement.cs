@@ -2,7 +2,7 @@
 // Copyright (c) NyokoDev. All rights reserved.
 // </copyright>
 
-namespace Lumina.Systems
+namespace Lumina.Systems.Presets
 {
     using System;
     using System.Diagnostics;

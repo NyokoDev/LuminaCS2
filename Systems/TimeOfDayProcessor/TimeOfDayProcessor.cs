@@ -15,7 +15,7 @@
     /// <summary>
     /// Handles time of day.
     /// </summary>
-    internal partial class TimeOfDayProccessor : SystemBase
+    internal partial class TimeOfDayProcessor : SystemBase
     {
 
         /// <summary>

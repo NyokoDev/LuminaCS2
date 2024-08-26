@@ -72,7 +72,7 @@ namespace Lumina
 
                 updateSystem.UpdateAt<UISystem>(SystemUpdatePhase.MainLoop);
 
-                updateSystem.UpdateAt<TimeOfDayProccessor>(SystemUpdatePhase.GameSimulation);
+                updateSystem.UpdateAt<TimeOfDayProcessor>(SystemUpdatePhase.GameSimulation);
             }
             catch
             {
@@ -97,11 +97,17 @@ namespace Lumina
                 return;
             }
 
+            RenderEffectsSystem.TextureFormat = GlobalVariables.Instance.TextureFormat;
+            Lumina.Mod.Log.Info($"Initial Texture Format: {RenderEffectsSystem.TextureFormat} + {GlobalVariables.Instance.TextureFormat}");
+
             if (string.IsNullOrEmpty(GlobalVariables.Instance.LUTName))
             {
                 // If LUTName is null or empty, assign it a default value
-                GlobalVariables.Instance.LUTName = "None"; // Consider defining this as a constant or configurable
+                GlobalVariables.Instance.LUTName = "None";
                 Lumina.Mod.Log.Info("LUTName was null or empty, assigned default value 'None'.");
+
+
+
             }
         }
 

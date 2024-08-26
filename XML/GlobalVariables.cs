@@ -163,7 +163,7 @@ namespace LuminaMod.XML
         public TonemappingMode TonemappingMode { get; set; } = TonemappingMode.None;
 
         [XmlElement]
-        public TextureFormat TextureFormat { get; set; } = TextureFormat.RGBA64;
+        public TextureFormat TextureFormat { get; set; } 
 
         [XmlElement]
         public bool SceneFlowCheckerEnabled { get; set; } = false;

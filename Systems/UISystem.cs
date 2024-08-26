@@ -10,9 +10,11 @@
     using Colossal.UI.Binding;
     using Game.UI;
     using Game.UI.InGame;
+    using Lumina.Systems.Presets;
     using Lumina.UI;
     using Lumina.XML;
     using LuminaMod.XML;
+    using UnityEngine;
     using UnityEngine.Rendering;
     using UnityEngine.Rendering.HighDefinition;
     using static UnityEngine.Rendering.DebugUI;
@@ -22,7 +24,6 @@
         public bool Visible { get; set; }
         private ValueBindingHelper<string[]> LutArrayExtended;
         private ValueBindingHelper<string> LutName;
-       
 
         protected override void OnCreate()
         {
@@ -77,7 +78,8 @@
 
             // Texture Format
             AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "TextureFormat", GetTextureFormatMode));
-            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetTextureFormat", SetTextureFormat));
+            AddBinding(new TriggerBinding<string>(Mod.MODUI, "SetTextureFormat", SetTextureFormat));
+
 
 
 
@@ -88,6 +90,9 @@
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleTimeFloatValue", HandleTimeFloatValue));
             // Array
             LutArrayExtended = CreateBinding("LUTArray", LUTArray());
+   
+
+
 
 
 
@@ -97,6 +102,31 @@
 
 
         }
+
+        private void SetTextureFormat(string obj)
+        {
+            Lumina.Mod.Log.Info("SetTextureFormat called with: " + obj);
+
+            // Check if the provided format is valid
+            if (obj == "RGBA64")
+            {
+                RenderEffectsSystem.TextureFormat = UnityEngine.TextureFormat.RGBA64;
+                GlobalVariables.Instance.TextureFormat = UnityEngine.TextureFormat.RGBA64;
+                Lumina.Mod.Log.Info("Texture format set to RGBA64.");
+            }
+            else if (obj == "RGBAHalf")
+            {
+                RenderEffectsSystem.TextureFormat = UnityEngine.TextureFormat.RGBAHalf;
+                GlobalVariables.Instance.TextureFormat = UnityEngine.TextureFormat.RGBAHalf;
+                Lumina.Mod.Log.Info("Texture format set to RGBAHalf.");
+            }
+            else
+            {
+                Lumina.Mod.Log.Error("Unhandled texture format: " + obj);
+            }
+        }
+
+
 
         private void PopulateLUTSArray()
         {
@@ -203,10 +233,7 @@
         }
 
 
-        private void SetTextureFormat(float obj)
-        {
-            RenderEffectsSystem.SetTextureFormat(obj);
-        }
+
 
         private string GetLUTName()
         {
@@ -231,24 +258,24 @@
 
         private string GetTextureFormatMode()
         {
-            return RenderEffectsSystem.TextureFormat;
+            return RenderEffectsSystem.TextureFormat.ToString();
         }
 
 
 
         private bool TimeFloatIsActive()
         {
-            return TimeOfDayProccessor.Locked;
+            return TimeOfDayProcessor.Locked;
         }
 
         private void HandleTimeFloatValue(float obj)
         {
-            TimeOfDayProccessor.TimeFloat = obj;
+            TimeOfDayProcessor.TimeFloat = obj;
         }
 
         private float TimeFloatValue()
         {
-            return TimeOfDayProccessor.TimeFloat;
+            return TimeOfDayProcessor.TimeFloat;
         }
 
         private void OpenLUTFolder()

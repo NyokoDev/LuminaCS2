@@ -1,35 +1,56 @@
-﻿using Colossal.PSI.Common;
-using LuminaMod.XML;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
+using Colossal.PSI.Common;
+using Lumina.Systems;
+using Lumina.Systems.TextureHelper;
+using LuminaMod.XML;
 using UnityEngine;
 
 public class CubeLutLoader : MonoBehaviour
 {
-    public static Texture3D LutTexture { get; set; } // Static property to access the texture
-    public static TextureFormat TextureFormat { get; set; }
-
-
 
     /// <summary>
     /// Loads LUT as RGBA64.
     /// </summary>
     /// <param name="cubeFilePath">Cube file path.</param>
     /// <returns>Returns a texture 3d.</returns>
-    public static Texture3D LoadLutFromFileRGBA64(string cubeFilePath)
+    public static Texture3D LoadLutFromFile(string cubeFilePath)
     {
+        // Force resource unloading
+        Resources.UnloadUnusedAssets();
+
         if (File.Exists(cubeFilePath))
         {
             var result = LoadCubeFile(cubeFilePath);
             if (result != null)
             {
-                var texture = new Texture3D(result.LutSize, result.LutSize, result.LutSize, TextureFormat.RGBA64, false);
+                // Check if the desired texture format is supported
+                var desiredFormat = RenderEffectsSystem.TextureFormat;
+                var supportedFormats = new[] { TextureFormat.RGBAHalf, TextureFormat.RGBA64 }; // Add other formats if needed
+
+                if (!supportedFormats.Contains(desiredFormat))
+                {
+                    Lumina.Mod.Log.Error($"Desired texture format {desiredFormat} is not supported.");
+                    return null;
+                }
+
+                // Create and configure the texture
+                var texture = new Texture3D(result.LutSize, result.LutSize, result.LutSize, desiredFormat, false);
+
+                // Check if the texture format matches the desired format
+                if (texture.format != desiredFormat)
+                {
+                    Lumina.Mod.Log.Error($"Texture format mismatch. Expected: {desiredFormat}, but got: {texture.format}");
+                    return null;
+                }
+
                 texture.SetPixels(result.Pixels);
                 texture.Apply();
 
-                Lumina.Mod.Log.Info($"LUT Texture created successfully with size {result.LutSize}x{result.LutSize}x{result.LutSize} with texture format with texture format RGBA64");
+                Lumina.Mod.Log.Info($"LUT Texture created: {result.LutSize}³, format: {texture.format}");
 
                 return texture;
             }
@@ -45,47 +66,12 @@ public class CubeLutLoader : MonoBehaviour
             return null;
         }
     }
-
-
-    /// <summary>
-    /// Loads LUT as RGBAHalf.
-    /// </summary>
-    /// <param name="cubeFilePath">Cube file path.</param>
-    /// <returns>Returns a texture 3d.</returns>
-    public static Texture3D LoadLutFromFileRGBAHalf(string cubeFilePath)
-    {
-        if (File.Exists(cubeFilePath))
-        {
-            var result = LoadCubeFile(cubeFilePath);
-            if (result != null)
-            {
-                var texture = new Texture3D(result.LutSize, result.LutSize, result.LutSize, TextureFormat.RGBA4444, false);
-                texture.SetPixels(result.Pixels);
-                texture.Apply();
-
-                Lumina.Mod.Log.Info($"LUT Texture created successfully with size {result.LutSize}x{result.LutSize}x{result.LutSize} with texture format RGBAHALF");
-
-                return texture;
-            }
-            else
-            {
-                Lumina.Mod.Log.Info("Failed to parse the .cube file.");
-                return null;
-            }
-        }
-        else
-        {
-            Lumina.Mod.Log.Info($"File not found: {cubeFilePath}");
-            return null;
-        }
-    }
-
-
 
 
     // Load and process the LUT file
     private static ParseResult LoadCubeFile(string path)
     {
+        
         return ParseCubeData(path);
     }
 

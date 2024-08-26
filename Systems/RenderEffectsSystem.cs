@@ -58,7 +58,7 @@
 
         public bool LUTloaded = false;
 
-        public static string TextureFormat;
+        public static TextureFormat TextureFormat { get; set; } = TextureFormat.RGBAHalf;
 
 
         /// <summary>
@@ -118,58 +118,103 @@
         private void UpdateNames()
         {
             RenderEffectsSystem.ToneMappingMode = GlobalVariables.Instance.TonemappingMode.ToString();
-            RenderEffectsSystem.TextureFormat = GlobalVariables.Instance.TextureFormat.ToString();
-            CubeLutLoader.TextureFormat = GlobalVariables.Instance.TextureFormat;
         }
 
 
-
+        /// <summary>
+        /// Updates the LUT (Look-Up Table) used in tonemapping by loading a new LUT texture.
+        /// from the specified file path. The method ensures that the existing LUT is cleared.
+        /// and resources are properly unloaded before applying the new LUT texture.
+        /// </summary>
+        /// <remarks>
+        /// This method handles different texture formats specified in the global settings and
+        /// attempts to load the LUT accordingly. It also updates global variables with the new LUT name
+        /// and saves these settings to a file. If an error occurs during the process, it is logged for debugging purposes.
+        /// </remarks>
+        /// <exception cref="Exception">Thrown if there is an error during the LUT update process.</exception>
         public static void UpdateLUT()
         {
-            // Refresh the texture by setting it as null
-
             try
             {
                 var lutFilePath = Path.Combine(GlobalPaths.LuminaLUTSDirectory, LutName_Example + ".cube");
 
+                Mod.Log.Info($"Attempting to update LUT from file: {lutFilePath}");
+
                 // Ensure tonemapping is active and properly configured
+                if (m_Tonemapping == null)
+                {
+                    Mod.Log.Error("Tonemapping instance is null.");
+                    return;
+                }
+
                 m_Tonemapping.active = true;
                 m_Tonemapping.mode.overrideState = true;
                 m_Tonemapping.mode.value = GlobalVariables.Instance.TonemappingMode;
                 m_Tonemapping.lutTexture.overrideState = true;
+                Mod.Log.Info($"Tonemapping mode set to: {m_Tonemapping.mode.value}");
 
-                // Attempt to load the LUT texture from file
-                Texture3D lutTexture = null;
-
-                if (GlobalVariables.Instance.TextureFormat == UnityEngine.TextureFormat.RGBA64)
+                // Find and delete the existing texture if it already exists
+                var existingTexture = Resources.FindObjectsOfTypeAll<Texture3D>().FirstOrDefault(t => t.name == RenderEffectsSystem.LutName_Example);
+                if (existingTexture != null)
                 {
-                    lutTexture = CubeLutLoader.LoadLutFromFileRGBA64(lutFilePath);
+                    Mod.Log.Info("Destroying existing Texture3D: " + existingTexture.name);
+                    UnityEngine.Object.DestroyImmediate(existingTexture);
                 }
-                else if (GlobalVariables.Instance.TextureFormat == UnityEngine.TextureFormat.RGBAHalf)
+                else
                 {
-
-                    lutTexture = CubeLutLoader.LoadLutFromFileRGBAHalf(lutFilePath);
-                }
-
-                if (lutTexture == null)
-                {
-                    Mod.Log.Error($"Failed to load LUT texture from file: {lutFilePath}");
-                    return;
+                    Mod.Log.Info("No existing Texture3D to destroy.");
                 }
 
+                // Force resource unloading to ensure that no residual data remains
+                Mod.Log.Info("Forcing resource unloading.");
+                Resources.UnloadUnusedAssets();
 
+                // Create a new Texture3D object to hold the LUT
+                Texture3D newLutTexture = null;
+                Mod.Log.Info($"Loading LUT with format: {GlobalVariables.Instance.TextureFormat}");
 
-                // Set the loaded LUT texture
-                m_Tonemapping.lutTexture.value = lutTexture;
-                m_Tonemapping.ValidateLUT();
+                // Load the new LUT texture from the file based on the format
+                try
+                {
+                    newLutTexture = CubeLutLoader.LoadLutFromFile(lutFilePath);
+                }
+                catch (Exception ex)
+                {
+                    Mod.Log.Error($"Error loading LUT from file: {ex.Message}\n{ex.StackTrace}");
+                }
 
+                // Ensure that the newly created LUT texture is not null
+                if (newLutTexture != null)
+                {
+                    // Assign a name to the new texture
+                    newLutTexture.name = RenderEffectsSystem.LutName_Example;
+                    Mod.Log.Info("Loaded new Texture3D: " + newLutTexture.name);
 
-                Mod.Log.Info($"LUT successfully set to: {lutFilePath}");
+                    // Set the newly loaded LUT texture
+                    m_Tonemapping.lutTexture.value = newLutTexture;
+                    Mod.Log.Info("New LUT texture assigned.");
+                    m_Tonemapping.ValidateLUT();
+                    Mod.Log.Info($"LUT successfully set to: {lutFilePath}");
+                }
+                else
+                {
+                    Mod.Log.Error($"Failed to load LUT texture from: {lutFilePath}");
+                }
 
+                // Update global variables
                 GlobalVariables.Instance.LUTName = LutName_Example;
+                Mod.Log.Info("Updated GlobalVariables.Instance.LUTName");
 
-                // Save global variables to file, with error handling
-                GlobalVariables.SaveToFile(GlobalPaths.GlobalModSavingPath);
+                // Save global variables to file
+                try
+                {
+                    GlobalVariables.SaveToFile(GlobalPaths.GlobalModSavingPath);
+                    Mod.Log.Info($"Global variables saved to file: {GlobalPaths.GlobalModSavingPath}");
+                }
+                catch (Exception ex)
+                {
+                    Mod.Log.Error($"Error saving global variables to file: {ex.Message}\n{ex.StackTrace}");
+                }
             }
             catch (Exception ex)
             {
@@ -177,15 +222,7 @@
             }
         }
 
-        /// <summary>
-        /// Updates LUT texture format to desired.
-        /// </summary>
-        /// <param name="newFormat">New format.</param>
-        public static void UpdateLutTextureFormat()
-        {
-            m_Tonemapping.lutTexture.value = null;
-        }
-    
+
 
         private static Texture3D ChangeTextureFormat(Texture3D sourceTexture, TextureFormat newFormat)
         {
@@ -223,27 +260,26 @@
             }
             Mod.Log.Info("LUT file path is valid: " + lutFilePath);
 
+            // Ensure tonemapping is active and set up correctly
             m_Tonemapping.active = true;
-            Mod.Log.Info("Tonemapping activated.");
-
             m_Tonemapping.mode.value = GlobalVariables.Instance.TonemappingMode;
-
-            m_Tonemapping.lutTexture.overrideState = true;
             m_Tonemapping.mode.overrideState = true;
-            Mod.Log.Info("Tonemapping mode set to" + GlobalVariables.Instance.TonemappingMode + " and overrideState enabled.");
+            m_Tonemapping.lutTexture.overrideState = true;
+            Mod.Log.Info("Tonemapping activated with mode: " + GlobalVariables.Instance.TonemappingMode);
 
-            // Attempt to load the LUT texture from file
+            // Clear any existing LUT texture
+            if (m_Tonemapping.lutTexture.value != null)
+            {
+                UnityEngine.Object.DestroyImmediate(m_Tonemapping.lutTexture.value);
+                m_Tonemapping.lutTexture.value = null;
+                Mod.Log.Info("Tonemapping LUT: Previous LUT texture cleared.");
+            }
+
+            Resources.UnloadUnusedAssets();
+
+            // Attempt to load the new LUT texture from file
             Texture3D lutTexture = null;
-
-            if (GlobalVariables.Instance.TextureFormat == UnityEngine.TextureFormat.RGBA64)
-            {
-                lutTexture = CubeLutLoader.LoadLutFromFileRGBA64(lutFilePath);
-            }
-            else if (GlobalVariables.Instance.TextureFormat == UnityEngine.TextureFormat.RGBAHalf)
-            {
-                lutTexture = CubeLutLoader.LoadLutFromFileRGBAHalf(lutFilePath);
-            }
-
+            lutTexture = CubeLutLoader.LoadLutFromFile(lutFilePath);
             if (lutTexture == null)
             {
                 Mod.Log.Error($"Failed to load LUT texture from file: {lutFilePath}");
@@ -254,8 +290,10 @@
 
             if (LUTSValidated)
             {
+                // Set the name for initial texture management
+                lutTexture.name = RenderEffectsSystem.LutName_Example;
                 m_Tonemapping.lutTexture.value = lutTexture;
-                Mod.Log.Info("LUT texture applied to the tonemapping component.");
+                Mod.Log.Info("LUT texture applied to the tonemapping component with name: " + lutTexture.name);
             }
             else
             {
@@ -263,11 +301,12 @@
                 return;
             }
 
+            // Set LUT contribution
             m_Tonemapping.lutContribution.overrideState = true;
             m_Tonemapping.lutContribution.Override(GlobalVariables.Instance.LUTContribution);
-
             Mod.Log.Info("LUT contribution set with value: " + GlobalVariables.Instance.LUTContribution);
 
+            // Validate and log the result
             bool isLUTValid = m_Tonemapping.ValidateLUT();
             LogSize();
             Mod.Log.Info("LUT validation result: " + isLUTValid);
@@ -277,6 +316,7 @@
                 Mod.Log.Info("Final LUT validation failed after assignment.");
             }
         }
+
 
         /// <summary>
         /// Validates and ensures predetermined LUTs are available in ModsData.
@@ -752,40 +792,6 @@
         private static void UpdateTonemapping()
         {
             m_Tonemapping.mode.value = GlobalVariables.Instance.TonemappingMode;
-        }
-
-        /// <summary>
-        /// Sets texture format to RGBA64 OR 32 based on user choice.
-        /// </summary>
-        /// <param name="obj">Texture format.</param>
-        /// <exception cref="Exception">Throws an exception.</exception>
-        internal static void SetTextureFormat(float obj)
-        {
-            TextureFormat mode;
-
-            switch (obj)
-            {
-                case 0f:
-                    mode = UnityEngine.TextureFormat.RGBA64;
-                    break;
-                case 1f:
-                    mode = UnityEngine.TextureFormat.RGBAHalf;
-                    break;
-                default:
-                    // Optionally, handle the default case (e.g., log a warning or set a fallback mode)
-                    return;
-            }
-            UpdateLutTextureFormat();
-            // Ensure GlobalVariables.Instance is not null before setting the value
-            if (GlobalVariables.Instance != null)
-            {
-                GlobalVariables.Instance.TextureFormat = mode;
-                Mod.Log.Info("Texture format set to: " + mode);
-            }
-            else
-            {
-                throw new Exception("Null reference.");
-            }
         }
     }
 }

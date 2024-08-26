@@ -133,10 +133,10 @@ namespace Lumina
         [SettingsUISection(KSection, KToggleGroup)]
         public bool UseTimeOfDaySlider
         {
-            get => TimeOfDayProccessor.Locked;
+            get => TimeOfDayProcessor.Locked;
             set
             {
-                TimeOfDayProccessor.Locked = value;
+                TimeOfDayProcessor.Locked = value;
             }
         }
 
