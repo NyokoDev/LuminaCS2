@@ -13,6 +13,7 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 
 export let EditorEnabled$ = false;
+
 export let ColorAdjustmentsEnabled = true;
 
 

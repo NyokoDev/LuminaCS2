@@ -1131,5 +1131,47 @@ $hueshift-top: 80rem;
    font-size: 18rem;
 }
 
+.toe-strength-container {
+   position: absolute;
+}
 
+.toe-strength-label {
+   position: absolute;
+}
 
+.toe-strength-slider {
+   position: absolute;
+}
+
+.toestrength-checkbox-container {
+   position: absolute;
+}
+
+.toestrength-checkbox-image {
+
+}
+
+.toestrength-checkbox-button {
+
+}
+
+// General checkbox
+
+// highlights checkbox
+.checkbox-container {
+   position: absolute;
+
+ }
+
+ .checkbox-image {
+   position: absolute;
+   background-image: url('https://svgshare.com/i/15wf.svg');
+   background-size: cover; /* Make sure the background image covers the entire area */
+   width: 28rem;
+   height: 28rem;
+   filter: invert(100%);
+ }
+
+ .highlightscheckbox2 {
+   z-index: -1;
+ }

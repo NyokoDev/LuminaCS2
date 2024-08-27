@@ -30,6 +30,12 @@
 "LUMINA.tonemappingtitle","Tonemapping"
 "LUMINA.textureformatdropdowntooltip","Texture Format"
 "LUMINA.tonemappingmodedropdowntooltip","Tonemapping Mode"
+"LUMINA.ToeStrength","Toe Strength"
+"LUMINA.ToeLength","Toe Length"
+"LUMINA.ShoulderLength","Shoulder Length"
+"LUMINA.ShoulderAngle","Shoulder Angle"
+"LUMINA.CustomGamma","Gamma"
+
 
 
 

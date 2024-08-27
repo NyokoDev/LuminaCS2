@@ -57,6 +57,7 @@ export const HighlightsActive$ =  bindValue<boolean>(mod.id, 'GetHighlightsCheck
 const TonemappingMode$ = bindValue<string>(mod.id, "TonemappingMode");
 const TextureFormatMode$ = bindValue<string>(mod.id, "TextureFormat");
 const ExternalModeActivated$ = bindValue<boolean>(mod.id, "IsExternal");
+const CustomModeActivated$ = bindValue<boolean>(mod.id, "IsCustom");
 
 // Planetary Settings
 
@@ -132,6 +133,7 @@ const LUTValue = useValue(LUTValue$);
 const LUTName = useValue(LUTName$);
 const TonemappingMode = useValue(TonemappingMode$);
 const ExternalModeActivated = useValue(ExternalModeActivated$);
+const CustomModeActivated = useValue(CustomModeActivated$);
 const TextureFormatMode = useValue(TextureFormatMode$);
 
 
@@ -963,8 +965,15 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
 </div>
 </Tooltip>
 
+<label className="title_SVH title_zQN ModeLabel" style={{ whiteSpace: 'nowrap' }}>
+        {translate("LUMINA.tonemappingmodedropdowntooltip")}
+      </label>
 
-{ExternalModeActivated$ && (
+      <label className="title_SVH title_zQN LutLabel" style={{ whiteSpace: 'nowrap' }}>
+        {translate("LUMINA.tonemappingtitle")}
+      </label>
+
+{ExternalModeActivated && (
   <div>
     <div>
       <button
@@ -979,12 +988,8 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
         {translate("LUMINA.openlutbutton")}
       </button>
 
-      <label className="title_SVH title_zQN LutLabel" style={{ whiteSpace: 'nowrap' }}>
-        {translate("LUMINA.tonemappingtitle")}
-      </label>
-      <label className="title_SVH title_zQN ModeLabel" style={{ whiteSpace: 'nowrap' }}>
-        {translate("LUMINA.tonemappingmodedropdowntooltip")}
-      </label>
+
+
 
       <label className="title_SVH title_zQN LutLabelInUse" style={{ whiteSpace: 'nowrap' }}>
         Lut Texture
@@ -995,6 +1000,53 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
       <LUTSDropdown />
     </div>
   </div>
+)}
+
+{CustomModeActivated && (
+  <div>
+
+
+<div className="toe-strength-container">
+  <input
+    value={LatitudeValue}
+    type="range"
+    className="toggle_cca item-mouse-states_Fmi toggle_th_ toe-strength-input"
+    onChange={(event) => handleLatitude(Number(event.target.value))}
+  />
+  <label className="title_SVH title_zQN toe-strength-label" style={{ whiteSpace: 'nowrap' }}>
+    {translate("LUMINA.ToeStrength")}
+  </label>
+  <Slider
+    value={(LongitudeValue - planetstart) / planetstepSize}
+    start={-100}
+    end={planetnumberofsteps}
+    className="toe-strength-slider"
+    gamepadStep={0.001}
+    valueTransformer={SliderValueTransformer.intTransformer}
+    disabled={false}
+    noFill={false}
+    onChange={(number) => handleLongitude(number)}
+    // onDragStart={() => console.log("onDragStart")}
+    // onDragEnd={() => console.log("onDragEnd")}
+    // onMouseOver={() => console.log("onMouseOver")}
+    // onMouseLeave={() => console.log("onMouseLeave")}
+  />
+  
+  <div className="toestrength-checkbox-container">
+    {HighlightsActive && (
+      <div className="toestrength-checkbox-image" onClick={handleHighlightsCheckbox}></div>
+    )}
+    <button
+      className="toggle_cca item-mouse-states_Fmi toggle_th_ toestrength-checkbox-button"
+      onClick={handleHighlightsCheckbox}
+    ></button>
+  </div>
+</div>
+
+
+
+
+    </div>
 )}
 
 

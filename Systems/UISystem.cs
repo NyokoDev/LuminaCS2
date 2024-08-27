@@ -11,6 +11,7 @@
     using Game.UI;
     using Game.UI.InGame;
     using Lumina.Systems.Presets;
+    using Lumina.Systems.Tonemapping_Custom;
     using Lumina.UI;
     using Lumina.XML;
     using LuminaMod.XML;
@@ -26,16 +27,14 @@
         private ValueBindingHelper<string[]> LutArrayExtended;
         private ValueBindingHelper<string> LutName;
 
+        /// <inheritdoc/>
         protected override void OnCreate()
         {
             base.OnCreate();
             InitializeLutName();
             CreateBindings();
 
-
         }
-
-
 
         /// <summary>
         /// Creates bindings for the mod.
@@ -94,6 +93,10 @@
             //TonemappingExternalMode
             AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsExternal", () => IsExternalMode()));
 
+            //TonemappingCustomMode
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsCustom", () => IsCustomMode()));
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsToeStrengthActive", () => IsToeStrengthActive()));
+            AddBinding(new TriggerBinding(Mod.MODUI, "SetToeStrengthActive", SetToeStrengthActive));
 
 
 
@@ -103,6 +106,22 @@
 
 
 
+
+        }
+
+        private void SetToeStrengthActive()
+        {
+            TonemappingCustomBindings.SetToeStrength();
+        }
+
+        private bool IsToeStrengthActive()
+        {
+            return TonemappingCustomBindings.IsToeStrengthActive;
+        }
+
+        private bool IsCustomMode()
+        {
+            return RenderEffectsSystem.IsCustomMode;
         }
 
         private bool IsExternalMode()
@@ -124,7 +143,6 @@
             catch (Exception ex)
             {
                 Lumina.Mod.Log.Info("[FAILURE] Failed to add or update binding for LUTArray: " + ex.Message);
-         
             }
 
         }
@@ -150,7 +168,7 @@
             }
         }
 
-            public static void UpdateArray()
+        public static void UpdateArray()
         {
             var lutFiles = RenderEffectsSystem.LutFiles;
 

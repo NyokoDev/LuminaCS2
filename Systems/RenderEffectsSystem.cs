@@ -294,6 +294,8 @@
 
             // Set LUT contribution
             m_Tonemapping.lutContribution.overrideState = true;
+            m_Tonemapping.toeStrength.overrideState = GlobalVariables.Instance.ToeStrengthActive;
+            m_Tonemapping.toeStrength.Override(GlobalVariables.Instance.ToeStrengthValue);
             m_Tonemapping.lutContribution.Override(GlobalVariables.Instance.LUTContribution);
             Mod.Log.Info("LUT contribution set with value: " + GlobalVariables.Instance.LUTContribution);
 
@@ -490,6 +492,7 @@
                 Mod.Log.Info("[LUMINA] Successfully added HDRP volume.");
             }
         }
+
 #if DEBUG
         public void SetUpVolumetricClouds()
         {
@@ -785,6 +788,29 @@
             m_Tonemapping.mode.value = GlobalVariables.Instance.TonemappingMode;
 
             IsExternalMode = GlobalVariables.Instance.TonemappingMode == TonemappingMode.External;
+            IsCustomMode = GlobalVariables.Instance.TonemappingMode == TonemappingMode.Custom;
+
+        }
+        internal static void SetTonemappingCustomModeProperties()
+        {
+            if (m_Tonemapping.mode.value == TonemappingMode.Custom)
+            {
+                m_Tonemapping.toeStrength.overrideState = GlobalVariables.Instance.ToeStrengthActive;
+                m_Tonemapping.toeStrength.Override(GlobalVariables.Instance.ToeStrengthValue);
+
+                m_Tonemapping.toeLength.overrideState = GlobalVariables.Instance.ToeLengthActive;
+                m_Tonemapping.toeLength.Override(GlobalVariables.Instance.ToeLengthValue);
+
+                m_Tonemapping.shoulderStrength.overrideState = GlobalVariables.Instance.shoulderStrength;
+                m_Tonemapping.shoulderStrength.Override(GlobalVariables.Instance.shoulderStrengthValue);
+                m_Tonemapping.shoulderLength.overrideState = GlobalVariables.Instance.shoulderLengthActive;
+                m_Tonemapping.shoulderAngle.overrideState = GlobalVariables.Instance.shoulderAngleActive;
+                m_Tonemapping.shoulderAngle.Override(GlobalVariables.Instance.shoulderAngleValue);
+
+                m_Tonemapping.gamma.overrideState = GlobalVariables.Instance.TonemappingGammaActive;
+                m_Tonemapping.gamma.Override(GlobalVariables.Instance.TonemappingGammaValue);
+            }
+
         }
     }
 }

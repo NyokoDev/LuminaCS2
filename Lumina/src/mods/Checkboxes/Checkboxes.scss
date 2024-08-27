@@ -1,0 +1,13 @@
+.checkbox-container {
+    position: absolute;
+ 
+  }
+ 
+  .checkbox-image {
+    position: absolute;
+    background-image: url('https://svgshare.com/i/15wf.svg');
+    background-size: cover; /* Make sure the background image covers the entire area */
+    width: 28rem;
+    height: 28rem;
+    filter: invert(100%);
+  }

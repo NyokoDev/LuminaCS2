@@ -169,6 +169,11 @@ namespace LuminaMod.XML
         [XmlElement]
         public bool SceneFlowCheckerEnabled { get; set; } = false;
 
+        [XmlElement]
+        public bool ToeStrengthActive { get; set; } = false;
+
+        [XmlElement]
+        public float ToeStrengthValue { get; set; }
 
         /// <summary>
         /// Serializes to a file.
@@ -275,6 +280,8 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.LUTContribution = loadedVariables.LUTContribution;
                     GlobalVariables.Instance.LUTName = loadedVariables.LUTName;
                     GlobalVariables.Instance.SceneFlowCheckerEnabled = loadedVariables.SceneFlowCheckerEnabled;
+                    GlobalVariables.Instance.ToeStrengthActive = loadedVariables.ToeStrengthActive;
+
 
                     return loadedVariables;
                 }
@@ -310,6 +317,14 @@ namespace LuminaMod.XML
             }
         }
 
-
+        public bool ToeLengthActive { get; internal set; }
+        public float ToeLengthValue { get; internal set; }
+        public bool shoulderStrength { get; internal set; }
+        public float shoulderStrengthValue { get; internal set; }
+        public bool shoulderLengthActive { get; internal set; }
+        public bool shoulderAngleActive { get; internal set; }
+        public float shoulderAngleValue { get; internal set; }
+        public bool TonemappingGammaActive { get; internal set; }
+        public float TonemappingGammaValue { get; internal set; }
     }
 }
