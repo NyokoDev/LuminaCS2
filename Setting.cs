@@ -68,17 +68,25 @@ namespace Lumina
         {
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the IMGUR button should be visible.
-        /// </summary>
+
         [SettingsUISection(KSection, KToggleGroup)]
-        public bool Button
+        public bool SaveAutomatically
         {
-            get
+            get => GlobalVariables.Instance.SaveAutomatically;
+            set
             {
-                return SliderPanel.buttonVisible;
+                GlobalVariables.Instance.SaveAutomatically = value;
             }
-            set => SliderPanel.buttonVisible = value;
+        }
+
+        [SettingsUISection(KSection, KToggleGroup)]
+        public bool UseTimeOfDaySlider
+        {
+            get => TimeOfDayProcessor.Locked;
+            set
+            {
+                TimeOfDayProcessor.Locked = value;
+            }
         }
 
         /// <summary>
@@ -130,15 +138,7 @@ namespace Lumina
             }
         }
 
-        [SettingsUISection(KSection, KToggleGroup)]
-        public bool UseTimeOfDaySlider
-        {
-            get => TimeOfDayProcessor.Locked;
-            set
-            {
-                TimeOfDayProcessor.Locked = value;
-            }
-        }
+        
 
         /// <summary>
         /// Opens the folder location.
@@ -290,12 +290,12 @@ namespace Lumina
             "Dropdowns"
           },
           {
-            setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.Button)),
-            "Toggle IMGUR button visibility"
+            setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.SaveAutomatically)),
+            "Save automatically"
           },
           {
-            setting.GetOptionDescLocaleID(nameof(Lumina.Setting.Button)),
-            "Shows or hides the ingame IMGUR button."
+            setting.GetOptionDescLocaleID(nameof(Lumina.Setting.SaveAutomatically)),
+            "Saves automatically your settings when UI is opened or closed."
           },
           {
             setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.Guides)),

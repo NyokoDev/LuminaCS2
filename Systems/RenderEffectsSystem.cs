@@ -69,6 +69,7 @@
         /// </summary>
         public static bool IsCustomMode { get; set; }
 
+
         /// <summary>
         /// Logs current LUT log size.
         /// </summary>
@@ -214,16 +215,7 @@
                 GlobalVariables.Instance.LUTName = LutName_Example;
                 Mod.Log.Info("Updated GlobalVariables.Instance.LUTName");
 
-                // Save global variables to file
-                try
-                {
-                    GlobalVariables.SaveToFile(GlobalPaths.GlobalModSavingPath);
-                    Mod.Log.Info($"Global variables saved to file: {GlobalPaths.GlobalModSavingPath}");
-                }
-                catch (Exception ex)
-                {
-                    Mod.Log.Error($"Error saving global variables to file: {ex.Message}\n{ex.StackTrace}");
-                }
+
             }
             catch (Exception ex)
             {
@@ -791,6 +783,19 @@
             IsCustomMode = GlobalVariables.Instance.TonemappingMode == TonemappingMode.Custom;
 
         }
+
+        internal static void ToggleToeStrength()
+        {
+            bool newState = !GlobalVariables.Instance.ToeStrengthActive;
+            GlobalVariables.Instance.ToeStrengthActive = newState;
+            m_Tonemapping.toeStrength.overrideState = newState;
+        }
+
+        internal static void SetToeStrengthValue()
+        {
+            m_Tonemapping.toeStrength.Override(GlobalVariables.Instance.ToeStrengthValue);
+        }
+
         internal static void SetTonemappingCustomModeProperties()
         {
             if (m_Tonemapping.mode.value == TonemappingMode.Custom)
@@ -811,6 +816,31 @@
                 m_Tonemapping.gamma.Override(GlobalVariables.Instance.TonemappingGammaValue);
             }
 
+        }
+
+        internal static void SetToeLengthValue()
+        {
+            m_Tonemapping.toeLength.Override(GlobalVariables.Instance.ToeLengthValue);
+        }
+
+        internal static void ToggleToeLength()
+        {
+            m_Tonemapping.toeStrength.overrideState = !m_Tonemapping.toeStrength.overrideState;
+        }
+
+        internal static void SetShoulderStrengthActive()
+        {
+            // Toggle the overrideState of shoulderStrength
+            m_Tonemapping.shoulderStrength.overrideState = !m_Tonemapping.shoulderStrength.overrideState;
+
+            // Update GlobalVariables.Instance.shoulderStrengthActive based on the new state
+            GlobalVariables.Instance.shoulderStrengthActive = m_Tonemapping.shoulderStrength.overrideState;
+        }
+
+
+        internal static void handleShoulderStrength()
+        {
+            m_Tonemapping.shoulderStrength.Override(GlobalVariables.Instance.shoulderStrengthValue);
         }
     }
 }

@@ -202,6 +202,9 @@ namespace LuminaMod.XML
         [XmlElement]
         public float TonemappingGammaValue { get; set; } = 0f;
 
+        [XmlElement]
+        public bool SaveAutomatically { get; set; } = true;
+
         /// <summary>
         /// Serializes to a file.
         /// </summary>
@@ -305,7 +308,7 @@ namespace LuminaMod.XML
                     // Tonemapping
                     GlobalVariables.Instance.TonemappingMode = loadedVariables?.TonemappingMode ?? TonemappingMode.None;
                     GlobalVariables.Instance.LUTContribution = loadedVariables?.LUTContribution ?? 0f;
-                    GlobalVariables.Instance.LUTName = loadedVariables?.LUTName ?? string.Empty;
+                    GlobalVariables.Instance.LUTName = loadedVariables?.LUTName ?? "None";
                     GlobalVariables.Instance.SceneFlowCheckerEnabled = loadedVariables?.SceneFlowCheckerEnabled ?? false;
 
                     GlobalVariables.Instance.ToeStrengthActive = loadedVariables?.ToeStrengthActive ?? false;
@@ -321,6 +324,7 @@ namespace LuminaMod.XML
 
                     GlobalVariables.Instance.TonemappingGammaActive = loadedVariables?.TonemappingGammaActive ?? false;
                     GlobalVariables.Instance.TonemappingGammaValue = loadedVariables?.TonemappingGammaValue ?? 0f;
+                    GlobalVariables.Instance.SaveAutomatically = loadedVariables?.SaveAutomatically ?? true;
 
                     return loadedVariables;
                 }

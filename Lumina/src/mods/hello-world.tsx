@@ -12,6 +12,7 @@ import { YourPanelComponent } from "./panel";
 
 let showModeRow$: boolean; // Assuming this is initialized somewhere
 
+
 // Getting the vanilla theme css for compatibility
 const ToolBarButtonTheme: Theme | any = getModule(
     "game-ui/game/components/toolbar/components/feature-button/toolbar-feature-button.module.scss",
@@ -35,7 +36,7 @@ export const LuminaButton: ModuleRegistryExtend = (Component) => {
         const { children, ...otherProps } = props || {};
         const MIT_ToolEnabled = isInstalled$
         const moveItIconSrc = MIT_ToolEnabled ? "https://svgshare.com/i/15rV.svg" : "https://svgshare.com/i/15rV.svg";
-        const [isInstalled, setIsInstalled] = useState(true); // assuming you meant to use useState to manage isInstalled state
+        const [isInstalled, setIsInstalled] = useState(false); // assuming you meant to use useState to manage isInstalled state
 
         return (
             <>    
@@ -47,6 +48,7 @@ export const LuminaButton: ModuleRegistryExtend = (Component) => {
                     focusKey={VanillaComponentResolver.instance.FOCUS_DISABLED}
                     onClick={() => {
                         setIsInstalled(!isInstalled); // update isInstalled state
+                        trigger(mod.id, 'SaveAutomatically');
                     }}
                       
                     onSelect={() => {

@@ -6,6 +6,7 @@
     using System.IO;
     using System.Linq;
     using System.Text;
+    using System.Threading;
     using System.Threading.Tasks;
     using Colossal.UI.Binding;
     using Game.UI;
@@ -73,7 +74,7 @@
 
             AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "LUTValue", () => LUTValue()));
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleLUTContribution", HandleLUTContribution));
-            AddBinding(new TriggerBinding(Mod.MODUI, "OpenLUTFolder", OpenLUTFolder)); 
+            AddBinding(new TriggerBinding(Mod.MODUI, "OpenLUTFolder", OpenLUTFolder));
             AddBinding(new TriggerBinding(Mod.MODUI, "UpdateLUT", UpdateLUT));
 
             // Texture Format
@@ -95,11 +96,25 @@
 
             //TonemappingCustomMode
             AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsCustom", () => IsCustomMode()));
+
+
             AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsToeStrengthActive", () => IsToeStrengthActive()));
             AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "ToeStrengthValue", () => GetToeStrengthValue()));
             AddBinding(new TriggerBinding(Mod.MODUI, "SetToeStrengthActive", SetToeStrengthActive));
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleToeStrengthActive", HandleToeStrengthActive));
 
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsToeLengthActive", () => IsToeLengthActive()));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "ToeLengthValue", () => ToeLengthValue()));
+            AddBinding(new TriggerBinding(Mod.MODUI, "SetToeLengthActive", SetToeLengthActive));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleToeLengthActive", HandleToeLengthActive));
+
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsShoulderStrengthActive", () => IsShoulderStrengthActive()));
+            AddBinding(new TriggerBinding(Mod.MODUI, "SetShoulderStrengthActive", SetShoulderStrengthActive));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "ShoulderStrengthValue", () => ShoulderStrengthValue()));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "handleShoulderStrength", handleShoulderStrength));
+
+
+            AddBinding(new TriggerBinding(Mod.MODUI, "SaveAutomatically", SaveAutomatically));
 
 
 
@@ -109,7 +124,65 @@
 
 
 
+        }
 
+        private void SaveAutomatically()
+        {
+            // Check if the save automatically flag is true
+            if (GlobalVariables.Instance.SaveAutomatically)
+            {
+                // Save global variables to file
+                try
+                {
+                    GlobalVariables.SaveToFile(GlobalPaths.GlobalModSavingPath);
+                    Mod.Log.Info($"Global variables saved to file: {GlobalPaths.GlobalModSavingPath}");
+                }
+                catch (Exception ex)
+                {
+                    Mod.Log.Error($"Error saving global variables to file: {ex.Message}\n{ex.StackTrace}");
+                }
+            }
+        }
+
+
+        private void handleShoulderStrength(float obj)
+        {
+            TonemappingCustomBindings.handleShoulderStrength(obj);
+        }
+
+        private float ShoulderStrengthValue()
+        {
+            return GlobalVariables.Instance.shoulderStrengthValue;
+        }
+
+        private void SetShoulderStrengthActive()
+        {
+            TonemappingCustomBindings.SetShoulderStrengthActive();
+        }
+
+        private bool IsShoulderStrengthActive()
+        {
+            return GlobalVariables.Instance.shoulderStrengthActive;
+        }
+
+        private void HandleToeLengthActive(float obj)
+        {
+            TonemappingCustomBindings.HandleToeLengthActive(obj);
+        }
+
+        private void SetToeLengthActive()
+        {
+            TonemappingCustomBindings.SetToeLengthActive();
+        }
+
+        private float ToeLengthValue()
+        {
+            return GlobalVariables.Instance.ToeLengthValue;
+        }
+
+        private bool IsToeLengthActive()
+        {
+            return GlobalVariables.Instance.ToeLengthActive;
         }
 
         private float GetToeStrengthValue()
@@ -217,10 +290,17 @@
             // Retrieve the LUT files array
             var lutFiles = RenderEffectsSystem.LutFiles;
 
-            // Check if lutFiles is null and update it with the directory files if necessary
-            if (lutFiles == null)
+            // Check if lutFiles is null or empty and update it with the directory files if necessary
+            if (lutFiles == null || lutFiles.Length == 0)
             {
-                Lumina.Mod.Log.Info("LUTArray() returned null from RenderEffectsSystem.LutFiles. Populating with files from the directory.");
+                Lumina.Mod.Log.Info("LUTArray() is null or empty. Populating with files from the directory.");
+
+                // Ensure the LUT directory exists
+                if (!Directory.Exists(GlobalPaths.LuminaLUTSDirectory))
+                {
+                    Lumina.Mod.Log.Warn($"LUT directory not found: {GlobalPaths.LuminaLUTSDirectory}. Creating directory...");
+                    Directory.CreateDirectory(GlobalPaths.LuminaLUTSDirectory);
+                }
 
                 // Populate RenderEffectsSystem.LutFiles with files from the specified directory
                 var filesWithFullPath = Directory.GetFiles(GlobalPaths.LuminaLUTSDirectory, "*.cube");
@@ -234,12 +314,6 @@
                 RenderEffectsSystem.LutFiles = fileNames;
 
                 Lumina.Mod.Log.Info(string.Join(", ", RenderEffectsSystem.LutFiles)); // Log the result for debugging
-            }
-
-            // Optionally, check if the array is empty and handle it if needed
-            if (RenderEffectsSystem.LutFiles.Length == 0)
-            {
-                Lumina.Mod.Log.Info("LUTArray() returned an empty array from RenderEffectsSystem.LutFiles.");
             }
 
             // Return the array

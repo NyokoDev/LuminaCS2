@@ -21,6 +21,8 @@ import { TonemappingDropdown } from "./TonemappingDropdown";
 import { LUTSDropdown } from "./LUTSDropdown";
 import { ToeStrengthCheckbox } from "./Checkboxes/ToeStrengthCheckbox";
 import './Checkboxes/CheckboxesStyle.scss'
+import ToeLengthCheckbox from "./Checkboxes/ToeLengthCheckbox";
+import ShoulderStrengthCheckbox from "./Checkboxes/ShoulderStrengthCheckbox";
 
 
 export let isInstalled$ = false;
@@ -69,6 +71,12 @@ export const LongitudeValue$ = bindValue<number>(mod.id, 'LongitudeValue');
 export const LUTValue$ = bindValue<number>(mod.id, 'LUTValue');
 export const LUTName$ = bindValue<string>(mod.id, 'LUTName');
 export const ToeStrengthValue$ = bindValue<number>(mod.id, "ToeStrengthValue")
+export const ToeLengthValue$ = bindValue<number>(mod.id, "ToeLengthValue");
+
+export const ShoulderStrengthValue$ = bindValue<number>(mod.id, "ShoulderStrengthValue");
+
+
+
 
 const theme = createTheme({
   palette: {
@@ -138,13 +146,18 @@ const ExternalModeActivated = useValue(ExternalModeActivated$);
 const CustomModeActivated = useValue(CustomModeActivated$);
 const TextureFormatMode = useValue(TextureFormatMode$);
 const ToeStrengthValue = useValue(ToeStrengthValue$);
+const ToeLengthValue = useValue(ToeLengthValue$);
+
+const ShoulderStrengthValue = useValue(ShoulderStrengthValue$);
+
+
 
 
 
 // Initialize state variables using useState hook
-const [ColorAdjustmentsEnabled$, setCA] = useState(false);
+const [ColorAdjustmentsEnabled$, setCA] = useState(true);
 const [SettingsEnabled$, setSettings] = useState(false);
-const [ToneMappingEnabled$, setTonemapping] = useState(true);
+const [ToneMappingEnabled$, setTonemapping] = useState(false);
 const [PlanetaryEnabled$, setPlanetaryTab] = useState(false);
 const [OnImport, OnImportChange] = useState(false);
 
@@ -179,12 +192,9 @@ const [OnImport, OnImportChange] = useState(false);
   const numberOfSteps = Math.floor((end - start) / stepSize);
   
   const handleSliderChange = (value: number) => {
-    // Round the value to the nearest step size of 0.001
-    const roundedValue = Math.round(value / 0.001) * 0.001;
-    // Convert the rounded value to an integer if necessary
-    const id = globalstart + (value * globalstepSize);
+
     // Trigger the action with the adjusted value
-    trigger(mod.id, 'SetPostExposure', id);
+    trigger(mod.id, 'SetPostExposure', value);
 };
 
 const handleContrast = (value: number) => {
@@ -381,6 +391,14 @@ const handleHighlights = (value: number) => {
       trigger(mod.id, 'HandleToeStrengthActive', value);
     };
 
+    const handleToeLength = (value: number) => {
+      trigger(mod.id, 'HandleToeLengthActive', value);
+    };
+    
+    const handleShoulderStrength = (value: number) => {
+      trigger(mod.id, 'handleShoulderStrength', value);
+    };
+    
 
 
 
@@ -526,14 +544,15 @@ return (
   onChange={(event) => handleSliderChange(parseFloat(event.target.value))}
 />
         <Slider
-                   value={(PEValue- globalstart) / globalstepSize}
-                   start={-180}
-                   end={globalnumberOfSteps}
+                   value={PEValue}
+                   start={-5}
+                   end={3}
           className="PostExposureSlider"
           gamepadStep={0.001}
+          step={0.001}
 
         
-          valueTransformer={SliderValueTransformer.intTransformer}
+          valueTransformer={SliderValueTransformer.floatTransformer}
           disabled={false}
           noFill={false}
           onChange={(number) => handleSliderChange(number)}
@@ -885,7 +904,7 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
 
 <div className="LuminaVersion_Image">
   <div className="Version_Text"
-  ><h1>v1.5.6r4</h1> 
+  ><h1>v1.5.7</h1> 
   
   </div>
 </div>
@@ -1046,6 +1065,64 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
   <ToeStrengthCheckbox
   />
 </div>
+
+<div className="toe-length-container">
+  <input
+    value={ToeLengthValue}
+    type="range"
+    className="toggle_cca item-mouse-states_Fmi toggle_th_ toe-length-input"
+    onChange={(event) => handleToeLength(Number(event.target.value))}
+  />
+  <label className="title_SVH title_zQN toe-length-label" style={{ whiteSpace: 'nowrap' }}>
+    {translate("LUMINA.ToeLength")}
+  </label>
+
+  <Slider
+    value={ToeLengthValue}
+    start={0}       // Minimum value of the slider
+    end={1}          // Maximum value of the slider
+    step={0.0001}    // Step size for precision
+    className="toe-length-slider"
+    gamepadStep={stepSize} // Step size for gamepad interaction
+    valueTransformer={SliderValueTransformer.floatTransformer} // Value transformation logic
+    disabled={false}
+    noFill={false}
+    onChange={(number) => handleToeLength(number)} // Callback for value change
+  />
+
+  <ToeLengthCheckbox
+  />
+</div>
+
+<div className="shoulder-strength-container-box">
+  <input
+    value={ShoulderStrengthValue}
+    type="range"
+    className="toggle_cca item-mouse-states_Fmi toggle_th_ shoulder-strength-input"
+    onChange={(event) => handleShoulderStrength(Number(event.target.value))}
+  />
+  <label className="title_SVH title_zQN shoulder-strength-label" style={{ whiteSpace: 'nowrap' }}>
+    {translate("LUMINA.ShoulderStrength")}
+  </label>
+
+  <Slider
+    value={ShoulderStrengthValue}
+    start={0}       // Minimum value of the slider
+    end={1}         // Maximum value of the slider
+    step={0.0001}   // Step size for precision
+    className="shoulder-strength-slider"
+    gamepadStep={stepSize} // Step size for gamepad interaction
+    valueTransformer={SliderValueTransformer.floatTransformer} // Value transformation logic
+    disabled={false}
+    noFill={false}
+    onChange={(number) => handleShoulderStrength(number)} // Callback for value change
+  />
+
+  <ShoulderStrengthCheckbox
+  />
+</div>
+
+
 
 
 

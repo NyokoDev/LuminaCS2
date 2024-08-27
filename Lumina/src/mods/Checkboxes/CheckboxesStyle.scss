@@ -45,3 +45,132 @@
     left: 400rem;
     width: 90rem;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+.toe-length-label {
+    position: absolute;
+    top: 35rem; /* 15rem + 20rem */
+    left: 25rem;
+    font-size: 15rem;/* 15rem */
+    color: white;
+}
+
+.toe-length-slider {
+    position: absolute;
+    top: 40rem; /* 20rem + 20rem */
+    width: 235rem;
+    left: 150rem;
+}
+
+.toe-length-container {
+    position: absolute;
+    width: 235rem;
+    top: 70rem; /* 50rem + 20rem */
+    left: 20rem;
+}
+
+.toeLength-checkbox-image {
+    position: absolute;
+    top: -30rem; /* -35rem + 20rem */
+    height: 20rem;
+    width: 20rem;
+    left: -30rem;
+    z-index: 1000;
+}
+
+.toeLength-checkbox-button {
+    position: absolute;
+    top: -30rem; /* -35rem + 20rem */
+    height: 20rem;
+    width: 20rem;
+    left: -30rem;
+}
+
+.toe-length-input {
+    position: absolute;
+    color: white;
+    top: 30rem; /* 10rem + 20rem */
+    left: 400rem;
+    width: 90rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.shoulder-strength-container-box {
+    position: absolute;
+    width: 235rem;
+    top: 90rem; /* 50rem + 20rem */
+    left: 20rem;
+}
+
+
+.shoulder-strength-label {
+    position: absolute;
+    top: 55rem; /* 35rem + 20rem */
+    left: 25rem;
+    font-size: 15rem; /* unchanged */
+    color: white;
+}
+
+.shoulder-strength-slider {
+    position: absolute;
+    top: 60rem; /* 40rem + 20rem */
+    width: 175rem; /* unchanged */
+    left: 190rem;
+}
+
+.shoulder-strength-container {
+    position: absolute;
+    width: 235rem; /* unchanged */
+    top: 120rem; /* 70rem + 20rem */
+    left: 20rem;
+    z-index: 1000;
+}
+
+.shoulderStrength-checkbox-image {
+    position: absolute;
+    top: -60rem;/* -35rem + 20rem */
+    height: 20rem; /* unchanged */
+    width: 20rem; /* unchanged */
+    left: -30rem; /* unchanged */
+    z-index: 100;
+}
+
+.shoulderstrength-checkbox-button {
+    position: absolute;
+    top: -60rem;/* -35rem + 20rem */
+    height: 20rem; /* unchanged */
+    width: 20rem; /* unchanged */
+    left: -30rem; /* unchanged */
+}
+
+
+.shoulder-strength-input {
+    position: absolute;
+    color: white;
+    top: 50rem; /* 30rem + 20rem */
+    left: 400rem; /* unchanged */
+    width: 90rem; /* unchanged */
+}

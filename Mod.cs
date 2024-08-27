@@ -60,29 +60,27 @@ namespace Lumina
             // Load translations.
             Localization.LoadTranslations(null, Log);
 
-            try
-            {
                 // Load global settings
                 GlobalVariables.LoadFromFile(GlobalPaths.GlobalModSavingPath);
                 CheckForNullLUTName();
 
+                updateSystem.UpdateAfter<PreSystem>(SystemUpdatePhase.PreCulling);
 
-                // Update system after RenderEffectsSystem but before culling
-                updateSystem.UpdateAfter<RenderEffectsSystem>(SystemUpdatePhase.PreCulling);
+               // Update system after RenderEffectsSystem but before culling
+                 updateSystem.UpdateAfter<RenderEffectsSystem>(SystemUpdatePhase.PreCulling);
 
                 updateSystem.UpdateAt<UISystem>(SystemUpdatePhase.MainLoop);
 
                 updateSystem.UpdateAt<TimeOfDayProcessor>(SystemUpdatePhase.GameSimulation);
-            }
-            catch
-            {
+   
                 // Notify if failed to retrieve Lumina settings
                 NotificationSystem.Push(
                   "lumina",
-                  thumbnail: "https://i.imgur.com/C9fZDiA.png",
+                  thumbnail: "https://mods.paradoxplaza.com/mods/75251/Windows",
                   title: "Lumina",
                   text: $"Wasn't possible to retrieve settings.");
-            }
+            
+
         }
 
 
