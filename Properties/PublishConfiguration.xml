@@ -109,7 +109,7 @@
 	<!--Dependency for the mod, can be set multiple times-->
 	<Dependency Id="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
-	<ChangeLog Value="Lumina 1.5.7r1 - Full changelog on SkyLinx." />
+	<ChangeLog Value="Lumina 1.5.7r1 - Stability restored." />
 	<!--ChangeLog>
 	</ChangeLog-->
 	<!--External link. supported types are discord, github, youtube, twitch, x, paypal, patreon-->
