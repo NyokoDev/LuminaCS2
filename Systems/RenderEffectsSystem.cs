@@ -73,7 +73,7 @@
         /// <summary>
         /// Logs current LUT log size.
         /// </summary>
-        private static void LogSize()
+        private static void LogSizeAssureCorrectMode()
         {
             // Assuming you already have a reference to the current HDRenderPipelineAsset
             HDRenderPipelineAsset currentAsset = GraphicsSettings.currentRenderPipeline as HDRenderPipelineAsset;
@@ -87,7 +87,28 @@
             {
                 Lumina.Mod.Log.Info("Failed to retrieve the current HDRenderPipelineAsset.");
             }
+
+            // Check and set Tonemapping mode
+            if (m_Tonemapping.mode.value == TonemappingMode.External)
+            {
+                GlobalVariables.Instance.TonemappingMode = TonemappingMode.External;
+                IsExternalMode = true;
+                IsCustomMode = false;
+            }
+            else if (m_Tonemapping.mode.value == TonemappingMode.Custom)
+            {
+                GlobalVariables.Instance.TonemappingMode = TonemappingMode.Custom;
+                IsCustomMode = true;
+                IsExternalMode = false;
+            }
+            else
+            {
+                // If neither condition is met, set both to false
+                IsExternalMode = false;
+                IsCustomMode = false;
+            }
         }
+
 
         /// <summary>
         /// OnUpdate method.
@@ -293,7 +314,7 @@
 
             // Validate and log the result
             bool isLUTValid = m_Tonemapping.ValidateLUT();
-            LogSize();
+            LogSizeAssureCorrectMode();
             Mod.Log.Info("LUT validation result: " + isLUTValid);
 
             if (!isLUTValid)

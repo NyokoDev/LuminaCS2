@@ -9,6 +9,7 @@ namespace Lumina
     using Game.Modding;
     using Game.PSI;
     using Game.SceneFlow;
+    using Game.UI.Localization;
     using HarmonyLib;
     using Lumina.Locale;
     using Lumina.Systems;
@@ -60,33 +61,35 @@ namespace Lumina
             // Load translations.
             Localization.LoadTranslations(null, Log);
 
-                // Load global settings
-                GlobalVariables.LoadFromFile(GlobalPaths.GlobalModSavingPath);
-                CheckForNullLUTName();
+            // Load global settings
+            GlobalVariables.LoadFromFile(GlobalPaths.GlobalModSavingPath);
+            CheckForNullLUTName();
 
-                updateSystem.UpdateAfter<PreSystem>(SystemUpdatePhase.PreCulling);
+            updateSystem.UpdateAfter<PreSystem>(SystemUpdatePhase.PreCulling);
 
-               // Update system after RenderEffectsSystem but before culling
-                 updateSystem.UpdateAfter<RenderEffectsSystem>(SystemUpdatePhase.PreCulling);
+            // Update system after RenderEffectsSystem but before culling
+            updateSystem.UpdateAfter<RenderEffectsSystem>(SystemUpdatePhase.PreCulling);
 
-                updateSystem.UpdateAt<UISystem>(SystemUpdatePhase.MainLoop);
+            updateSystem.UpdateAt<UISystem>(SystemUpdatePhase.MainLoop);
 
-                updateSystem.UpdateAt<TimeOfDayProcessor>(SystemUpdatePhase.GameSimulation);
-   
-                // Notify if failed to retrieve Lumina settings
-                NotificationSystem.Push(
-                  "lumina",
-                  thumbnail: "https://mods.paradoxplaza.com/mods/75251/Windows",
-                  title: "Lumina",
-                  text: $"Wasn't possible to retrieve settings.");
-            
+            updateSystem.UpdateAt<TimeOfDayProcessor>(SystemUpdatePhase.GameSimulation);
 
+            // Notify if failed to retrieve Lumina settings
+            NotificationSystem.Push(
+                identifier: "lumina",
+                thumbnail: "https://i.imgur.com/6KKpq5g.jpeg",
+                progress: 100, // 50% complete
+                title: (LocalizedString)"Lumina",  // Assuming LocalizedString conversion
+                text: (LocalizedString)"Loaded succesfully.",  // Assuming LocalizedString conversion
+                onClicked: () =>
+                {
+                    // Remove the notification when it is clicked
+                    NotificationSystem.Pop("lumina");
+                });
         }
 
 
-
-
-        private static void CheckForNullLUTName()
+            private static void CheckForNullLUTName()
         {
             // Access the instance of GlobalVariables and check if LUTName is null or empty
             if (GlobalVariables.Instance == null)

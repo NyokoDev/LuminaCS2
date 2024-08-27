@@ -904,7 +904,7 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
 
 <div className="LuminaVersion_Image">
   <div className="Version_Text"
-  ><h1>v1.5.7</h1> 
+  ><h1>v1.5.7r1</h1> 
   
   </div>
 </div>
