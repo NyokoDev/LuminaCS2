@@ -173,7 +173,34 @@ namespace LuminaMod.XML
         public bool ToeStrengthActive { get; set; } = false;
 
         [XmlElement]
-        public float ToeStrengthValue { get; set; }
+        public float ToeStrengthValue { get; set; } = 0f;
+
+        [XmlElement]
+        public bool ToeLengthActive { get; set; } = false;
+
+        [XmlElement]
+        public float ToeLengthValue { get; set; } = 0f;
+
+        [XmlElement]
+        public bool shoulderStrengthActive { get; set; } = false;
+
+        [XmlElement]
+        public float shoulderStrengthValue { get; set; } = 0f;
+
+        [XmlElement]
+        public bool shoulderLengthActive { get; set; } = false;
+
+        [XmlElement]
+        public bool shoulderAngleActive { get; set; } = false;
+
+        [XmlElement]
+        public float shoulderAngleValue { get; set; } = 0f;
+
+        [XmlElement]
+        public bool TonemappingGammaActive { get; set; } = false;
+
+        [XmlElement]
+        public float TonemappingGammaValue { get; set; } = 0f;
 
         /// <summary>
         /// Serializes to a file.
@@ -250,38 +277,50 @@ namespace LuminaMod.XML
                     // Deserialize the object from the file.
                     GlobalVariables loadedVariables = (GlobalVariables)serializer.Deserialize(reader);
 
-                    // Set the loaded values to the corresponding properties.
-                    GlobalVariables.Instance.PostExposure = loadedVariables.PostExposure;
-                    GlobalVariables.Instance.PostExposureActive = loadedVariables.PostExposureActive;
-                    GlobalVariables.Instance.Contrast = loadedVariables.Contrast;
-                    GlobalVariables.Instance.ContrastActive = loadedVariables.ContrastActive;
-                    GlobalVariables.Instance.HueShift = loadedVariables.HueShift;
-                    GlobalVariables.Instance.HueShiftActive = loadedVariables.HueShiftActive;
-                    GlobalVariables.Instance.Saturation = loadedVariables.Saturation;
-                    GlobalVariables.Instance.SaturationActive = loadedVariables.SaturationActive;
+                    // Set the loaded values to the corresponding properties, with default values if missing.
+                    GlobalVariables.Instance.PostExposure = loadedVariables?.PostExposure ?? 0f;
+                    GlobalVariables.Instance.PostExposureActive = loadedVariables?.PostExposureActive ?? false;
+                    GlobalVariables.Instance.Contrast = loadedVariables?.Contrast ?? 0f;
+                    GlobalVariables.Instance.ContrastActive = loadedVariables?.ContrastActive ?? false;
+                    GlobalVariables.Instance.HueShift = loadedVariables?.HueShift ?? 0f;
+                    GlobalVariables.Instance.HueShiftActive = loadedVariables?.HueShiftActive ?? false;
+                    GlobalVariables.Instance.Saturation = loadedVariables?.Saturation ?? 0f;
+                    GlobalVariables.Instance.SaturationActive = loadedVariables?.SaturationActive ?? false;
 
-                    GlobalVariables.Instance.Latitude = loadedVariables.Latitude;
-                    GlobalVariables.Instance.Longitude = loadedVariables.Longitude;
+                    GlobalVariables.Instance.Latitude = loadedVariables?.Latitude ?? 0f;
+                    GlobalVariables.Instance.Longitude = loadedVariables?.Longitude ?? 0f;
 
-                    GlobalVariables.Instance.Temperature = loadedVariables.Temperature;
-                    GlobalVariables.Instance.TemperatureActive = loadedVariables.TemperatureActive;
-                    GlobalVariables.Instance.Tint = loadedVariables.Tint;
-                    GlobalVariables.Instance.TintActive = loadedVariables.TintActive;
+                    GlobalVariables.Instance.Temperature = loadedVariables?.Temperature ?? 0f;
+                    GlobalVariables.Instance.TemperatureActive = loadedVariables?.TemperatureActive ?? false;
+                    GlobalVariables.Instance.Tint = loadedVariables?.Tint ?? 0f;
+                    GlobalVariables.Instance.TintActive = loadedVariables?.TintActive ?? false;
 
-                    GlobalVariables.Instance.Shadows = loadedVariables.Shadows;
-                    GlobalVariables.Instance.ShadowsActive = loadedVariables.ShadowsActive;
-                    GlobalVariables.Instance.Midtones = loadedVariables.Midtones;
-                    GlobalVariables.Instance.MidtonesActive = loadedVariables.MidtonesActive;
-                    GlobalVariables.Instance.Highlights = loadedVariables.Highlights;
-                    GlobalVariables.Instance.HighlightsActive = loadedVariables.HighlightsActive;
+                    GlobalVariables.Instance.Shadows = loadedVariables?.Shadows ?? 0f;
+                    GlobalVariables.Instance.ShadowsActive = loadedVariables?.ShadowsActive ?? false;
+                    GlobalVariables.Instance.Midtones = loadedVariables?.Midtones ?? 0f;
+                    GlobalVariables.Instance.MidtonesActive = loadedVariables?.MidtonesActive ?? false;
+                    GlobalVariables.Instance.Highlights = loadedVariables?.Highlights ?? 0f;
+                    GlobalVariables.Instance.HighlightsActive = loadedVariables?.HighlightsActive ?? false;
 
                     // Tonemapping
-                    GlobalVariables.Instance.TonemappingMode = loadedVariables.TonemappingMode;
-                    GlobalVariables.Instance.LUTContribution = loadedVariables.LUTContribution;
-                    GlobalVariables.Instance.LUTName = loadedVariables.LUTName;
-                    GlobalVariables.Instance.SceneFlowCheckerEnabled = loadedVariables.SceneFlowCheckerEnabled;
-                    GlobalVariables.Instance.ToeStrengthActive = loadedVariables.ToeStrengthActive;
+                    GlobalVariables.Instance.TonemappingMode = loadedVariables?.TonemappingMode ?? TonemappingMode.None;
+                    GlobalVariables.Instance.LUTContribution = loadedVariables?.LUTContribution ?? 0f;
+                    GlobalVariables.Instance.LUTName = loadedVariables?.LUTName ?? string.Empty;
+                    GlobalVariables.Instance.SceneFlowCheckerEnabled = loadedVariables?.SceneFlowCheckerEnabled ?? false;
 
+                    GlobalVariables.Instance.ToeStrengthActive = loadedVariables?.ToeStrengthActive ?? false;
+                    GlobalVariables.Instance.ToeStrengthValue = loadedVariables?.ToeStrengthValue ?? 0f;
+                    GlobalVariables.Instance.ToeLengthActive = loadedVariables?.ToeLengthActive ?? false;
+                    GlobalVariables.Instance.ToeLengthValue = loadedVariables?.ToeLengthValue ?? 0f;
+
+                    GlobalVariables.Instance.shoulderStrengthActive = loadedVariables?.shoulderStrengthActive ?? false;
+                    GlobalVariables.Instance.shoulderStrengthValue = loadedVariables?.shoulderStrengthValue ?? 0f;
+                    GlobalVariables.Instance.shoulderLengthActive = loadedVariables?.shoulderLengthActive ?? false;
+                    GlobalVariables.Instance.shoulderAngleActive = loadedVariables?.shoulderAngleActive ?? false;
+                    GlobalVariables.Instance.shoulderAngleValue = loadedVariables?.shoulderAngleValue ?? 0f;
+
+                    GlobalVariables.Instance.TonemappingGammaActive = loadedVariables?.TonemappingGammaActive ?? false;
+                    GlobalVariables.Instance.TonemappingGammaValue = loadedVariables?.TonemappingGammaValue ?? 0f;
 
                     return loadedVariables;
                 }
@@ -298,6 +337,8 @@ namespace LuminaMod.XML
                 return null;
             }
         }
+
+
 
         private static GlobalVariables instance;
 
@@ -317,14 +358,6 @@ namespace LuminaMod.XML
             }
         }
 
-        public bool ToeLengthActive { get; internal set; }
-        public float ToeLengthValue { get; internal set; }
-        public bool shoulderStrength { get; internal set; }
-        public float shoulderStrengthValue { get; internal set; }
-        public bool shoulderLengthActive { get; internal set; }
-        public bool shoulderAngleActive { get; internal set; }
-        public float shoulderAngleValue { get; internal set; }
-        public bool TonemappingGammaActive { get; internal set; }
-        public float TonemappingGammaValue { get; internal set; }
+ 
     }
 }

@@ -801,7 +801,7 @@
                 m_Tonemapping.toeLength.overrideState = GlobalVariables.Instance.ToeLengthActive;
                 m_Tonemapping.toeLength.Override(GlobalVariables.Instance.ToeLengthValue);
 
-                m_Tonemapping.shoulderStrength.overrideState = GlobalVariables.Instance.shoulderStrength;
+                m_Tonemapping.shoulderStrength.overrideState = GlobalVariables.Instance.shoulderStrengthActive;
                 m_Tonemapping.shoulderStrength.Override(GlobalVariables.Instance.shoulderStrengthValue);
                 m_Tonemapping.shoulderLength.overrideState = GlobalVariables.Instance.shoulderLengthActive;
                 m_Tonemapping.shoulderAngle.overrideState = GlobalVariables.Instance.shoulderAngleActive;

@@ -1,0 +1,47 @@
+
+.toe-strength-label {
+    position: absolute;
+    top: 15rem;
+    left: 25rem;
+    font-size: 15rem;
+    color: white;
+}
+
+.toe-strength-slider {
+    position: absolute;
+    top: 20rem;
+    width: 235rem;
+    left: 150rem;
+}
+
+.toe-strength-container {
+    position: absolute;
+    width: 235rem;
+    top: 50rem;
+    left: 20rem;
+}
+
+.toestrength-checkbox-image {
+    position: absolute;
+    top: -35rem; 
+    height: 20rem;
+    width: 20rem;
+    left: -30rem;
+    z-index: 1000;
+}
+
+.toestrength-checkbox-button {
+    position: absolute;
+    top: -35rem; 
+    height: 20rem;
+    width: 20rem;
+    left: -30rem;
+}
+
+.toe-strength-input {
+    position: absolute;
+    color: white;
+    top: 10rem; 
+    left: 400rem;
+    width: 90rem;
+}

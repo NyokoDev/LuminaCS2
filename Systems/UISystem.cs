@@ -96,7 +96,9 @@
             //TonemappingCustomMode
             AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsCustom", () => IsCustomMode()));
             AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsToeStrengthActive", () => IsToeStrengthActive()));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "ToeStrengthValue", () => GetToeStrengthValue()));
             AddBinding(new TriggerBinding(Mod.MODUI, "SetToeStrengthActive", SetToeStrengthActive));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleToeStrengthActive", HandleToeStrengthActive));
 
 
 
@@ -107,6 +109,17 @@
 
 
 
+
+        }
+
+        private float GetToeStrengthValue()
+        {
+            return GlobalVariables.Instance.ToeStrengthValue;
+        }
+
+        private void HandleToeStrengthActive(float obj)
+        {
+            TonemappingCustomBindings.HandleToeStrengthActive(obj);
         }
 
         private void SetToeStrengthActive()

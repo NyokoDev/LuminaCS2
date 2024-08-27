@@ -13,13 +13,14 @@ import { createPortal } from "react-dom";
 import React, { Fragment } from 'react';
 import {SketchPicker} from 'react-color';
 import Box from "@mui/material/Box";
-import { Slider as Slider2, TextField, createTheme } from '@mui/material';
+import { Checkbox, Slider as Slider2, TextField, createTheme } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import red from "@mui/material/colors/red";
 import FilePicker from "./FilePicker";
 import { TonemappingDropdown } from "./TonemappingDropdown";
 import { LUTSDropdown } from "./LUTSDropdown";
-
+import { ToeStrengthCheckbox } from "./Checkboxes/ToeStrengthCheckbox";
+import './Checkboxes/CheckboxesStyle.scss'
 
 
 export let isInstalled$ = false;
@@ -67,6 +68,7 @@ export const LongitudeValue$ = bindValue<number>(mod.id, 'LongitudeValue');
 //Tonemapping
 export const LUTValue$ = bindValue<number>(mod.id, 'LUTValue');
 export const LUTName$ = bindValue<string>(mod.id, 'LUTName');
+export const ToeStrengthValue$ = bindValue<number>(mod.id, "ToeStrengthValue")
 
 const theme = createTheme({
   palette: {
@@ -135,6 +137,7 @@ const TonemappingMode = useValue(TonemappingMode$);
 const ExternalModeActivated = useValue(ExternalModeActivated$);
 const CustomModeActivated = useValue(CustomModeActivated$);
 const TextureFormatMode = useValue(TextureFormatMode$);
+const ToeStrengthValue = useValue(ToeStrengthValue$);
 
 
 
@@ -165,6 +168,10 @@ const [OnImport, OnImportChange] = useState(false);
   const planetstepSize = 0.0001;
   const planetnumberofsteps = Math.floor((planetend - planetstart) / planetstepSize);
 
+
+  const StepSizeStart = 0.0001;
+  const StepSizeEnd = 1;
+  const stepSizeNew = 0.0001; // Define a small step size for precision
  
   
 
@@ -370,6 +377,10 @@ const handleHighlights = (value: number) => {
     };
 
     
+    const handleToeStrength = (value: number) => {
+      trigger(mod.id, 'HandleToeStrengthActive', value);
+    };
+
 
 
 
@@ -1008,39 +1019,32 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
 
 <div className="toe-strength-container">
   <input
-    value={LatitudeValue}
+    value={ToeStrengthValue}
     type="range"
     className="toggle_cca item-mouse-states_Fmi toggle_th_ toe-strength-input"
-    onChange={(event) => handleLatitude(Number(event.target.value))}
+    onChange={(event) => handleToeStrength(Number(event.target.value))}
   />
   <label className="title_SVH title_zQN toe-strength-label" style={{ whiteSpace: 'nowrap' }}>
     {translate("LUMINA.ToeStrength")}
   </label>
+
+
   <Slider
-    value={(LongitudeValue - planetstart) / planetstepSize}
-    start={-100}
-    end={planetnumberofsteps}
-    className="toe-strength-slider"
-    gamepadStep={0.001}
-    valueTransformer={SliderValueTransformer.intTransformer}
-    disabled={false}
-    noFill={false}
-    onChange={(number) => handleLongitude(number)}
-    // onDragStart={() => console.log("onDragStart")}
-    // onDragEnd={() => console.log("onDragEnd")}
-    // onMouseOver={() => console.log("onMouseOver")}
-    // onMouseLeave={() => console.log("onMouseLeave")}
-  />
+  value={ToeStrengthValue}
+  start={0}       // Minimum value of the slider
+  end={1}          // Maximum value of the slider
+  step={0.0001}    // Step size for precision
+  className="toe-strength-slider"
+  gamepadStep={stepSize} // Step size for gamepad interaction
+  valueTransformer={SliderValueTransformer.floatTransformer} // Value transformation logic
+  disabled={false}
+  noFill={false}
+  onChange={(number) => handleToeStrength(number)} // Callback for value change
+/>
+
   
-  <div className="toestrength-checkbox-container">
-    {HighlightsActive && (
-      <div className="toestrength-checkbox-image" onClick={handleHighlightsCheckbox}></div>
-    )}
-    <button
-      className="toggle_cca item-mouse-states_Fmi toggle_th_ toestrength-checkbox-button"
-      onClick={handleHighlightsCheckbox}
-    ></button>
-  </div>
+  <ToeStrengthCheckbox
+  />
 </div>
 
 

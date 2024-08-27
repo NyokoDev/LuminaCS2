@@ -1,10 +1,12 @@
+import './Checkboxes.scss'
+import './CheckboxesStyle.scss'
 import mod from "mod.json";
 import { bindValue, trigger, useValue } from 'cs2/api';
 
 export const Active$ = bindValue<boolean>(mod.id, "IsToeStrengthActive");
 
 
-const Checkbox: React.FC = () => {
+export const ToeStrengthCheckbox = () => {
   const isActive = useValue(Active$);
 
   const toggle = () => {
@@ -12,20 +14,21 @@ const Checkbox: React.FC = () => {
   };
 
   return (
-    <div className="checkbox-container">
+    <div className="checkbox-container toe-strength-container">
       {isActive && (
         <div 
-          className="checkbox-image" 
+          className="checkbox-image toestrength-checkbox-image" 
           onClick={toggle}
         ></div>
       )}
       <button
-        className="toggle_cca item-mouse-states_Fmi toggle_th_"
+        className="toggle_cca item-mouse-states_Fmi toggle_th_ toestrength-checkbox-button"
         onClick={toggle}
       ></button>
     </div>
   );
 };
 
-export default Checkbox;
+export default ToeStrengthCheckbox;
+
 
