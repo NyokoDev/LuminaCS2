@@ -10,10 +10,11 @@
     using System.Text;
     using System.Threading.Tasks;
     using Game.Assets;
+    using Game.Prefabs;
     using Game.Rendering;
     using Game.Simulation;
     using JetBrains.Annotations;
-    using Lumina.UI;
+    using Lumina.Systems.TextureHelper;
     using Lumina.XML;
     using LuminaMod.XML;
     using Unity.Entities;
@@ -22,6 +23,7 @@
     using UnityEngine.Rendering;
     using UnityEngine.Rendering.HighDefinition;
     using static UnityEngine.Rendering.DebugUI;
+    using static UnityEngine.Rendering.HighDefinition.CameraSettings;
     using static UnityEngine.Rendering.HighDefinition.VolumetricClouds;
     using static UnityEngine.Rendering.HighDefinition.WindParameter;
 
@@ -47,6 +49,7 @@
         public VolumetricClouds m_VolumetricClouds;
         public static string LutName_Example;
         public static string ToneMappingMode;
+        public static PhysicallyBasedSky LightingPhysicallyBasedSky;
 
         private UnityEngine.Rendering.HighDefinition.ColorAdjustments colorAdjustments;
         private PhotoModeRenderSystem PhotoModeRenderSystem;
@@ -58,6 +61,19 @@
         public static bool Panel = true;
 
         public bool LUTloaded = false;
+        private VisualEnvironment m_Sky;
+        private HDRISky hdriSky;
+
+
+        /// <summary>
+        /// Cubemap file path.
+        /// </summary>
+        public static string cubemapFilePath = Path.Combine(GlobalPaths.LuminaHDRIDirectory, GlobalVariables.Instance.CubemapName + ".png");
+
+        /// <summary>
+        /// Cubemap.
+        /// </summary>
+        public static Cubemap GlobalCubemap;
 
         /// <summary>
         /// Gets or sets a value indicating whether Tonemapping mode is External.
@@ -69,6 +85,22 @@
         /// </summary>
         public static bool IsCustomMode { get; set; }
 
+        /// <summary>
+        /// Called when the system is created.
+        /// </summary>
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+            InitializeCubemap();
+            GetPrivateFieldm_PhysicallyBasedSky();
+            ConvertToHDRP();
+        }
+
+        private void InitializeCubemap()
+        {
+            GlobalCubemap = CubemapLoader.LoadCubemap();
+            Lumina.Mod.Log.Info("Initialized cubemap succesfully.");
+        }
 
         /// <summary>
         /// Logs current LUT log size.
@@ -121,13 +153,7 @@
                 SceneFlowChecker.CheckForErrors();
             }
 
-            if (Panel)
-            {
-                GameObject newGameObject = new GameObject();
-                newGameObject.AddComponent<SliderPanel>();
-                PanelInitialized = true;
-                Panel = false;
-            }
+
 
             // Start everything else
             PlanetarySettings();
@@ -139,10 +165,21 @@
                 TonemappingLUT();
                 LUTloaded = true;
             }
-
             ColorAdjustments();
             WhiteBalance();
             ShadowsMidTonesHighlights();
+        }
+
+
+
+
+        public static void ApplyCubemap()
+        {
+            LightingPhysicallyBasedSky.active = true;
+            LightingPhysicallyBasedSky.spaceEmissionMultiplier.overrideState = true;
+            LightingPhysicallyBasedSky.spaceEmissionTexture.overrideState = true;
+            LightingPhysicallyBasedSky.spaceEmissionTexture.value = GlobalCubemap;
+            LightingPhysicallyBasedSky.spaceEmissionMultiplier.value = 5000;
         }
 
         private void UpdateNames()
@@ -358,7 +395,7 @@
         private void CopyAllEmbeddedResourcesToDirectory(string directoryPath)
         {
             var assembly = GetType().Assembly;
-            var resourceNamespace = "Lumina.LUTS"; // Replace with your actual namespace
+            var resourceNamespace = "Lumina.LUTS"; 
 
             // Get all resource names
             var resourceNames = assembly.GetManifestResourceNames();
@@ -431,6 +468,44 @@
             }
         }
 
+        private void GetPrivateFieldm_PhysicallyBasedSky()
+        {
+            // Use reflection to get the private m_PhysicallyBasedSky field from LightingSystem
+            Type lightingSystemType = typeof(LightingSystem);
+            FieldInfo physicallyBasedSkyFieldInfo = lightingSystemType.GetField("m_PhysicallyBasedSky", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            if (physicallyBasedSkyFieldInfo != null)
+            {
+                LightingSystem lightingSystem = World.GetExistingSystemManaged<LightingSystem>();
+                if (lightingSystem != null)
+                {
+                    // Get the value of the private field
+                    var physicallyBasedSky = physicallyBasedSkyFieldInfo.GetValue(lightingSystem);
+
+                    if (physicallyBasedSky != null)
+                    {
+                        // Set the value to the field in this script
+                        LightingPhysicallyBasedSky = (UnityEngine.Rendering.HighDefinition.PhysicallyBasedSky)physicallyBasedSky;
+                        ApplyCubemap();
+                        Lumina.Mod.Log.Info("Successfully retrieved and assigned m_PhysicallyBasedSky.");
+                    }
+                    else
+                    {
+                        Lumina.Mod.Log.Info("m_PhysicallyBasedSky field is null.");
+                    }
+                }
+                else
+                {
+                    Lumina.Mod.Log.Info("LightingSystem instance is null.");
+                }
+            }
+            else
+            {
+                Lumina.Mod.Log.Info("Field m_PhysicallyBasedSky not found.");
+            }
+        }
+
+
         private void WhiteBalance()
         {
             m_WhiteBalance.temperature.Override(GlobalVariables.Instance.Temperature);
@@ -449,14 +524,7 @@
             m_ShadowsMidtonesHighlights.highlights.overrideState = GlobalVariables.Instance.HighlightsActive;
         }
 
-        /// <summary>
-        /// Called when the system is created.
-        /// </summary>
-        protected override void OnCreate()
-        {
-            base.OnCreate();
-            ConvertToHDRP();
-        }
+
 
         /// <summary>
         /// Initializes Lumina's volume into the Scene.
@@ -465,17 +533,21 @@
         {
             if (!m_SetupDone)
             {
+               
                 // Create new Global Volume GameObject
                 GameObject globalVolume = new GameObject("Lumina");
                 UnityEngine.Object.DontDestroyOnLoad(globalVolume);
 
                 // Add Volume component
                 LuminaVolume = globalVolume.AddComponent<Volume>();
-                LuminaVolume.priority = 1980f;
+                LuminaVolume.priority = 10000f;
+                Mod.Log.Info("[LUMINA] Priority set to 10k for testing.");
                 LuminaVolume.enabled = true;
+                LuminaVolume.name = "Lumina";
 
                 // Access the Volume Profile
                 m_Profile = LuminaVolume.profile;
+
 
 #if DEBUG
                 // Add Volumetric Clouds
@@ -495,16 +567,24 @@
                 m_ColorAdjustments = m_Profile.Add<ColorAdjustments>();
                 m_ColorAdjustments.colorFilter.Override(new Color(1f, 1f, 1f));
 
-                m_SetupDone = true;
+
 
                 m_ShadowsMidtonesHighlights = m_Profile.Add<ShadowsMidtonesHighlights>(); // Shadows, midtones, highlights
                 m_ShadowsMidtonesHighlights.active = true;
                 m_ShadowsMidtonesHighlights.shadows.Override(new Vector4(GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows));
                 m_ShadowsMidtonesHighlights.midtones.Override(new Vector4(GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones));
 
+   
+                // Finalize Volume
+                m_SetupDone = true;
                 Mod.Log.Info("[LUMINA] Successfully added HDRP volume.");
+
+
             }
         }
+
+
+
 
 #if DEBUG
         public void SetUpVolumetricClouds()

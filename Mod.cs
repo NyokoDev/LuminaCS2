@@ -67,12 +67,16 @@ namespace Lumina
 
             updateSystem.UpdateAfter<PreSystem>(SystemUpdatePhase.PreCulling);
 
+
+
             // Update system after RenderEffectsSystem but before culling
             updateSystem.UpdateAfter<RenderEffectsSystem>(SystemUpdatePhase.PreCulling);
 
             updateSystem.UpdateAt<UISystem>(SystemUpdatePhase.MainLoop);
 
             updateSystem.UpdateAt<TimeOfDayProcessor>(SystemUpdatePhase.GameSimulation);
+
+            updateSystem.UpdateAfter<CubemapUpdateSystem>(SystemUpdatePhase.GameSimulation);
 
             // Notify if failed to retrieve Lumina settings
             NotificationSystem.Push(

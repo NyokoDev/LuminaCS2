@@ -29,6 +29,17 @@
 		<Exec Command="npm run build" WorkingDirectory="$(ProjectDir)/Lumina" />
 	</Target>
 	<ItemGroup>
+	  <None Remove="Cubemaps\abandoned_parking_cubemap.png" />
+	  <None Remove="Cubemaps\dirt_bike_track_cubemap.png" />
+	  <None Remove="Cubemaps\evening_road_cubemap.png" />
+	  <None Remove="Cubemaps\freight_station_cubemap.png" />
+	  <None Remove="Cubemaps\kloetzle_blei_cubemap.png" />
+	  <None Remove="Cubemaps\kloppenheim_cubemap.png" />
+	  <None Remove="Cubemaps\rural_landscape_cubemap.png" />
+	  <None Remove="Cubemaps\rural_landscape_night_cubemap.png" />
+	  <None Remove="Cubemaps\small_rural_road_cubemap.png" />
+	  <None Remove="Cubemaps\straw_rolls_field_cubemap.png" />
+	  <None Remove="Cubemaps\sunflowers_cubemap.png" />
 	  <None Remove="l10n\de-DE.csv" />
 	  <None Remove="l10n\en-US.csv" />
 	  <None Remove="l10n\es-ES.csv" />
@@ -65,6 +76,17 @@
 	  <AdditionalFiles Include="stylecop.json" />
 	</ItemGroup>
 	<ItemGroup>
+	  <EmbeddedResource Include="Cubemaps\abandoned_parking_cubemap.png" />
+	  <EmbeddedResource Include="Cubemaps\dirt_bike_track_cubemap.png" />
+	  <EmbeddedResource Include="Cubemaps\evening_road_cubemap.png" />
+	  <EmbeddedResource Include="Cubemaps\freight_station_cubemap.png" />
+	  <EmbeddedResource Include="Cubemaps\kloetzle_blei_cubemap.png" />
+	  <EmbeddedResource Include="Cubemaps\kloppenheim_cubemap.png" />
+	  <EmbeddedResource Include="Cubemaps\rural_landscape_cubemap.png" />
+	  <EmbeddedResource Include="Cubemaps\rural_landscape_night_cubemap.png" />
+	  <EmbeddedResource Include="Cubemaps\small_rural_road_cubemap.png" />
+	  <EmbeddedResource Include="Cubemaps\straw_rolls_field_cubemap.png" />
+	  <EmbeddedResource Include="Cubemaps\sunflowers_cubemap.png" />
 	  <EmbeddedResource Include="l10n\de-DE.csv" />
 	  <EmbeddedResource Include="l10n\en-US.csv" />
 	  <EmbeddedResource Include="l10n\es-ES.csv" />
@@ -149,6 +171,9 @@
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="Unity.Mathematics">
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="UnityEngine.ImageConversionModule">
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="UnityEngine.IMGUIModule">

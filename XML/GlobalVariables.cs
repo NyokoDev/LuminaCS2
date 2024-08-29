@@ -205,6 +205,12 @@ namespace LuminaMod.XML
         [XmlElement]
         public bool SaveAutomatically { get; set; } = true;
 
+        [XmlElement]
+        public string CubemapName { get; set; } = "lilienstein_4k";
+
+        [XmlElement]
+        public float spaceEmissionMultiplier { get; set; } = 1000f;
+
         /// <summary>
         /// Serializes to a file.
         /// </summary>
@@ -325,6 +331,8 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.TonemappingGammaActive = loadedVariables?.TonemappingGammaActive ?? false;
                     GlobalVariables.Instance.TonemappingGammaValue = loadedVariables?.TonemappingGammaValue ?? 0f;
                     GlobalVariables.Instance.SaveAutomatically = loadedVariables?.SaveAutomatically ?? true;
+                    GlobalVariables.Instance.CubemapName = loadedVariables?.CubemapName ?? "lilienstein_4k";
+                    GlobalVariables.Instance.spaceEmissionMultiplier = loadedVariables?.spaceEmissionMultiplier ?? 20000f;
 
                     return loadedVariables;
                 }
@@ -346,6 +354,7 @@ namespace LuminaMod.XML
 
         private static GlobalVariables instance;
 
+
         /// <summary>
         /// Gets singleton pattern to ensure only one instance of GlobalVariables exists.
         /// </summary>
@@ -362,6 +371,6 @@ namespace LuminaMod.XML
             }
         }
 
- 
+
     }
 }

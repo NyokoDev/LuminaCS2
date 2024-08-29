@@ -34,6 +34,11 @@ namespace Lumina.XML
         /// </summary>
         public static string LuminaLUTSDirectory = Path.Combine(AssemblyDirectory, "LUTS");
 
+        /// <summary>
+        /// Returns HDRI Directory.
+        /// </summary>
+        public static string LuminaHDRIDirectory = Path.Combine(AssemblyDirectory, "Cubemaps");
+
         private static string assemblyPDXDirectory = Path.Combine(LocalLowDirectory, "Colossal Order", "Cities Skylines II", "ModsData", "Lumina");
         private static string settingsFilePath = Path.Combine(AssemblyDirectory, "Lumina.xml");
 
