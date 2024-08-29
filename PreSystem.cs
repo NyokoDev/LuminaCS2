@@ -153,7 +153,7 @@ namespace Lumina
                 Directory.CreateDirectory(directoryPath);
             }
             // Copy all embedded resources
-            CopyAllEmbeddedResourcesToDirectory(directoryPath);
+            CopyCubemapsToDirectory(directoryPath);
 
         }
 

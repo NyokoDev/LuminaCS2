@@ -34,6 +34,7 @@
     {
         public static string lutFilePath = Path.Combine(GlobalPaths.LuminaLUTSDirectory, GlobalVariables.Instance.LUTName + ".cube");
         public static string[] LutFiles;
+        public static string[] CubemapFiles;
         bool m_SetupDone = false;
         Volume LuminaVolume;
         private VolumeProfile m_Profile;
@@ -96,11 +97,36 @@
             ConvertToHDRP();
         }
 
-        private void InitializeCubemap()
+        public static void InitializeCubemap()
         {
             GlobalCubemap = CubemapLoader.LoadCubemap();
             Lumina.Mod.Log.Info("Initialized cubemap succesfully.");
         }
+
+        public static void UpdateCubemap()
+        {
+            // Stop Cubemap manager from attempting to load mid loading
+            GlobalVariables.Instance.HDRISkyEnabled = false;
+     
+            // Check if GlobalCubemap already holds a cubemap
+            if (GlobalCubemap != null)
+            {
+                // Destroy the existing cubemap to free up resources
+                UnityEngine.Object.Destroy(GlobalCubemap);
+            }
+
+            Resources.UnloadAsset(GlobalCubemap);
+
+            // Load the new cubemap
+            GlobalCubemap = CubemapLoader.LoadCubemap();
+
+            // Log that the cubemap has been initialized successfully
+            Lumina.Mod.Log.Info("Initialized cubemap successfully.");
+
+            // Initialize Cubemap system again.
+            GlobalVariables.Instance.HDRISkyEnabled = true;
+        }
+
 
         /// <summary>
         /// Logs current LUT log size.
@@ -170,7 +196,29 @@
             ShadowsMidTonesHighlights();
         }
 
+        public static void DisableCubemap()
+        {
+            // Disable the LightingPhysicallyBasedSky
+            LightingPhysicallyBasedSky.active = true;
 
+            // Disable the override states for space emission properties
+            LightingPhysicallyBasedSky.spaceEmissionMultiplier.overrideState = false;
+            LightingPhysicallyBasedSky.spaceEmissionTexture.overrideState = false;
+
+            // Optionally reset the values (this might be necessary to fully disable the effects)
+            LightingPhysicallyBasedSky.spaceEmissionTexture.value = null;
+            LightingPhysicallyBasedSky.spaceEmissionMultiplier.value = 0;
+
+            // Destroy the existing GlobalCubemap to free up resources
+            if (GlobalCubemap != null)
+            {
+                UnityEngine.Object.Destroy(GlobalCubemap);
+                GlobalCubemap = null;
+            }
+
+            // Log that the cubemap has been successfully destroyed and settings disabled
+            Lumina.Mod.Log.Info("Disabled lighting sky and destroyed cubemap successfully.");
+        }
 
 
         public static void ApplyCubemap()
@@ -179,7 +227,7 @@
             LightingPhysicallyBasedSky.spaceEmissionMultiplier.overrideState = true;
             LightingPhysicallyBasedSky.spaceEmissionTexture.overrideState = true;
             LightingPhysicallyBasedSky.spaceEmissionTexture.value = GlobalCubemap;
-            LightingPhysicallyBasedSky.spaceEmissionMultiplier.value = 5000;
+            LightingPhysicallyBasedSky.spaceEmissionMultiplier.value = GlobalVariables.Instance.spaceEmissionMultiplier;
         }
 
         private void UpdateNames()
@@ -486,7 +534,15 @@
                     {
                         // Set the value to the field in this script
                         LightingPhysicallyBasedSky = (UnityEngine.Rendering.HighDefinition.PhysicallyBasedSky)physicallyBasedSky;
-                        ApplyCubemap();
+                        if (GlobalVariables.Instance.HDRISkyEnabled)
+                        {
+                            ApplyCubemap();
+                        }
+                        else
+                        {
+                            Lumina.Mod.Log.Info("HDRI Sky disabled. Space emission texture not applied.");
+                        }
+
                         Lumina.Mod.Log.Info("Successfully retrieved and assigned m_PhysicallyBasedSky.");
                     }
                     else
@@ -942,6 +998,12 @@
         internal static void handleShoulderStrength()
         {
             m_Tonemapping.shoulderStrength.Override(GlobalVariables.Instance.shoulderStrengthValue);
+        }
+
+        internal static void handleEmissionMultiplier(float obj)
+        {
+            GlobalVariables.Instance.spaceEmissionMultiplier = obj;
+            LightingPhysicallyBasedSky.spaceEmissionMultiplier.Override(obj);
         }
     }
 }

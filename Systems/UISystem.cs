@@ -25,7 +25,11 @@
     internal partial class UISystem : ExtendedUISystemBase
     {
         public bool Visible { get; set; }
+        public string CubemapName = GlobalVariables.Instance.CubemapName;
+        public bool UsingHDRSky = GlobalVariables.Instance.HDRISkyEnabled;
+
         private ValueBindingHelper<string[]> LutArrayExtended;
+        private ValueBindingHelper<string[]> CubemapArrayExtended;
         private ValueBindingHelper<string> LutName;
 
         /// <inheritdoc/>
@@ -90,6 +94,10 @@
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleTimeFloatValue", HandleTimeFloatValue));
             // Array
             LutArrayExtended = CreateBinding("LUTArray", LUTArray());
+            CubemapArrayExtended = CreateBinding("CubemapArrayExtended", CubemapArrayExtendedReturn());
+
+            //Cubemaps
+            AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "CubemapName", ReturnCubemapName));
 
             //TonemappingExternalMode
             AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsExternal", () => IsExternalMode()));
@@ -113,9 +121,16 @@
             AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "ShoulderStrengthValue", () => ShoulderStrengthValue()));
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "handleShoulderStrength", handleShoulderStrength));
 
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsHDRISkyEnabled", () => IsHDRISkyEnabled()));
+            AddBinding(new TriggerBinding(Mod.MODUI, "SetHDRISkyEnabled", SetHDRISkyEnabled));
+
+            AddBinding(new TriggerBinding<string>(Mod.MODUI, "UpdateCubemapName", UpdateCubemapName));
+
 
             AddBinding(new TriggerBinding(Mod.MODUI, "SaveAutomatically", SaveAutomatically));
 
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "handleEmissionMultiplier", handleEmissionMultiplier));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "EmissionMultiplier", () => GetEmissionMultiplier()));
 
 
 
@@ -123,7 +138,97 @@
 
 
 
+        }
 
+        private float GetEmissionMultiplier()
+        {
+            return GlobalVariables.Instance.spaceEmissionMultiplier;
+        }
+
+        private void handleEmissionMultiplier(float obj)
+        {
+            RenderEffectsSystem.handleEmissionMultiplier(obj);
+        }
+
+        private void UpdateCubemapName(string obj)
+        {
+            // Update GlobalVariables.Instance.CubemapName with the provided name
+            GlobalVariables.Instance.CubemapName = obj;
+
+            // Ensure the local CubemapName variable is also updated
+            CubemapName = GlobalVariables.Instance.CubemapName;
+
+            // Once the names are updated, call the method to update the cubemap
+            RenderEffectsSystem.UpdateCubemap();
+        }
+
+        private void SetHDRISkyEnabled()
+        {
+            GlobalVariables.Instance.HDRISkyEnabled = !GlobalVariables.Instance.HDRISkyEnabled;
+            UsingHDRSky = GlobalVariables.Instance.HDRISkyEnabled;
+            RenderEffectsSystem.DisableCubemap();
+        }
+
+        private bool IsHDRISkyEnabled()
+        {
+            // Check if HDRI Sky is enabled in GlobalVariables
+            if (GlobalVariables.Instance.HDRISkyEnabled == false)
+            {
+                UsingHDRSky = false;
+            }
+            else
+            {
+                UsingHDRSky = true;
+            }
+
+            // Return the value of UsingHDRSky
+            return UsingHDRSky;
+        }
+
+
+        private string ReturnCubemapName()
+        {
+            // Update the GlobalVariables.Instance.CubemapName with the current CubemapName
+            GlobalVariables.Instance.CubemapName = CubemapName;
+
+            // Return the current CubemapName
+            return CubemapName;
+        }
+
+
+        private string[] CubemapArrayExtendedReturn()
+        {
+            // Retrieve the LUT files array
+            var lutFiles = RenderEffectsSystem.CubemapFiles;
+
+            // Check if lutFiles is null or empty and update it with the directory files if necessary
+            if (lutFiles == null || lutFiles.Length == 0)
+            {
+                Lumina.Mod.Log.Info("CubemapArrayExtendedReturn() is null or empty. Populating with files from the directory.");
+
+                // Ensure the LUT directory exists
+                if (!Directory.Exists(GlobalPaths.LuminaHDRIDirectory))
+                {
+                    Lumina.Mod.Log.Warn($"Cubemaps directory not found: {GlobalPaths.LuminaHDRIDirectory}. Creating directory...");
+                    Directory.CreateDirectory(GlobalPaths.LuminaHDRIDirectory);
+                }
+
+                // Populate RenderEffectsSystem.LutFiles with files from the specified directory
+                var filesWithFullPath = Directory.GetFiles(GlobalPaths.LuminaHDRIDirectory, "*.png");
+
+                // Extract only the file names without the extension
+                var fileNames = filesWithFullPath
+                    .Select(filePath => Path.GetFileNameWithoutExtension(filePath))
+                    .ToArray();
+
+                // Update RenderEffectsSystem.LutFiles with only the file names
+                RenderEffectsSystem.CubemapFiles = fileNames;
+
+                Lumina.Mod.Log.Info(string.Join(", ", RenderEffectsSystem.CubemapFiles)); // Log the result for debugging
+            }
+
+            // Return the array
+            return RenderEffectsSystem.CubemapFiles;
         }
 
         private void SaveAutomatically()
@@ -332,6 +437,7 @@
         private void InitializeLutName()
         {
             RenderEffectsSystem.LutName_Example = GlobalVariables.Instance.LUTName;
+            GlobalVariables.Instance.CubemapName = "";
         }
 
         private void SetTonemappingMode(float obj)

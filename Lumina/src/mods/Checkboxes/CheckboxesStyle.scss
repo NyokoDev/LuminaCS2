@@ -174,3 +174,45 @@
     left: 400rem; /* unchanged */
     width: 90rem; /* unchanged */
 }
+
+
+
+
+
+
+
+
+
+
+// HDRI
+
+.hdri-strength-container {
+    position: absolute !important; 
+    width: 235rem !important; /* unchanged */
+    top: 120rem !important; /* 70rem + 20rem */
+    right: 870rem !important;
+    z-index: 1000 !important;
+    pointer-events: auto;
+}
+
+.hdri-checkbox-image {
+    position: absolute;
+    background-image: url('https://svgshare.com/i/15wf.svg');
+    background-size: cover; /* Make sure the background image covers the entire area */
+    top: -60rem !important; /* -35rem + 20rem */
+    right: 50rem !important;
+    height: 20rem !important; /* unchanged */
+    width: 20rem !important; /* unchanged */
+    z-index: 200;
+    filter: invert(100%);
+    pointer-events: auto;
+}
+
+.hdristrength-checkbox-button {
+    position: absolute !important; 
+    top: -60rem !important; /* -35rem + 20rem */
+    height: 20rem !important; /* unchanged */
+    width: 20rem !important; /* unchanged */
+    right: 50rem !important;
+    pointer-events: auto;
+}

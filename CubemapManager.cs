@@ -5,6 +5,7 @@
 namespace Lumina
 {
     using Lumina.Systems;
+    using LuminaMod.XML;
     using Unity.Entities;
 
     /// <summary>
@@ -26,7 +27,10 @@ namespace Lumina
         /// </summary>
         protected override void OnUpdate()
         {
+            if (GlobalVariables.Instance.HDRISkyEnabled)
+            {
             RenderEffectsSystem.ApplyCubemap();
-        }
+             }
+          }
     }
 }

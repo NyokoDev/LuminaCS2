@@ -23,6 +23,8 @@ import { ToeStrengthCheckbox } from "./Checkboxes/ToeStrengthCheckbox";
 import './Checkboxes/CheckboxesStyle.scss'
 import ToeLengthCheckbox from "./Checkboxes/ToeLengthCheckbox";
 import ShoulderStrengthCheckbox from "./Checkboxes/ShoulderStrengthCheckbox";
+import { CubemapsDropdown } from "./Cubemaps/CubemapsDropdown";
+import SpaceEmissionCheckbox from "./Checkboxes/UseHDRISky";
 
 
 export let isInstalled$ = false;
@@ -75,7 +77,7 @@ export const ToeLengthValue$ = bindValue<number>(mod.id, "ToeLengthValue");
 
 export const ShoulderStrengthValue$ = bindValue<number>(mod.id, "ShoulderStrengthValue");
 
-
+export const EmissionMultiplier$ = bindValue<number>(mod.id, "EmissionMultiplier");
 
 
 const theme = createTheme({
@@ -150,13 +152,15 @@ const ToeLengthValue = useValue(ToeLengthValue$);
 
 const ShoulderStrengthValue = useValue(ShoulderStrengthValue$);
 
+const EmissionMultiplier = useValue(EmissionMultiplier$);
 
 
 
 
 // Initialize state variables using useState hook
-const [ColorAdjustmentsEnabled$, setCA] = useState(true);
+const [ColorAdjustmentsEnabled$, setCA] = useState(false);
 const [SettingsEnabled$, setSettings] = useState(false);
+const [SkyAndFogEnabled$, setSkyAndFog] = useState(true);
 const [ToneMappingEnabled$, setTonemapping] = useState(false);
 const [PlanetaryEnabled$, setPlanetaryTab] = useState(false);
 const [OnImport, OnImportChange] = useState(false);
@@ -391,6 +395,10 @@ const handleHighlights = (value: number) => {
       trigger(mod.id, 'HandleToeStrengthActive', value);
     };
 
+    const handleEmissionMultiplier = (value: number) => {
+      trigger(mod.id, 'handleEmissionMultiplier', value);
+    };
+
     const handleToeLength = (value: number) => {
       trigger(mod.id, 'HandleToeLengthActive', value);
     };
@@ -445,6 +453,7 @@ return (
     setSettings(true)
     setPlanetaryTab(false)
     setTonemapping(false)
+    setSkyAndFog(false)
  ;}}>
 </button>
 
@@ -469,6 +478,7 @@ return (
     setSettings(false)
     setPlanetaryTab(true)
     setTonemapping(false)
+    setSkyAndFog(false)
  ;}}>
 </button>
 </Tooltip>
@@ -488,6 +498,27 @@ return (
     setSettings(false)
     setPlanetaryTab(false)
     setTonemapping(true)
+    setSkyAndFog(false)
+ ;}}>
+</button>
+</Tooltip>
+
+<Tooltip
+  tooltip={translate("LUMINA.skyandfogtooltip")}// Specify the content of the tooltip
+  disabled={false} // Specify whether the tooltip is disabled (default: false)
+  alignment="center" // Specify the alignment of the tooltip (e.g., "start", "center", "end")
+  className="custom-tooltip" // Specify additional class names for styling purposes
+>
+<button 
+  className={tab1 ? 'SkyAndFogButtonDeselected' : 'SkyAndFogButton'} 
+  onSelect={() => {
+    console.log("[LUMINA] Toggled Sky and Fog panel.");
+  }}
+  onClick={() => { setCA(false)
+    setSettings(false)
+    setPlanetaryTab(false)
+    setTonemapping(false)
+    setSkyAndFog(true)
  ;}}>
 </button>
 </Tooltip>
@@ -1138,6 +1169,38 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
    </div>
 
 </div>
+
+}
+
+{SkyAndFogEnabled$ &&
+<div className="SkyAndFogPanel"> 
+
+<div className="CubemapsDropdown">
+      <CubemapsDropdown />
+    </div>
+
+    <Slider
+    value={EmissionMultiplier}
+    start={1}       // Minimum value of the slider
+    end={20000}         // Maximum value of the slider
+    step={0.001}   // Step size for precision
+    className="cubemap-intensity-slider"
+    gamepadStep={stepSize} // Step size for gamepad interaction
+    valueTransformer={SliderValueTransformer.floatTransformer} // Value transformation logic
+    disabled={false}
+    noFill={false}
+    onChange={(number) => handleEmissionMultiplier(number)} // Callback for value change
+  />
+
+  <label className="space-emission-label">Space emission multiplier</label>
+  <label className="space-emission-texture-label">Enable Space Emission Texture</label>
+  <SpaceEmissionCheckbox
+
+
+  />
+
+
+  </div>
 
 }
 </div>

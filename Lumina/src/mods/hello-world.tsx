@@ -36,7 +36,7 @@ export const LuminaButton: ModuleRegistryExtend = (Component) => {
         const { children, ...otherProps } = props || {};
         const MIT_ToolEnabled = isInstalled$
         const moveItIconSrc = MIT_ToolEnabled ? "https://svgshare.com/i/15rV.svg" : "https://svgshare.com/i/15rV.svg";
-        const [isInstalled, setIsInstalled] = useState(false); // assuming you meant to use useState to manage isInstalled state
+        const [isInstalled, setIsInstalled] = useState(true); // assuming you meant to use useState to manage isInstalled state
 
         return (
             <>    
