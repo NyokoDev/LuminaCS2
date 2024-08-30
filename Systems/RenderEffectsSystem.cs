@@ -107,7 +107,7 @@
         {
             // Stop Cubemap manager from attempting to load mid loading
             GlobalVariables.Instance.HDRISkyEnabled = false;
-     
+
             // Check if GlobalCubemap already holds a cubemap
             if (GlobalCubemap != null)
             {
@@ -223,7 +223,8 @@
 
         public static void ApplyCubemap()
         {
-            LightingPhysicallyBasedSky.active = true;
+            LightingPhysicallyBasedSky.active = true; // Disable Physically Based Sky for testing
+
             LightingPhysicallyBasedSky.spaceEmissionMultiplier.overrideState = true;
             LightingPhysicallyBasedSky.spaceEmissionTexture.overrideState = true;
             if (GlobalCubemap != null)
@@ -450,7 +451,7 @@
         private void CopyAllEmbeddedResourcesToDirectory(string directoryPath)
         {
             var assembly = GetType().Assembly;
-            var resourceNamespace = "Lumina.LUTS"; 
+            var resourceNamespace = "Lumina.LUTS";
 
             // Get all resource names
             var resourceNames = assembly.GetManifestResourceNames();
@@ -596,15 +597,15 @@
         {
             if (!m_SetupDone)
             {
-               
+
                 // Create new Global Volume GameObject
                 GameObject globalVolume = new GameObject("Lumina");
                 UnityEngine.Object.DontDestroyOnLoad(globalVolume);
 
                 // Add Volume component
                 LuminaVolume = globalVolume.AddComponent<Volume>();
-                LuminaVolume.priority = 10000f;
-                Mod.Log.Info("[LUMINA] Priority set to 10k for testing.");
+                LuminaVolume.priority = 1980f;
+                Mod.Log.Info("[LUMINA] Priority set to 1980.");
                 LuminaVolume.enabled = true;
                 LuminaVolume.name = "Lumina";
 
@@ -637,7 +638,7 @@
                 m_ShadowsMidtonesHighlights.shadows.Override(new Vector4(GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows));
                 m_ShadowsMidtonesHighlights.midtones.Override(new Vector4(GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones));
 
-   
+
                 // Finalize Volume
                 m_SetupDone = true;
                 Mod.Log.Info("[LUMINA] Successfully added HDRP volume.");
@@ -1011,6 +1012,45 @@
         {
             GlobalVariables.Instance.spaceEmissionMultiplier = obj;
             LightingPhysicallyBasedSky.spaceEmissionMultiplier.Override(obj);
+        }
+
+        /// <summary>
+        /// Adjusts light.
+        /// </summary>
+        internal static void AdjustAngularDiameter()
+        {
+            // Find the game object named "SunLight"
+            GameObject sunLightObject = GameObject.Find("SunLight");
+
+            if (sunLightObject != null)
+            {
+                Light light = sunLightObject.GetComponent<Light>();
+
+                if (light != null && light.type == UnityEngine.LightType.Directional)
+                {
+                    HDAdditionalLightData hdLightData = light.GetComponent<HDAdditionalLightData>();
+
+                    if (hdLightData != null)
+                    {
+                        Lumina.Mod.Log.Info($"Sun Light found: {light.gameObject.name}");
+                        hdLightData.angularDiameter = 12f;
+                        hdLightData.intensity = 5f;
+                        hdLightData.flareSize = 0f;
+                    }
+                    else
+                    {
+                        Lumina.Mod.Log.Info($"Sun Light found but no HDAdditionalLightData: {light.gameObject.name}");
+                    }
+                }
+                else
+                {
+                    Lumina.Mod.Log.Info($"GameObject 'SunLight' is not a directional light.");
+                }
+            }
+            else
+            {
+                Lumina.Mod.Log.Info("Sun Light (game object) not found in the scene.");
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 using Lumina.Systems.TextureHelper;
 using Lumina.XML;
 using LuminaMod.XML;
+using System.Drawing.Drawing2D;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -13,9 +14,11 @@ class CubemapLoader : MonoBehaviour
 
     public static Cubemap LoadCubemap()
     {
+        // Construct the full path to the cubemap PNG file
         var cubemapFilePath = Path.Combine(GlobalPaths.LuminaHDRIDirectory, IncomingCubemap + ".png");
 
-        if (GlobalVariables.Instance.CubemapName == null)
+        // Check if GlobalVariables.Instance.CubemapName is null or if IncomingCubemap is empty
+        if (string.IsNullOrEmpty(IncomingCubemap) || GlobalVariables.Instance.CubemapName == null)
         {
             Lumina.Mod.Log.Info("Cubemap name is none. Ignoring.");
             return null;

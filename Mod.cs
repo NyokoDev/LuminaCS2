@@ -12,6 +12,7 @@ namespace Lumina
     using Game.UI.Localization;
     using HarmonyLib;
     using Lumina.Locale;
+    using Lumina.ManagerSystems;
     using Lumina.Systems;
     using Lumina.XML;
     using LuminaMod.XML;
