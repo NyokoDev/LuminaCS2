@@ -206,7 +206,7 @@ namespace LuminaMod.XML
         public bool SaveAutomatically { get; set; } = true;
 
         [XmlElement]
-        public string CubemapName { get; set; } = "abandoned_parking_cubemap";
+        public string CubemapName { get; set; } 
 
         [XmlElement]
         public float spaceEmissionMultiplier { get; set; } = 1000f;
@@ -334,7 +334,7 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.TonemappingGammaActive = loadedVariables?.TonemappingGammaActive ?? false;
                     GlobalVariables.Instance.TonemappingGammaValue = loadedVariables?.TonemappingGammaValue ?? 0f;
                     GlobalVariables.Instance.SaveAutomatically = loadedVariables?.SaveAutomatically ?? true;
-                    GlobalVariables.Instance.CubemapName = loadedVariables?.CubemapName ?? "abandoned_parking_cubemap";
+                    GlobalVariables.Instance.CubemapName = loadedVariables?.CubemapName ?? "None";
                     GlobalVariables.Instance.spaceEmissionMultiplier = loadedVariables?.spaceEmissionMultiplier ?? 20000f;
                     GlobalVariables.Instance.HDRISkyEnabled = loadedVariables?.HDRISkyEnabled ?? false;
 

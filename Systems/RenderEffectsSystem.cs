@@ -226,7 +226,14 @@
             LightingPhysicallyBasedSky.active = true;
             LightingPhysicallyBasedSky.spaceEmissionMultiplier.overrideState = true;
             LightingPhysicallyBasedSky.spaceEmissionTexture.overrideState = true;
-            LightingPhysicallyBasedSky.spaceEmissionTexture.value = GlobalCubemap;
+            if (GlobalCubemap != null)
+            {
+                LightingPhysicallyBasedSky.spaceEmissionTexture.value = GlobalCubemap;
+            }
+            else
+            {
+            }
+
             LightingPhysicallyBasedSky.spaceEmissionMultiplier.value = GlobalVariables.Instance.spaceEmissionMultiplier;
         }
 

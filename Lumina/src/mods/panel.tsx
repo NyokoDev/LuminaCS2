@@ -158,9 +158,9 @@ const EmissionMultiplier = useValue(EmissionMultiplier$);
 
 
 // Initialize state variables using useState hook
-const [ColorAdjustmentsEnabled$, setCA] = useState(false);
+const [ColorAdjustmentsEnabled$, setCA] = useState(true);
 const [SettingsEnabled$, setSettings] = useState(false);
-const [SkyAndFogEnabled$, setSkyAndFog] = useState(true);
+const [SkyAndFogEnabled$, setSkyAndFog] = useState(false);
 const [ToneMappingEnabled$, setTonemapping] = useState(false);
 const [PlanetaryEnabled$, setPlanetaryTab] = useState(false);
 const [OnImport, OnImportChange] = useState(false);
@@ -935,7 +935,7 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
 
 <div className="LuminaVersion_Image">
   <div className="Version_Text"
-  ><h1>v1.5.7r1</h1> 
+  ><h1>v1.5.8</h1> 
   
   </div>
 </div>

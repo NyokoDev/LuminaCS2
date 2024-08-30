@@ -25,7 +25,7 @@
     internal partial class UISystem : ExtendedUISystemBase
     {
         public bool Visible { get; set; }
-        public string CubemapName = GlobalVariables.Instance.CubemapName;
+        public string CubemapName;
         public bool UsingHDRSky = GlobalVariables.Instance.HDRISkyEnabled;
 
         private ValueBindingHelper<string[]> LutArrayExtended;
@@ -154,6 +154,7 @@
         {
             // Update GlobalVariables.Instance.CubemapName with the provided name
             GlobalVariables.Instance.CubemapName = obj;
+            CubemapLoader.IncomingCubemap = obj;
 
             // Ensure the local CubemapName variable is also updated
             CubemapName = GlobalVariables.Instance.CubemapName;

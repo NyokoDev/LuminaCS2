@@ -1,5 +1,6 @@
 ﻿using Lumina.Systems;
 using Lumina.Systems.TextureHelper;
+using Lumina.XML;
 using LuminaMod.XML;
 using System.IO;
 using UnityEngine;
@@ -8,9 +9,18 @@ using UnityEngine.Rendering;
 class CubemapLoader : MonoBehaviour
 {
     static string cubemapFilePath = RenderEffectsSystem.cubemapFilePath;
+    public static string IncomingCubemap;
 
     public static Cubemap LoadCubemap()
     {
+        var cubemapFilePath = Path.Combine(GlobalPaths.LuminaHDRIDirectory, IncomingCubemap + ".png");
+
+        if (GlobalVariables.Instance.CubemapName == null)
+        {
+            Lumina.Mod.Log.Info("Cubemap name is none. Ignoring.");
+            return null;
+        }
+
         Lumina.Mod.Log.Info("Starting to load cubemap from PNG file: " + cubemapFilePath);
 
         var texture2D = TextureStreamUtility.LoadTextureFromFile(cubemapFilePath, false);
