@@ -1,12 +1,19 @@
 # Lumina
 ### for Cities: Skylines II
 
-## Documentation
+- [Installation Guide](https://github.com/NyokoDev/LuminaCS2/blob/master/Documentation/Installation.md)
 
-- [Installation](https://github.com/NyokoDev/LuminaCS2/blob/master/Documentation/Installation.md)
-- [How to use LUTs (Look-up-tables)](https://github.com/NyokoDev/LuminaCS2/blob/master/Documentation/LUTS.md)
+## Effects
+
+- [Color Adjustments](https://github.com/NyokoDev/LuminaCS2/blob/master/Documentation/ColorAdjustments.md)
+- [White Balance](https://github.com/NyokoDev/LuminaCS2/blob/master/Documentation/WhiteBalance.md)
+
+## Guides
+
+
 - [Publish LUT to PDXMods](https://github.com/NyokoDev/LuminaCS2/blob/master/Documentation/PublishLUTToPdxMods.md)
-- [How to Use the "Send to Lumina" Button (Not ready)](#how-to-use-the-send-to-lumina-button-not-ready)
+- [How to Use LUTs (Look-Up-Tables)](https://github.com/NyokoDev/LuminaCS2/blob/master/Documentation/LUTS.md)
+
 
 
 ## FAQ
