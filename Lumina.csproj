@@ -30,7 +30,6 @@
 	</Target>
 	<ItemGroup>
 	  <None Remove="Cubemaps\sunflowers_cubemap.png" />
-	  <None Remove="Documentation\ShadowsMidtonesHighlights.md" />
 	  <None Remove="l10n\de-DE.csv" />
 	  <None Remove="l10n\en-US.csv" />
 	  <None Remove="l10n\es-ES.csv" />
@@ -65,9 +64,6 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <AdditionalFiles Include="stylecop.json" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Compile Include="Documentation\ShadowsMidtonesHighlights.md" />
 	</ItemGroup>
 	<ItemGroup>
 	  <EmbeddedResource Include="Cubemaps\sunflowers_cubemap.png" />

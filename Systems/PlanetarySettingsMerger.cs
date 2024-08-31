@@ -5,6 +5,9 @@ namespace Lumina.Systems
 {
     internal class PlanetarySettingsMerger
     {
+        public static float CurrentLatitude { get; set; }
+        public static float CurrentLongitude { get; set; }
+
         internal static float LatitudeValue()
         {
             return GlobalVariables.Instance.Latitude;

@@ -18,6 +18,7 @@ namespace Lumina.UI
     using System.Reflection;
     using System.Runtime.Remoting;
     using UnityEngine.Rendering;
+    using UnityEngine.Rendering.HighDefinition;
 
     public class SliderPanel : MonoBehaviour
     {
@@ -437,43 +438,76 @@ namespace Lumina.UI
             MidtonesSpace = float.TryParse(GUI.TextField(new Rect(330, Slider2Rect.y, 40, 20), MidtonesSpace.ToString()), out float parsedMidtonesSpace) ? parsedMidtonesSpace : MidtonesSpace;
         }
 
-        private void ResetSettings()
+        public static void ResetSettings()
         {
-            slider1Value = -1.431f;
-            slider2Value = 1f;
-            slider3Value = 1f;
-            slider4Value = 1f;
-            LatitudeValue = 41.9028f;
-            LongitudeValue = 12.4964f;
-            TintSpace = 1f;
-            TemperatureSpace = 1f;
-            ShadowsSpace = 1f;
-            MidtonesSpace = 1f;
 
-            GlobalVariables.Instance.PostExposure = -1.431f;
-            GlobalVariables.Instance.PostExposureActive = false;
-            GlobalVariables.Instance.Contrast = 1f;
+            GlobalVariables.Instance.PostExposure =  0f;
+            GlobalVariables.Instance.PostExposureActive =  false;
+            GlobalVariables.Instance.Contrast =  0f;
             GlobalVariables.Instance.ContrastActive = false;
-            GlobalVariables.Instance.HueShift = 1f;
-            GlobalVariables.Instance.HueShiftActive = false;
-            GlobalVariables.Instance.Saturation = 1f;
-            GlobalVariables.Instance.SaturationActive = false;
-            GlobalVariables.Instance.Latitude = 41.9028f;
-            GlobalVariables.Instance.Longitude = 12.4964f;
+            GlobalVariables.Instance.HueShift = 0f;
+            GlobalVariables.Instance.HueShiftActive =  false;
+            GlobalVariables.Instance.Saturation =   0f;
+            GlobalVariables.Instance.SaturationActive =  false;
 
-            GlobalVariables.Instance.Tint = 1f;
-            GlobalVariables.Instance.TintActive = false;
-            GlobalVariables.Instance.Temperature = 1f;
+            GlobalVariables.Instance.Latitude = GetLatitude();
+            GlobalVariables.Instance.Longitude = GetLongitude();
+
+            GlobalVariables.Instance.Temperature = 0f;
             GlobalVariables.Instance.TemperatureActive = false;
-            GlobalVariables.Instance.Shadows = 1f;
+            GlobalVariables.Instance.Tint = 0f;
+            GlobalVariables.Instance.TintActive = false;
+
+            GlobalVariables.Instance.Shadows = 0f;
             GlobalVariables.Instance.ShadowsActive = false;
-            GlobalVariables.Instance.Midtones = 1f;
+            GlobalVariables.Instance.Midtones = 0f;
             GlobalVariables.Instance.MidtonesActive = false;
-            GlobalVariables.Instance.Highlights = 1f;
+            GlobalVariables.Instance.Highlights = 0f;
             GlobalVariables.Instance.HighlightsActive = false;
+
+            // Tonemapping
+            GlobalVariables.Instance.TonemappingMode = TonemappingMode.None;
+            GlobalVariables.Instance.LUTContribution = 0f;
+            GlobalVariables.Instance.LUTName = "None";
+            GlobalVariables.Instance.SceneFlowCheckerEnabled = false;
+
+            GlobalVariables.Instance.ToeStrengthActive = false;
+            GlobalVariables.Instance.ToeStrengthValue = 0f;
+            GlobalVariables.Instance.ToeLengthActive = false;
+            GlobalVariables.Instance.ToeLengthValue = 0f;
+
+            GlobalVariables.Instance.shoulderStrengthActive = false;
+            GlobalVariables.Instance.shoulderStrengthValue = 0f;
+            GlobalVariables.Instance.shoulderLengthActive = false;
+            GlobalVariables.Instance.shoulderAngleActive = false;
+            GlobalVariables.Instance.shoulderAngleValue = 0f;
+
+            GlobalVariables.Instance.TonemappingGammaActive = false;
+            GlobalVariables.Instance.TonemappingGammaValue = 0f;
+            GlobalVariables.Instance.SaveAutomatically = true;
+            GlobalVariables.Instance.CubemapName = "None";
+            GlobalVariables.Instance.spaceEmissionMultiplier = 100f;
+            GlobalVariables.Instance.HDRISkyEnabled = false;
+
+            GlobalVariables.Instance.CustomSunEnabled = false;
+            GlobalVariables.Instance.AngularDiameter = 0f;
+            GlobalVariables.Instance.SunIntensity = 0f;
+            GlobalVariables.Instance.SunFlareSize = 0f;
+
+            RenderEffectsSystem.DisableCubemap(); // Disable cubemap.
 
             // Save changes
             GlobalVariables.SaveToFile(GlobalPaths.GlobalModSavingPath);
+        }
+
+        private static float GetLongitude()
+        {
+            return PlanetarySettingsMerger.CurrentLongitude;
+        }
+
+        private static float GetLatitude()
+        {
+            return PlanetarySettingsMerger.CurrentLatitude;
         }
 
         internal static void Toggle()

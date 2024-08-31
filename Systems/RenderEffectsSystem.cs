@@ -100,7 +100,7 @@
         public static void InitializeCubemap()
         {
             GlobalCubemap = CubemapLoader.LoadCubemap();
-            Lumina.Mod.Log.Info("Initialized cubemap succesfully.");
+             Mod.Log.Info("Initialized cubemap succesfully.");
         }
 
         public static void UpdateCubemap()
@@ -121,7 +121,7 @@
             GlobalCubemap = CubemapLoader.LoadCubemap();
 
             // Log that the cubemap has been initialized successfully
-            Lumina.Mod.Log.Info("Initialized cubemap successfully.");
+             Mod.Log.Info("Initialized cubemap successfully.");
 
             // Initialize Cubemap system again.
             GlobalVariables.Instance.HDRISkyEnabled = true;
@@ -139,11 +139,11 @@
             if (currentAsset != null)
             {
                 int lutSize = currentAsset.currentPlatformRenderPipelineSettings.postProcessSettings.lutSize;
-                Lumina.Mod.Log.Info($"Current LUT size: {lutSize}");
+                 Mod.Log.Info($"Current LUT size: {lutSize}");
             }
             else
             {
-                Lumina.Mod.Log.Info("Failed to retrieve the current HDRenderPipelineAsset.");
+                 Mod.Log.Info("Failed to retrieve the current HDRenderPipelineAsset.");
             }
 
             // Check and set Tonemapping mode
@@ -217,7 +217,7 @@
             }
 
             // Log that the cubemap has been successfully destroyed and settings disabled
-            Lumina.Mod.Log.Info("Disabled lighting sky and destroyed cubemap successfully.");
+             Mod.Log.Info("Disabled lighting sky and destroyed cubemap successfully.");
         }
 
 
@@ -548,24 +548,24 @@
                         }
                         else
                         {
-                            Lumina.Mod.Log.Info("HDRI Sky disabled. Space emission texture not applied.");
+                             Mod.Log.Info("HDRI Sky disabled. Space emission texture not applied.");
                         }
 
-                        Lumina.Mod.Log.Info("Successfully retrieved and assigned m_PhysicallyBasedSky.");
+                         Mod.Log.Info("Successfully retrieved and assigned m_PhysicallyBasedSky.");
                     }
                     else
                     {
-                        Lumina.Mod.Log.Info("m_PhysicallyBasedSky field is null.");
+                         Mod.Log.Info("m_PhysicallyBasedSky field is null.");
                     }
                 }
                 else
                 {
-                    Lumina.Mod.Log.Info("LightingSystem instance is null.");
+                     Mod.Log.Info("LightingSystem instance is null.");
                 }
             }
             else
             {
-                Lumina.Mod.Log.Info("Field m_PhysicallyBasedSky not found.");
+                 Mod.Log.Info("Field m_PhysicallyBasedSky not found.");
             }
         }
 
@@ -858,6 +858,10 @@
 
                             if (latitudeField != null && longitudeField != null)
                             {
+                                // Extract the current values of m_Latitude and m_Longitude from the instance
+                                PlanetarySettingsMerger.CurrentLatitude = (float)latitudeField.GetValue(planetarySystemInstance);
+                                PlanetarySettingsMerger.CurrentLongitude = (float)longitudeField.GetValue(planetarySystemInstance);
+
                                 float newLatitude = GlobalVariables.Instance.Latitude;
                                 float newLongitude = GlobalVariables.Instance.Longitude;
 
@@ -931,7 +935,7 @@
                     break;
                 default:
                     // Handle unknown mode or log an error
-                    Lumina.Mod.Log.Info($"Unknown tonemapping mode value: {obj}");
+                     Mod.Log.Info($"Unknown tonemapping mode value: {obj}");
                     return;
             }
 
@@ -1038,17 +1042,17 @@
                     }
                     else
                     {
-                        Lumina.Mod.Log.Info($"Sun Light found but no HDAdditionalLightData: {light.gameObject.name}");
+                         Mod.Log.Info($"Sun Light found but no HDAdditionalLightData: {light.gameObject.name}");
                     }
                 }
                 else
                 {
-                    Lumina.Mod.Log.Info($"GameObject 'SunLight' is not a directional light.");
+                     Mod.Log.Info($"GameObject 'SunLight' is not a directional light.");
                 }
             }
             else
             {
-                Lumina.Mod.Log.Info("Sun Light (game object) not found in the scene.");
+                 Mod.Log.Info("Sun Light (game object) not found in the scene.");
             }
         }
     }

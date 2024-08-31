@@ -1,4 +1,5 @@
-﻿using Lumina.Systems;
+﻿using Lumina;
+using Lumina.Systems;
 using Lumina.Systems.TextureHelper;
 using Lumina.XML;
 using LuminaMod.XML;
@@ -20,18 +21,18 @@ class CubemapLoader : MonoBehaviour
         // Check if GlobalVariables.Instance.CubemapName is null or if IncomingCubemap is empty
         if (string.IsNullOrEmpty(IncomingCubemap) || GlobalVariables.Instance.CubemapName == null)
         {
-            Lumina.Mod.Log.Info("Cubemap name is none. Ignoring.");
+             Mod.Log.Info("Cubemap name is none. Ignoring.");
             return null;
         }
 
-        Lumina.Mod.Log.Info("Starting to load cubemap from PNG file: " + cubemapFilePath);
+         Mod.Log.Info("Starting to load cubemap from PNG file: " + cubemapFilePath);
 
         var texture2D = TextureStreamUtility.LoadTextureFromFile(cubemapFilePath, false);
 
         int textureWidth = texture2D.width;
         int textureHeight = texture2D.height;
 
-        Lumina.Mod.Log.Info($"Texture dimensions: Width = {textureWidth}, Height = {textureHeight}");
+         Mod.Log.Info($"Texture dimensions: Width = {textureWidth}, Height = {textureHeight}");
 
 
         // Create the cubemap based on the calculated face size
@@ -57,7 +58,7 @@ class CubemapLoader : MonoBehaviour
         cubemap.SmoothEdges();
         cubemap.Apply();
 
-        Lumina.Mod.Log.Info("Created Cubemap from PNG file successfully.");
+         Mod.Log.Info("Created Cubemap from PNG file successfully.");
         return cubemap;
     }
 

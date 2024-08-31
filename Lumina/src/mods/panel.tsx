@@ -172,6 +172,9 @@ const [ToneMappingEnabled$, setTonemapping] = useState(false);
 const [PlanetaryEnabled$, setPlanetaryTab] = useState(false);
 const [OnImport, OnImportChange] = useState(false);
 
+const [IsClicked, setIsClicked] = useState(false);
+
+
 
 
   const [tab1, setTab1] = useState(false);
@@ -267,9 +270,21 @@ function SaveSettings() {
 }
 
 function ResetToDefault() {
-  console.log("Sent to Lumina button clicked.");
-  trigger(mod.id, 'ResetLuminaSettings');
+  console.log("Reset settings clicked");
+  return (
+    <div>
+      <p>{translate("LUMINA.resettodefault")}</p>
+      <ConfirmationDialog
+        message={translate("LUMINA.resettodefault")}
+        onCancel={() => console.log("Dialog canceled.")}
+        onConfirm={(dismiss: boolean): void => {
+          trigger(mod.id, 'ResetLuminaSettings');
+        }}
+      />
+    </div>
+  );
 }
+
 
 function ImportPreset() {
   console.log("Import lumina preset button clicked.");
@@ -899,13 +914,31 @@ return (
     onClick={SaveSettings}
     className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LuminaSaveButton">{translate("LUMINA.save")}</button>
 
+{IsClicked && (
+  <div className="ResetConfirmationDialog">
+  <p>{translate("LUMINA.resettodefaultconfirmation")}</p>
+  <ConfirmationDialog
+    message={translate("LUMINA.resettodefaultconfirmation")}
+    onCancel={() => {
+      console.log("Dialog canceled.");
+      setIsClicked(false); // Reset state when dialog is canceled
+    }}
+    onConfirm={(dismiss: boolean): void => {
+      trigger(mod.id, 'ResetLuminaSettings');
+      setIsClicked(false); // Reset state after confirming
+    }}
+  />
+</div>
 
+)}
     
     <button 
 
-    
-    onClick={ResetToDefault}
-    className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LuminaResetSettingsButton">{translate("LUMINA.resettodefault")}</button>
+    onClick={() => setIsClicked(true)}
+    className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LuminaResetSettingsButton">
+
+      
+      {translate("LUMINA.resettodefault")}</button>
 
 <h1 className="title_SVH title_zQN PresetManagementLabel">{translate("LUMINA.presetmanagement")}</h1>
 
@@ -954,7 +987,7 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
 
 <div className="LuminaVersion_Image">
   <div className="Version_Text"
-  ><h1>v1.5.9</h1> 
+  ><h1>v1.5.9r1</h1> 
   
   </div>
 </div>

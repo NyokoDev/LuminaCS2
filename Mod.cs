@@ -110,7 +110,7 @@ namespace Lumina
             {
                 // If LUTName is null or empty, assign it a default value
                 GlobalVariables.Instance.LUTName = "None";
-                Lumina.Mod.Log.Info("LUTName was null or empty, assigned default value 'None'.");
+                 Mod.Log.Info("LUTName was null or empty, assigned default value 'None'.");
 
 
 

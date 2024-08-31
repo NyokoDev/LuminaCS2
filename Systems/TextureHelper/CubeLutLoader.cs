@@ -4,7 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Colossal.PSI.Common;
+using Lumina;
 using Lumina.Systems;
 using Lumina.Systems.TextureHelper;
 using LuminaMod.XML;
@@ -39,19 +39,19 @@ public class CubeLutLoader : MonoBehaviour
                 texture.SetPixels(result.Pixels);
                 texture.Apply();
 
-                Lumina.Mod.Log.Info($"LUT Texture created: {result.LutSize}³, format: {texture.graphicsFormat}");
+                 Mod.Log.Info($"LUT Texture created: {result.LutSize}³, format: {texture.graphicsFormat}");
 
                 return texture;
             }
             else
             {
-                Lumina.Mod.Log.Info("Failed to parse the .cube file.");
+                 Mod.Log.Info("Failed to parse the .cube file.");
                 return null;
             }
         }
         else
         {
-            Lumina.Mod.Log.Info($"File not found: {cubeFilePath}");
+             Mod.Log.Info($"File not found: {cubeFilePath}");
             return null;
         }
     }
@@ -69,7 +69,7 @@ public class CubeLutLoader : MonoBehaviour
     {
         bool Error(string msg)
         {
-            Lumina.Mod.Log.Info(msg);
+             Mod.Log.Info(msg);
             return false;
         }
 
@@ -98,7 +98,7 @@ public class CubeLutLoader : MonoBehaviour
 
                 if (!int.TryParse(sizeStr, out var size))
                 {
-                    Lumina.Mod.Log.Info($"Invalid data on line {i}");
+                     Mod.Log.Info($"Invalid data on line {i}");
                     return null;
                 }
 
@@ -117,7 +117,7 @@ public class CubeLutLoader : MonoBehaviour
 
             if (row.Length != 3)
             {
-                Lumina.Mod.Log.Info($"Invalid data on line {i}");
+                 Mod.Log.Info($"Invalid data on line {i}");
                 return null;
             }
 
@@ -127,7 +127,7 @@ public class CubeLutLoader : MonoBehaviour
             {
                 if (!float.TryParse(row[j], NumberStyles.Float, CultureInfo.InvariantCulture.NumberFormat, out var d))
                 {
-                    Lumina.Mod.Log.Info($"Invalid data on line {i}");
+                     Mod.Log.Info($"Invalid data on line {i}");
                     return null;
                 }
 
@@ -139,7 +139,7 @@ public class CubeLutLoader : MonoBehaviour
 
         if (sizeCube != table.Count)
         {
-            Lumina.Mod.Log.Info($"Wrong table size - Expected {sizeCube} elements, got {table.Count}");
+             Mod.Log.Info($"Wrong table size - Expected {sizeCube} elements, got {table.Count}");
             return null;
         }
 

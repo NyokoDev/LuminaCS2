@@ -90,6 +90,8 @@
 
 
 
+            AddBinding(new TriggerBinding(Mod.MODUI, "Save", SaveToFile));
+            AddBinding(new TriggerBinding(Mod.MODUI, "ResetLuminaSettings", Reset));
 
 
             //Time of day
@@ -194,7 +196,7 @@
         {
             GlobalVariables.Instance.CustomSunEnabled = !GlobalVariables.Instance.CustomSunEnabled;
             customSunEnabled = GlobalVariables.Instance.CustomSunEnabled;
-            Lumina.Mod.Log.Info("Set CustomSun to " + customSunEnabled.ToString());
+            Mod.Log.Info("Set CustomSun to " + customSunEnabled.ToString());
         }
 
         private bool IsCustomSunEnabled()
@@ -280,12 +282,12 @@
             // Check if lutFiles is null or empty and update it with the directory files if necessary
             if (lutFiles == null || lutFiles.Length == 0)
             {
-                Lumina.Mod.Log.Info("CubemapArrayExtendedReturn() is null or empty. Populating with files from the directory.");
+                 Mod.Log.Info("CubemapArrayExtendedReturn() is null or empty. Populating with files from the directory.");
 
                 // Ensure the LUT directory exists
                 if (!Directory.Exists(GlobalPaths.LuminaHDRIDirectory))
                 {
-                    Lumina.Mod.Log.Warn($"Cubemaps directory not found: {GlobalPaths.LuminaHDRIDirectory}. Creating directory...");
+                    Mod.Log.Warn($"Cubemaps directory not found: {GlobalPaths.LuminaHDRIDirectory}. Creating directory...");
                     Directory.CreateDirectory(GlobalPaths.LuminaHDRIDirectory);
                 }
 
@@ -300,7 +302,7 @@
                 // Update RenderEffectsSystem.LutFiles with only the file names
                 RenderEffectsSystem.CubemapFiles = fileNames;
 
-                Lumina.Mod.Log.Info(string.Join(", ", RenderEffectsSystem.CubemapFiles)); // Log the result for debugging
+                 Mod.Log.Info(string.Join(", ", RenderEffectsSystem.CubemapFiles)); // Log the result for debugging
             }
 
             // Return the array
@@ -409,7 +411,7 @@
             }
             catch (Exception ex)
             {
-                Lumina.Mod.Log.Info("[FAILURE] Failed to add or update binding for LUTArray: " + ex.Message);
+                 Mod.Log.Info("[FAILURE] Failed to add or update binding for LUTArray: " + ex.Message);
             }
 
         }
@@ -419,19 +421,19 @@
             try
             {
                 // Log the incoming value for debugging
-                Lumina.Mod.Log.Info($"SendLUTName() called with value: {obj}");
+                 Mod.Log.Info($"SendLUTName() called with value: {obj}");
 
                 // Assign the value to RenderEffectsSystem.LutName_Example
                 RenderEffectsSystem.LutName_Example = obj;
 
                 // Log the successful update
-                Lumina.Mod.Log.Info($"LutName_Example successfully updated to: {RenderEffectsSystem.LutName_Example}");
+                 Mod.Log.Info($"LutName_Example successfully updated to: {RenderEffectsSystem.LutName_Example}");
             }
             catch (Exception ex)
             {
                 // Log the exception details for debugging
-                Lumina.Mod.Log.Error($"An error occurred in SendLUTName(): {ex.Message}");
-                Lumina.Mod.Log.Error($"Stack Trace: {ex.StackTrace}");
+                Mod.Log.Error($"An error occurred in SendLUTName(): {ex.Message}");
+                Mod.Log.Error($"Stack Trace: {ex.StackTrace}");
             }
         }
 
@@ -442,7 +444,7 @@
             // Check if lutFiles is null and update it with the directory files if necessary
             if (lutFiles == null)
             {
-                Lumina.Mod.Log.Info("LUTArray() returned null from RenderEffectsSystem.LutFiles. Populating with files from the directory.");
+                 Mod.Log.Info("LUTArray() returned null from RenderEffectsSystem.LutFiles. Populating with files from the directory.");
 
                 // Populate RenderEffectsSystem.LutFiles with files from the specified directory
                 var filesWithFullPath = Directory.GetFiles(GlobalPaths.LuminaLUTSDirectory, "*.cube");
@@ -455,13 +457,13 @@
                 // Update RenderEffectsSystem.LutFiles with only the file names
                 RenderEffectsSystem.LutFiles = fileNames;
 
-                Lumina.Mod.Log.Info(string.Join(", ", RenderEffectsSystem.LutFiles)); // Log the result for debugging
+                 Mod.Log.Info(string.Join(", ", RenderEffectsSystem.LutFiles)); // Log the result for debugging
             }
 
             // Optionally, check if the array is empty and handle it if needed
             if (RenderEffectsSystem.LutFiles.Length == 0)
             {
-                Lumina.Mod.Log.Info("LUTArray() returned an empty array from RenderEffectsSystem.LutFiles.");
+                 Mod.Log.Info("LUTArray() returned an empty array from RenderEffectsSystem.LutFiles.");
             }
         }
 
@@ -474,12 +476,12 @@
             // Check if lutFiles is null or empty and update it with the directory files if necessary
             if (lutFiles == null || lutFiles.Length == 0)
             {
-                Lumina.Mod.Log.Info("LUTArray() is null or empty. Populating with files from the directory.");
+                 Mod.Log.Info("LUTArray() is null or empty. Populating with files from the directory.");
 
                 // Ensure the LUT directory exists
                 if (!Directory.Exists(GlobalPaths.LuminaLUTSDirectory))
                 {
-                    Lumina.Mod.Log.Warn($"LUT directory not found: {GlobalPaths.LuminaLUTSDirectory}. Creating directory...");
+                    Mod.Log.Warn($"LUT directory not found: {GlobalPaths.LuminaLUTSDirectory}. Creating directory...");
                     Directory.CreateDirectory(GlobalPaths.LuminaLUTSDirectory);
                 }
 
@@ -494,7 +496,7 @@
                 // Update RenderEffectsSystem.LutFiles with only the file names
                 RenderEffectsSystem.LutFiles = fileNames;
 
-                Lumina.Mod.Log.Info(string.Join(", ", RenderEffectsSystem.LutFiles)); // Log the result for debugging
+                 Mod.Log.Info(string.Join(", ", RenderEffectsSystem.LutFiles)); // Log the result for debugging
             }
 
             // Return the array
@@ -557,18 +559,18 @@
         private void UpdateLUTName(string obj)
         {
             // Log the incoming value
-            Lumina.Mod.Log.Info($"[DEBUG] UpdateLUTName called with obj: {obj}");
+             Mod.Log.Info($"[DEBUG] UpdateLUTName called with obj: {obj}");
 
             // Check if obj is null or empty
             if (string.IsNullOrEmpty(obj))
             {
-                Lumina.Mod.Log.Info("[DEBUG] UpdateLUTName received an empty or null value.");
+                 Mod.Log.Info("[DEBUG] UpdateLUTName received an empty or null value.");
             }
             else
             {
                 // Log the values before assignment
-                Lumina.Mod.Log.Info($"[DEBUG] Setting RenderEffectsSystem.LutName_Example to: {obj}");
-                Lumina.Mod.Log.Info($"[DEBUG] Setting GlobalVariables.Instance.LUTName to: {obj}");
+                 Mod.Log.Info($"[DEBUG] Setting RenderEffectsSystem.LutName_Example to: {obj}");
+                 Mod.Log.Info($"[DEBUG] Setting GlobalVariables.Instance.LUTName to: {obj}");
             }
 
             try
@@ -578,12 +580,12 @@
                 GlobalVariables.Instance.LUTName = obj;
 
                 // Confirm successful assignment
-                Lumina.Mod.Log.Info($"[DEBUG] Successfully updated LUT names: RenderEffectsSystem.LutName_Example = {RenderEffectsSystem.LutName_Example}, GlobalVariables.Instance.LUTName = {GlobalVariables.Instance.LUTName}");
+                 Mod.Log.Info($"[DEBUG] Successfully updated LUT names: RenderEffectsSystem.LutName_Example = {RenderEffectsSystem.LutName_Example}, GlobalVariables.Instance.LUTName = {GlobalVariables.Instance.LUTName}");
             }
             catch (Exception ex)
             {
                 // Log any exceptions
-                Lumina.Mod.Log.Info($"[ERROR] Exception occurred in UpdateLUTName: {ex.Message}\n{ex.StackTrace}");
+                 Mod.Log.Info($"[ERROR] Exception occurred in UpdateLUTName: {ex.Message}\n{ex.StackTrace}");
             }
         }
         private void UpdateLUT()
@@ -726,8 +728,7 @@
             AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetSaturation", () => GetSaturation()));
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetSaturation", SetSaturation));
 
-            AddBinding(new TriggerBinding(Mod.MODUI, "Save", SaveToFile));
-            AddBinding(new TriggerBinding(Mod.MODUI, "ResetLuminaSettings", Reset));
+
         }
 
         private void Checkboxes()
@@ -824,7 +825,7 @@
 
         private void Reset()
         {
-            SliderPanel.showResetDialog = true;
+            SliderPanel.ResetSettings();
         }
 
         private void SaveToFile()
