@@ -7,6 +7,7 @@
 
 - [Color Adjustments](https://github.com/NyokoDev/LuminaCS2/blob/master/Documentation/ColorAdjustments.md)
 - [White Balance](https://github.com/NyokoDev/LuminaCS2/blob/master/Documentation/WhiteBalance.md)
+- [Shadows,Midtones,Highlights](https://github.com/NyokoDev/LuminaCS2/blob/master/Documentation/ShadowsMidtonesHighlights.md)
 
 ## Guides
 
