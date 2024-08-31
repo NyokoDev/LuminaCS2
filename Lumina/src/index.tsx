@@ -1,6 +1,5 @@
 import { ModRegistrar } from "cs2/modding";
 import { Editor_Button} from "mods/editor_button";
-import { Editor_Panel } from "mods/editor_panel";
 import { LuminaButton } from "mods/hello-world";
 import { YourPanelComponent } from "mods/panel";
 import { LuminaButton2 } from "mods/set-to-lumina-button";

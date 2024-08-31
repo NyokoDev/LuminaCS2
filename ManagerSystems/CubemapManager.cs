@@ -30,7 +30,7 @@ namespace Lumina.ManagerSystems
         {
             if (GlobalVariables.Instance.HDRISkyEnabled)
             {
-                RenderEffectsSystem.AdjustAngularDiameter();
+
                 RenderEffectsSystem.ApplyCubemap();
             }
         }

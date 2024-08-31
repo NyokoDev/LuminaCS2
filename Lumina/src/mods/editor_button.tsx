@@ -6,8 +6,8 @@ import { getModule, ModuleRegistryExtend } from "cs2/modding";
 import { VanillaComponentResolver } from "classes/VanillaComponentResolver";
 //import { LocalizedString, useLocalization } from "cs2/l10n";
 import mod from "../../mod.json";
-import { EditorEnabled$ as isEditor$ } from './editor_panel';
-import { Editor_Panel } from "./editor_panel";
+import { isInstalled$ as originalIsInstalled$ } from './panel';
+import { YourPanelComponent } from "./panel";
 import "editor_lumina.scss";
 
 let showModeRow$: boolean; // Assuming this is initialized somewhere
@@ -27,13 +27,16 @@ import iconActive from "../img/Lumina.svg";
 import styles from "../lumina.module.scss";
 
 
-export let EditorPanel$ = isEditor$;
+let isInstalled$ = originalIsInstalled$; 
+export let EditorPanel$ = originalIsInstalled$; 
 
 export const Editor_Button: ModuleRegistryExtend = (Component) => {
     return (props) => {
         const { children, ...otherProps } = props || {};
-        const [isEditor$, setIsEditor] = useState(false); // assuming you meant to use useState to manage isInstalled state
-        const moveItIconSrc = isEditor$ ? "https://svgshare.com/i/15rV.svg" : "https://svgshare.com/i/15rV.svg";
+        const MIT_ToolEnabled = isInstalled$
+        const moveItIconSrc = MIT_ToolEnabled ? "https://svgshare.com/i/15rV.svg" : "https://svgshare.com/i/15rV.svg";
+        const [isInstalled, setIsInstalled] = useState(true); // assuming you meant to use useState to manage isInstalled state
+
 
         return (
             <>    
@@ -44,7 +47,8 @@ export const Editor_Button: ModuleRegistryExtend = (Component) => {
                     variant="icon"
                     focusKey={VanillaComponentResolver.instance.FOCUS_DISABLED}
                     onClick={() => {
-                        setIsEditor(!isEditor$); // update isInstalled state
+                        setIsInstalled(!isInstalled); // update isInstalled state
+                        trigger(mod.id, 'SaveAutomatically');
                     }}
                       
                     onSelect={() => {
@@ -57,7 +61,7 @@ export const Editor_Button: ModuleRegistryExtend = (Component) => {
                 <div className={ToolBarTheme.divider}></div>
 
                 <Component {...otherProps}></Component>
-                {isEditor$ && <Editor_Panel />}
+                {isInstalled && <YourPanelComponent />}
 
             </>
         );

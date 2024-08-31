@@ -1183,3 +1183,63 @@ $hueshift-top: 80rem;
    text-transform: uppercase;
    top:58rem;
 }
+
+.custom-sun-label{
+   color: rgb(142, 139, 139);
+   position: absolute;
+   left:35rem;
+   text-transform: uppercase;
+   top:110rem;
+}
+
+.sun-diameter-label{
+   color:wheat;
+   position: absolute;
+   left:13rem;
+   text-transform: uppercase;
+   top:143rem;
+   pointer-events: auto;
+}
+
+.sun-adjust-diameter-slider {
+   position: absolute;
+   top:150rem;
+   width: 350rem;
+   left: 150rem;
+   pointer-events: auto;
+}
+
+.sun-intensity-label{
+   color: wheat;
+   position: absolute;
+   left: 13rem;
+   text-transform: uppercase;
+   top: 173rem;
+   pointer-events: auto;
+}
+
+.sun-adjust-intensity-slider {
+   position: absolute;
+   top: 180rem;
+   width: 350rem;
+   left: 150rem;
+   pointer-events: auto;
+}
+
+.sun-flare-size-label{
+   color: wheat;
+   position: absolute;
+   left: 13rem;
+   text-transform: uppercase;
+   top: 203rem;
+   pointer-events: auto;
+}
+
+.sun-adjust-flare-size-slider{
+   position: absolute;
+   top: 210rem;
+   width: 350rem;
+   left: 150rem;
+   pointer-events: auto;
+}
+

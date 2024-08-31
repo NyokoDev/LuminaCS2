@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Unity.Entities;
-
-namespace Lumina.ManagerSystems
+﻿namespace Lumina.ManagerSystems
 {
+    using Lumina.Systems;
+    using Unity.Entities;
+
     internal partial class CustomSunManager : SystemBase
     {
         protected override void OnUpdate()
         {
-
+            if (LuminaMod.XML.GlobalVariables.Instance.CustomSunEnabled)
+            {
+                RenderEffectsSystem.AdjustAngularDiameter();
+            }
         }
     }
 }

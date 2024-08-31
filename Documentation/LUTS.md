@@ -19,11 +19,10 @@ Lumina supports LUTs in `.cube` format for Unity HDRP Tonemapping. Unlike the pr
    - You can also open this folder directly from the Lumina UI for easy access.
 
 3. **Apply Your LUT**:
-   - In the Lumina interface, type the exact name of your LUT (without the `.cube` extension) to apply it.
-   - For convenience, you can copy and paste the name directly from your file explorer.
+   - In the Lumina interface, find the name of your LUT in the dropdown to apply it.
    - Click "Load LUT" to apply the selected LUT.
 
-   ![Load LUT](https://i.imgur.com/yJ8X9ff.png)
+   ![Load LUT](https://i.imgur.com/6KYC10g.png)
 
 #### Included LUTs
 
@@ -42,11 +41,5 @@ Starting in Lumina v1.5.7r1, a new feature allows users to switch between differ
 *Important:* To see LUTs, the mode must be set to 'External'; otherwise, they won't show, and only the effects of other tonemapping modes will be visible.
 
 ![Modes](https://i.imgur.com/ww1V5oo.png)
-
-#### Improvements in Lumina v1.5.7r1
-
-- **LUTs Texture Format**:
-  - The default color texture format for LUTs has been switched to `RGBA64` to resolve inconsistencies with other LUTs.
-  - **Note:** Switching between `RGBA64` and `RGBA32` may require a restart of the application for the changes to take effect.]
 
 See - [Publish LUT to PDXMods](https://github.com/NyokoDev/LuminaCS2/blob/master/Documentation/PublishLUTToPdxMods.md)

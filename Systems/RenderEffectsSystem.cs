@@ -1032,10 +1032,9 @@
 
                     if (hdLightData != null)
                     {
-                        Lumina.Mod.Log.Info($"Sun Light found: {light.gameObject.name}");
-                        hdLightData.angularDiameter = 12f;
-                        hdLightData.intensity = 5f;
-                        hdLightData.flareSize = 0f;
+                        hdLightData.angularDiameter = GlobalVariables.Instance.AngularDiameter != 0f ? GlobalVariables.Instance.AngularDiameter : 0f;
+                        hdLightData.intensity = GlobalVariables.Instance.SunIntensity != 0f ? GlobalVariables.Instance.SunIntensity : 0f;
+                        hdLightData.flareSize = GlobalVariables.Instance.SunFlareSize != 0f ? GlobalVariables.Instance.SunFlareSize : 0f;
                     }
                     else
                     {

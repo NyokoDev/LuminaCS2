@@ -214,6 +214,18 @@ namespace LuminaMod.XML
         [XmlElement]
         public bool HDRISkyEnabled { get; set; } = false;
 
+        [XmlElement]
+        public bool CustomSunEnabled { get; set; }
+
+        [XmlElement]
+        public float AngularDiameter { get; set; }
+
+        [XmlElement]
+        public float SunIntensity { get; set; }
+
+        [XmlElement]
+        public float SunFlareSize { get; set; }
+
         /// <summary>
         /// Serializes to a file.
         /// </summary>
@@ -337,6 +349,12 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.CubemapName = loadedVariables?.CubemapName ?? "None";
                     GlobalVariables.Instance.spaceEmissionMultiplier = loadedVariables?.spaceEmissionMultiplier ?? 20000f;
                     GlobalVariables.Instance.HDRISkyEnabled = loadedVariables?.HDRISkyEnabled ?? false;
+
+                    GlobalVariables.Instance.CustomSunEnabled = loadedVariables?.CustomSunEnabled ?? false;
+                    GlobalVariables.Instance.AngularDiameter = loadedVariables?.AngularDiameter ?? 0f;
+                    GlobalVariables.Instance.SunIntensity = loadedVariables?.SunIntensity ?? 0f;
+                    GlobalVariables.Instance.SunFlareSize = loadedVariables?.SunFlareSize ?? 0f;
+
 
                     return loadedVariables;
                 }

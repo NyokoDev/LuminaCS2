@@ -25,6 +25,7 @@ import ToeLengthCheckbox from "./Checkboxes/ToeLengthCheckbox";
 import ShoulderStrengthCheckbox from "./Checkboxes/ShoulderStrengthCheckbox";
 import { CubemapsDropdown } from "./Cubemaps/CubemapsDropdown";
 import SpaceEmissionCheckbox from "./Checkboxes/UseHDRISky";
+import CustomSunCheckbox from "./Checkboxes/UseCustomSunCheckbox";
 
 
 export let isInstalled$ = false;
@@ -78,6 +79,10 @@ export const ToeLengthValue$ = bindValue<number>(mod.id, "ToeLengthValue");
 export const ShoulderStrengthValue$ = bindValue<number>(mod.id, "ShoulderStrengthValue");
 
 export const EmissionMultiplier$ = bindValue<number>(mod.id, "EmissionMultiplier");
+export const SunDiameter$ = bindValue<number>(mod.id, "SunDiameter");
+export const SunIntensity$ = bindValue<number>(mod.id, "SunIntensity");
+export const SunFlareSize$ = bindValue<number>(mod.id, "SunFlareSize");
+
 
 
 const theme = createTheme({
@@ -153,14 +158,16 @@ const ToeLengthValue = useValue(ToeLengthValue$);
 const ShoulderStrengthValue = useValue(ShoulderStrengthValue$);
 
 const EmissionMultiplier = useValue(EmissionMultiplier$);
-
+const SunDiameter = useValue(SunDiameter$);
+const SunIntensity = useValue(SunIntensity$);
+const SunFlareSize = useValue(SunFlareSize$);
 
 
 
 // Initialize state variables using useState hook
-const [ColorAdjustmentsEnabled$, setCA] = useState(true);
+const [ColorAdjustmentsEnabled$, setCA] = useState(false);
 const [SettingsEnabled$, setSettings] = useState(false);
-const [SkyAndFogEnabled$, setSkyAndFog] = useState(false);
+const [SkyAndFogEnabled$, setSkyAndFog] = useState(true);
 const [ToneMappingEnabled$, setTonemapping] = useState(false);
 const [PlanetaryEnabled$, setPlanetaryTab] = useState(false);
 const [OnImport, OnImportChange] = useState(false);
@@ -406,10 +413,21 @@ const handleHighlights = (value: number) => {
     const handleShoulderStrength = (value: number) => {
       trigger(mod.id, 'handleShoulderStrength', value);
     };
+
     
+    const handleAngularDiameter = (value: number) => {
+      trigger(mod.id, 'handleAngularDiameter', value);
+    };
 
+    
+    const handleSunIntensity = (value: number) => {
+      trigger(mod.id, 'handleSunIntensity', value);
+    };
 
-
+    
+    const handleSunFlareSize = (value: number) => {
+      trigger(mod.id, 'handleSunFlareSize', value);
+    };
 
 
 return (
@@ -434,6 +452,7 @@ return (
     setSettings(false)
     setPlanetaryTab(false)
     setTonemapping(false)
+    setSkyAndFog(false)
    }}>
 </button>
 </Tooltip>
@@ -935,7 +954,7 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
 
 <div className="LuminaVersion_Image">
   <div className="Version_Text"
-  ><h1>v1.5.8r1</h1> 
+  ><h1>v1.5.9</h1> 
   
   </div>
 </div>
@@ -1199,6 +1218,54 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
 
   />
 
+<CustomSunCheckbox
+
+/>
+
+<label className="custom-sun-label">Use Custom Sun Properties</label>
+<label className="sun-diameter-label">Sun Diameter</label>
+<Slider
+    value={SunDiameter}
+    start={0}       // Minimum value of the slider
+    end={100}         // Maximum value of the slider
+    step={0.000001}   // Step size for precision
+    className="sun-adjust-diameter-slider"
+    gamepadStep={stepSize} // Step size for gamepad interaction
+    valueTransformer={SliderValueTransformer.floatTransformer} // Value transformation logic
+    disabled={false}
+    noFill={false}
+    onChange={(number) => handleAngularDiameter(number)} // Callback for value change
+  />
+
+
+
+<label className="sun-intensity-label">Sun Intensity</label>
+<Slider
+    value={SunIntensity}
+    start={0}       // Minimum value of the slider
+    end={100}         // Maximum value of the slider
+    step={0.000001}   // Step size for precision
+    className="sun-adjust-intensity-slider"
+    gamepadStep={stepSize} // Step size for gamepad interaction
+    valueTransformer={SliderValueTransformer.floatTransformer} // Value transformation logic
+    disabled={false}
+    noFill={false}
+    onChange={(number) => handleSunIntensity(number)} // Callback for value change
+  />
+
+<label className="sun-flare-size-label">Sun Flare Size</label>
+<Slider
+    value={SunFlareSize}
+    start={0}       // Minimum value of the slider
+    end={100}         // Maximum value of the slider
+    step={0.000001}  
+    className="sun-adjust-flare-size-slider"
+    gamepadStep={stepSize} // Step size for gamepad interaction
+    valueTransformer={SliderValueTransformer.floatTransformer} // Value transformation logic
+    disabled={false}
+    noFill={false}
+    onChange={(number) => handleSunFlareSize(number)} // Callback for value change
+  />
 
   </div>
 

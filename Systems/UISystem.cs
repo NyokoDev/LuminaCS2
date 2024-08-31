@@ -25,12 +25,16 @@
     internal partial class UISystem : ExtendedUISystemBase
     {
         public bool Visible { get; set; }
-        public string CubemapName;
+        public string CubemapName { get; set;}
         public bool UsingHDRSky = GlobalVariables.Instance.HDRISkyEnabled;
 
         private ValueBindingHelper<string[]> LutArrayExtended;
         private ValueBindingHelper<string[]> CubemapArrayExtended;
         private ValueBindingHelper<string> LutName;
+        private bool customSunEnabled { get; set; }
+        private float SunDiameterValue { get; set; }
+        public float SunIntensityValue { get; set; }
+        public float SunFlareSizeValue { get; set; }
 
         /// <inheritdoc/>
         protected override void OnCreate()
@@ -132,12 +136,81 @@
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "handleEmissionMultiplier", handleEmissionMultiplier));
             AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "EmissionMultiplier", () => GetEmissionMultiplier()));
 
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsCustomSunEnabled", () => IsCustomSunEnabled()));
+            AddBinding(new TriggerBinding(Mod.MODUI, "SetCustomSunEnabled", SetCustomSunEnabled));
+
+
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "SunDiameter", () => SunDiameter()));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "handleAngularDiameter", handleAngularDiameter));
+
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "SunIntensity", () => SunIntensity()));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "handleSunIntensity", handleSunIntensity));
+
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "SunFlareSize", () => SunFlareSize()));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "handleSunFlareSize", handleSunFlareSize));
 
 
 
+        }
+
+        private void handleSunFlareSize(float obj)
+        {
+            SunFlareSizeValue = obj;
+            GlobalVariables.Instance.SunFlareSize = SunFlareSizeValue;
+        }
+
+            private float SunFlareSize()
+        {
+            SunFlareSizeValue = GlobalVariables.Instance.SunFlareSize;
+            return SunFlareSizeValue;
+        }
+
+        private void handleSunIntensity(float obj)
+        {
+            SunIntensityValue = obj;
+            GlobalVariables.Instance.SunIntensity = SunIntensityValue;
+        }
+
+        private float SunIntensity()
+        {
+                SunIntensityValue = GlobalVariables.Instance.SunIntensity;
+                return SunIntensityValue;
+        }
+
+        private void handleAngularDiameter(float obj)
+        {
+            SunDiameterValue = obj;
+            GlobalVariables.Instance.AngularDiameter = SunDiameterValue;
+        }
+
+        private float SunDiameter()
+        {
+            SunDiameterValue = GlobalVariables.Instance.AngularDiameter;
+            return SunDiameterValue;
+        }
 
 
+        private void SetCustomSunEnabled()
+        {
+            GlobalVariables.Instance.CustomSunEnabled = !GlobalVariables.Instance.CustomSunEnabled;
+            customSunEnabled = GlobalVariables.Instance.CustomSunEnabled;
+            Lumina.Mod.Log.Info("Set CustomSun to " + customSunEnabled.ToString());
+        }
 
+        private bool IsCustomSunEnabled()
+        {
+            // Check if CustomSunEnabled is enabled in GlobalVariables
+            if (GlobalVariables.Instance.CustomSunEnabled == false)
+            {
+                customSunEnabled = false;
+            }
+            else
+            {
+                customSunEnabled = true;
+            }
+
+            // Return the value of CustomSunEnabled
+            return customSunEnabled;
         }
 
         private float GetEmissionMultiplier()
@@ -189,13 +262,15 @@
 
         private string ReturnCubemapName()
         {
+            // Check if CubemapName is null or empty and set it to "Select Cubemap" if so
+            CubemapName = string.IsNullOrEmpty(CubemapName) ? "Select Cubemap" : CubemapName;
+
             // Update the GlobalVariables.Instance.CubemapName with the current CubemapName
             GlobalVariables.Instance.CubemapName = CubemapName;
 
             // Return the current CubemapName
             return CubemapName;
         }
-
 
         private string[] CubemapArrayExtendedReturn()
         {

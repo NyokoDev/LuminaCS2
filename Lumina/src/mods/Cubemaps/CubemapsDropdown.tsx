@@ -6,7 +6,7 @@ import { Dropdown, DropdownItem, DropdownToggle, UISound, FOCUS_AUTO } from "cs2
 
 // Bind the CubemapArray to a variable and initialize it with an empty array
 export const CubemapArray = bindValue<string[]>(mod.id, "CubemapArrayExtended", []);
-const SelectedCubemap$ = bindValue<string>(mod.id, "CubemapName", "");
+const SelectedCubemap$ = bindValue<string>(mod.id, "CubemapName", "Select Cubemap");
 
 const DropdownStyle: Theme | any = getModule("game-ui/menu/themes/dropdown.module.scss", "classes");
 
