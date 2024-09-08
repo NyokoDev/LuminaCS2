@@ -328,7 +328,7 @@ namespace LuminaMod.XML
 
                     // Tonemapping
                     GlobalVariables.Instance.TonemappingMode = loadedVariables?.TonemappingMode ?? TonemappingMode.None;
-                    GlobalVariables.Instance.LUTContribution = loadedVariables?.LUTContribution ?? 0f;
+                    GlobalVariables.Instance.LUTContribution = loadedVariables?.LUTContribution ?? 1f;
                     GlobalVariables.Instance.LUTName = loadedVariables?.LUTName ?? "None";
                     GlobalVariables.Instance.SceneFlowCheckerEnabled = loadedVariables?.SceneFlowCheckerEnabled ?? false;
 

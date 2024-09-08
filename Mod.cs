@@ -64,7 +64,6 @@ namespace Lumina
 
             // Load global settings
             GlobalVariables.LoadFromFile(GlobalPaths.GlobalModSavingPath);
-            CheckForNullLUTName();
 
             updateSystem.UpdateAfter<PreSystem>(SystemUpdatePhase.PreCulling);
 
@@ -95,28 +94,6 @@ namespace Lumina
                     NotificationSystem.Pop("lumina");
                 });
         }
-
-
-            private static void CheckForNullLUTName()
-        {
-            // Access the instance of GlobalVariables and check if LUTName is null or empty
-            if (GlobalVariables.Instance == null)
-            {
-                Lumina.Mod.Log.Error("GlobalVariables.Instance is null.");
-                return;
-            }
-
-            if (string.IsNullOrEmpty(GlobalVariables.Instance.LUTName))
-            {
-                // If LUTName is null or empty, assign it a default value
-                GlobalVariables.Instance.LUTName = "None";
-                 Mod.Log.Info("LUTName was null or empty, assigned default value 'None'.");
-
-
-
-            }
-        }
-
 
         /// <inheritdoc/>
         public void OnDispose()
