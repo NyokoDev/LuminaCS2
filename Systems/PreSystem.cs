@@ -75,38 +75,54 @@ namespace Lumina
         }
 
 
-
         private void CheckAndReplaceAdditionalPackages()
         {
             var packagesDirectory = GlobalPaths.PackagesDirectory;
+            var localPackagesDirectory = GlobalPaths.LocalModsDirectory;
+            var hdrDirectory = GlobalPaths.LuminaHDRIDirectory;
+            var lutsDirectory = GlobalPaths.LuminaLUTSDirectory;
 
-            // Check if the packages directory exists
+            // Check if both the packages and local packages directories exist
             if (!Directory.Exists(packagesDirectory))
             {
                 Lumina.Mod.Log.Info($"Packages directory does not exist: {packagesDirectory}");
                 return;
             }
 
-            // Get all files in the directory and its subdirectories
-            var files = Directory.GetFiles(packagesDirectory, "*.*", SearchOption.AllDirectories)
-                                 .Where(f => (f.EndsWith(".cube", StringComparison.OrdinalIgnoreCase) ||
-                                              f.EndsWith(".png", StringComparison.OrdinalIgnoreCase)) &&
-                                             !Path.GetFileNameWithoutExtension(f).ToLower().Contains("screenshot") &&
-                                             !Path.GetFileNameWithoutExtension(f).ToLower().Contains("preview") &&
-                                             !Path.GetFileNameWithoutExtension(f).ToLower().Contains("thumbnail"));
+            if (!Directory.Exists(localPackagesDirectory))
+            {
+                Lumina.Mod.Log.Info($"Local packages directory does not exist: {localPackagesDirectory}");
+                return;
+            }
 
+            // Get all relevant files from both directories (.cube and .png)
+            var packageFiles = Directory.GetFiles(packagesDirectory, "*.*", SearchOption.AllDirectories)
+                                        .Where(f => (f.EndsWith(".cube", StringComparison.OrdinalIgnoreCase) ||
+                                                     f.EndsWith(".png", StringComparison.OrdinalIgnoreCase)) &&
+                                                    !IsExcludedFile(f));
 
-            // Process normal files
-            ProcessFiles(files);
+            var localFiles = Directory.GetFiles(localPackagesDirectory, "*.*", SearchOption.AllDirectories)
+                                      .Where(f => (f.EndsWith(".cube", StringComparison.OrdinalIgnoreCase) ||
+                                                   f.EndsWith(".png", StringComparison.OrdinalIgnoreCase)) &&
+                                                  !IsExcludedFile(f));
 
-            // Load assemblies and check for embedded resources
-            var assemblies = Directory.GetFiles(packagesDirectory, "*.dll", SearchOption.AllDirectories);
-            foreach (var assemblyPath in assemblies)
+            // Combine files from both directories
+            var allFiles = packageFiles.Concat(localFiles);
+
+            // Process and copy the files to their respective destinations
+            ProcessFiles(allFiles, hdrDirectory, lutsDirectory);
+
+            // Load assemblies and check for embedded resources from both directories
+            var packageAssemblies = Directory.GetFiles(packagesDirectory, "*.dll", SearchOption.AllDirectories);
+            var localAssemblies = Directory.GetFiles(localPackagesDirectory, "*.dll", SearchOption.AllDirectories);
+            var allAssemblies = packageAssemblies.Concat(localAssemblies);
+
+            foreach (var assemblyPath in allAssemblies)
             {
                 try
                 {
                     var assembly = Assembly.LoadFrom(assemblyPath);
-                    ProcessEmbeddedResources(assembly);
+                    ProcessEmbeddedResources(assembly, hdrDirectory, lutsDirectory);
                 }
                 catch (Exception ex)
                 {
@@ -115,129 +131,90 @@ namespace Lumina
             }
         }
 
-        private void ProcessFiles(IEnumerable<string> files)
+        // Helper method to process files and copy them to the destination directories
+        private void ProcessFiles(IEnumerable<string> files, string hdrDirectory, string lutsDirectory)
         {
             foreach (var file in files)
             {
-                try
+                var fileName = Path.GetFileName(file);
+                var fileDirectory = Path.GetDirectoryName(file); // Get the file's directory
+                string destination = null;
+
+                // Exclude .png files if maptextureconfig.json is in the same directory
+                if (file.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
                 {
-                    var extension = Path.GetExtension(file).ToLowerInvariant();
-                    string destinationPath = string.Empty;
-
-                    // If it's a .png file, check for maptextureconfig.json in the same directory
-                    if (extension == ".png")
+                    var configPath = Path.Combine(fileDirectory, "maptextureconfig.json");
+                    if (File.Exists(configPath))
                     {
-                        var directory = Path.GetDirectoryName(file);
-                        var configFilePath = Path.Combine(directory, "maptextureconfig.json");
-
-                        // Skip this .png file if maptextureconfig.json exists in the same directory
-                        if (File.Exists(configFilePath))
-                        {
-                            Lumina.Mod.Log.Info($"Skipped {file} because maptextureconfig.json was found in the same directory.");
-                            continue;
-                        }
-
-                        destinationPath = Path.Combine(GlobalPaths.LuminaHDRIDirectory, Path.GetFileName(file));
+                        Lumina.Mod.Log.Info($"Skipping {fileName} as maptextureconfig.json is found in the same directory.");
+                        continue;
                     }
-                    else if (extension == ".cube")
-                    {
-                        destinationPath = Path.Combine(GlobalPaths.LuminaLUTSDirectory, Path.GetFileName(file));
-                    }
-
-                    // Ensure the destination directory exists
-                    var destinationDirectory = Path.GetDirectoryName(destinationPath);
-                    if (!Directory.Exists(destinationDirectory))
-                    {
-                        Directory.CreateDirectory(destinationDirectory);
-                    }
-
-                    // Copy the file to the destination
-                    File.Copy(file, destinationPath, overwrite: true);
-                    Lumina.Mod.Log.Info($"Copied {file} to {destinationPath}");
+                    destination = Path.Combine(hdrDirectory, fileName);
                 }
-                catch (Exception ex)
+                else if (file.EndsWith(".cube", StringComparison.OrdinalIgnoreCase))
                 {
-                    Lumina.Mod.Log.Error($"Error copying file {file}: {ex.Message}");
+                    destination = Path.Combine(lutsDirectory, fileName);
+                }
+
+                if (destination != null)
+                {
+                    try
+                    {
+                        File.Copy(file, destination, overwrite: true);
+                        Lumina.Mod.Log.Info($"Copied {fileName} to {destination}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Lumina.Mod.Log.Error($"Failed to copy {fileName} to {destination}: {ex.Message}");
+                    }
                 }
             }
         }
 
-        private void ProcessEmbeddedResources(Assembly assembly)
+        // Helper method to process embedded resources within an assembly
+        private void ProcessEmbeddedResources(Assembly assembly, string hdrDirectory, string lutsDirectory)
         {
-            if (assembly == null)
+            var resourceNames = assembly.GetManifestResourceNames();
+            foreach (var resourceName in resourceNames)
             {
-                Lumina.Mod.Log.Error("Assembly is null.");
-                return;
-            }
-
-            try
-            {
-                var resourceNames = assembly.GetManifestResourceNames();
-                if (resourceNames == null || resourceNames.Length == 0)
-                {
-                    Lumina.Mod.Log.Info($"No resources found in assembly {assembly.FullName}");
-                    return;
-                }
-
-                foreach (var resourceName in resourceNames)
+                if (resourceName.EndsWith(".cube", StringComparison.OrdinalIgnoreCase) ||
+                    resourceName.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
                 {
                     try
                     {
-                        // Check for .cube or .png files within the embedded resources
-                        if (resourceName.EndsWith(".cube", StringComparison.OrdinalIgnoreCase) ||
-                            resourceName.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
+                        using (var resourceStream = assembly.GetManifestResourceStream(resourceName))
                         {
-                            using (var stream = assembly.GetManifestResourceStream(resourceName))
+                            if (resourceStream != null)
                             {
-                                if (stream == null)
+                                string fileName = Path.GetFileName(resourceName);
+                                string destination = resourceName.EndsWith(".cube", StringComparison.OrdinalIgnoreCase)
+                                    ? Path.Combine(lutsDirectory, fileName)
+                                    : Path.Combine(hdrDirectory, fileName);
+
+                                using (var fileStream = File.Create(destination))
                                 {
-                                    Lumina.Mod.Log.Info($"Resource stream is null for {resourceName} in assembly {assembly.FullName}");
-                                    continue; // Skip this resource if the stream is null
+                                    resourceStream.CopyTo(fileStream);
                                 }
 
-                                var extension = Path.GetExtension(resourceName).ToLowerInvariant();
-                                string destinationPath = string.Empty;
-
-                                if (extension == ".png")
-                                {
-                                    destinationPath = Path.Combine(GlobalPaths.LuminaHDRIDirectory, Path.GetFileName(resourceName));
-                                }
-                                else if (extension == ".cube")
-                                {
-                                    destinationPath = Path.Combine(GlobalPaths.LuminaLUTSDirectory, Path.GetFileName(resourceName));
-                                }
-
-                                // Ensure the destination directory exists
-                                var destinationDirectory = Path.GetDirectoryName(destinationPath);
-                                if (!Directory.Exists(destinationDirectory))
-                                {
-                                    Directory.CreateDirectory(destinationDirectory);
-                                }
-
-                                // Save the embedded resource to the destination path
-                                using (var fileStream = new FileStream(destinationPath, FileMode.Create, FileAccess.Write))
-                                {
-                                    stream.CopyTo(fileStream);
-                                }
-
-                                Lumina.Mod.Log.Info($"Extracted embedded resource {resourceName} to {destinationPath}");
+                                Lumina.Mod.Log.Info($"Extracted embedded resource {resourceName} to {destination}");
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Lumina.Mod.Log.Error($"Error processing embedded resource {resourceName}: {ex.Message}");
+                        Lumina.Mod.Log.Error($"Failed to extract resource {resourceName}: {ex.Message}");
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                Lumina.Mod.Log.Error($"[HARMLESS] Error processing assembly {assembly.FullName}: {ex.Message}");
-            }
         }
-    
 
-
+        // Helper method to check for excluded files based on their name
+        private bool IsExcludedFile(string filePath)
+        {
+            var fileName = Path.GetFileNameWithoutExtension(filePath).ToLower();
+            return fileName.Contains("screenshot") || fileName.Contains("preview") ||
+                   fileName.Contains("photo-collage") || fileName.Contains("thumbnail");
+        }
 
 
         /// <summary>

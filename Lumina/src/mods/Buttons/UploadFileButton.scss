@@ -1,0 +1,12 @@
+.UploadFileButton >* {
+    position: absolute;
+    display: flex;
+    top:5rem;
+    left: 500rem;
+    width: 40rem;
+    height: 40rem;
+}
+
+.UploadFileButton:hover > * {
+    filter: invert(100%);
+}

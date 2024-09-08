@@ -129,6 +129,7 @@
 		<Reference Include="Colossal.Localization">
 			<Private>false</Private>
 		</Reference>
+		<Reference Include="System.Windows.Forms" />
 		<Reference Include="Unity.RenderPipelines.Core.Runtime">
 			<Private>false</Private>
 		</Reference>
@@ -186,6 +187,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Lib.Harmony" Version="2.2.2" />
+		<PackageReference Include="MetroFramework" Version="1.2.0.3" />
 		<PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

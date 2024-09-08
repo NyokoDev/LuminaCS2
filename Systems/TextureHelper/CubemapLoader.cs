@@ -62,6 +62,7 @@ class CubemapLoader : MonoBehaviour
         return cubemap;
     }
 
+
     /// <summary>
     /// Sets a cubemap face.
     /// </summary>

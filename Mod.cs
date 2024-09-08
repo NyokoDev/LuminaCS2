@@ -81,18 +81,25 @@ namespace Lumina
             updateSystem.UpdateAfter<CustomSunManager>(SystemUpdatePhase.GameSimulation);
 
 
-            // Notify if failed to retrieve Lumina settings
-            NotificationSystem.Push(
-                identifier: "lumina",
-                thumbnail: "https://i.imgur.com/6KKpq5g.jpeg",
-                progress: 100, // 50% complete
-                title: (LocalizedString)"Lumina",  // Assuming LocalizedString conversion
-                text: (LocalizedString)"Loaded succesfully.",  // Assuming LocalizedString conversion
-                onClicked: () =>
-                {
-                    // Remove the notification when it is clicked
-                    NotificationSystem.Pop("lumina");
-                });
+            SendNotification();
+        }
+
+        private void SendNotification()
+        {
+                // Notify if failed to retrieve Lumina settings
+                NotificationSystem.Push(
+                    identifier: "lumina",
+                    thumbnail: "https://i.imgur.com/6KKpq5g.jpeg",
+                    progress: 100, // 50% complete
+                    title: (LocalizedString)"Lumina",  // Assuming LocalizedString conversion
+                    text: (LocalizedString)"Loaded succesfully.",  // Assuming LocalizedString conversion
+                    onClicked: () =>
+                    {
+                        // Remove the notification when it is clicked
+                        NotificationSystem.Pop("lumina");
+                    });
+            NotificationSystem.Pop("lumina");
+
         }
 
         /// <inheritdoc/>

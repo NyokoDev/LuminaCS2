@@ -467,7 +467,7 @@ namespace Lumina.UI
 
             // Tonemapping
             GlobalVariables.Instance.TonemappingMode = TonemappingMode.None;
-            GlobalVariables.Instance.LUTContribution = 0f;
+            GlobalVariables.Instance.LUTContribution = 1f;
             GlobalVariables.Instance.LUTName = "None";
             GlobalVariables.Instance.SceneFlowCheckerEnabled = false;
 

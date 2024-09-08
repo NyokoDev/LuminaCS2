@@ -9,6 +9,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Colossal.UI.Binding;
+    using Game;
     using Game.UI;
     using Game.UI.InGame;
     using Lumina.Systems.Presets;
@@ -16,11 +17,15 @@
     using Lumina.UI;
     using Lumina.XML;
     using LuminaMod.XML;
+    using Microsoft.Win32;
+    using Unity.Entities;
     using UnityEngine;
+    using MetroFramework.Controls;
     using UnityEngine.Experimental.Rendering;
     using UnityEngine.Rendering;
     using UnityEngine.Rendering.HighDefinition;
     using static UnityEngine.Rendering.DebugUI;
+    using System.Windows.Forms;
 
     internal partial class UISystem : ExtendedUISystemBase
     {
@@ -80,7 +85,7 @@
 
             AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "LUTName", GetLUTName));
 
-            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "LUTValue", () => LUTValue()));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetLutContributionValue", () => GetLutContributionValue()));
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleLUTContribution", HandleLUTContribution));
             AddBinding(new TriggerBinding(Mod.MODUI, "OpenLUTFolder", OpenLUTFolder));
             AddBinding(new TriggerBinding(Mod.MODUI, "UpdateLUT", UpdateLUT));
@@ -152,7 +157,96 @@
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "handleSunFlareSize", handleSunFlareSize));
 
 
+            // UI Update
+            AddBinding(new TriggerBinding(Mod.MODUI, "UpdateUIElements", UpdateUIElements));
 
+            AddBinding(new TriggerBinding(Mod.MODUI, "UploadLUTFileDialog", UploadLUTFileDialog));
+
+
+        }
+
+        private void UploadLUTFileDialog()
+        {
+            // Create an instance of OpenFileDialog
+            System.Windows.Forms.OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Title = "Select a .cube File",
+                Filter = "Cube Files (*.cube)|*.cube",
+                FilterIndex = 1, // Set default filter index
+                RestoreDirectory = true, // Restore the previous directory
+                ShowHelp = false,
+                AutoUpgradeEnabled = true
+            };
+
+            try
+            {
+                // Show the dialog and check if the user selected a file
+                DialogResult result = openFileDialog.ShowDialog();
+                Lumina.Mod.Log.Info($"Dialog result: {result}");
+
+                if (result == DialogResult.OK)
+                {
+                    // Get the selected file path
+                    string filePath = openFileDialog.FileName;
+                    Lumina.Mod.Log.Info($"Selected file path: {filePath}");
+
+                    // Attempt to load the LUT from the selected file
+                    try
+                    {
+                        var lutTexture = CubeLutLoader.LoadLutFromFile(filePath);
+                        if (lutTexture != null)
+                        {
+                            // Remove the .cube extension from the file name
+                            string lutName = System.IO.Path.GetFileNameWithoutExtension(filePath);
+
+                            // Set the LUT name and apply the texture
+                            RenderEffectsSystem.LutName_Example = lutName;
+                            RenderEffectsSystem.m_Tonemapping.lutTexture.value = lutTexture;
+                            Lumina.Mod.Log.Info("LUT texture successfully loaded and applied.");
+                        }
+                        else
+                        {
+                            Lumina.Mod.Log.Warn("LUT texture could not be loaded from the file.");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Lumina.Mod.Log.Error($"Error loading LUT texture: {ex.Message}");
+                    }
+                }
+                else
+                {
+                    Lumina.Mod.Log.Info("No file selected.");
+                }
+            }
+            finally
+            {
+                // Dispose of the OpenFileDialog to free up resources
+                openFileDialog.Dispose();
+                Lumina.Mod.Log.Info("OpenFileDialog disposed.");
+            }
+        }
+
+
+        private float GetLutContributionValue()
+        {
+            float lutContribution = GlobalVariables.Instance.LUTContribution;
+
+            // Check if the value is a valid number (not NaN) and return it
+            if (!float.IsNaN(lutContribution))
+            {
+                return lutContribution;
+            }
+
+            // Return a default value if it's not a valid number
+            return 1f;
+        }
+
+
+
+        private void UpdateUIElements()
+        {
+            CubemapArrayExtendedReturn();
         }
 
         private void handleSunFlareSize(float obj)
@@ -160,6 +254,7 @@
             SunFlareSizeValue = obj;
             GlobalVariables.Instance.SunFlareSize = SunFlareSizeValue;
         }
+
 
             private float SunFlareSize()
         {
@@ -274,40 +369,23 @@
             return CubemapName;
         }
 
-        private string[] CubemapArrayExtendedReturn()
+        public static string[] CubemapArrayExtendedReturn()
         {
-            // Retrieve the LUT files array
-            var lutFiles = RenderEffectsSystem.CubemapFiles;
+            // Ensure RenderEffectsSystem.CubemapFiles is properly updated
+            RenderEffectsSystem.CubemapFiles = UIDropdownUpdate.UpdateCubemapDropdown();
 
-            // Check if lutFiles is null or empty and update it with the directory files if necessary
-            if (lutFiles == null || lutFiles.Length == 0)
+            // Check if CubemapFiles is null or empty
+            if (RenderEffectsSystem.CubemapFiles == null || RenderEffectsSystem.CubemapFiles.Length == 0)
             {
-                 Mod.Log.Info("CubemapArrayExtendedReturn() is null or empty. Populating with files from the directory.");
-
-                // Ensure the LUT directory exists
-                if (!Directory.Exists(GlobalPaths.LuminaHDRIDirectory))
-                {
-                    Mod.Log.Warn($"Cubemaps directory not found: {GlobalPaths.LuminaHDRIDirectory}. Creating directory...");
-                    Directory.CreateDirectory(GlobalPaths.LuminaHDRIDirectory);
-                }
-
-                // Populate RenderEffectsSystem.LutFiles with files from the specified directory
-                var filesWithFullPath = Directory.GetFiles(GlobalPaths.LuminaHDRIDirectory, "*.png");
-
-                // Extract only the file names without the extension
-                var fileNames = filesWithFullPath
-                    .Select(filePath => Path.GetFileNameWithoutExtension(filePath))
-                    .ToArray();
-
-                // Update RenderEffectsSystem.LutFiles with only the file names
-                RenderEffectsSystem.CubemapFiles = fileNames;
-
-                 Mod.Log.Info(string.Join(", ", RenderEffectsSystem.CubemapFiles)); // Log the result for debugging
+                // Log a warning if no cubemap files are found
+                Mod.Log.Warn("No cubemap files found or CubemapFiles is null.");
+                return Array.Empty<string>(); // Return an empty array instead of null
             }
 
             // Return the array
             return RenderEffectsSystem.CubemapFiles;
         }
+
 
         private void SaveAutomatically()
         {
@@ -596,12 +674,23 @@
         private void HandleLUTContribution(float obj)
         {
             GlobalVariables.Instance.LUTContribution = obj;
+            UpdateLUTContribution();
         }
 
-        private float LUTValue()
+        private void UpdateLUTContribution()
         {
-            return GlobalVariables.Instance.LUTContribution;
+            if (RenderEffectsSystem.m_Tonemapping != null && GlobalVariables.Instance != null)
+            {
+                RenderEffectsSystem.m_Tonemapping.lutContribution.value = GlobalVariables.Instance.LUTContribution;
+            }
+            else
+            {
+                Lumina.Mod.Log.Error("RenderEffectsSystem.m_Tonemapping or GlobalVariables.Instance is null.");
+            }
         }
+
+
+
 
         private void PlanetarySettings()
         {

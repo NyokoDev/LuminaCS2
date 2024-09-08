@@ -3,6 +3,7 @@ import { Theme } from "cs2/bindings";
 import { getModule } from "cs2/modding";
 import mod from "../../../mod.json";
 import { Dropdown, DropdownItem, DropdownToggle, UISound, FOCUS_AUTO } from "cs2/ui";
+import '../dropdown_module.scss'
 
 // Bind the CubemapArray to a variable and initialize it with an empty array
 export const CubemapArray = bindValue<string[]>(mod.id, "CubemapArrayExtended", []);
@@ -42,6 +43,7 @@ export const CubemapsDropdown = () => {
   const dropDownItems = Cubemaps.map((mode) => (
     <DropdownItem<string>
       theme={DropdownStyle}
+      className="CubemapDropdown"
       focusKey={FOCUS_AUTO}
       value={mode}
       closeOnSelect={true}
@@ -54,10 +56,11 @@ export const CubemapsDropdown = () => {
   ));
 
   return (
-    <div style={{ padding: "5rem" }}>
+    <div style={{ padding: "5rem", overflowY: "scroll" }}>
       <Dropdown focusKey={FOCUS_AUTO} theme={DropdownStyle} content={dropDownItems}>
-        <DropdownToggle>{selectedCubemapLabel}</DropdownToggle>
+        <DropdownToggle >{selectedCubemapLabel}</DropdownToggle>
       </Dropdown>
     </div>
   );
+  
 };

@@ -49,6 +49,7 @@ export const LuminaButton: ModuleRegistryExtend = (Component) => {
                     onClick={() => {
                         setIsInstalled(!isInstalled); // update isInstalled state
                         trigger(mod.id, 'SaveAutomatically');
+                        trigger(mod.id, 'UpdateUIElements');
                     }}
                       
                     onSelect={() => {

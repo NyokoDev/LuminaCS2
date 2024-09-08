@@ -39,6 +39,14 @@
    box-shadow: inset 0 0 20px rgba(16, 16, 16, 0.6); /* Add a blurred black inner shadow */
 }
 
+.TabsRow > * {
+   border: 2px solid #000; /* Add a 2px solid black border to each child element */
+   border-radius: 50%; /* Make the border circular */
+   width: 50rem; /* Adjust the width of each child element */
+   height: 50rem; /* Adjust the height of each child element to match the width for perfect circles */
+   display: flex;
+}
+
 
 
 
@@ -51,7 +59,7 @@
    height: 45rem;
    left: 900rem; /* Adjusted left position */
    transition: transform 0.01s ease-in-out;
-   border-radius: 50%; /* Make it round */
+   filter: invert(100%); /* Invert the colors to turn black to white */
 }
 
 .ColorAdjustmentsButtonDeselected {
@@ -63,7 +71,7 @@
    height: 45rem;
    left: 900rem; /* Adjusted left position */
    transition: transform 0.01s ease-in-out;
-   border-radius: 50%; /* Make it round */
+   filter: invert(100%); /* Invert the colors to turn black to white */
 }
 
 .SettingsButton {
@@ -1082,11 +1090,12 @@ $hueshift-top: 80rem;
 
  .LutLabelInUse {
    position: absolute;
-   color: rgb(255, 255, 255);
-   font-size: 16rem;
+   color: rgb(211, 211, 211);
+   font-size: 15rem;
    top: 45rem;
-   left: 410rem;
- }
+   left: 23rem;
+}
+
 
  .LUTSDropdown {
    position: absolute;
@@ -1128,19 +1137,24 @@ $hueshift-top: 80rem;
 
 }
 
-.LoadLUTButton {
+.LoadLUTButton, .OpenLUTButton {
    position: absolute;
+   height: 30rem;
+   width: 208rem;
+   top: 218rem;
+   box-sizing: border-box; /* Ensure consistent box-sizing */
+}
+
+.LoadLUTButton {
    left: 20rem;
-   width: 300rem;
-   top: 105rem;
 }
 
 .OpenLUTButton {
-   position: absolute;
-   left: 20rem;
-   width: 300rem;
-   top: 155rem;
+   left:20rem;
+   top:240rem !important;
+   z-index: 200;
 }
+
 
 .LutLabel {
    color: rgb(255, 255, 255);

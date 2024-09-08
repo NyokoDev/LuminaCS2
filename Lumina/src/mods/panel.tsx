@@ -26,6 +26,8 @@ import ShoulderStrengthCheckbox from "./Checkboxes/ShoulderStrengthCheckbox";
 import { CubemapsDropdown } from "./Cubemaps/CubemapsDropdown";
 import SpaceEmissionCheckbox from "./Checkboxes/UseHDRISky";
 import CustomSunCheckbox from "./Checkboxes/UseCustomSunCheckbox";
+import { LUTContributionSlider } from "./Sliders/LutContributionSlider";
+import { OpenFileDialogButton } from "./Buttons/UploadFileButton";
 
 
 export let isInstalled$ = false;
@@ -60,6 +62,7 @@ export const Highlights$ =  bindValue<number>(mod.id, 'GetHighlights');
 export const HighlightsActive$ =  bindValue<boolean>(mod.id, 'GetHighlightsCheckbox');
 
 // Tonemapping
+
 const TonemappingMode$ = bindValue<string>(mod.id, "TonemappingMode");
 const TextureFormatMode$ = bindValue<string>(mod.id, "TextureFormat");
 const ExternalModeActivated$ = bindValue<boolean>(mod.id, "IsExternal");
@@ -71,7 +74,6 @@ export const LatitudeValue$ = bindValue<number>(mod.id, 'LatitudeValue');
 export const LongitudeValue$ = bindValue<number>(mod.id, 'LongitudeValue');
 
 //Tonemapping
-export const LUTValue$ = bindValue<number>(mod.id, 'LUTValue');
 export const LUTName$ = bindValue<string>(mod.id, 'LUTName');
 export const ToeStrengthValue$ = bindValue<number>(mod.id, "ToeStrengthValue")
 export const ToeLengthValue$ = bindValue<number>(mod.id, "ToeLengthValue");
@@ -146,7 +148,6 @@ const LongitudeValue = useValue(LongitudeValue$);
 
 
 //Tonemapping
-const LUTValue = useValue(LUTValue$);
 const LUTName = useValue(LUTName$);
 const TonemappingMode = useValue(TonemappingMode$);
 const ExternalModeActivated = useValue(ExternalModeActivated$);
@@ -167,8 +168,8 @@ const SunFlareSize = useValue(SunFlareSize$);
 // Initialize state variables using useState hook
 const [ColorAdjustmentsEnabled$, setCA] = useState(false);
 const [SettingsEnabled$, setSettings] = useState(false);
-const [SkyAndFogEnabled$, setSkyAndFog] = useState(true);
-const [ToneMappingEnabled$, setTonemapping] = useState(false);
+const [SkyAndFogEnabled$, setSkyAndFog] = useState(false);
+const [ToneMappingEnabled$, setTonemapping] = useState(true);
 const [PlanetaryEnabled$, setPlanetaryTab] = useState(false);
 const [OnImport, OnImportChange] = useState(false);
 
@@ -1110,7 +1111,15 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
     </div>
 
     <div className="LUTSDropdown">
-      <LUTSDropdown />
+                <LUTSDropdown />
+                
+                <LUTContributionSlider />
+
+
+                <Tooltip tooltip={translate("LUMINA.uploadlutbutton")}>
+    <OpenFileDialogButton />
+</Tooltip>
+
     </div>
   </div>
 )}
@@ -1214,11 +1223,6 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
 )}
 
 
-
-<div  className="title_SVH PublicServiceAnnouncement">
-  <h1>BEWARE. Tonemapping features are on early development.</h1>
-  <h2>To use LUTs, mode must be set to 'External'</h2>
-   </div>
 
 </div>
 

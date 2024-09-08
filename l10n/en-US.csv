@@ -38,6 +38,7 @@
 "LUMINA.CustomGamma","Gamma"
 "LUMINA.skyandfogtooltip","Sky and Fog"
 "LUMINA.resettodefaultconfirmation","This action will reset your settings and cannot be undone. Do you want to continue?"
+"LUMINA.uploadlutbutton","Upload file (.cube)"
 
 
 
