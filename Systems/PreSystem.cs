@@ -31,8 +31,13 @@ namespace Lumina
             ValidateLUTSDirectory();
             ValidateCubemapsDirectory();
             CheckForNullLUTName();
-            ClearPackagesDirectory();
-            CheckAndReplaceAdditionalPackages();
+
+            if (GlobalVariables.Instance.ReloadAllPackagesOnRestart)
+            {
+                ClearPackagesDirectory();
+                CheckAndReplaceAdditionalPackages();
+            }
+
         }
 
         private void ClearPackagesDirectory()
@@ -138,6 +143,16 @@ namespace Lumina
             {
                 var fileName = Path.GetFileName(file);
                 var fileDirectory = Path.GetDirectoryName(file); // Get the file's directory
+                var baseFileName = Path.GetFileNameWithoutExtension(file); // Get the base name of the file without extension
+                var luminaFile = Path.Combine(fileDirectory, baseFileName + ".lumina"); // Construct the .lumina file path
+
+                // Ensure a .lumina file exists beside the file
+                if (!File.Exists(luminaFile))
+                {
+                    Lumina.Mod.Log.Info($"Skipping {fileName} as no corresponding .lumina file was found.");
+                    continue;
+                }
+
                 string destination = null;
 
                 // Exclude .png files if maptextureconfig.json is in the same directory
@@ -170,6 +185,7 @@ namespace Lumina
                 }
             }
         }
+
 
         // Helper method to process embedded resources within an assembly
         private void ProcessEmbeddedResources(Assembly assembly, string hdrDirectory, string lutsDirectory)

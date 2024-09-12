@@ -226,6 +226,9 @@ namespace LuminaMod.XML
         [XmlElement]
         public float SunFlareSize { get; set; }
 
+        [XmlElement]
+        public bool ReloadAllPackagesOnRestart { get; set; }
+
         /// <summary>
         /// Serializes to a file.
         /// </summary>
@@ -354,6 +357,7 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.AngularDiameter = loadedVariables?.AngularDiameter ?? 0f;
                     GlobalVariables.Instance.SunIntensity = loadedVariables?.SunIntensity ?? 0f;
                     GlobalVariables.Instance.SunFlareSize = loadedVariables?.SunFlareSize ?? 0f;
+                    GlobalVariables.Instance.ReloadAllPackagesOnRestart = loadedVariables?.ReloadAllPackagesOnRestart ?? true;
 
 
                     return loadedVariables;

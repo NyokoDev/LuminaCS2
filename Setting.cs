@@ -15,6 +15,7 @@ namespace Lumina
     using Game.Prefabs;
     using Game.Settings;
     using Game.UI;
+    using Game.UI.InGame;
     using Game.UI.Widgets;
     using Lumina.Systems;
     using Lumina.UI;
@@ -66,6 +67,21 @@ namespace Lumina
         public Setting(IMod mod)
             : base(mod)
         {
+        }
+
+        [SettingsUISection(KSection, KToggleGroup)]
+        [SettingsUIMultilineText("https://svgshare.com/i/15rV.svg")]
+        public string LuminaByNyoko => string.Empty;
+
+
+        [SettingsUISection(KSection, KToggleGroup)]
+        public bool ReloadAllPackagesOnRestart
+        {
+            get => GlobalVariables.Instance.ReloadAllPackagesOnRestart;
+            set
+            {
+                GlobalVariables.Instance.ReloadAllPackagesOnRestart = value;
+            }
         }
 
 
@@ -138,7 +154,7 @@ namespace Lumina
             }
         }
 
-        
+
 
         /// <summary>
         /// Opens the folder location.
@@ -227,6 +243,7 @@ namespace Lumina
         public override void Apply()
         {
             base.Apply();
+            GlobalVariables.SaveToFile(GlobalPaths.GlobalModSavingPath);
         }
 
         /// <summary>
@@ -245,109 +262,9 @@ namespace Lumina
         {
         }
 
-        /// <summary>
-        /// Locale source for English.
-        /// </summary>
-        public class LocaleEN : IDictionarySource
+        public void Unload()
         {
-            private readonly Setting setting;
 
-            /// <summary>
-            /// Initializes a new instance of the <see cref="LocaleEN"/> class.
-            /// </summary>
-            /// <param name="setting">Setting parameter.</param>
-            public LocaleEN(Setting setting)
-            {
-                this.setting = setting;
-            }
-
-            /// <inheritdoc/>
-            public IEnumerable<KeyValuePair<string, string>> ReadEntries(IList<IDictionaryEntryError> errors, Dictionary<string, int> indexCounts)
-            {
-                return new Dictionary<string, string>
-                {
-          {
-            setting.GetSettingsLocaleID(), "Lumina"
-          },
-          {
-            setting.GetOptionTabLocaleID(Setting.KSection),
-            "Main"
-          },
-          {
-            setting.GetOptionGroupLocaleID(Setting.KButtonGroup),
-            "Buttons"
-          },
-          {
-            setting.GetOptionGroupLocaleID(Setting.KToggleGroup),
-            "Lumina " + GlobalPaths.Version
-          },
-          {
-            setting.GetOptionGroupLocaleID(Setting.KSliderGroup),
-            "Sliders"
-          },
-          {
-            setting.GetOptionGroupLocaleID(Setting.KDropdownGroup),
-            "Dropdowns"
-          },
-          {
-            setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.SaveAutomatically)),
-            "Save automatically"
-          },
-          {
-            setting.GetOptionDescLocaleID(nameof(Lumina.Setting.SaveAutomatically)),
-            "Saves automatically your settings when UI is opened or closed."
-          },
-          {
-            setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.Guides)),
-            "Lumina Guides"
-          },
-          {
-            setting.GetOptionDescLocaleID(nameof(Lumina.Setting.Guides)),
-            "Opens Lumina guides for information and documentation in a new tab."
-          },
-          {
-            setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.Support)),
-            "Discord Server"
-          },
-          {
-            setting.GetOptionDescLocaleID(nameof(Lumina.Setting.Support)),
-            "Opens Support discord server in new tab."
-          },
-          {
-            setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.Donate)),
-            "Donate"
-          },
-          {
-            setting.GetOptionDescLocaleID(nameof(Lumina.Setting.Donate)),
-            "Opens Paypal donation wizard in new tab. Thanks for considering supporting me!"
-          },
-          {
-            setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.OpenLocationButton)),
-            "Open Saved Settings File"
-          },
-          {
-            setting.GetOptionDescLocaleID(nameof(Lumina.Setting.OpenLocationButton)),
-            "Opens the saved settings file in a new tab."
-                    },
-                    {
-            setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.UseTimeOfDaySlider)),
-            "Use Time Of Day Slider"
-          },
-                    {
-            setting.GetOptionDescLocaleID(nameof(Lumina.Setting.UseTimeOfDaySlider)),
-            "Shows a time of day slider to switch between day/night. Disabled by default if Weather Plus or other time changing mode is detected."
-                    }
-                    
-
-
-                };
-
-            }
-
-            /// <inheritdoc/>
-            public void Unload()
-            {
-            }
         }
     }
 }

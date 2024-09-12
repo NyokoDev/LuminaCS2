@@ -57,7 +57,7 @@ namespace Lumina
             // Initialize and register mod settings
             this.setting = new Setting(this);
             this.setting.RegisterInOptionsUI();
-            GameManager.instance.localizationManager.AddSource("en-US", new Setting.LocaleEN(setting));
+            GameManager.instance.localizationManager.AddSource("en-US", new LocaleEN(setting));
 
             // Load translations.
             Localization.LoadTranslations(null, Log);
