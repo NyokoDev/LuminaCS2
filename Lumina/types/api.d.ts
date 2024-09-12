@@ -1,6 +1,5 @@
 declare module "cs2/api" {
   export interface ValueBinding<T> {
-    [x: string]: any;
   	readonly value: T;
   	subscribe(listener?: BindingListener<T>): ValueSubscription<T>;
   	dispose(): void;

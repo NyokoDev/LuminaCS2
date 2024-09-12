@@ -6,7 +6,6 @@
 	<!--Short description of the mod-->
 	<ShortDescription Value="Fine tune post-processing settings." />
 	<!--Long description of the mod. Single line or multi line. Supports minimal markdown subset-->
-	<!--LongDescription Value="Fine tune post exposure, hue, shift and saturation." /-->
 	<LongDescription>
 		Lumina, formerly known as ColorAdjustments, is a post-processing mod for Cities Skylines, crafted to significantly enhance in-game visuals. It allows players to save and load color settings, eliminating the need to reconfigure them each time the game is launched. Currently in Beta, Lumina features cubemap replacement, a time-of-day slider, LUT selection, and detailed color adjustments such as exposure, contrast, hue, and white balance. It also offers planetary settings and brightness control, and is compatible with the game editor. As one of the most complex mods I've ever designed and coded, Lumina's detailed overview of features and updates can be found on the project's GitHub repository.
 
@@ -17,7 +16,7 @@
 		TritonSupreme for code related to the sliders.
 		DanielNotFound22 for testing and advice.
 		T.D.W for input and help.
-		
+
 		Translations:
 		Translations for this mod are available in several languages including:
 
@@ -53,7 +52,7 @@
 	<!--Link to the forum post where the mod can be discussed-->
 	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/lumina.1645623/" />
 	<!--Version of the mod-->
-	<ModVersion Value="1.6" />
+	<ModVersion Value="1.6r1" />
 	<!--Recommended version of the base game to use the mod-->
 	<GameVersion Value="1.1.*" />
 	<!--Dependency for the mod, can be set multiple times-->
@@ -62,6 +61,10 @@
 	<ChangeLog Value="Lumina 1.6 - Improvements." />
 	<!--ChangeLog>
 	</ChangeLog-->
-	<!--External link. supported types are discord, github, youtube, twitch, x, paypal, patreon-->
-	<ExternalLink Type="" Url="" />
+	<!--External links-->
+	<ExternalLink Type="discord" Url="https://discord.gg/5gZgRNm29e" />
+	<ExternalLink Type="paypal" Url="https://paypal.me/nyokodev" />
+	<ExternalLink Type="github" Url="https://github.com/NyokoDev/LuminaCS2" />
+	<ExternalLink Type="crowdin" Url="https://crowdin.com/project/lumina" />
+	<ExternalLink Type="ko-fi" Url="https://ko-fi.com/devnyoko" />
 </Publish>

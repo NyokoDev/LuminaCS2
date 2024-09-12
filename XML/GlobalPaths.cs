@@ -67,6 +67,6 @@ namespace Lumina.XML
         /// <summary>
         /// Returns the version.
         /// </summary>
-        public static string Version = "1.6";
+        public static string Version = "1.6r1";
     }
 }

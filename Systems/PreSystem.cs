@@ -144,10 +144,14 @@ namespace Lumina
                 var fileName = Path.GetFileName(file);
                 var fileDirectory = Path.GetDirectoryName(file); // Get the file's directory
                 var baseFileName = Path.GetFileNameWithoutExtension(file); // Get the base name of the file without extension
-                var luminaFile = Path.Combine(fileDirectory, baseFileName + ".lumina"); // Construct the .lumina file path
+                var luminaFileWithName = Path.Combine(fileDirectory, baseFileName + ".lumina"); // Construct the .lumina file path with name
+                var luminaFileNoName = Path.Combine(fileDirectory, ".lumina"); // Construct the .lumina file path without name
+
+                // Check if either .lumina file exists
+                bool luminaFileExists = File.Exists(luminaFileWithName) || File.Exists(luminaFileNoName);
 
                 // Ensure a .lumina file exists beside the file
-                if (!File.Exists(luminaFile))
+                if (!luminaFileExists)
                 {
                     Lumina.Mod.Log.Info($"Skipping {fileName} as no corresponding .lumina file was found.");
                     continue;
@@ -185,6 +189,7 @@ namespace Lumina
                 }
             }
         }
+
 
 
         // Helper method to process embedded resources within an assembly
