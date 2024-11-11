@@ -34,9 +34,11 @@ export const Editor_Button: ModuleRegistryExtend = (Component) => {
     return (props) => {
         const { children, ...otherProps } = props || {};
         const MIT_ToolEnabled = isInstalled$
-        const moveItIconSrc = MIT_ToolEnabled ? "https://svgshare.com/i/15rV.svg" : "https://svgshare.com/i/15rV.svg";
+        const moveItIconSrc = MIT_ToolEnabled ? "coui://ui-mods/images/Lumina.svg" : "coui://ui-mods/images/Lumina.svg";
         const [isInstalled, setIsInstalled] = useState(true); // assuming you meant to use useState to manage isInstalled state
 
+        let a = iconOff;
+        a = iconActive;
 
         return (
             <>    
