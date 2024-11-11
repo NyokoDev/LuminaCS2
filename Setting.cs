@@ -70,7 +70,7 @@ namespace Lumina
         }
 
         [SettingsUISection(KSection, KToggleGroup)]
-        [SettingsUIMultilineText("https://svgshare.com/i/15rV.svg")]
+        [SettingsUIMultilineText("https://github.com/NyokoDev/LuminaCS2/blob/master/HTTP/Lumina.svg")]
         public string LuminaByNyoko => string.Empty;
 
 
