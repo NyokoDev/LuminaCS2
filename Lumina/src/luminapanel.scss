@@ -53,7 +53,7 @@
 .ColorAdjustmentsButton {
     position: absolute;
     display: flex;
-    background-image: url('https://github.com/NyokoDev/LuminaCS2/blob/master/HTTP/ColorAdjustments.svg');
+    background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/ColorAdjustments.svg');
     background-size: cover; /* Make sure the background image covers the entire area */
     width: 45rem;
     height: 45rem;
@@ -65,7 +65,7 @@
 .ColorAdjustmentsButtonDeselected {
     position: absolute;
     display: flex;
-    background-image: url('https://github.com/NyokoDev/LuminaCS2/blob/master/HTTP/ColorAdjustments.svg');
+    background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/ColorAdjustments.svg');
     background-size: cover; /* Make sure the background image covers the entire area */
     width: 45rem;
     height: 45rem;
@@ -76,7 +76,7 @@
 
 .SettingsButton {
     position: absolute;
-    background-image: url('https://github.com/NyokoDev/LuminaCS2/blob/master/HTTP/SettingsGear.svg');
+    background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/SettingsGear.svg');
     background-size: cover; /* Make sure the background image covers the entire area */
     width: 45rem;
     height: 45rem;
@@ -88,7 +88,7 @@
 
 .SettingsButtonDeselected {
     position: absolute;
-    background-image: url('https://github.com/NyokoDev/LuminaCS2/blob/master/HTTP/SettingsGear.svg');
+    background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/SettingsGear.svg');
     background-size: cover; /* Make sure the background image covers the entire area */
     width: 45rem;
     height: 45rem;
@@ -100,7 +100,7 @@
 
 .PlanetaryButton {
     position: absolute;
-    background-image: url('https://github.com/NyokoDev/LuminaCS2/blob/master/HTTP/Planet.svg');
+    background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/Planet.svg');
     background-size: cover; /* Make sure the background image covers the entire area */
     width: 43rem;
     height: 43rem;
@@ -112,7 +112,7 @@
 
 .PlanetaryButtonDeselected {
     position: absolute;
-    background-image: url('https://github.com/NyokoDev/LuminaCS2/blob/master/HTTP/Planet.svg');
+    background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/Planet.svg');
     background-size: cover; /* Make sure the background image covers the entire area */
     width: 43rem;
     height: 43rem;
@@ -337,7 +337,7 @@ $distance:30rem;
    position: absolute;
    left: 0rem;
    top: $global-height + $distance + -70rem;
-   background-image: url('https://github.com/NyokoDev/LuminaCS2/blob/master/HTTP/Checkmark.svg');
+   background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/Checkmark.svg');
    background-size: cover; /* Make sure the background image covers the entire area */
    width: 28rem;
    height: 28rem;
@@ -399,7 +399,7 @@ $contrast-top: 50rem;
    position: absolute;
    left: 0rem;
    top: $global-height + $distance + -70rem;
-   background-image: url('https://github.com/NyokoDev/LuminaCS2/blob/master/HTTP/Checkmark.svg');
+   background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/Checkmark.svg');
    background-size: cover; /* Make sure the background image covers the entire area */
    width: 28rem;
    height: 28rem;
@@ -458,7 +458,7 @@ $hueshift-top: 80rem;
    position: absolute;
    left: 0rem;
    top: $global-height + $distance + -70rem;
-   background-image: url('https://github.com/NyokoDev/LuminaCS2/blob/master/HTTP/Checkmark.svg');
+   background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/Checkmark.svg');
    background-size: cover; /* Make sure the background image covers the entire area */
    width: 28rem;
    height: 28rem;
@@ -515,7 +515,7 @@ $hueshift-top: 80rem;
    position: absolute;
    left: 0rem;
    top: $global-height + $distance + -70rem;
-   background-image: url('https://github.com/NyokoDev/LuminaCS2/blob/master/HTTP/Checkmark.svg');
+   background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/Checkmark.svg');
    background-size: cover; /* Make sure the background image covers the entire area */
    width: 28rem;
    height: 28rem;
@@ -584,7 +584,7 @@ $hueshift-top: 80rem;
    position: absolute;
    left: 0rem;
    top: $global-height + $distance + -70rem;
-   background-image: url('https://github.com/NyokoDev/LuminaCS2/blob/master/HTTP/Checkmark.svg');
+   background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/Checkmark.svg');
    background-size: cover; /* Make sure the background image covers the entire area */
    width: 28rem;
    height: 28rem;
@@ -642,7 +642,7 @@ $hueshift-top: 80rem;
    position: absolute;
    left: 0rem;
    top: $global-height + $distance + -70rem;
-   background-image: url('https://github.com/NyokoDev/LuminaCS2/blob/master/HTTP/Checkmark.svg');
+   background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/Checkmark.svg');
    background-size: cover; /* Make sure the background image covers the entire area */
    width: 28rem;
    height: 28rem;
@@ -711,7 +711,7 @@ $hueshift-top: 80rem;
    position: absolute;
    left: 0rem;
    top: $global-height + $distance + -70rem;
-   background-image: url('https://github.com/NyokoDev/LuminaCS2/blob/master/HTTP/Checkmark.svg');
+   background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/Checkmark.svg');
    background-size: cover; /* Make sure the background image covers the entire area */
    width: 28rem;
    height: 28rem;
@@ -767,7 +767,7 @@ $hueshift-top: 80rem;
    position: absolute;
    left: 0rem;
    top: $global-height + $distance + -70rem;
-   background-image: url('https://github.com/NyokoDev/LuminaCS2/blob/master/HTTP/Checkmark.svg');
+   background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/Checkmark.svg');
    background-size: cover; /* Make sure the background image covers the entire area */
    width: 28rem;
    height: 28rem;
@@ -824,7 +824,7 @@ $hueshift-top: 80rem;
    position: absolute;
    left: 0rem;
    top: $global-height + $distance + -70rem;
-   background-image: url('https://github.com/NyokoDev/LuminaCS2/blob/master/HTTP/Checkmark.svg');
+   background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/Checkmark.svg');
    background-size: cover; /* Make sure the background image covers the entire area */
    width: 28rem;
    height: 28rem;
@@ -1063,7 +1063,7 @@ $hueshift-top: 80rem;
     width: 500rem;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("https://github.com/NyokoDev/LuminaCS2/blob/master/HTTP/Version.png");
+    background-image: url("https://raw.githubusercontent.com/NyokoDev/LuminaCS2/b4e1c1020a4e14c951f700d5ead90a5b72947a55/HTTP/Version.png");
     border: 5px solid #000; /* Example border: 5px solid black */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Example box shadow: offset-x, offset-y, blur-radius, color */
 }
