@@ -357,7 +357,7 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.AngularDiameter = loadedVariables?.AngularDiameter ?? 0f;
                     GlobalVariables.Instance.SunIntensity = loadedVariables?.SunIntensity ?? 0f;
                     GlobalVariables.Instance.SunFlareSize = loadedVariables?.SunFlareSize ?? 0f;
-                    GlobalVariables.Instance.ReloadAllPackagesOnRestart = loadedVariables?.ReloadAllPackagesOnRestart ?? true;
+                    GlobalVariables.Instance.ReloadAllPackagesOnRestart = loadedVariables?.ReloadAllPackagesOnRestart ?? false;
 
 
                     return loadedVariables;

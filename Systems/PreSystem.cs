@@ -116,24 +116,6 @@ namespace Lumina
 
             // Process and copy the files to their respective destinations
             ProcessFiles(allFiles, hdrDirectory, lutsDirectory);
-
-            // Load assemblies and check for embedded resources from both directories
-            var packageAssemblies = Directory.GetFiles(packagesDirectory, "*.dll", SearchOption.AllDirectories);
-            var localAssemblies = Directory.GetFiles(localPackagesDirectory, "*.dll", SearchOption.AllDirectories);
-            var allAssemblies = packageAssemblies.Concat(localAssemblies);
-
-            foreach (var assemblyPath in allAssemblies)
-            {
-                try
-                {
-                    var assembly = Assembly.LoadFrom(assemblyPath);
-                    ProcessEmbeddedResources(assembly, hdrDirectory, lutsDirectory);
-                }
-                catch (Exception ex)
-                {
-                    Lumina.Mod.Log.Error($"[HARMLESS] Not loaded {assemblyPath}: {ex.Message}");
-                }
-            }
         }
 
         // Helper method to process files and copy them to the destination directories
@@ -190,45 +172,6 @@ namespace Lumina
             }
         }
 
-
-
-        // Helper method to process embedded resources within an assembly
-        private void ProcessEmbeddedResources(Assembly assembly, string hdrDirectory, string lutsDirectory)
-        {
-            var resourceNames = assembly.GetManifestResourceNames();
-            foreach (var resourceName in resourceNames)
-            {
-                if (resourceName.EndsWith(".cube", StringComparison.OrdinalIgnoreCase) ||
-                    resourceName.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
-                {
-                    try
-                    {
-                        using (var resourceStream = assembly.GetManifestResourceStream(resourceName))
-                        {
-                            if (resourceStream != null)
-                            {
-                                string fileName = Path.GetFileName(resourceName);
-                                string destination = resourceName.EndsWith(".cube", StringComparison.OrdinalIgnoreCase)
-                                    ? Path.Combine(lutsDirectory, fileName)
-                                    : Path.Combine(hdrDirectory, fileName);
-
-                                using (var fileStream = File.Create(destination))
-                                {
-                                    resourceStream.CopyTo(fileStream);
-                                }
-
-                                Lumina.Mod.Log.Info($"Extracted embedded resource {resourceName} to {destination}");
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Lumina.Mod.Log.Error($"Failed to extract resource {resourceName}: {ex.Message}");
-                    }
-                }
-            }
-        }
-
         // Helper method to check for excluded files based on their name
         private bool IsExcludedFile(string filePath)
         {
@@ -261,55 +204,11 @@ namespace Lumina
                     RenderEffectsSystem.LutFiles = Directory.GetFiles(GlobalPaths.LuminaLUTSDirectory);
                 }
 
-                // Copy all embedded resources
-                CopyAllEmbeddedResourcesToDirectory(directoryPath);
+
             }
             catch (Exception ex)
             {
                 Mod.Log.Error($"Failed to validate or create the LUTs directory: {ex.Message}");
-            }
-        }
-
-        private void CopyAllEmbeddedResourcesToDirectory(string directoryPath)
-        {
-            var assembly = GetType().Assembly;
-            var resourceNamespace = "Lumina.LUTS"; // Replace with your actual namespace
-
-            // Get all resource names
-            var resourceNames = assembly.GetManifestResourceNames();
-
-            foreach (var resourceName in resourceNames)
-            {
-                // Check if the resource belongs to the correct namespace
-                if (resourceName.StartsWith(resourceNamespace))
-                {
-                    using (var resourceStream = assembly.GetManifestResourceStream(resourceName))
-                    {
-                        if (resourceStream == null)
-                        {
-                            Mod.Log.Error($"Embedded resource '{resourceName}' not found.");
-                            continue;
-                        }
-
-                        // Determine the destination path
-                        var relativePath = resourceName.Substring(resourceNamespace.Length + 1); // Remove namespace prefix
-                        var destinationPath = Path.Combine(directoryPath, relativePath);
-
-                        // Create the directory if it doesn't exist
-                        var destinationDirectory = Path.GetDirectoryName(destinationPath);
-                        if (!Directory.Exists(destinationDirectory))
-                        {
-                            Directory.CreateDirectory(destinationDirectory);
-                        }
-
-                        // Copy the resource to the destination
-                        using (var fileStream = new FileStream(destinationPath, FileMode.Create, FileAccess.Write))
-                        {
-                            resourceStream.CopyTo(fileStream);
-                        }
-
-                    }
-                }
             }
         }
 
@@ -334,49 +233,6 @@ namespace Lumina
         }
 
 
-        private void CopyCubemapsToDirectory(string directoryPath)
-        {
-            var assembly = GetType().Assembly;
-            var resourceNamespace = "Lumina.Cubemaps"; // Replace with your actual namespace
-
-            // Get all resource names
-            var resourceNames = assembly.GetManifestResourceNames();
-
-            foreach (var resourceName in resourceNames)
-            {
-                // Check if the resource belongs to the correct namespace
-                if (resourceName.StartsWith(resourceNamespace))
-                {
-                    using (var resourceStream = assembly.GetManifestResourceStream(resourceName))
-                    {
-                        if (resourceStream == null)
-                        {
-                            Mod.Log.Error($"Embedded resource '{resourceName}' not found.");
-                            continue;
-                        }
-
-                        // Determine the destination path
-                        var relativePath = resourceName.Substring(resourceNamespace.Length + 1); // Remove namespace prefix
-                        var destinationPath = Path.Combine(directoryPath, relativePath);
-
-                        // Create the directory if it doesn't exist
-                        var destinationDirectory = Path.GetDirectoryName(destinationPath);
-                        if (!Directory.Exists(destinationDirectory))
-                        {
-                            Directory.CreateDirectory(destinationDirectory);
-                        }
-
-                        // Copy the resource to the destination
-                        using (var fileStream = new FileStream(destinationPath, FileMode.Create, FileAccess.Write))
-                        {
-                            resourceStream.CopyTo(fileStream);
-                        }
-
-                    }
-                }
-            }
-        }
-
         private void ValidateCubemapsDirectory()
         {
             // Ensure the directory path for LUTs is valid
@@ -392,8 +248,6 @@ namespace Lumina
             {
                 Directory.CreateDirectory(directoryPath);
             }
-            // Copy all embedded resources
-            CopyCubemapsToDirectory(directoryPath);
 
         }
 
