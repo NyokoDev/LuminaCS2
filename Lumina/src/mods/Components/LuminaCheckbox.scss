@@ -1,0 +1,50 @@
+.lumina-volume-container {
+    pointer-events: auto; /* Allows interaction with the container */
+    position: absolute;
+    height: 20rem;
+    width: 20rem;
+    top: 300rem;
+    right:200rem;
+    z-index: 1000;
+}
+
+.TextUseLumina {
+    pointer-events: auto; /* Allows interaction with the container */
+    text-transform: uppercase; /* Transforms text to uppercase */
+    color: white;
+    position: absolute;
+    top: 300rem;
+    right:200rem;
+}
+
+.checkbox-container {
+    position: absolute;
+ 
+  }
+ 
+  .checkbox-image {
+    position: absolute;
+    background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/Checkmark.svg');
+    background-size: cover; /* Make sure the background image covers the entire area */
+    filter: invert(100%);
+  }
+
+.lumina-volume-image {
+    pointer-events: auto; /* Allows interaction with the container */
+    position: absolute;
+    top: 0rem; /* -35rem + 20rem */
+    height: inherit;
+    width: inherit;
+    right:inherit;
+    z-index: 3000;
+}
+
+.lumina-volume-toggle {
+    pointer-events: auto; /* Allows interaction with the container */
+    position: absolute;
+    top: 0rem; /* -35rem + 20rem */
+    height: 20rem;
+    width: 20rem;
+right:inherit;
+    z-index: 2500;
+}

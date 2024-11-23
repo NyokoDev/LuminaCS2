@@ -173,7 +173,7 @@
 
         private bool CheckIfLumina()
         {
-            return GlobalVariables.Instance.LuminaVolumeEnabled;
+            return RenderEffectsSystem.LuminaVolume.enabled;
         }
         private void RestartLuminaVolume()
         {

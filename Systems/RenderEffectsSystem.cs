@@ -501,16 +501,7 @@
         private void ColorAdjustments()
         {
             // Use reflection to get the private ColorAdjustments field from LightingSystem
-            Type lightingSystemType = typeof(LightingSystem);
-            FieldInfo colorAdjustmentsField = lightingSystemType.GetField("m_ColorAdjustments", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            if (colorAdjustmentsField != null)
-            {
-                LightingSystem lightingSystem = World.GetExistingSystemManaged<LightingSystem>();
-                colorAdjustments = (UnityEngine.Rendering.HighDefinition.ColorAdjustments)colorAdjustmentsField.GetValue(lightingSystem);
-
-                if (colorAdjustments != null)
-                {
+            colorAdjustments = m_ColorAdjustments; 
                     // Set the exposure value to 0 using Override method
                     colorAdjustments.postExposure.Override(GlobalVariables.Instance.PostExposure);
                     colorAdjustments.postExposure.overrideState = GlobalVariables.Instance.PostExposureActive;
@@ -524,9 +515,9 @@
 
                     colorAdjustments.saturation.Override(GlobalVariables.Instance.Saturation);
                     colorAdjustments.saturation.overrideState = GlobalVariables.Instance.SaturationActive;
-                }
+                
             }
-        }
+        
 
         private void GetPrivateFieldm_PhysicallyBasedSky()
         {

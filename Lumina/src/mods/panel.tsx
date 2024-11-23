@@ -453,6 +453,7 @@ return (
 
 <div className="TabsRow">
 
+
     <Tooltip
   tooltip={translate("LUMINA.colortooltip")} // Specify the content of the tooltip
   disabled={false} // Specify whether the tooltip is disabled (default: false)
@@ -569,7 +570,7 @@ return (
 
   <div  className="Panel">
     
-  <LuminaVolumeCheckbox />
+
 
 
 
@@ -913,7 +914,8 @@ return (
 
 {SettingsEnabled$ && (
     <div className="SettingsPanel">
-
+      <label className="TextUseLumina">enable Lumina Volume</label>
+  <LuminaVolumeCheckbox />
     <button 
   
     onClick={SaveSettings}

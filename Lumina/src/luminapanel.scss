@@ -1,16 +1,18 @@
 .Panel {
    position: absolute;
    width: 950rem;
-   height: 900rem;
+   height: 500rem;
    top: 500rem;
    left: 200rem;
-   background-color: rgba(71, 55, 55, 0.3);
-   box-shadow: inset 0 0 20px rgba(16, 16, 16, 0.6); /* Add a blurred black inner shadow */
+   background-color: rgb(0, 0, 0, 0.1); /* Semi-transparent background */
+   backdrop-filter: blur(10px); /* Apply blur to the background behind the panel */
+   box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6); /* Blurred black inner shadow */
    overflow-y: scroll;
-   max-height: 400rem; 
+   max-height: 400rem;
    pointer-events: auto;
    cursor: pointer;
- }
+}
+
  
 
 
@@ -59,7 +61,7 @@
     height: 45rem;
     left: 900rem; /* Adjusted left position */
     transition: transform 0.01s ease-in-out;
-    filter: invert(100%); /* Invert the colors to turn black to white */
+   
 }
 
 .ColorAdjustmentsButtonDeselected {
@@ -71,7 +73,6 @@
     height: 45rem;
     left: 900rem; /* Adjusted left position */
     transition: transform 0.01s ease-in-out;
-    filter: invert(100%); /* Invert the colors to turn black to white */
 }
 
 .SettingsButton {
@@ -83,7 +84,8 @@
     left: 0rem;
     transition: transform 0.01s ease-in-out;
     border-radius: 50%; /* Make it round */
-    filter: invert(100%); /* Invert the colors to turn black to white */
+    filter:invert(100%);
+ 
 }
 
 .SettingsButtonDeselected {
@@ -95,7 +97,7 @@
     left: 0rem;
     transition: transform 2s ease-in-out;
     border-radius: 50%; /* Make it round */
-    filter: invert(100%); /* Invert the colors to turn black to white */
+    filter:invert(100%);
 }
 
 .PlanetaryButton {
@@ -107,7 +109,6 @@
     left: 850rem; /* Adjusted left position */
     transition: transform 0.01s ease-in-out;
     border-radius: 50%; /* Make it round */
-    filter: invert(100%); /* Invert the colors to turn black to white */
 }
 
 .PlanetaryButtonDeselected {
@@ -119,7 +120,6 @@
     left: 850rem; /* Adjusted left position */
     transition: transform 2s ease-in-out;
     border-radius: 50%; /* Make it round */
-    filter: invert(100%); /* Invert the colors to turn black to white */
 }
 
 .PlanetaryButton:hover {
@@ -138,7 +138,6 @@
    left: 800rem; 
    transition: transform 0.01s ease-in-out;
    border-radius: 50%; /* Make it round */
-   filter: invert(100%); /* Invert the colors to turn black to white */
 }
 
 .TonemappingButtonDeselected {
@@ -150,7 +149,6 @@
    left: 800rem; /* Adjusted left position */
    transition: transform 2s ease-in-out;
    border-radius: 50%; /* Make it round */
-   filter: invert(100%); /* Invert the colors to turn black to white */
 }
 
 .TonemappingButton:hover {
@@ -167,7 +165,6 @@
    left: 750rem; 
    transition: transform 0.01s ease-in-out;
    border-radius: 50%; /* Make it round */
-   filter: invert(100%); /* Invert the colors to turn black to white */
 }
 
 .SkyAndFogButtonDeselected {
@@ -179,7 +176,6 @@
    left: 750rem; 
    transition: transform 2s ease-in-out;
    border-radius: 50%; /* Make it round */
-   filter: invert(100%); /* Invert the colors to turn black to white */
 }
 
 .SkyAndFogButton:hover {
@@ -978,7 +974,7 @@ $hueshift-top: 80rem;
  // Latitude
 .LatitudeLabel {
    position: absolute;
-   color: rgb(118, 118, 118);
+   color: rgb(255, 255, 255);
    font-size: 20rem;
    left: 0rem;
    width: 150rem;
@@ -993,7 +989,6 @@ $hueshift-top: 80rem;
    left: 250rem;
    top: $global-height + $distance + 0rem;
    width: 680rem;
-   background-color: rgba(0, 0, 0, 0.5);
 }
 
 .LatitudeInput {
@@ -1009,7 +1004,7 @@ $hueshift-top: 80rem;
 //Longitude
 .LongitudeLabel {
    position: absolute;
-   color: rgb(118, 118, 118);
+   color: rgb(255, 255, 255);
    font-size: 20rem;
    left: 0rem;
    width: 150rem;
@@ -1024,7 +1019,6 @@ $hueshift-top: 80rem;
    left: 250rem;
    top: $global-height + $distance + 40rem;
    width: 680rem;
-   background-color: rgba(0, 0, 0, 0.5);
 }
 
 .LongitudeInput {
