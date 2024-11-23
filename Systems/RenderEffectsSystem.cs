@@ -36,7 +36,7 @@
         public static string[] LutFiles;
         public static string[] CubemapFiles;
         bool m_SetupDone = false;
-        Volume LuminaVolume;
+        public static Volume LuminaVolume;
         private VolumeProfile m_Profile;
 
         public RenderEffectsSystem PPS;
@@ -92,6 +92,8 @@
         protected override void OnCreate()
         {
             base.OnCreate();
+
+
             InitializeCubemap();
             GetPrivateFieldm_PhysicallyBasedSky();
             ConvertToHDRP();
@@ -191,6 +193,7 @@
                 TonemappingLUT();
                 LUTloaded = true;
             }
+
             ColorAdjustments();
             WhiteBalance();
             ShadowsMidTonesHighlights();
@@ -198,6 +201,7 @@
 
         public static void DisableCubemap()
         {
+
             // Disable the LightingPhysicallyBasedSky
             LightingPhysicallyBasedSky.active = true;
 
@@ -606,12 +610,11 @@
                 LuminaVolume = globalVolume.AddComponent<Volume>();
                 LuminaVolume.priority = 1980f;
                 Mod.Log.Info("[LUMINA] Priority set to 1980.");
-                LuminaVolume.enabled = true;
+                LuminaVolume.enabled = GlobalVariables.Instance.LuminaVolumeEnabled;
                 LuminaVolume.name = "Lumina";
 
                 // Access the Volume Profile
                 m_Profile = LuminaVolume.profile;
-
 
 #if DEBUG
                 // Add Volumetric Clouds
@@ -619,30 +622,27 @@
 #endif
 
                 // Add Tonemapping
+                m_ColorAdjustments = m_Profile.Add<ColorAdjustments>();
+                m_ShadowsMidtonesHighlights = m_Profile.Add<ShadowsMidtonesHighlights>(); // Shadows, midtones, highlights
                 m_Tonemapping = m_Profile.Add<Tonemapping>();
-
-                // Add and configure White Balance effect
                 m_WhiteBalance = m_Profile.Add<WhiteBalance>();
-                m_WhiteBalance.active = true;
+
                 m_WhiteBalance.temperature.Override(GlobalVariables.Instance.Temperature);
                 m_WhiteBalance.tint.Override(GlobalVariables.Instance.Tint);
 
-                // Add and configure Color Adjustments effect
-                m_ColorAdjustments = m_Profile.Add<ColorAdjustments>();
-                m_ColorAdjustments.colorFilter.Override(new Color(1f, 1f, 1f));
-
-
-
-                m_ShadowsMidtonesHighlights = m_Profile.Add<ShadowsMidtonesHighlights>(); // Shadows, midtones, highlights
-                m_ShadowsMidtonesHighlights.active = true;
                 m_ShadowsMidtonesHighlights.shadows.Override(new Vector4(GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows));
                 m_ShadowsMidtonesHighlights.midtones.Override(new Vector4(GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones));
 
-
                 // Finalize Volume
                 m_SetupDone = true;
-                Mod.Log.Info("[LUMINA] Successfully added HDRP volume.");
 
+
+                // Log active/inactive status of components
+                foreach (var component in m_Profile.components)
+                {
+                    Mod.Log.Info($"[LUMINA] Component: {component.GetType().Name}, Active: {component.active}");
+                }
+                Mod.Log.Info("[LUMINA] Successfully added HDRP volume.");
 
             }
         }

@@ -166,10 +166,10 @@ const SunFlareSize = useValue(SunFlareSize$);
 
 
 // Initialize state variables using useState hook
-const [ColorAdjustmentsEnabled$, setCA] = useState(false);
+const [ColorAdjustmentsEnabled$, setCA] = useState(true);
 const [SettingsEnabled$, setSettings] = useState(false);
 const [SkyAndFogEnabled$, setSkyAndFog] = useState(false);
-const [ToneMappingEnabled$, setTonemapping] = useState(true);
+const [ToneMappingEnabled$, setTonemapping] = useState(false);
 const [PlanetaryEnabled$, setPlanetaryTab] = useState(false);
 const [OnImport, OnImportChange] = useState(false);
 

@@ -229,6 +229,9 @@ namespace LuminaMod.XML
         [XmlElement]
         public bool ReloadAllPackagesOnRestart { get; set; }
 
+        [XmlElement]
+        public bool LuminaVolumeEnabled { get; set; }
+
         /// <summary>
         /// Serializes to a file.
         /// </summary>

@@ -55,7 +55,7 @@
         /// </summary>
         private void CreateBindings()
         {
-
+            UseLuminaVolume();
             Checkboxes();
             ColorAdjustments();
 
@@ -164,6 +164,31 @@
 
 
         }
+
+        private void UseLuminaVolume()
+        {
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "UseLuminaVolume", () => CheckIfLumina()));
+            AddBinding(new TriggerBinding(Mod.MODUI, "RestartLuminaVolume", RestartLuminaVolume));
+        }
+
+        private bool CheckIfLumina()
+        {
+            return GlobalVariables.Instance.LuminaVolumeEnabled;
+        }
+
+        private void RestartLuminaVolume()
+        {
+            if (RenderEffectsSystem.LuminaVolume != null)
+            {
+                RenderEffectsSystem.LuminaVolume.enabled = !Enabled;
+                Mod.Log.Info($"[LUMINA] LuminaVolume enabled status set to {!Enabled}.");
+            }
+            else
+            {
+                Mod.Log.Error("[LUMINA] LuminaVolume is null. Unable to restart LuminaVolume.");
+            }
+        }
+
 
         private void UploadLUTFileDialog()
         {
