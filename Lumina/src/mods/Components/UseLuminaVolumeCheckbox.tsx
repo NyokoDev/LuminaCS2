@@ -1,5 +1,5 @@
 import './Checkboxes.scss';
-import './CheckboxesStyle.scss';
+import './CheckboxesStyle.scss'
 import mod from "mod.json";
 import { bindValue, trigger, useValue } from 'cs2/api';
 
@@ -14,6 +14,7 @@ export const LuminaVolumeCheckbox = () => {
 
   return (
     <div className="checkbox-container lumina-volume-container">
+      <label> Use Lumina</label>
       {isActive && (
         <div 
           className="checkbox-image lumina-volume-image" 

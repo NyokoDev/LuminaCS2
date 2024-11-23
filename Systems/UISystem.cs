@@ -175,20 +175,28 @@
         {
             return GlobalVariables.Instance.LuminaVolumeEnabled;
         }
-
         private void RestartLuminaVolume()
         {
             if (RenderEffectsSystem.LuminaVolume != null)
             {
-                RenderEffectsSystem.LuminaVolume.enabled = !Enabled;
-                Mod.Log.Info($"[LUMINA] LuminaVolume enabled status set to {!Enabled}.");
+                // Log the current state before toggling
+                bool currentState = RenderEffectsSystem.LuminaVolume.enabled;
+                Mod.Log.Info($"[LUMINA] Current LuminaVolume enabled status: {currentState}.");
+
+                // Toggle the enabled state
+                GlobalVariables.Instance.LuminaVolumeEnabled = !currentState;
+                Mod.Log.Info($"[LUMINA] Toggling LuminaVolume enabled status to {!currentState}.");
+
+                // Apply the new state
+                RenderEffectsSystem.LuminaVolume.enabled = !currentState;
+
+                Mod.Log.Info($"[LUMINA] LuminaVolume enabled status set to {!currentState}.");
             }
             else
             {
                 Mod.Log.Error("[LUMINA] LuminaVolume is null. Unable to restart LuminaVolume.");
             }
         }
-
 
         private void UploadLUTFileDialog()
         {

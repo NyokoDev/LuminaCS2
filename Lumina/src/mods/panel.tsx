@@ -28,6 +28,7 @@ import SpaceEmissionCheckbox from "./Checkboxes/UseHDRISky";
 import CustomSunCheckbox from "./Checkboxes/UseCustomSunCheckbox";
 import { LUTContributionSlider } from "./Sliders/LutContributionSlider";
 import { OpenFileDialogButton } from "./Buttons/UploadFileButton";
+import LuminaVolumeCheckbox from "./Components/UseLuminaVolumeCheckbox";
 
 
 export let isInstalled$ = false;
@@ -568,7 +569,7 @@ return (
 
   <div  className="Panel">
     
-   
+  <LuminaVolumeCheckbox />
 
 
 
@@ -576,8 +577,11 @@ return (
 
     {ColorAdjustmentsEnabled$ && (
     <div className="ColorAdjustments">
- 
+
+
+
         <label className="title_SVH title_zQN CALabel">{translate("LUMINA.coloradjustments")}</label>
+     
         <label className="title_SVH title_zQN PostExposureLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.postexposure")}</label>
         <label className="title_SVH title_zQN PostExposureValue" >{PEValue.toString()} </label>
 
