@@ -13,7 +13,9 @@ export const LuminaVolumeCheckbox = () => {
   };
 
   return (
-    <div className="checkbox-container lumina-volume-container">
+    <div className="checkbox-container lumina-volume-container"
+    onClick={toggle}
+    >
       <label> Use Lumina</label>
       {isActive && (
         <div 

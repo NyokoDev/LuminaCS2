@@ -307,6 +307,8 @@ namespace LuminaMod.XML
                     // Deserialize the object from the file.
                     GlobalVariables loadedVariables = (GlobalVariables)serializer.Deserialize(reader);
 
+                    GlobalVariables.instance.LuminaVolumeEnabled = loadedVariables?.LuminaVolumeEnabled ?? false;
+
                     // Set the loaded values to the corresponding properties, with default values if missing.
                     GlobalVariables.Instance.PostExposure = loadedVariables?.PostExposure ?? 0f;
                     GlobalVariables.Instance.PostExposureActive = loadedVariables?.PostExposureActive ?? false;
@@ -361,6 +363,8 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.SunIntensity = loadedVariables?.SunIntensity ?? 0f;
                     GlobalVariables.Instance.SunFlareSize = loadedVariables?.SunFlareSize ?? 0f;
                     GlobalVariables.Instance.ReloadAllPackagesOnRestart = loadedVariables?.ReloadAllPackagesOnRestart ?? false;
+
+                  
 
 
                     return loadedVariables;

@@ -610,7 +610,16 @@
                 LuminaVolume = globalVolume.AddComponent<Volume>();
                 LuminaVolume.priority = 1980f;
                 Mod.Log.Info("[LUMINA] Priority set to 1980.");
-                LuminaVolume.enabled = GlobalVariables.Instance.LuminaVolumeEnabled;
+
+                if (GlobalVariables.Instance.LuminaVolumeEnabled)
+                {
+                    LuminaVolume.enabled = true;
+                }
+                else
+                {
+                    LuminaVolume.enabled = false;
+                }
+           
                 LuminaVolume.name = "Lumina";
 
                 // Access the Volume Profile
@@ -646,7 +655,6 @@
 
             }
         }
-
 
 
 
