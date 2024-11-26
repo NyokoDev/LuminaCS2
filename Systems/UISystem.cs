@@ -360,27 +360,33 @@
             RenderEffectsSystem.UpdateCubemap();
         }
 
+        /// <summary>
+        /// Toggles the state of the HDRI Sky and applies or disables the cubemap accordingly.
+        /// </summary>
         private void SetHDRISkyEnabled()
         {
-            GlobalVariables.Instance.HDRISkyEnabled = !GlobalVariables.Instance.HDRISkyEnabled;
-            UsingHDRSky = GlobalVariables.Instance.HDRISkyEnabled;
-            RenderEffectsSystem.DisableCubemap();
-        }
+            // Toggle the HDRI Sky state
+            bool isEnabled = !GlobalVariables.Instance.HDRISkyEnabled;
+            GlobalVariables.Instance.HDRISkyEnabled = isEnabled;
+            UsingHDRSky = isEnabled;
 
-        private bool IsHDRISkyEnabled()
-        {
-            // Check if HDRI Sky is enabled in GlobalVariables
-            if (GlobalVariables.Instance.HDRISkyEnabled == false)
+            // Update the render effects based on the new state
+            if (isEnabled)
             {
-                UsingHDRSky = false;
+                RenderEffectsSystem.ApplyCubemap();
             }
             else
             {
-                UsingHDRSky = true;
+                RenderEffectsSystem.DisableCubemap();
             }
+        }
 
+
+
+        private bool IsHDRISkyEnabled()
+        {
             // Return the value of UsingHDRSky
-            return UsingHDRSky;
+            return GlobalVariables.Instance.HDRISkyEnabled;
         }
 
 

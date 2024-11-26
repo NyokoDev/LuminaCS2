@@ -107,26 +107,13 @@
 
         public static void UpdateCubemap()
         {
-            // Stop Cubemap manager from attempting to load mid loading
-            GlobalVariables.Instance.HDRISkyEnabled = false;
-
-            // Check if GlobalCubemap already holds a cubemap
-            if (GlobalCubemap != null)
-            {
-                // Destroy the existing cubemap to free up resources
-                UnityEngine.Object.Destroy(GlobalCubemap);
-            }
-
-            Resources.UnloadAsset(GlobalCubemap);
-
             // Load the new cubemap
             GlobalCubemap = CubemapLoader.LoadCubemap();
 
-            // Log that the cubemap has been initialized successfully
-             Mod.Log.Info("Initialized cubemap successfully.");
+            RenderEffectsSystem.ApplyCubemap();
 
-            // Initialize Cubemap system again.
-            GlobalVariables.Instance.HDRISkyEnabled = true;
+            // Log that the cubemap has been initialized successfully
+            Mod.Log.Info("Initialized cubemap successfully.");
         }
 
 
@@ -199,48 +186,121 @@
             ShadowsMidTonesHighlights();
         }
 
+        /// <summary>
+        /// Disables the HDRI Sky and reverts to the default lighting sky configuration.
+        /// </summary>
         public static void DisableCubemap()
         {
-
-            // Disable the LightingPhysicallyBasedSky
-            LightingPhysicallyBasedSky.active = true;
-
-            // Disable the override states for space emission properties
-            LightingPhysicallyBasedSky.spaceEmissionMultiplier.overrideState = false;
-            LightingPhysicallyBasedSky.spaceEmissionTexture.overrideState = false;
-
-            // Optionally reset the values (this might be necessary to fully disable the effects)
-            LightingPhysicallyBasedSky.spaceEmissionTexture.value = null;
-            LightingPhysicallyBasedSky.spaceEmissionMultiplier.value = 0;
-
-            // Destroy the existing GlobalCubemap to free up resources
-            if (GlobalCubemap != null)
+            try
             {
-                UnityEngine.Object.Destroy(GlobalCubemap);
-                GlobalCubemap = null;
+                // Enable the LightingPhysicallyBasedSky
+                LightingPhysicallyBasedSky.active = true;
+                DisableVisualEnvironment();
+                Mod.Log.Info("LightingPhysicallyBasedSky enabled successfully.");
+            }
+            catch (Exception ex)
+            {
+                // Log any unexpected errors
+                Mod.Log.Error($"Failed to enable LightingPhysicallyBasedSky: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Removes the VisualEnvironment and HDRISky overrides from the LuminaVolume.
+        /// </summary>
+        private static void DisableVisualEnvironment()
+        {
+            // Ensure the LuminaVolume is available
+            Volume luminaVolume = RenderEffectsSystem.LuminaVolume;
+            if (luminaVolume == null)
+            {
+                Mod.Log.Error("LuminaVolume not found. Unable to remove VisualEnvironment and HDRISky.");
+                return;
             }
 
-            // Log that the cubemap has been successfully destroyed and settings disabled
-             Mod.Log.Info("Disabled lighting sky and destroyed cubemap successfully.");
+            // Get the VolumeProfile
+            VolumeProfile profile = luminaVolume.profile;
+            if (profile == null)
+            {
+                Mod.Log.Error("No VolumeProfile assigned to LuminaVolume.");
+                return;
+            }
+
+            // Attempt to remove the VisualEnvironment override
+            if (profile.TryGet(out VisualEnvironment visualEnvironment))
+            {
+                profile.Remove<VisualEnvironment>();
+                Mod.Log.Info("VisualEnvironment override removed successfully.");
+            }
+            else
+            {
+                Mod.Log.Info("VisualEnvironment override not found in the VolumeProfile.");
+            }
+
+            // Attempt to remove the HDRISky override
+            if (profile.TryGet(out HDRISky hdriSky))
+            {
+                profile.Remove<HDRISky>();
+                Mod.Log.Info("HDRISky override removed successfully.");
+            }
+            else
+            {
+                Mod.Log.Info("HDRISky override not found in the VolumeProfile.");
+            }
         }
 
 
         public static void ApplyCubemap()
         {
-            LightingPhysicallyBasedSky.active = true; // Disable Physically Based Sky for testing
-
-            LightingPhysicallyBasedSky.spaceEmissionMultiplier.overrideState = true;
-            LightingPhysicallyBasedSky.spaceEmissionTexture.overrideState = true;
-            if (GlobalCubemap != null)
+            // Ensure GlobalCubemap is not null
+            if (GlobalCubemap == null)
             {
-                LightingPhysicallyBasedSky.spaceEmissionTexture.value = GlobalCubemap;
-            }
-            else
-            {
+                Mod.Log.Info("GlobalCubemap is null. Skipping cubemap application.");
+                return;
             }
 
-            LightingPhysicallyBasedSky.spaceEmissionMultiplier.value = GlobalVariables.Instance.spaceEmissionMultiplier;
+            // Get the active Volume and ensure it's not null
+            Volume volume = RenderEffectsSystem.LuminaVolume;
+            if (volume == null)
+            {
+                Mod.Log.Info("No Volume found in the scene. Add a Volume to configure HDRI Sky.");
+                return;
+            }
+
+            // Fetch or create the VolumeProfile
+            VolumeProfile profile = volume.profile;
+            if (!profile)
+            {
+                Mod.Log.Info("No VolumeProfile assigned to the Volume.");
+                return;
+            }
+
+            // Ensure HDRI Sky and Visual Environment overrides are present
+            if (!profile.TryGet(out HDRISky hdriSky))
+            {
+                hdriSky = profile.Add<HDRISky>();
+                hdriSky.active = true;
+            }
+            if (!profile.TryGet(out VisualEnvironment visualEnvironment))
+            {
+                visualEnvironment = profile.Add<VisualEnvironment>();
+                visualEnvironment.active = true;
+            }
+
+            // Set HDRI Sky as the active sky type
+            visualEnvironment.skyType.Override((int)SkyType.HDRI);
+
+            // Assign the HDRI Cubemap
+            hdriSky.hdriSky.overrideState = true;
+            hdriSky.hdriSky.Override(GlobalCubemap);
+            // Adjust brightness by setting the exposure
+            float desiredExposure = 10f; // Set your desired exposure value (e.g., 1.5 for brighter, lower for darker)
+            hdriSky.skyIntensityMode.Override(SkyIntensityMode.Lux);
+            hdriSky.desiredLuxValue.Override(desiredExposure);
+            Mod.Log.Info("Overriden.");
         }
+
+
 
         private void UpdateNames()
         {

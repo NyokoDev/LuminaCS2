@@ -24,15 +24,9 @@ namespace Lumina.ManagerSystems
         }
 
         /// <summary>
-        /// Updates cubemap on update to prevent LightingSystem volume to reset their volume causing it to dissappear.
         /// </summary>
         protected override void OnUpdate()
         {
-            if (GlobalVariables.Instance.HDRISkyEnabled)
-            {
-
-                RenderEffectsSystem.ApplyCubemap();
-            }
         }
     }
 }

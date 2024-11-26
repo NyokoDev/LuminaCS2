@@ -4,6 +4,7 @@ import { getModule } from "cs2/modding";
 import mod from "../../../mod.json";
 import { Dropdown, DropdownItem, DropdownToggle, UISound, FOCUS_AUTO } from "cs2/ui";
 import '../dropdown_module.scss'
+import '../Cubemaps/Cubemaps.scss'
 
 // Bind the CubemapArray to a variable and initialize it with an empty array
 export const CubemapArray = bindValue<string[]>(mod.id, "CubemapArrayExtended", []);

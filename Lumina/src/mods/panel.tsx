@@ -29,6 +29,7 @@ import CustomSunCheckbox from "./Checkboxes/UseCustomSunCheckbox";
 import { LUTContributionSlider } from "./Sliders/LutContributionSlider";
 import { OpenFileDialogButton } from "./Buttons/UploadFileButton";
 import LuminaVolumeCheckbox from "./Components/UseLuminaVolumeCheckbox";
+import './Cubemaps/Cubemaps.scss'
 
 
 export let isInstalled$ = false;
@@ -1236,26 +1237,13 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
 
 {SkyAndFogEnabled$ &&
 <div className="SkyAndFogPanel"> 
-
+<h1 className="CubemapName">Cubemap Name</h1>
 <div className="CubemapsDropdown">
+
       <CubemapsDropdown />
     </div>
-
-    <Slider
-    value={EmissionMultiplier}
-    start={1}       // Minimum value of the slider
-    end={20000}         // Maximum value of the slider
-    step={0.001}   // Step size for precision
-    className="cubemap-intensity-slider"
-    gamepadStep={stepSize} // Step size for gamepad interaction
-    valueTransformer={SliderValueTransformer.floatTransformer} // Value transformation logic
-    disabled={false}
-    noFill={false}
-    onChange={(number) => handleEmissionMultiplier(number)} // Callback for value change
-  />
-
-  <label className="space-emission-label">Space emission multiplier</label>
-  <label className="space-emission-texture-label">Enable Space Emission Texture</label>
+    
+  <label className="space-emission-texture-label">Enable Environment HDRI Sky</label>
   <SpaceEmissionCheckbox
 
 
