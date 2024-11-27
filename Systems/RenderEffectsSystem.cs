@@ -294,7 +294,7 @@
             hdriSky.hdriSky.overrideState = true;
             hdriSky.hdriSky.Override(GlobalCubemap);
             // Adjust brightness by setting the exposure
-            float desiredExposure = 10000f; 
+            float desiredExposure = 8000f; 
             hdriSky.skyIntensityMode.Override(SkyIntensityMode.Lux);
             hdriSky.desiredLuxValue.Override(desiredExposure);
             GlobalVariables.Instance.HDRISkyEnabled = true;
