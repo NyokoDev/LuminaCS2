@@ -2,6 +2,8 @@ import { Slider, SliderValueTransformer } from "mods/slider";
 import './LutContributionSlider.scss';
 import { bindValue, trigger, useValue } from "cs2/api";
 import mod from "./../../../mod.json";
+import { useLocalization } from "cs2/l10n";
+const { translate } = useLocalization();
 
 // Bind value for LUT contribution and export it
 export const GetLutContributionValue$ = bindValue<number>(mod.id, 'GetLutContributionValue');
@@ -45,7 +47,7 @@ export const LUTContributionSlider = () => {
             />
             
             {/* Label for the slider */}
-            <label className="title_SVH title_zQN lut-contribution-label">LUT Contribution</label>
+            <label className="title_SVH title_zQN lut-contribution-label">{translate("LUMINA.lutcontribution")}</label>
         </div>
     );
 };

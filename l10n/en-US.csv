@@ -39,7 +39,13 @@
 "LUMINA.skyandfogtooltip","Sky and Fog"
 "LUMINA.resettodefaultconfirmation","This action will reset your settings and cannot be undone. Do you want to continue?"
 "LUMINA.uploadlutbutton","Upload file (.cube)"
-
-
+"LUMINA.enableluminavolume","Enable Lumina Volume"
+"LUMINA.luttexture","Lut Texture"
+"LUMINA.cubemapname","Cubemap Name"
+"LUMINA.environmenthdrisky","Enable Environment HDRI Sky"
+"LUMINA.usecustomsunproperties","Use Custom Sun Properties"
+"LUMINA.sundiameter","Sun Diameter"
+"LUMINA.sunflaresize","Sun Flare Size"
+"LUMINA.lutcontribution,"LUT Contribution"
 
 

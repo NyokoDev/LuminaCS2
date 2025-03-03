@@ -915,7 +915,7 @@ return (
 
 {SettingsEnabled$ && (
     <div className="SettingsPanel">
-      <label className="TextUseLumina">enable Lumina Volume</label>
+      <label className="TextUseLumina">{translate("LUMINA.enableluminavolume")}</label>
   <LuminaVolumeCheckbox />
     <button 
   
@@ -1113,7 +1113,7 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
 
 
       <label className="title_SVH title_zQN LutLabelInUse" style={{ whiteSpace: 'nowrap' }}>
-        Lut Texture
+      {translate("LUMINA.luttexture")}
       </label>
     </div>
 
@@ -1237,13 +1237,13 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
 
 {SkyAndFogEnabled$ &&
 <div className="SkyAndFogPanel"> 
-<h1 className="CubemapName">Cubemap Name</h1>
+<h1 className="CubemapName">{translate("LUMINA.cubemapname")}</h1>
 <div className="CubemapsDropdown">
 
       <CubemapsDropdown />
     </div>
     
-  <label className="space-emission-texture-label">Enable Environment HDRI Sky</label>
+  <label className="space-emission-texture-label">{translate("LUMINA.environmenthdrisky")}</label>
   <SpaceEmissionCheckbox
 
 
@@ -1253,8 +1253,8 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
 
 />
 
-<label className="custom-sun-label">Use Custom Sun Properties</label>
-<label className="sun-diameter-label">Sun Diameter</label>
+<label className="custom-sun-label">{translate("LUMINA.usecustomsunproperties")}</label>
+<label className="sun-diameter-label">{translate("LUMINA.sundiameter")}</label>
 <Slider
     value={SunDiameter}
     start={0}       // Minimum value of the slider
@@ -1284,7 +1284,7 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
     onChange={(number) => handleSunIntensity(number)} // Callback for value change
   />
 
-<label className="sun-flare-size-label">Sun Flare Size</label>
+<label className="sun-flare-size-label">{translate("LUMINA.sunflaresize")}</label>
 <Slider
     value={SunFlareSize}
     start={0}       // Minimum value of the slider

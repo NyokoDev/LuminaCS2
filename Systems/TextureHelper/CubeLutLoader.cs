@@ -30,7 +30,7 @@ public class CubeLutLoader : MonoBehaviour
             if (result != null)
             {
                 // Create and configure the texture
-                var texture = new Texture3D(result.LutSize, result.LutSize, result.LutSize, GraphicsFormat.R16G16B16A16_SFloat, TextureCreationFlags.None)
+                var texture = new Texture3D(result.LutSize, result.LutSize, result.LutSize, GraphicsFormat.R32G32B32A32_SFloat, TextureCreationFlags.None)
                 {
                     filterMode = FilterMode.Bilinear, // Properties from CubeLutImporter
                     wrapMode = TextureWrapMode.Clamp,
