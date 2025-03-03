@@ -55,6 +55,7 @@ module.exports = {
           MiniCssExtractPlugin.loader,
           {
             loader: "css-loader",
+            
             options: {
               url: true,
               importLoaders: 1,
@@ -66,6 +67,13 @@ module.exports = {
             },
           },
           "sass-loader",
+        ],
+      },
+      {
+        test: /\.css$/, // This handles plain CSS files like simplebar.min.css
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader"
         ],
       },
       {

@@ -1,5 +1,7 @@
 import { ButtonTheme, Tooltip, Button, ConfirmationDialog, Panel, Portal, FloatingButton, PanelSection, PanelSectionRow, FormattedParagraphs, Dropdown, Icon } from "cs2/ui";
 import { bindValue, trigger, useValue, } from "cs2/api";
+import SimpleBar from 'simplebar-react';
+import 'simplebar-react/dist/simplebar.min.css';
 import { game, tool, Theme, } from "cs2/bindings";
 import { getModule, ModuleRegistryExtend } from "cs2/modding";
 import { VanillaComponentResolver } from "classes/VanillaComponentResolver";
@@ -449,6 +451,7 @@ const handleHighlights = (value: number) => {
 
 
 return (
+
   <div className="Global">
 
 
@@ -569,8 +572,9 @@ return (
 
 
 
+   
   <div  className="Panel">
-    
+
 
 
 
@@ -1118,10 +1122,11 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
     </div>
 
     <div className="LUTSDropdown">
+
                 <LUTSDropdown />
                 
                 <LUTContributionSlider />
-
+            <label className="title_SVH title_zQN lut-contribution-label">{translate("LUMINA.lutcontribution")}</label>
 
                 <Tooltip tooltip={translate("LUMINA.uploadlutbutton")}>
     <OpenFileDialogButton />
@@ -1270,7 +1275,7 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
 
 
 
-<label className="sun-intensity-label">Sun Intensity</label>
+<label className="sun-intensity-label">{translate("LUMINA.sunintensity")}</label>
 <Slider
     value={SunIntensity}
     start={0}       // Minimum value of the slider
@@ -1305,6 +1310,8 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
 
 
 
+
 </div>
+
 )}
 
