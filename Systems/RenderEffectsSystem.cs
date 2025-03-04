@@ -296,7 +296,16 @@
             Mod.Log.Info("Added Visual Environment HDRI Sky component.");
         }
 
+        public static void UpdateCubemap()
+        {
+            // Load the new cubemap
+            GlobalCubemap = CubemapLoader.LoadCubemap();
 
+            RenderEffectsSystem.ApplyCubemap();
+
+            // Log that the cubemap has been initialized successfully
+            Mod.Log.Info("Initialized cubemap successfully.");
+        }
 
         private void UpdateNames()
         {
