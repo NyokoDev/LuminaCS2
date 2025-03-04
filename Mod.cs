@@ -65,7 +65,7 @@ namespace Lumina
             // Load global settings
             GlobalVariables.LoadFromFile(GlobalPaths.GlobalModSavingPath);
 
-            updateSystem.UpdateAfter<PreSystem>(SystemUpdatePhase.PreCulling);
+            updateSystem.UpdateAfter<PreSystem>(SystemUpdatePhase.UIUpdate);
 
 
 

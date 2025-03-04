@@ -18,33 +18,37 @@ namespace Lumina.Systems
 
         public static string[] UpdateCubemapDropdown()
         {
-            // Ensure the LUT directory exists
+            // Ensure CubemapFiles is reset before updating
+            RenderEffectsSystem.CubemapFiles = Array.Empty<string>();
+
+            // Ensure the cubemap directory exists
             if (!Directory.Exists(GlobalPaths.LuminaHDRIDirectory))
             {
                 Mod.Log.Warn($"Cubemaps directory not found: {GlobalPaths.LuminaHDRIDirectory}. Creating directory...");
                 Directory.CreateDirectory(GlobalPaths.LuminaHDRIDirectory);
             }
 
-            // Populate RenderEffectsSystem.CubemapFiles with files from the specified directory
+            // Get all PNG files from the directory
             var filesWithFullPath = Directory.GetFiles(GlobalPaths.LuminaHDRIDirectory, "*.png");
 
             // Extract only the file names without the extension
-            var fileNames = filesWithFullPath
+            RenderEffectsSystem.CubemapFiles = filesWithFullPath
                 .Select(filePath => Path.GetFileNameWithoutExtension(filePath))
                 .ToArray();
 
-            // Ensure CubemapFiles is not null before logging
-            if (RenderEffectsSystem.CubemapFiles != null)
+            // Log the updated cubemap files
+            if (RenderEffectsSystem.CubemapFiles.Length > 0)
             {
-                // Log the result for debugging
                 Mod.Log.Info("Cubemap files updated:\n" + string.Join(Environment.NewLine, RenderEffectsSystem.CubemapFiles));
             }
             else
             {
-                Mod.Log.Warn("CubemapFiles is null after update.");
+                Mod.Log.Warn("No cubemap files found.");
             }
-            // Return the array of file names
-            return fileNames;
+
+            // Return the updated array
+            return RenderEffectsSystem.CubemapFiles;
         }
     }
 }
+

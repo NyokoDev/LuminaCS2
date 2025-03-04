@@ -35,8 +35,9 @@ namespace Lumina
             if (GlobalVariables.Instance.ReloadAllPackagesOnRestart)
             {
                 ClearPackagesDirectory();
-                CheckAndReplaceAdditionalPackages();
+
             }
+            CheckAndReplaceAdditionalPackages();
 
         }
 

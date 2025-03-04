@@ -28,6 +28,7 @@ import iconActive from "../img/Lumina.svg";
 import styles from "../lumina.module.scss";
 
 
+
 let isInstalled$ = originalIsInstalled$; 
 
 
@@ -37,6 +38,7 @@ export const LuminaButton: ModuleRegistryExtend = (Component) => {
         const MIT_ToolEnabled = isInstalled$
         const moveItIconSrc = MIT_ToolEnabled ? "coui://ui-mods/images/Lumina.svg" : "coui://ui-mods/images/Lumina.svg";
         const [isInstalled, setIsInstalled] = useState(false); // assuming you meant to use useState to manage isInstalled state
+        const [refreshKey, setRefreshKey] = useState(0); // Key for forcing re-render
 
         let a = iconOff;
         a = iconActive;
@@ -51,6 +53,7 @@ export const LuminaButton: ModuleRegistryExtend = (Component) => {
                     focusKey={VanillaComponentResolver.instance.FOCUS_DISABLED}
                     onClick={() => {
                         setIsInstalled(!isInstalled); // update isInstalled state
+                        setRefreshKey((prev) => prev + 1); // Change key to force re-render
                         trigger(mod.id, 'SaveAutomatically');
                         trigger(mod.id, 'UpdateUIElements');
                     }}
@@ -64,7 +67,7 @@ export const LuminaButton: ModuleRegistryExtend = (Component) => {
                 />
                 <div className={ToolBarTheme.divider}></div>
                 <Component {...otherProps} />
-                {isInstalled && <YourPanelComponent />}
+                {isInstalled && <YourPanelComponent key={refreshKey} />} {/* Forces re-render */}
             </>
         );
     };

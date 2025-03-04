@@ -405,24 +405,21 @@
 
         public static string[] CubemapArrayExtendedReturn()
         {
-            // Ensure RenderEffectsSystem.CubemapFiles is properly updated
-            if (RenderEffectsSystem.CubemapFiles != null)
-            {
-                RenderEffectsSystem.CubemapFiles = null;
-            }
+            // Ensure RenderEffectsSystem.CubemapFiles is properly reset to an empty array
+            RenderEffectsSystem.CubemapFiles = Array.Empty<string>();
 
+            // Update the array with the latest cubemap files
             RenderEffectsSystem.CubemapFiles = UIDropdownUpdate.UpdateCubemapDropdown();
 
-
-            // Check if CubemapFiles is null or empty
-            if (RenderEffectsSystem.CubemapFiles == null || RenderEffectsSystem.CubemapFiles.Length == 0)
+            // Check if CubemapFiles is still empty after the update
+            if (RenderEffectsSystem.CubemapFiles.Length == 0)
             {
                 // Log a warning if no cubemap files are found
-                Mod.Log.Warn("No cubemap files found or CubemapFiles is null.");
+                Mod.Log.Warn("No cubemap files found.");
                 return Array.Empty<string>(); // Return an empty array instead of null
             }
 
-            // Return the array
+            // Return the updated array
             return RenderEffectsSystem.CubemapFiles;
         }
 
