@@ -13,15 +13,14 @@ class CubemapLoader : MonoBehaviour
     static string cubemapFilePath = RenderEffectsSystem.cubemapFilePath;
     public static string IncomingCubemap;
 
-    public static Cubemap LoadCubemap()
+    public static Cubemap LoadSavedCubemap()
     {
         // Construct the full path to the cubemap PNG file
-        var cubemapFilePath = Path.Combine(GlobalPaths.LuminaHDRIDirectory, IncomingCubemap + ".png");
+        var cubemapFilePath = Path.Combine(GlobalPaths.LuminaHDRIDirectory, GlobalVariables.Instance.CubemapName + ".png");
 
         // Check if GlobalVariables.Instance.CubemapName is null, "Select Cubemap", or if IncomingCubemap is empty
-        if (string.IsNullOrEmpty(IncomingCubemap) ||
-            string.IsNullOrEmpty(GlobalVariables.Instance.CubemapName) ||
-            GlobalVariables.Instance.CubemapName == "Select Cubemap")
+        if (
+            string.IsNullOrEmpty(GlobalVariables.Instance.CubemapName))
         {
             Mod.Log.Info("Cubemap name is none. Ignoring.");
             return null;
@@ -29,6 +28,58 @@ class CubemapLoader : MonoBehaviour
 
 
         Mod.Log.Info("Starting to load cubemap from PNG file: " + cubemapFilePath);
+
+        var texture2D = TextureStreamUtility.LoadTextureFromFile(cubemapFilePath, false);
+
+        int textureWidth = texture2D.width;
+        int textureHeight = texture2D.height;
+
+        Mod.Log.Info($"Texture dimensions: Width = {textureWidth}, Height = {textureHeight}");
+
+
+        // Create the cubemap based on the calculated face size
+        Cubemap cubemap = new Cubemap(2048, TextureFormat.ARGB32, true)
+        {
+            name = "LuminaCubemap",
+            wrapMode = TextureWrapMode.Clamp,
+        };
+        Texture2D combinedTexture = TextureStreamUtility.LoadTextureFromFile(cubemapFilePath);
+
+        // Set the faces of the cubemap using the calculated face size
+        SetCubemapFace(cubemap, combinedTexture, CubemapFace.PositiveX, 2, 1);
+        SetCubemapFace(cubemap, combinedTexture, CubemapFace.PositiveY, 1, 0);
+        SetCubemapFace(cubemap, combinedTexture, CubemapFace.PositiveZ, 1, 1);
+        SetCubemapFace(cubemap, combinedTexture, CubemapFace.NegativeX, 0, 1);
+        SetCubemapFace(cubemap, combinedTexture, CubemapFace.NegativeY, 1, 2);
+        SetCubemapFace(cubemap, combinedTexture, CubemapFace.NegativeZ, 3, 1);
+        Object.Destroy(combinedTexture);
+
+        // Set cubemap texture.
+        cubemap.anisoLevel = 9;
+        cubemap.filterMode = FilterMode.Trilinear;
+        cubemap.SmoothEdges();
+        cubemap.Apply();
+
+        Mod.Log.Info("Created Cubemap from PNG file successfully.");
+        return cubemap;
+    }
+
+    public static Cubemap LoadCubemap()
+    {
+        // Construct the full path to the cubemap PNG file
+        var cubemapFilePath = Path.Combine(GlobalPaths.LuminaHDRIDirectory, IncomingCubemap + ".png");
+
+      // Check if GlobalVariables.Instance.CubemapName is null, "Select Cubemap", or if IncomingCubemap is empty
+if (string.IsNullOrEmpty(IncomingCubemap) || 
+    string.IsNullOrEmpty(GlobalVariables.Instance.CubemapName) || 
+    GlobalVariables.Instance.CubemapName == "Select Cubemap")
+{
+    Mod.Log.Info("Cubemap name is none. Ignoring.");
+    return null;
+}
+
+
+         Mod.Log.Info("Starting to load cubemap from PNG file: " + cubemapFilePath);
 
         var texture2D = TextureStreamUtility.LoadTextureFromFile(cubemapFilePath, false);
 

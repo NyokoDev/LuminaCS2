@@ -93,22 +93,16 @@
         {
             base.OnCreate();
 
-
+            ConvertToHDRP();
             InitializeCubemap();
             GetPrivateFieldm_PhysicallyBasedSky();
-            ConvertToHDRP();
+
         }
 
-        public static void InitializeCubemap()
+        public static void InitializeCubemap() 
         {
-            GlobalCubemap = CubemapLoader.LoadCubemap();
-            Mod.Log.Info("Initialized cubemap succesfully.");
-        }
-
-        public static void UpdateCubemap()
-        {
-            // Load the new cubemap
-            GlobalCubemap = CubemapLoader.LoadCubemap();
+                 // Load the new cubemap
+            GlobalCubemap = CubemapLoader.LoadSavedCubemap();
 
             RenderEffectsSystem.ApplyCubemap();
 
@@ -293,12 +287,13 @@
             // Assign the HDRI Cubemap
             hdriSky.hdriSky.overrideState = true;
             hdriSky.hdriSky.Override(GlobalCubemap);
+            Mod.Log.Info("Applied Cubemap " + GlobalVariables.Instance.CubemapName);
             // Adjust brightness by setting the exposure
             float desiredExposure = 8000f; 
             hdriSky.skyIntensityMode.Override(SkyIntensityMode.Lux);
             hdriSky.desiredLuxValue.Override(desiredExposure);
             GlobalVariables.Instance.HDRISkyEnabled = true;
-            Mod.Log.Info("Overriden.");
+            Mod.Log.Info("Added Visual Environment HDRI Sky component.");
         }
 
 
@@ -703,8 +698,6 @@
                     Mod.Log.Info($"[LUMINA] Component: {component.GetType().Name}, Active: {component.active}");
                 }
 
-                // Initialize Cubemap if any
-                CubemapLoader.LoadCubemap();
 
                 // Finalize Volume
                 m_SetupDone = true;
