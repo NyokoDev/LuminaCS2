@@ -694,8 +694,7 @@
                 m_ShadowsMidtonesHighlights.shadows.Override(new Vector4(GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows));
                 m_ShadowsMidtonesHighlights.midtones.Override(new Vector4(GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones));
 
-                // Finalize Volume
-                m_SetupDone = true;
+           
 
 
                 // Log active/inactive status of components
@@ -703,6 +702,12 @@
                 {
                     Mod.Log.Info($"[LUMINA] Component: {component.GetType().Name}, Active: {component.active}");
                 }
+
+                // Initialize Cubemap if any
+                CubemapLoader.LoadCubemap();
+
+                // Finalize Volume
+                m_SetupDone = true;
                 Mod.Log.Info("[LUMINA] Successfully added HDRP volume.");
 
             }

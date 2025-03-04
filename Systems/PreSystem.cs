@@ -117,31 +117,54 @@ namespace Lumina
 
             // Process and copy the files to their respective destinations
             ProcessFiles(allFiles, hdrDirectory, lutsDirectory);
-            // Check if all required files are found in both directories
-            NotifyIfPackagesAreFoundNotInFolder(packageFiles, localFiles, packagesDirectory, localPackagesDirectory);
+            // Check if all required files are found in the packages directory and compare to target directories
+            NotifyIfPackagesAreFoundNotInFolder(packageFiles, hdrDirectory, lutsDirectory, packagesDirectory);
         }
 
-        private void NotifyIfPackagesAreFoundNotInFolder(IEnumerable<string> packageFiles, IEnumerable<string> localFiles, string packagesDirectory, string localPackagesDirectory)
+        private void NotifyIfPackagesAreFoundNotInFolder(IEnumerable<string> packageFiles, string hdrDirectory, string lutsDirectory, string packagesDirectory)
         {
-            // Get the relative paths of the files (to compare easily)
-            var packageFileNames = packageFiles.Select(f => Path.GetFileName(f)).ToList();
-            var localFileNames = localFiles.Select(f => Path.GetFileName(f)).ToList();
+            // Get the relative paths of the files (to compare easily), excluding the files that are marked as excluded
+            var packageFileNames = packageFiles
+                .Where(f => !IsExcludedFile(f)) // Exclude the files
+                .Select(f => Path.GetFileName(f).Trim().ToLower()) // Normalize and trim the file names for comparison
+                .ToList();
 
-            // Compare the files from both directories
-            var missingInPackages = localFileNames.Except(packageFileNames).ToList();
-            var missingInLocalPackages = packageFileNames.Except(localFileNames).ToList();
+            // Separate .cube and .png files for appropriate checking
+            var packageLutFiles = packageFileNames.Where(f => f.EndsWith(".cube")).ToList();
+            var packageCubemapFiles = packageFileNames.Where(f => f.EndsWith(".png")).ToList();
 
-            // If there are files missing in either directory, notify the user
-            if (missingInPackages.Any())
+            // Get .cube and .png files from the target directories (lutsDirectory and hdrDirectory), excluding the excluded files
+            var lutsFiles = Directory.GetFiles(lutsDirectory, "*.cube", SearchOption.AllDirectories)
+                                     .Where(f => !IsExcludedFile(f)) // Exclude the files
+                                     .Select(f => Path.GetFileName(f).Trim().ToLower())
+                                     .ToList();
+
+            var hdrFiles = Directory.GetFiles(hdrDirectory, "*.png", SearchOption.AllDirectories)
+                                    .Where(f => !IsExcludedFile(f)) // Exclude the files
+                                    .Select(f => Path.GetFileName(f).Trim().ToLower())
+                                    .ToList();
+
+            // Debugging log for file names comparison
+            Lumina.Mod.Log.Info($"Package LUT files: {string.Join(", ", packageLutFiles)}");
+            Lumina.Mod.Log.Info($"Package Cubemap files: {string.Join(", ", packageCubemapFiles)}");
+            Lumina.Mod.Log.Info($"LUT files in lutsDirectory: {string.Join(", ", lutsFiles)}");
+            Lumina.Mod.Log.Info($"Cubemap files in hdrDirectory: {string.Join(", ", hdrFiles)}");
+
+            // Check if any .cube files are missing from lutsDirectory
+            var missingInLutsDirectory = packageLutFiles.Except(lutsFiles).ToList();
+            var missingInHdrDirectory = packageCubemapFiles.Except(hdrFiles).ToList();
+
+            // If there are missing files in the target directories, notify the user
+            if (missingInLutsDirectory.Any())
             {
-                Lumina.Mod.Log.Warn($"The following files are missing from the packages directory: {string.Join(", ", missingInPackages)}");
-                throw new Exception($"Missing files in the packages directory: {string.Join(", ", missingInPackages)}");
+                Lumina.Mod.Log.Warn($"The following LUT files are missing from the LUTs directory: {string.Join(", ", missingInLutsDirectory)}");
+                throw new Exception($"Missing LUT files in the LUTs directory: {string.Join(", ", missingInLutsDirectory)}");
             }
 
-            if (missingInLocalPackages.Any())
+            if (missingInHdrDirectory.Any())
             {
-                Lumina.Mod.Log.Warn($"The following files are missing from the local packages directory: {string.Join(", ", missingInLocalPackages)}");
-                throw new Exception($"Missing files in the local packages directory: {string.Join(", ", missingInLocalPackages)}");
+                Lumina.Mod.Log.Warn($"The following Cubemap files are missing from the HDR directory: {string.Join(", ", missingInHdrDirectory)}");
+                throw new Exception($"Missing Cubemap files in the HDR directory: {string.Join(", ", missingInHdrDirectory)}");
             }
         }
 
