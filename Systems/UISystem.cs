@@ -274,6 +274,7 @@
         private void UpdateUIElements()
         {
             CubemapArrayExtendedReturn();
+            LUTArray();
         }
 
         private void handleSunFlareSize(float obj)
@@ -405,7 +406,13 @@
         public static string[] CubemapArrayExtendedReturn()
         {
             // Ensure RenderEffectsSystem.CubemapFiles is properly updated
+            if (RenderEffectsSystem.CubemapFiles != null)
+            {
+                RenderEffectsSystem.CubemapFiles = null;
+            }
+
             RenderEffectsSystem.CubemapFiles = UIDropdownUpdate.UpdateCubemapDropdown();
+
 
             // Check if CubemapFiles is null or empty
             if (RenderEffectsSystem.CubemapFiles == null || RenderEffectsSystem.CubemapFiles.Length == 0)
@@ -580,14 +587,13 @@
 
         private string[] LUTArray()
         {
-
             // Retrieve the LUT files array
             var lutFiles = RenderEffectsSystem.LutFiles;
 
             // Check if lutFiles is null or empty and update it with the directory files if necessary
             if (lutFiles == null || lutFiles.Length == 0)
             {
-                 Mod.Log.Info("LUTArray() is null or empty. Populating with files from the directory.");
+                Mod.Log.Info("LUTArray() is null or empty. Populating with files from the directory.");
 
                 // Ensure the LUT directory exists
                 if (!Directory.Exists(GlobalPaths.LuminaLUTSDirectory))
@@ -604,15 +610,22 @@
                     .Select(filePath => Path.GetFileNameWithoutExtension(filePath))
                     .ToArray();
 
+                // Check if RenderEffectsSystem.LutFiles is not null before updating it
+                if (RenderEffectsSystem.LutFiles != null)
+                {
+                    RenderEffectsSystem.LutFiles = null;
+                }
+
                 // Update RenderEffectsSystem.LutFiles with only the file names
                 RenderEffectsSystem.LutFiles = fileNames;
 
-                 Mod.Log.Info(string.Join(", ", RenderEffectsSystem.LutFiles)); // Log the result for debugging
+                Mod.Log.Info(string.Join(", ", RenderEffectsSystem.LutFiles)); // Log the result for debugging
             }
 
             // Return the array
             return RenderEffectsSystem.LutFiles;
         }
+
 
 
 

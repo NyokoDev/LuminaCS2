@@ -102,7 +102,7 @@
         public static void InitializeCubemap()
         {
             GlobalCubemap = CubemapLoader.LoadCubemap();
-             Mod.Log.Info("Initialized cubemap succesfully.");
+            Mod.Log.Info("Initialized cubemap succesfully.");
         }
 
         public static void UpdateCubemap()
