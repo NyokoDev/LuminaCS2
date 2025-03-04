@@ -117,6 +117,32 @@ namespace Lumina
 
             // Process and copy the files to their respective destinations
             ProcessFiles(allFiles, hdrDirectory, lutsDirectory);
+            // Check if all required files are found in both directories
+            NotifyIfPackagesAreFoundNotInFolder(packageFiles, localFiles, packagesDirectory, localPackagesDirectory);
+        }
+
+        private void NotifyIfPackagesAreFoundNotInFolder(IEnumerable<string> packageFiles, IEnumerable<string> localFiles, string packagesDirectory, string localPackagesDirectory)
+        {
+            // Get the relative paths of the files (to compare easily)
+            var packageFileNames = packageFiles.Select(f => Path.GetFileName(f)).ToList();
+            var localFileNames = localFiles.Select(f => Path.GetFileName(f)).ToList();
+
+            // Compare the files from both directories
+            var missingInPackages = localFileNames.Except(packageFileNames).ToList();
+            var missingInLocalPackages = packageFileNames.Except(localFileNames).ToList();
+
+            // If there are files missing in either directory, notify the user
+            if (missingInPackages.Any())
+            {
+                Lumina.Mod.Log.Warn($"The following files are missing from the packages directory: {string.Join(", ", missingInPackages)}");
+                throw new Exception($"Missing files in the packages directory: {string.Join(", ", missingInPackages)}");
+            }
+
+            if (missingInLocalPackages.Any())
+            {
+                Lumina.Mod.Log.Warn($"The following files are missing from the local packages directory: {string.Join(", ", missingInLocalPackages)}");
+                throw new Exception($"Missing files in the local packages directory: {string.Join(", ", missingInLocalPackages)}");
+            }
         }
 
         // Helper method to process files and copy them to the destination directories

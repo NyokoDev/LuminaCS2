@@ -405,9 +405,6 @@
 
         public static string[] CubemapArrayExtendedReturn()
         {
-            // Ensure RenderEffectsSystem.CubemapFiles is properly reset to an empty array
-            RenderEffectsSystem.CubemapFiles = Array.Empty<string>();
-
             // Update the array with the latest cubemap files
             RenderEffectsSystem.CubemapFiles = UIDropdownUpdate.UpdateCubemapDropdown();
 
