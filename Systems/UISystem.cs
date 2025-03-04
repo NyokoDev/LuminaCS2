@@ -390,18 +390,23 @@
             return GlobalVariables.Instance.HDRISkyEnabled;
         }
 
-
         private string ReturnCubemapName()
         {
-            // Check if CubemapName is null or empty and set it to "Select Cubemap" if so
-            CubemapName = string.IsNullOrEmpty(CubemapName) ? "Select Cubemap" : CubemapName;
+            // Check if GlobalVariables.Instance.CubemapName is null or empty
+            if (string.IsNullOrEmpty(GlobalVariables.Instance.CubemapName))
+            {
+                // Load from file if CubemapName is null or empty
+                GlobalVariables.LoadFromFile(GlobalPaths.GlobalModSavingPath);
+            }
 
-            // Update the GlobalVariables.Instance.CubemapName with the current CubemapName
-            GlobalVariables.Instance.CubemapName = CubemapName;
+            // Ensure CubemapName is set, use "Select Cubemap" if not
+            CubemapName = GlobalVariables.Instance.CubemapName ?? "Select Cubemap";
 
-            // Return the current CubemapName
+            // Always return the current CubemapName
             return CubemapName;
         }
+
+
 
         public static string[] CubemapArrayExtendedReturn()
         {

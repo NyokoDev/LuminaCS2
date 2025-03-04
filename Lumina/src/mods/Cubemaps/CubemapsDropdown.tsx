@@ -8,7 +8,7 @@ import '../Cubemaps/Cubemaps.scss'
 
 // Bind the CubemapArray to a variable and initialize it with an empty array
 export const CubemapArray = bindValue<string[]>(mod.id, "CubemapArrayExtended", []);
-const SelectedCubemap$ = bindValue<string>(mod.id, "CubemapName", "Select Cubemap");
+const SelectedCubemap$ = bindValue<string>(mod.id, "CubemapName");
 
 const DropdownStyle: Theme | any = getModule("game-ui/menu/themes/dropdown.module.scss", "classes");
 
