@@ -15,6 +15,7 @@
     using Game.Simulation;
     using JetBrains.Annotations;
     using Lumina.Systems.TextureHelper;
+    using Lumina.UI;
     using Lumina.XML;
     using LuminaMod.XML;
     using Unity.Entities;
@@ -662,6 +663,9 @@
 
                 // Create new Global Volume GameObject
                 GameObject globalVolume = new GameObject("Lumina");
+
+
+                globalVolume.AddComponent<SliderPanel>(); // Workaround for Photo Mode Retrieval - Send to Lumina button
                 UnityEngine.Object.DontDestroyOnLoad(globalVolume);
 
                 // Add Volume component
