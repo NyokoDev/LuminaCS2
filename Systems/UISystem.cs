@@ -392,15 +392,8 @@
 
         private string ReturnCubemapName()
         {
-            // Check if GlobalVariables.Instance.CubemapName is null or empty
-            if (string.IsNullOrEmpty(GlobalVariables.Instance.CubemapName))
-            {
-                // Load from file if CubemapName is null or empty
-                GlobalVariables.LoadFromFile(GlobalPaths.GlobalModSavingPath);
-            }
-
             // Ensure CubemapName is set, use "Select Cubemap" if not
-            CubemapName = GlobalVariables.Instance.CubemapName ?? "Select Cubemap";
+            CubemapName = GlobalVariables.Instance.CubemapName;
 
             // Always return the current CubemapName
             return CubemapName;
@@ -638,7 +631,6 @@
         private void InitializeLutName()
         {
             RenderEffectsSystem.LutName_Example = GlobalVariables.Instance.LUTName;
-            GlobalVariables.Instance.CubemapName = "";
         }
 
         private void SetTonemappingMode(float obj)

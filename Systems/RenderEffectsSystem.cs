@@ -93,6 +93,8 @@
         {
             base.OnCreate();
 
+
+            GlobalVariables.LoadFromFile(GlobalPaths.GlobalModSavingPath);
             ConvertToHDRP();
             InitializeCubemap();
             GetPrivateFieldm_PhysicallyBasedSky();
