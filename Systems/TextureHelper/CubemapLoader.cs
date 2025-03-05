@@ -20,7 +20,7 @@ class CubemapLoader : MonoBehaviour
 
         // Check if GlobalVariables.Instance.CubemapName is null, "Select Cubemap", or if IncomingCubemap is empty
         if (
-            string.IsNullOrEmpty(GlobalVariables.Instance.CubemapName))
+              string.IsNullOrEmpty(GlobalVariables.Instance.CubemapName))
         {
             Mod.Log.Info("Cubemap name is none. Ignoring.");
             return null;

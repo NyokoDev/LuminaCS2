@@ -102,16 +102,35 @@
 
         }
 
-        public static void InitializeCubemap() 
+        public static void InitializeCubemap()
         {
-                 // Load the new cubemap
+            if (GlobalVariables.Instance == null)
+            {
+                Mod.Log.Error("GlobalVariables.Instance is null! Aborting.");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(GlobalVariables.Instance.CubemapName) ||
+                GlobalVariables.Instance.CubemapName.Equals("None", StringComparison.OrdinalIgnoreCase))
+            {
+                Mod.Log.Info("Cubemap name is none or empty. Ignoring.");
+                return;
+            }
+
+            // Load the new cubemap
             GlobalCubemap = CubemapLoader.LoadSavedCubemap();
 
-            RenderEffectsSystem.ApplyCubemap();
+            if (GlobalCubemap == null)
+            {
+                Mod.Log.Error("CubemapLoader.LoadSavedCubemap() returned null! Aborting.");
+                return;
+            }
 
-            // Log that the cubemap has been initialized successfully
+            RenderEffectsSystem.ApplyCubemap();
             Mod.Log.Info("Initialized cubemap successfully.");
         }
+
+
 
 
         /// <summary>
