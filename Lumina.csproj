@@ -198,6 +198,7 @@
 		<Folder Include="Lumina\src\img\" />
 		<Folder Include="Lumina\src\classes\" />
 		<Folder Include="HTTP\" />
+		<Folder Include="XML\Images\" />
 	</ItemGroup>
 
 
