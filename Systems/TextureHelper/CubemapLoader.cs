@@ -19,12 +19,15 @@ class CubemapLoader : MonoBehaviour
         var cubemapFilePath = Path.Combine(GlobalPaths.LuminaHDRIDirectory, GlobalVariables.Instance.CubemapName + ".png");
 
         // Check if GlobalVariables.Instance.CubemapName is null, "Select Cubemap", or if IncomingCubemap is empty
-        if (
-              string.IsNullOrEmpty(GlobalVariables.Instance.CubemapName))
+        if (string.IsNullOrEmpty(GlobalVariables.Instance.CubemapName) ||
+            GlobalVariables.Instance.CubemapName == "None" ||
+            GlobalVariables.Instance.CubemapName == "Select Cubemap")
         {
-            Mod.Log.Info("Cubemap name is none. Ignoring.");
-            return null;
+            Mod.Log.Info("Cubemap name is invalid. Ignoring.");
+            // Add any alternative handling here if needed, instead of returning null
+            return null; // Or proceed with other logic
         }
+
 
 
         Mod.Log.Info("Starting to load cubemap from PNG file: " + cubemapFilePath);

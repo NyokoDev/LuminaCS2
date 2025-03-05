@@ -118,7 +118,19 @@
             }
 
             // Load the new cubemap
-            GlobalCubemap = CubemapLoader.LoadSavedCubemap();
+            if (string.IsNullOrEmpty(GlobalVariables.Instance.CubemapName) ||
+    GlobalVariables.Instance.CubemapName == "None" ||
+    GlobalVariables.Instance.CubemapName == "Select Cubemap")
+            {
+                Mod.Log.Info("Cubemap name is invalid. Skipping cubemap loading.");
+                
+                GlobalCubemap = null; 
+            }
+            else
+            {
+                GlobalCubemap = CubemapLoader.LoadSavedCubemap();
+            }
+
 
             if (GlobalCubemap == null)
             {
