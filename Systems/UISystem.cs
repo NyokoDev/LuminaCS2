@@ -233,7 +233,7 @@
                         }
                         else
                         {
-                            Lumina.Mod.Log.Warn("LUT texture could not be loaded from the file.");
+                            Lumina.Mod.Log.Info("LUT texture could not be loaded from the file.");
                         }
                     }
                     catch (Exception ex)
@@ -412,7 +412,7 @@
                 if (RenderEffectsSystem.CubemapFiles == null || RenderEffectsSystem.CubemapFiles.Length == 0)
                 {
                     // Log a warning if no cubemap files are found
-                    Mod.Log.Warn("No cubemap files found.");
+                    Mod.Log.Info("No cubemap files found.");
                     return new string[] { "None" }; // Return "None" instead of an empty array
                 }
 
@@ -599,7 +599,7 @@
                 // Ensure the LUT directory exists
                 if (!Directory.Exists(GlobalPaths.LuminaLUTSDirectory))
                 {
-                    Mod.Log.Warn($"LUT directory not found: {GlobalPaths.LuminaLUTSDirectory}. Creating directory...");
+                    Mod.Log.Info($"LUT directory not found: {GlobalPaths.LuminaLUTSDirectory}. Creating directory...");
                     Directory.CreateDirectory(GlobalPaths.LuminaLUTSDirectory);
                 }
 

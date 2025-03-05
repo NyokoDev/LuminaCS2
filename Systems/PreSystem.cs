@@ -157,7 +157,7 @@ namespace Lumina
             // If there are missing files in the target directories, notify the user
             if (missingInLutsDirectory.Any())
             {
-                Lumina.Mod.Log.Warn($"The following LUT files are missing from the LUTs directory: {string.Join(", ", missingInLutsDirectory)}");
+                Lumina.Mod.Log.Info($"The following LUT files are missing from the LUTs directory: {string.Join(", ", missingInLutsDirectory)}");
                 Mod.Log.Info($"Missing LUT files in the LUTs directory: {string.Join(", ", missingInLutsDirectory)}");
             }
 

@@ -88,8 +88,8 @@ namespace Lumina
 
             private void CheckVersion()
         {
-            string url = "https://github.com/NyokoDev/LuminaCS2/XML/version.txt"; // URL for the version file
-            string currentVersion = GlobalPaths.Version; // The version stored in your instance
+            string url = "https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/XML/version.txt"; // URL for the version file
+            string currentVersion = GlobalPaths.Version; 
 
             try
             {
@@ -102,11 +102,11 @@ namespace Lumina
                     // Compare the current version with the latest version
                     if (currentVersion == latestVersion)
                     {
-                        Mod.Log.Info("The version is up to date.");
+                        Mod.Log.Info("The version is up to date. Current: " + currentVersion);
                     }
                     else
                     {
-                        Mod.Log.Error("New version available! Current: " + currentVersion + " Latest: " + latestVersion);
+                        Mod.Log.Info("New version available! Current: " + currentVersion + " Latest: " + latestVersion);
                     }
                 }
             }

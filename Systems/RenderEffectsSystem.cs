@@ -413,7 +413,7 @@
                 }
                 else
                 {
-                    Mod.Log.Error($"Failed to load LUT texture from: {lutFilePath}");
+                    Mod.Log.Info($"Failed to load LUT texture from: {lutFilePath}");
                 }
 
                 // Update global variables
@@ -470,7 +470,7 @@
             lutTexture = CubeLutLoader.LoadLutFromFile(lutFilePath);
             if (lutTexture == null)
             {
-                Mod.Log.Error($"Failed to load LUT texture from file: {lutFilePath}");
+                Mod.Log.Info($"Failed to load LUT texture from file: {lutFilePath}");
                 return;
             }
 

@@ -24,7 +24,7 @@ namespace Lumina.Systems
             // Ensure the cubemap directory exists
             if (!Directory.Exists(GlobalPaths.LuminaHDRIDirectory))
             {
-                Mod.Log.Warn($"Cubemaps directory not found: {GlobalPaths.LuminaHDRIDirectory}. Creating directory...");
+                Mod.Log.Info($"Cubemaps directory not found: {GlobalPaths.LuminaHDRIDirectory}. Creating directory...");
                 Directory.CreateDirectory(GlobalPaths.LuminaHDRIDirectory);
             }
 
@@ -43,7 +43,7 @@ namespace Lumina.Systems
             }
             else
             {
-                Mod.Log.Warn("No cubemap files found.");
+                Mod.Log.Info("No cubemap files found.");
                 RenderEffectsSystem.CubemapFiles = Array.Empty<string>();
             }
 
