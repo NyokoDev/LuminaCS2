@@ -44,6 +44,7 @@ namespace Lumina.Systems
             else
             {
                 Mod.Log.Warn("No cubemap files found.");
+                RenderEffectsSystem.CubemapFiles = Array.Empty<string>();
             }
 
             // Return the updated array

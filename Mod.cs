@@ -18,6 +18,7 @@ namespace Lumina
     using LuminaMod.XML;
     using System;
     using System.IO;
+    using System.Net;
     using UnityEngine;
 
     /// <summary>
@@ -62,6 +63,7 @@ namespace Lumina
             // Load translations.
             Localization.LoadTranslations(null, Log);
 
+            CheckVersion();
             // Load global settings
             GlobalVariables.LoadFromFile(GlobalPaths.GlobalModSavingPath);
 
@@ -83,6 +85,37 @@ namespace Lumina
 
             SendNotification();
         }
+
+            private void CheckVersion()
+        {
+            string url = "https://github.com/NyokoDev/LuminaCS2/XML/version.txt"; // URL for the version file
+            string currentVersion = GlobalPaths.Version; // The version stored in your instance
+
+            try
+            {
+                // Create a WebClient to fetch the version from the URL
+                using (WebClient client = new WebClient())
+                {
+                    // Download the version file content synchronously
+                    string latestVersion = client.DownloadString(url).Trim(); // Fetch and trim the version string
+
+                    // Compare the current version with the latest version
+                    if (currentVersion == latestVersion)
+                    {
+                        Mod.Log.Info("The version is up to date.");
+                    }
+                    else
+                    {
+                        Mod.Log.Error("New version available! Current: " + currentVersion + " Latest: " + latestVersion);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mod.Log.Error("Error checking version: " + ex.Message);
+            }
+        }
+        
 
         private void SendNotification()
         {
