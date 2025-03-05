@@ -158,13 +158,13 @@ namespace Lumina
             if (missingInLutsDirectory.Any())
             {
                 Lumina.Mod.Log.Warn($"The following LUT files are missing from the LUTs directory: {string.Join(", ", missingInLutsDirectory)}");
-                throw new Exception($"Missing LUT files in the LUTs directory: {string.Join(", ", missingInLutsDirectory)}");
+                Mod.Log.Info($"Missing LUT files in the LUTs directory: {string.Join(", ", missingInLutsDirectory)}");
             }
 
             if (missingInHdrDirectory.Any())
             {
                 Lumina.Mod.Log.Warn($"The following Cubemap files are missing from the HDR directory: {string.Join(", ", missingInHdrDirectory)}");
-                throw new Exception($"Missing Cubemap files in the HDR directory: {string.Join(", ", missingInHdrDirectory)}");
+                Mod.Log.Info($"Missing Cubemap files in the HDR directory: {string.Join(", ", missingInHdrDirectory)}");
             }
         }
 
