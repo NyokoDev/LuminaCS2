@@ -1,7 +1,7 @@
 # Lumina
 ### for Cities: Skylines II
 
-- [Installation Guide](https://github.com/NyokoDev/LuminaCS2/blob/master/Documentation/Installation.md)
+- [Lumina Docs](https://skylinx.gitbook.io/lumina)
 
 ## Effects
 
