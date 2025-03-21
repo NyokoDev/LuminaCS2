@@ -1,92 +1,79 @@
-.Panel {
-   position: absolute;
-   width: 950rem;
-   height: 500rem;
-   top: 500rem;
-   left: 200rem;
-   background-color: rgba(50, 50, 50, 0.8); /* Dark grey background with transparency */
-   backdrop-filter: blur(10px); /* Apply blur to the background behind the panel */
-   box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6); /* Blurred black inner shadow */
-   overflow-y: auto; /* Enable vertical scrolling */
-   max-height: 400rem;
-   pointer-events: auto;
-   cursor: pointer;
-   border-radius: 20rem; /* Rounded corners */
-   color: #e0e0e0; /* Light grey text color for contrast */
-   font-family: 'Arial', sans-serif; /* Clean and modern font */
+.Panel
+{
+    position: absolute;
+    width: 950rem;
+    height: 500rem;
+    top: 500rem;
+    left: 200rem;
+    background-color: rgba(50, 50, 50, 0.8); /* Dark grey background with transparency */
+    backdrop-filter: blur(10px); /* Apply blur to the background behind the panel */
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6); /* Blurred black inner shadow */
+    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 400rem;
+    pointer-events: auto;
+    cursor: pointer;
+    border-radius: 20rem; /* Rounded corners */
+    color: #e0e0e0; /* Light grey text color for contrast */
+    font-family: Overpass,"Noto Sans","Noto Sans KR","Noto Sans JP","Noto Sans SC","Noto Sans TC","Noto Sans Thai","Noto Sans Hebrew","Noto Sans Arabic","Noto Sans Bengali","Noto Sans Devanagari", sans-serif; /* Clean and modern font */
 }
 
-.Panel .simplebar-scrollbar::before {
-   width: 6px; /* Set a smaller width for the thumb */
-   background-color: #3498db;
- }
- 
- .Panel .simplebar-track {
-   width: 6px; /* Adjust track width as well */
- }
- 
+    .Panel .simplebar-scrollbar::before
+    {
+        width: 6px; /* Set a smaller width for the thumb */
+        background-color: #3498db;
+    }
 
+    .Panel .simplebar-track
+    {
+        width: 6px; /* Adjust track width as well */
+    }
 
- .Span1{
-  
+.Span1
+{
     width: 1500rem;
     height: 200rem;
- }
+}
 
- .LuminaBckImage{
+.LuminaBckImage
+{
     position: absolute;
     right: 200rem;
     width: 100%;
     height: 100%;
- }
- 
- .TabsRow {
-   position: absolute;
-   display: flex;
-   width: 950rem;
-   height: 50rem;
-   top: 440rem;
-   left: 200rem;
-   border-radius: 20rem; /* Rounded corners */
-   background-color: rgba(50, 50, 50, 0.8); /* Dark grey background with transparency */
-   box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6); /* Blurred black inner shadow */
-   color: #e0e0e0; /* Light grey text color for contrast */
-   font-family: 'Arial', sans-serif; /* Clean and modern font */
-   pointer-events: auto;
 }
 
-
-.TabsRow > * {
-   filter:invert(100%);
-   width: 50rem; /* Adjust the width of each child element */
-   height: 50rem; /* Adjust the height of each child element to match the width for perfect circles */
-   display: flex; /* Ensure that child elements use flexbox layout */
-   align-items: center; /* Center contents vertically */
-   justify-content: center; /* Center contents horizontally */
-
-}
-
-
-
-
-
-
-.ColorAdjustmentsButton {
+.TabsRow
+{
     position: absolute;
     display: flex;
-    background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/ColorAdjustments.svg');
-    background-size: cover; /* Make sure the background image covers the entire area */
-    width: 45rem;
-    height: 45rem;
-    left: 900rem; /* Adjusted left position */
-    transition: transform 0.01s ease-in-out;
-   
+    width: 950rem;
+    height: 50rem;
+    top: 440rem;
+    left: 200rem;
+    border-radius: 20rem; /* Rounded corners */
+    background-color: rgba(50, 50, 50, 0.8); /* Dark grey background with transparency */
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6); /* Blurred black inner shadow */
+    color: #e0e0e0; /* Light grey text color for contrast */
+    font-family: Overpass,"Noto Sans","Noto Sans KR","Noto Sans JP","Noto Sans SC","Noto Sans TC","Noto Sans Thai","Noto Sans Hebrew","Noto Sans Arabic","Noto Sans Bengali","Noto Sans Devanagari", sans-serif; /* Clean and modern font */
+    pointer-events: auto;
 }
 
-.ColorAdjustmentsButtonDeselected {
+
+    .TabsRow > *
+    {
+        filter: invert(100%);
+        width: 50rem; /* Adjust the width of each child element */
+        height: 50rem; /* Adjust the height of each child element to match the width for perfect circles */
+        display: flex; /* Ensure that child elements use flexbox layout */
+        align-items: center; /* Center contents vertically */
+        justify-content: center; /* Center contents horizontally */
+    }
+
+.ColorAdjustmentsButton
+{
     position: absolute;
     display: flex;
-    background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/ColorAdjustments.svg');
+    background-image: url('coui://ui-mods/Icons/ColorAdjustments.svg');
     background-size: cover; /* Make sure the background image covers the entire area */
     width: 45rem;
     height: 45rem;
@@ -94,34 +81,48 @@
     transition: transform 0.01s ease-in-out;
 }
 
-.SettingsButton {
+.ColorAdjustmentsButtonDeselected
+{
     position: absolute;
-    background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/SettingsGear.svg');
+    display: flex;
+    background-image: url('coui://ui-mods/Icons/ColorAdjustments.svg');
+    background-size: cover; /* Make sure the background image covers the entire area */
+    width: 45rem;
+    height: 45rem;
+    left: 900rem; /* Adjusted left position */
+    transition: transform 0.01s ease-in-out;
+}
+
+.SettingsButton
+{
+    position: absolute;
+    background-image: url('coui://ui-mods/Icons/SettingsGear.svg');
     background-size: cover; /* Make sure the background image covers the entire area */
     width: 45rem;
     height: 45rem;
     left: 0rem;
     transition: transform 0.01s ease-in-out;
     border-radius: 50%; /* Make it round */
-    filter:invert(100%);
- 
+    filter: invert(100%);
 }
 
-.SettingsButtonDeselected {
+.SettingsButtonDeselected
+{
     position: absolute;
-    background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/SettingsGear.svg');
+    background-image: url('coui://ui-mods/Icons/SettingsGear.svg');
     background-size: cover; /* Make sure the background image covers the entire area */
     width: 45rem;
     height: 45rem;
     left: 0rem;
     transition: transform 2s ease-in-out;
     border-radius: 50%; /* Make it round */
-    filter:invert(100%);
+    filter: invert(100%);
 }
 
-.PlanetaryButton {
+.PlanetaryButton
+{
     position: absolute;
-    background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/Planet.svg');
+    background-image: url('coui://ui-mods/Icons/Planet.svg');
     background-size: cover; /* Make sure the background image covers the entire area */
     width: 43rem;
     height: 43rem;
@@ -130,9 +131,10 @@
     border-radius: 50%; /* Make it round */
 }
 
-.PlanetaryButtonDeselected {
+.PlanetaryButtonDeselected
+{
     position: absolute;
-    background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/Planet.svg');
+    background-image: url('coui://ui-mods/Icons/Planet.svg');
     background-size: cover; /* Make sure the background image covers the entire area */
     width: 43rem;
     height: 43rem;
@@ -141,140 +143,150 @@
     border-radius: 50%; /* Make it round */
 }
 
-.PlanetaryButton:hover {
-   transform: translateY(-15%);
+.PlanetaryButton:hover
+{
+    transform: translateY(-15%);
 }
-
 
 //Tonemapping
 
-.TonemappingButton {
-   position: absolute;
-   background-image: url('https://i.imgur.com/CwrbLHu.png');
-   background-size: cover; /* Make sure the background image covers the entire area */
-   width: 43rem;
-   height: 43rem;
-   left: 800rem; 
-   transition: transform 0.01s ease-in-out;
-   border-radius: 50%; /* Make it round */
+.TonemappingButton
+{
+    position: absolute;
+    background-image: url('coui://ui-mods/Icons/CwrbLHu.png');
+    background-size: cover; /* Make sure the background image covers the entire area */
+    width: 43rem;
+    height: 43rem;
+    left: 800rem;
+    transition: transform 0.01s ease-in-out;
+    border-radius: 50%; /* Make it round */
 }
 
-.TonemappingButtonDeselected {
-   position: absolute;
-   background-image: url('https://i.imgur.com/CwrbLHu.png');
-   background-size: cover; /* Make sure the background image covers the entire area */
-   width: 43rem;
-   height: 43rem;
-   left: 800rem; /* Adjusted left position */
-   transition: transform 2s ease-in-out;
-   border-radius: 50%; /* Make it round */
+.TonemappingButtonDeselected
+{
+    position: absolute;
+    background-image: url('coui://ui-mods/Icons/CwrbLHu.png');
+    background-size: cover; /* Make sure the background image covers the entire area */
+    width: 43rem;
+    height: 43rem;
+    left: 800rem; /* Adjusted left position */
+    transition: transform 2s ease-in-out;
+    border-radius: 50%; /* Make it round */
 }
 
-.TonemappingButton:hover {
-   transform: translateY(-15%);
-}
-
-
-.SkyAndFogButton {
-   position: absolute;
-   background-image: url('https://i.imgur.com/suuIDOT.png');
-   background-size: cover; /* Make sure the background image covers the entire area */
-   width: 43rem;
-   height: 43rem;
-   left: 750rem; 
-   transition: transform 0.01s ease-in-out;
-   border-radius: 50%; /* Make it round */
-}
-
-.SkyAndFogButtonDeselected {
-   position: absolute;
-   background-image: url('https://i.imgur.com/suuIDOT.png');
-   background-size: cover; /* Make sure the background image covers the entire area */
-   width: 43rem;
-   height: 43rem;
-   left: 750rem; 
-   transition: transform 2s ease-in-out;
-   border-radius: 50%; /* Make it round */
-}
-
-.SkyAndFogButton:hover {
-   transform: translateY(-15%);
+.TonemappingButton:hover
+{
+    transform: translateY(-15%);
 }
 
 
-.LUTInputText {
-   position: absolute;
-   color: transparent; 
-   width:500rem;
-   top: 50rem;
-   left: 20rem;
+.SkyAndFogButton
+{
+    position: absolute;
+    background-image: url('coui://ui-mods/Icons/suuIDOT.png');
+    background-size: cover; /* Make sure the background image covers the entire area */
+    width: 43rem;
+    height: 43rem;
+    left: 750rem;
+    transition: transform 0.01s ease-in-out;
+    border-radius: 50%; /* Make it round */
 }
 
-.LUTContributionSlider {
-   position: absolute;
-   height: 30rem;
-   top:250rem;
-   right: -120rem;
-   left: 250rem;
-   width: 500rem;
-   background-color: rgba(0, 0, 0, 0.5);
+.SkyAndFogButtonDeselected
+{
+    position: absolute;
+    background-image: url('coui://ui-mods/Icons/suuIDOT.png');
+    background-size: cover; /* Make sure the background image covers the entire area */
+    width: 43rem;
+    height: 43rem;
+    left: 750rem;
+    transition: transform 2s ease-in-out;
+    border-radius: 50%; /* Make it round */
 }
 
-.LUTContributionInput {
-   position: absolute;
-   color: rgb(118, 118, 118);
-   font-size: 20rem;
-   top:250rem;
-   left: 155rem;
-   width: 50rem;
-}
-
-
-
-
-.ColorAdjustmentsButton:hover {
-   transform: translateY(-15%);
+.SkyAndFogButton:hover
+{
+    transform: translateY(-15%);
 }
 
 
-
-.SettingsButton:hover{
-   transform: translateY(-15%);
+.LUTInputText
+{
+    position: absolute;
+    color: transparent;
+    width: 500rem;
+    top: 50rem;
+    left: 20rem;
 }
 
-
-.Global{
-   height: 100%; /* Make sure the body takes up the full height of the viewport */
-   margin: 0; /* Remove any default margin */
-   display: flex; /* Use flexbox for centering */
-   justify-content: center; /* Center horizontally */
-   align-items: center; /* Center vertically */
-   pointer-events: auto;
+.LUTContributionSlider
+{
+    position: absolute;
+    height: 30rem;
+    top: 250rem;
+    right: -120rem;
+    left: 250rem;
+    width: 500rem;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
-.ColorWheel {
-   display: flex;
-  position: absolute;
-  width: 500rem;
-  height: 500rem;
-}
-
-.Wheel {
-   background-color: red;
-   display: flex;
-   width: 300rem;
-   height: 300rem;
-}
-
-.TextField1 {
-   position: absolute;
-   width: 300rem;
-
+.LUTContributionInput
+{
+    position: absolute;
+    color: rgb(118, 118, 118);
+    font-size: 20rem;
+    top: 250rem;
+    left: 155rem;
+    width: 50rem;
 }
 
 
 
 
+.ColorAdjustmentsButton:hover
+{
+    transform: translateY(-15%);
+}
+
+
+
+.SettingsButton:hover
+{
+    transform: translateY(-15%);
+}
+
+
+.Global
+{
+    height: 100%; /* Make sure the body takes up the full height of the viewport */
+    margin: 0; /* Remove any default margin */
+    display: flex; /* Use flexbox for centering */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    pointer-events: auto;
+}
+
+.ColorWheel
+{
+    display: flex;
+    position: absolute;
+    width: 500rem;
+    height: 500rem;
+}
+
+.Wheel
+{
+    background-color: red;
+    display: flex;
+    width: 300rem;
+    height: 300rem;
+}
+
+.TextField1
+{
+    position: absolute;
+    width: 300rem;
+}
 
 
 
@@ -282,91 +294,100 @@
 
 
 
- .ColorAdjustments{
-   position: absolute;
 
-   right: 200rem;
-   width: 800rem;
- }
 
- .FirstTabLabel{
-   color: white;
-   position: absolute;
-   top: 15rem;
-   left: -20rem;
-   width:200rem;
 
- 
 
-   font-size: 20rem;
- }
- .CALabel{
-   color: rgb(255, 255, 255);
-   position: absolute;
-   top: 50rem;
-   left: 480rem;
-   width: 100%;
+.ColorAdjustments
+{
+    position: absolute;
+    right: 200rem;
+    width: 800rem;
+}
 
-   font-size: 18rem;
- }
+.FirstTabLabel
+{
+    color: white;
+    position: absolute;
+    top: 15rem;
+    left: -20rem;
+    width: 200rem;
+    font-size: 20rem;
+}
 
- 
+.CALabel
+{
+    color: rgb(255, 255, 255);
+    position: absolute;
+    top: 50rem;
+    left: 480rem;
+    width: 100%;
+    font-size: 18rem;
+}
+
+
 // PostExposure Variables
 $pe-top: 20rem;
 $global-height: 40rem;
-$distance:30rem;
-.PostExposureSlider{
-   position: absolute;
-   height: 30rem;
-   right: -120rem;
-   left: 480rem;
-   top: $global-height + $distance + 20rem;
-   width: 500rem;
+$distance: 30rem;
+
+.PostExposureSlider
+{
+    position: absolute;
+    height: 30rem;
+    right: -120rem;
+    left: 480rem;
+    top: $global-height + $distance + 20rem;
+    width: 500rem;
 }
 
-.PostExposureLabel {
-   position: absolute;
-   color: rgb(118, 118, 118);
-   font-size: 20rem;
-   left: 200rem;
-   width: 150rem;
-   top: $global-height + $distance + 20rem;
-   white-space: nowrap;
+.PostExposureLabel
+{
+    position: absolute;
+    color: rgb(118, 118, 118);
+    font-size: 20rem;
+    left: 200rem;
+    width: 150rem;
+    top: $global-height + $distance + 20rem;
+    white-space: nowrap;
 }
 
-.PostExposureValue{
-   position: absolute;
-   color: white;
-   font-size: 18.7rem;
-   left: 370rem;
-   top: $global-height + $distance + 20rem;
-   width: 150rem;
-   white-space: nowrap;
+.PostExposureValue
+{
+    position: absolute;
+    color: white;
+    font-size: 18.7rem;
+    left: 370rem;
+    top: $global-height + $distance + 20rem;
+    width: 150rem;
+    white-space: nowrap;
 }
 
-.pecheckbox {
-   position: absolute;
-   left: 370rem;
-   top: $global-height + $distance + 20rem;
-   width: 45rem;
-   height: 45rem;
+.pecheckbox
+{
+    position: absolute;
+    left: 370rem;
+    top: $global-height + $distance + 20rem;
+    width: 45rem;
+    height: 45rem;
+}
 
- }
+.pecheckboximage
+{
+    position: absolute;
+    left: 0rem;
+    top: $global-height + $distance + -70rem;
+    background-image: url('coui://ui-mods/Icons/Checkmark.svg');
+    background-size: cover; /* Make sure the background image covers the entire area */
+    width: 28rem;
+    height: 28rem;
+    filter: invert(100%);
+}
 
- .pecheckboximage {
-   position: absolute;
-   left: 0rem;
-   top: $global-height + $distance + -70rem;
-   background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/Checkmark.svg');
-   background-size: cover; /* Make sure the background image covers the entire area */
-   width: 28rem;
-   height: 28rem;
-   filter: invert(100%);
- }
-
- .postexposurecheckbox2 {
-   z-index: -1;
- }
+.postexposurecheckbox2
+{
+    z-index: -1;
+}
 
 
 
@@ -376,484 +397,524 @@ $distance:30rem;
 // Contrast variables
 $contrast-top: 50rem;
 
-.ContrastSlider {
-   position: absolute;
-   height: 30rem;
-   right: -120rem;
-   left: 480rem;
-   top: $global-height + $distance + 70rem;
-   width: 500rem;
+.ContrastSlider
+{
+    position: absolute;
+    height: 30rem;
+    right: -120rem;
+    left: 480rem;
+    top: $global-height + $distance + 70rem;
+    width: 500rem;
 }
 
-.ContrastLabel {
-   position: absolute;
-   color: rgb(118, 118, 118);
-   font-size: 20rem;
-   left: 200rem;
-   width: 150rem;
-   top: $global-height + $distance + 70rem;
-   white-space: nowrap;
+.ContrastLabel
+{
+    position: absolute;
+    color: rgb(118, 118, 118);
+    font-size: 20rem;
+    left: 200rem;
+    width: 150rem;
+    top: $global-height + $distance + 70rem;
+    white-space: nowrap;
 }
 
-.ContrastValue {
-   position: absolute;
-   color: white;
-   font-size: 18.7rem;
-   left: 370rem;
-   top: $global-height + $distance + 70rem;
-   width: 150rem;
-   white-space: nowrap;
+.ContrastValue
+{
+    position: absolute;
+    color: white;
+    font-size: 18.7rem;
+    left: 370rem;
+    top: $global-height + $distance + 70rem;
+    width: 150rem;
+    white-space: nowrap;
 }
 
 // Contrast checkbox
-.cocheckbox {
-   position: absolute;
-   left: 370rem;
-   top: $global-height + $distance + 70rem;
-   width: 45rem;
-   height: 45rem;
+.cocheckbox
+{
+    position: absolute;
+    left: 370rem;
+    top: $global-height + $distance + 70rem;
+    width: 45rem;
+    height: 45rem;
+}
 
- }
+.cocheckboximage
+{
+    position: absolute;
+    left: 0rem;
+    top: $global-height + $distance + -70rem;
+    background-image: url('coui://ui-mods/Icons/Checkmark.svg');
+    background-size: cover; /* Make sure the background image covers the entire area */
+    width: 28rem;
+    height: 28rem;
+    filter: invert(100%);
+}
 
- .cocheckboximage {
-   position: absolute;
-   left: 0rem;
-   top: $global-height + $distance + -70rem;
-   background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/Checkmark.svg');
-   background-size: cover; /* Make sure the background image covers the entire area */
-   width: 28rem;
-   height: 28rem;
-   filter: invert(100%);
- }
-
- .contrastcheckbox2 {
-   z-index: -1;
- }
+.contrastcheckbox2
+{
+    z-index: -1;
+}
 
 
 
 // Hueshift variables
 $hueshift-top: 80rem;
 
-.HueshiftSlider {
-   position: absolute;
-   height: 30rem;
-   right: -120rem;
-   left: 480rem;
-   top: $global-height + $distance + 120rem;
-   width: 500rem;
+.HueshiftSlider
+{
+    position: absolute;
+    height: 30rem;
+    right: -120rem;
+    left: 480rem;
+    top: $global-height + $distance + 120rem;
+    width: 500rem;
 }
 
-.HueshiftLabel {
-   position: absolute;
-   color: rgb(118, 118, 118);
-   font-size: 20rem;
-   left: 200rem;
-   width: 150rem;
-   top: $global-height + $distance + 120rem;
-   white-space: nowrap;
+.HueshiftLabel
+{
+    position: absolute;
+    color: rgb(118, 118, 118);
+    font-size: 20rem;
+    left: 200rem;
+    width: 150rem;
+    top: $global-height + $distance + 120rem;
+    white-space: nowrap;
 }
 
-.HueshiftValue {
-   position: absolute;
-   color: white;
-   font-size: 18.7rem;
-   left: 370rem;
-   top: $global-height + $distance + 120rem;
-   width: 150rem;
-   white-space: nowrap;
+.HueshiftValue
+{
+    position: absolute;
+    color: white;
+    font-size: 18.7rem;
+    left: 370rem;
+    top: $global-height + $distance + 120rem;
+    width: 150rem;
+    white-space: nowrap;
 }
 
 // Hueshift checkbox
-.hscheckbox {
-   position: absolute;
-   left: 370rem;
-   top: $global-height + $distance + 120rem;
-   width: 45rem;
-   height: 45rem;
+.hscheckbox
+{
+    position: absolute;
+    left: 370rem;
+    top: $global-height + $distance + 120rem;
+    width: 45rem;
+    height: 45rem;
+}
 
- }
+.hscheckboximage
+{
+    position: absolute;
+    left: 0rem;
+    top: $global-height + $distance + -70rem;
+    background-image: url('coui://ui-mods/Icons/Checkmark.svg');
+    background-size: cover; /* Make sure the background image covers the entire area */
+    width: 28rem;
+    height: 28rem;
+    filter: invert(100%);
+}
 
- .hscheckboximage {
-   position: absolute;
-   left: 0rem;
-   top: $global-height + $distance + -70rem;
-   background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/Checkmark.svg');
-   background-size: cover; /* Make sure the background image covers the entire area */
-   width: 28rem;
-   height: 28rem;
-   filter: invert(100%);
- }
-
- .hueshiftcheckbox2 {
-   z-index: -1;
- }
+.hueshiftcheckbox2
+{
+    z-index: -1;
+}
 
 
 // Saturation
 
-.SaturationSlider {
-   position: absolute;
-   height: 30rem;
-   right: -120rem;
-   left: 480rem;
-   top: $global-height + $distance + 170rem;
-   width: 500rem;
+.SaturationSlider
+{
+    position: absolute;
+    height: 30rem;
+    right: -120rem;
+    left: 480rem;
+    top: $global-height + $distance + 170rem;
+    width: 500rem;
 }
 
-.SaturationLabel {
-   position: absolute;
-   color: rgb(118, 118, 118);
-   font-size: 20rem;
-   left: 200rem;
-   width: 150rem;
-   top: $global-height + $distance + 170rem;
-   white-space: nowrap;
+.SaturationLabel
+{
+    position: absolute;
+    color: rgb(118, 118, 118);
+    font-size: 20rem;
+    left: 200rem;
+    width: 150rem;
+    top: $global-height + $distance + 170rem;
+    white-space: nowrap;
 }
 
-.SaturationValue {
-   position: absolute;
-   color: white;
-   font-size: 18.7rem;
-   left: 370rem;
-   top: $global-height + $distance + 170rem;
-   width: 150rem;
-   white-space: nowrap;
+.SaturationValue
+{
+    position: absolute;
+    color: white;
+    font-size: 18.7rem;
+    left: 370rem;
+    top: $global-height + $distance + 170rem;
+    width: 150rem;
+    white-space: nowrap;
 }
 
 // Saturation checkbox
-.satcheckbox {
-   position: absolute;
-   left: 370rem;
-   top: $global-height + $distance + 170rem;
-   width: 45rem;
-   height: 45rem;
+.satcheckbox
+{
+    position: absolute;
+    left: 370rem;
+    top: $global-height + $distance + 170rem;
+    width: 45rem;
+    height: 45rem;
+}
 
- }
+.satcheckboximage
+{
+    position: absolute;
+    left: 0rem;
+    top: $global-height + $distance + -70rem;
+    background-image: url('coui://ui-mods/Icons/Checkmark.svg');
+    background-size: cover; /* Make sure the background image covers the entire area */
+    width: 28rem;
+    height: 28rem;
+    filter: invert(100%);
+}
 
- .satcheckboximage {
-   position: absolute;
-   left: 0rem;
-   top: $global-height + $distance + -70rem;
-   background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/Checkmark.svg');
-   background-size: cover; /* Make sure the background image covers the entire area */
-   width: 28rem;
-   height: 28rem;
-   filter: invert(100%);
- }
-
- .satcheckbox2 {
-   z-index: -1;
- }
+.satcheckbox2
+{
+    z-index: -1;
+}
 
 
 // White Balance
 
-.WBLabel{
-   color: rgb(255, 255, 255);
-   position: absolute;
-   top: 280rem;
-   left: 500rem;
-   width: 100%;
-
-   font-size: 18rem;
+.WBLabel
+{
+    color: rgb(255, 255, 255);
+    position: absolute;
+    top: 280rem;
+    left: 500rem;
+    width: 100%;
+    font-size: 18rem;
 }
 
 // Temperature
 
-.TemperatureSlider {
-   position: absolute;
-   height: 30rem;
-   right: -120rem;
-   left: 480rem;
-   top: $global-height + $distance + 240rem;
-   width: 500rem;
+.TemperatureSlider
+{
+    position: absolute;
+    height: 30rem;
+    right: -120rem;
+    left: 480rem;
+    top: $global-height + $distance + 240rem;
+    width: 500rem;
 }
 
-.TemperatureLabel {
-   position: absolute;
-   color: rgb(118, 118, 118);
-   font-size: 20rem;
-   left: 200rem;
-   width: 150rem;
-   top: $global-height + $distance + 240rem;
-   white-space: nowrap;
+.TemperatureLabel
+{
+    position: absolute;
+    color: rgb(118, 118, 118);
+    font-size: 20rem;
+    left: 200rem;
+    width: 150rem;
+    top: $global-height + $distance + 240rem;
+    white-space: nowrap;
 }
 
-.TemperatureValue {
-   position: absolute;
-   color: white;
-   font-size: 18.7rem;
-   left: 370rem;
-   top: $global-height + $distance + 240rem;
-   width: 150rem;
-   white-space: nowrap;
+.TemperatureValue
+{
+    position: absolute;
+    color: white;
+    font-size: 18.7rem;
+    left: 370rem;
+    top: $global-height + $distance + 240rem;
+    width: 150rem;
+    white-space: nowrap;
 }
 
 // Temperature checkbox
-.tempcheckbox {
-   position: absolute;
-   left: 370rem;
-   top: $global-height + $distance + 240rem;
-   width: 45rem;
-   height: 45rem;
+.tempcheckbox
+{
+    position: absolute;
+    left: 370rem;
+    top: $global-height + $distance + 240rem;
+    width: 45rem;
+    height: 45rem;
+}
 
- }
+.tempcheckboximage
+{
+    position: absolute;
+    left: 0rem;
+    top: $global-height + $distance + -70rem;
+    background-image: url('coui://ui-mods/Icons/Checkmark.svg');
+    background-size: cover; /* Make sure the background image covers the entire area */
+    width: 28rem;
+    height: 28rem;
+    filter: invert(100%);
+}
 
- .tempcheckboximage {
-   position: absolute;
-   left: 0rem;
-   top: $global-height + $distance + -70rem;
-   background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/Checkmark.svg');
-   background-size: cover; /* Make sure the background image covers the entire area */
-   width: 28rem;
-   height: 28rem;
-   filter: invert(100%);
- }
-
- .tempcheckbox2 {
-   z-index: -1;
- }
+.tempcheckbox2
+{
+    z-index: -1;
+}
 
 
 // Tint
 
-.TintSlider {
-   position: absolute;
-   height: 30rem;
-   right: -120rem;
-   left: 480rem;
-   top: $global-height + $distance + 290rem;
-   width: 500rem;
+.TintSlider
+{
+    position: absolute;
+    height: 30rem;
+    right: -120rem;
+    left: 480rem;
+    top: $global-height + $distance + 290rem;
+    width: 500rem;
 }
 
-.TintLabel {
-   position: absolute;
-   color: rgb(118, 118, 118);
-   font-size: 20rem;
-   left: 200rem;
-   width: 150rem;
-   top: $global-height + $distance + 290rem;
-   white-space: nowrap;
+.TintLabel
+{
+    position: absolute;
+    color: rgb(118, 118, 118);
+    font-size: 20rem;
+    left: 200rem;
+    width: 150rem;
+    top: $global-height + $distance + 290rem;
+    white-space: nowrap;
 }
 
-.TintValue {
-   position: absolute;
-   color: white;
-   font-size: 18.7rem;
-   left: 370rem;
-   top: $global-height + $distance + 290rem;
-   width: 150rem;
-   white-space: nowrap;
+.TintValue
+{
+    position: absolute;
+    color: white;
+    font-size: 18.7rem;
+    left: 370rem;
+    top: $global-height + $distance + 290rem;
+    width: 150rem;
+    white-space: nowrap;
 }
 
 
 // Tint checkbox
-.tintcheckbox {
-   position: absolute;
-   left: 370rem;
-   top: $global-height + $distance + 290rem;
-   width: 45rem;
-   height: 45rem;
+.tintcheckbox
+{
+    position: absolute;
+    left: 370rem;
+    top: $global-height + $distance + 290rem;
+    width: 45rem;
+    height: 45rem;
+}
 
- }
+.tintcheckboximage
+{
+    position: absolute;
+    left: 0rem;
+    top: $global-height + $distance + -70rem;
+    background-image: url('coui://ui-mods/Icons/Checkmark.svg');
+    background-size: cover; /* Make sure the background image covers the entire area */
+    width: 28rem;
+    height: 28rem;
+    filter: invert(100%);
+}
 
- .tintcheckboximage {
-   position: absolute;
-   left: 0rem;
-   top: $global-height + $distance + -70rem;
-   background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/Checkmark.svg');
-   background-size: cover; /* Make sure the background image covers the entire area */
-   width: 28rem;
-   height: 28rem;
-   filter: invert(100%);
- }
-
- .tintcheckbox2 {
-   z-index: -1;
- }
+.tintcheckbox2
+{
+    z-index: -1;
+}
 
 // Brightness
 
-.BLabel {
-   color: rgb(255, 255, 255);
-   position: absolute;
-   top: 400rem;
-   left: 500rem;
-   width: 100%;
-
-   font-size: 18rem;
+.BLabel
+{
+    color: rgb(255, 255, 255);
+    position: absolute;
+    top: 400rem;
+    left: 500rem;
+    width: 100%;
+    font-size: 18rem;
 }
 
 
 // Shadows
 
-.ShadowsSlider {
-   position: absolute;
-   height: 30rem;
-   right: -120rem;
-   left: 480rem;
-   top: $global-height + $distance + 360rem;
-   width: 500rem;
+.ShadowsSlider
+{
+    position: absolute;
+    height: 30rem;
+    right: -120rem;
+    left: 480rem;
+    top: $global-height + $distance + 360rem;
+    width: 500rem;
 }
 
-.ShadowsLabel {
-   position: absolute;
-   color: rgb(118, 118, 118);
-   font-size: 20rem;
-   left: 200rem;
-   width: 150rem;
-   top: $global-height + $distance + 360rem;
-   white-space: nowrap;
+.ShadowsLabel
+{
+    position: absolute;
+    color: rgb(118, 118, 118);
+    font-size: 20rem;
+    left: 200rem;
+    width: 150rem;
+    top: $global-height + $distance + 360rem;
+    white-space: nowrap;
 }
 
-.ShadowsValue {
-   position: absolute;
-   color: white;
-   font-size: 18.7rem;
-   left: 370rem;
-   top: $global-height + $distance + 360rem;
-   width: 150rem;
-   white-space: nowrap;
+.ShadowsValue
+{
+    position: absolute;
+    color: white;
+    font-size: 18.7rem;
+    left: 370rem;
+    top: $global-height + $distance + 360rem;
+    width: 150rem;
+    white-space: nowrap;
 }
 
 // Shadows checkbox
-.shadowscheckbox {
-   position: absolute;
-   left: 370rem;
-   top: $global-height + $distance + 360rem;
-   width: 45rem;
-   height: 45rem;
-
- }
-
- .shadowscheckboximage {
-   position: absolute;
-   left: 0rem;
-   top: $global-height + $distance + -70rem;
-   background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/Checkmark.svg');
-   background-size: cover; /* Make sure the background image covers the entire area */
-   width: 28rem;
-   height: 28rem;
-   filter: invert(100%);
- }
-
- .shadowscheckbox2 {
-   z-index: -1;
- }
-
-
-.MidtonesSlider {
-   position: absolute;
-   height: 30rem;
-   right: -120rem;
-   left: 480rem;
-   top: $global-height + $distance + 430rem;
-   width: 500rem;
+.shadowscheckbox
+{
+    position: absolute;
+    left: 370rem;
+    top: $global-height + $distance + 360rem;
+    width: 45rem;
+    height: 45rem;
 }
 
-.MidtonesLabel {
-   position: absolute;
-   color: rgb(118, 118, 118);
-   font-size: 20rem;
-   left: 200rem;
-   width: 150rem;
-   top: $global-height + $distance +  430rem;
-   white-space: nowrap;
+.shadowscheckboximage
+{
+    position: absolute;
+    left: 0rem;
+    top: $global-height + $distance + -70rem;
+    background-image: url('coui://ui-mods/Icons/Checkmark.svg');
+    background-size: cover; /* Make sure the background image covers the entire area */
+    width: 28rem;
+    height: 28rem;
+    filter: invert(100%);
+}
+
+.shadowscheckbox2
+{
+    z-index: -1;
+}
+
+
+.MidtonesSlider
+{
+    position: absolute;
+    height: 30rem;
+    right: -120rem;
+    left: 480rem;
+    top: $global-height + $distance + 430rem;
+    width: 500rem;
+}
+
+.MidtonesLabel
+{
+    position: absolute;
+    color: rgb(118, 118, 118);
+    font-size: 20rem;
+    left: 200rem;
+    width: 150rem;
+    top: $global-height + $distance + 430rem;
+    white-space: nowrap;
 }
 
 // Midtones
-.MidtonesValue {
-   position: absolute;
-   color: white;
-   font-size: 18.7rem;
-   left: 370rem;
-   top: $global-height + $distance +  430rem;
-   width: 150rem;
-   white-space: nowrap;
+.MidtonesValue
+{
+    position: absolute;
+    color: white;
+    font-size: 18.7rem;
+    left: 370rem;
+    top: $global-height + $distance + 430rem;
+    width: 150rem;
+    white-space: nowrap;
 }
 
 // Shadows checkbox
-.midtonescheckbox {
-   position: absolute;
-   left: 370rem;
-   top: $global-height + $distance +  430rem;
-   width: 45rem;
-   height: 45rem;
+.midtonescheckbox
+{
+    position: absolute;
+    left: 370rem;
+    top: $global-height + $distance + 430rem;
+    width: 45rem;
+    height: 45rem;
+}
 
- }
+.midtonescheckboximage
+{
+    position: absolute;
+    left: 0rem;
+    top: $global-height + $distance + -70rem;
+    background-image: url('coui://ui-mods/Icons/Checkmark.svg');
+    background-size: cover; /* Make sure the background image covers the entire area */
+    width: 28rem;
+    height: 28rem;
+    filter: invert(100%);
+}
 
- .midtonescheckboximage {
-   position: absolute;
-   left: 0rem;
-   top: $global-height + $distance + -70rem;
-   background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/Checkmark.svg');
-   background-size: cover; /* Make sure the background image covers the entire area */
-   width: 28rem;
-   height: 28rem;
-   filter: invert(100%);
- }
-
- .midtonescheckbox2 {
-   z-index: -1;
- }
+.midtonescheckbox2
+{
+    z-index: -1;
+}
 
 
 
 // Highlights
-.HighlightsSlider {
-   position: absolute;
-   height: 30rem;
-   right: -120rem;
-   left: 480rem;
-   top: $global-height + $distance +  500rem;
-   width: 500rem;
+.HighlightsSlider
+{
+    position: absolute;
+    height: 30rem;
+    right: -120rem;
+    left: 480rem;
+    top: $global-height + $distance + 500rem;
+    width: 500rem;
 }
 
-.HighlightsLabel {
-   position: absolute;
-   color: rgb(118, 118, 118);
-   font-size: 20rem;
-   left: 200rem;
-   width: 150rem;
-   top: $global-height + $distance +   500rem;
-   white-space: nowrap;
+.HighlightsLabel
+{
+    position: absolute;
+    color: rgb(118, 118, 118);
+    font-size: 20rem;
+    left: 200rem;
+    width: 150rem;
+    top: $global-height + $distance + 500rem;
+    white-space: nowrap;
 }
 
-.HighlightsValue {
-   position: absolute;
-   color: white;
-   font-size: 18.7rem;
-   left: 370rem;
-   top: $global-height + $distance +  500rem;
-   width: 150rem;
-   white-space: nowrap;
+.HighlightsValue
+{
+    position: absolute;
+    color: white;
+    font-size: 18.7rem;
+    left: 370rem;
+    top: $global-height + $distance + 500rem;
+    width: 150rem;
+    white-space: nowrap;
 }
 
 // highlights checkbox
-.highlightscheckbox {
-   position: absolute;
-   left: 370rem;
-   top: $global-height + $distance +  500rem;
-   width: 45rem;
-   height: 45rem;
+.highlightscheckbox
+{
+    position: absolute;
+    left: 370rem;
+    top: $global-height + $distance + 500rem;
+    width: 45rem;
+    height: 45rem;
+}
 
- }
+.highlightscheckboximage
+{
+    position: absolute;
+    left: 0rem;
+    top: $global-height + $distance + -70rem;
+    background-image: url('coui://ui-mods/Icons/Checkmark.svg');
+    background-size: cover; /* Make sure the background image covers the entire area */
+    width: 28rem;
+    height: 28rem;
+    filter: invert(100%);
+}
 
- .highlightscheckboximage {
-   position: absolute;
-   left: 0rem;
-   top: $global-height + $distance + -70rem;
-   background-image: url('https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/HTTP/Checkmark.svg');
-   background-size: cover; /* Make sure the background image covers the entire area */
-   width: 28rem;
-   height: 28rem;
-   filter: invert(100%);
- }
-
- .highlightscheckbox2 {
-   z-index: -1;
- }
+.highlightscheckbox2
+{
+    z-index: -1;
+}
 
 
 
@@ -861,218 +922,242 @@ $hueshift-top: 80rem;
 
 // Settings
 
-.HelloLabel {
- font-size: 200rem;
+.HelloLabel
+{
+    font-size: 200rem;
 }
 
 
-.SettingsPanel {
-   position: absolute; 
-   top: 0rem;
-   left: 0rem;
-   width: inherit;
-   height: inherit;
-   overflow-y: auto;
- }
+.SettingsPanel
+{
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    width: inherit;
+    height: inherit;
+    overflow-y: auto;
+}
 
- .LuminaSaveButton {
-   position: absolute;
-   display: flex;
-   width: 300rem;
-   top: 20rem;
-   left: 40rem;
- }
+.LuminaSaveButton
+{
+    position: absolute;
+    display: flex;
+    width: 300rem;
+    top: 20rem;
+    left: 40rem;
+}
 
- .LuminaResetSettingsButton {
-   position: absolute;
-   display: flex;
-   width: 300rem;
-   top: 80rem;
-   left: 40rem;
- }
+.LuminaResetSettingsButton
+{
+    position: absolute;
+    display: flex;
+    width: 300rem;
+    top: 80rem;
+    left: 40rem;
+}
 
- // Save image
- .SaveButtonLuminaImage {
-   position: absolute;
-   left: 125rem;
-   top: 30rem;
-   mask-image: url('https://svgshare.com/i/15u4.svg')
- }
+// Save image
+.SaveButtonLuminaImage
+{
+    position: absolute;
+    left: 125rem;
+    top: 30rem;
+    mask-image: url('coui://ui-mods/Icons/save.svg')
+}
 
-  // Save image
-  .ResetButtonLuminaImage {
-   position: absolute;
-   left: 125rem;
-   top: 30rem;
-   mask-image: url('https://svgshare.com/i/15u4.svg')
- }
+// Save image
+.ResetButtonLuminaImage
+{
+    position: absolute;
+    left: 125rem;
+    top: 30rem;
+    mask-image: url('coui://ui-mods/Icons/reset.svg')
+}
 
- .VersionCheckLabel {
-   position: absolute;
-   bottom: 0rem;
-   width: 100rem;
-   height: 30rem;
-   background-color: rgba(0, 0, 0, 0.5); /* Black with 70% opacity */
-   color: rgba($color: #6b6b6b, $alpha: 1.0) /* Set text color to white */
- }
+.VersionCheckLabel
+{
+    position: absolute;
+    bottom: 0rem;
+    width: 100rem;
+    height: 30rem;
+    background-color: rgba(0, 0, 0, 0.5); /* Black with 70% opacity */
+    color: rgba($color: #6b6b6b, $alpha: 1.0) /* Set text color to white */
+}
 
- .UnityLegacyUIButton {
-   position: absolute;
-   display: flex;
-   background-color: black;
-   width: 300rem;
-   left: 400rem;
-   top: 80rem;
- }
+.UnityLegacyUIButton
+{
+    position: absolute;
+    display: flex;
+    background-color: black;
+    width: 300rem;
+    left: 400rem;
+    top: 80rem;
+}
 
-.PlanetaryPanel {
-   position: absolute; 
-   top: 0rem;
-   left: 0rem;
-   width: inherit;
-   height: inherit;
-   overflow-y: auto;
+.PlanetaryPanel
+{
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    width: inherit;
+    height: inherit;
+    overflow-y: auto;
 }
 
 
-.PresetManagementLabel {
-   position: absolute;
-   width: 500rem;
-   font-size: 20rem;
-   top: 160rem;
-   left: -100rem;
-   color: rgba(255, 255, 255, 0.5);
-   white-space: nowrap;
+.PresetManagementLabel
+{
+    position: absolute;
+    width: 500rem;
+    font-size: 20rem;
+    top: 160rem;
+    left: -100rem;
+    color: rgba(255, 255, 255, 0.5);
+    white-space: nowrap;
 }
 
-.LuminaExportPresetButton {
-      position: absolute;
-      display: flex;
-      top: 230rem;
-      height:30rem;
-   width: 200rem;
-      left: 40rem;
+.LuminaExportPresetButton
+{
+    position: absolute;
+    display: flex;
+    top: 230rem;
+    height: 30rem;
+    width: 200rem;
+    left: 40rem;
 }
 
 
-.logo_IpH {
-  mask-image: url('https://i.ytimg.com/vi/rNW1xrpt8OE/hqdefault.jpg') !important
+.logo_IpH
+{
+    mask-image: url('https://i.ytimg.com/vi/rNW1xrpt8OE/hqdefault.jpg') !important
 }
 
-.LuminaImportPresetButton {
-   position: absolute;
-   display: flex;
-   top: 290rem;
-   height:30rem;
-   width: 200rem;
-   left: 40rem;
+.LuminaImportPresetButton
+{
+    position: absolute;
+    display: flex;
+    top: 290rem;
+    height: 30rem;
+    width: 200rem;
+    left: 40rem;
 }
 
-.LuminaOpenFolder {
-   position: absolute;
-   display: flex;
-   top: 335rem;
-   height:30rem;
-   width: 250rem;
-   left: 40rem;
+.LuminaOpenFolder
+{
+    position: absolute;
+    display: flex;
+    top: 335rem;
+    height: 30rem;
+    width: 250rem;
+    left: 40rem;
 }
 
-.PresetConfirmation {
-   position: absolute;
-   top: 150rem;
-   height: 200rem;
-   width: 400rem;
-   left: 450rem;
+.PresetConfirmation
+{
+    position: absolute;
+    top: 150rem;
+    height: 200rem;
+    width: 400rem;
+    left: 450rem;
 }
 
-.PresetInputText {
-   position: absolute;
-   color: white;
-   width:200rem;
-   top: 205rem;
-   left: 40rem;
+.PresetInputText
+{
+    position: absolute;
+    color: white;
+    width: 200rem;
+    top: 205rem;
+    left: 40rem;
 }
 
- // Planetary Settings
+// Planetary Settings
 
- // Latitude
-.LatitudeLabel {
-   position: absolute;
-   color: rgb(255, 255, 255);
-   font-size: 20rem;
-   left: 0rem;
-   width: 150rem;
-   top: $global-height + $distance + -9rem;
-   white-space: nowrap;
+// Latitude
+.LatitudeLabel
+{
+    position: absolute;
+    color: rgb(255, 255, 255);
+    font-size: 20rem;
+    left: 0rem;
+    width: 150rem;
+    top: $global-height + $distance + -9rem;
+    white-space: nowrap;
 }
 
-.LatitudeSlider {
-   position: absolute;
-   height: 30rem;
-   right: -120rem;
-   left: 250rem;
-   top: $global-height + $distance + 0rem;
-   width: 680rem;
+.LatitudeSlider
+{
+    position: absolute;
+    height: 30rem;
+    right: -120rem;
+    left: 250rem;
+    top: $global-height + $distance + 0rem;
+    width: 680rem;
 }
 
-.LatitudeInput {
-   position: absolute;
-   color: rgb(118, 118, 118);
-   font-size: 20rem;
-   left: 155rem;
-   width: 50rem;
-   top: $global-height + $distance + -9rem;
-   white-space: nowrap;
+.LatitudeInput
+{
+    position: absolute;
+    color: rgb(118, 118, 118);
+    font-size: 20rem;
+    left: 155rem;
+    width: 50rem;
+    top: $global-height + $distance + -9rem;
+    white-space: nowrap;
 }
 
 //Longitude
-.LongitudeLabel {
-   position: absolute;
-   color: rgb(255, 255, 255);
-   font-size: 20rem;
-   left: 0rem;
-   width: 150rem;
-   top: $global-height + $distance + 31rem;
-   white-space: nowrap;
+.LongitudeLabel
+{
+    position: absolute;
+    color: rgb(255, 255, 255);
+    font-size: 20rem;
+    left: 0rem;
+    width: 150rem;
+    top: $global-height + $distance + 31rem;
+    white-space: nowrap;
 }
 
-.LongitudeSlider {
-   position: absolute;
-   height: 30rem;
-   right: -120rem;
-   left: 250rem;
-   top: $global-height + $distance + 40rem;
-   width: 680rem;
+.LongitudeSlider
+{
+    position: absolute;
+    height: 30rem;
+    right: -120rem;
+    left: 250rem;
+    top: $global-height + $distance + 40rem;
+    width: 680rem;
 }
 
-.LongitudeInput {
-   position: absolute;
-   color: rgb(118, 118, 118);
-   font-size: 20rem;
-   left: 155rem;
-   width: 50rem;
-   top: $global-height + $distance + 31rem;
-   white-space: nowrap;
+.LongitudeInput
+{
+    position: absolute;
+    color: rgb(118, 118, 118);
+    font-size: 20rem;
+    left: 155rem;
+    width: 50rem;
+    top: $global-height + $distance + 31rem;
+    white-space: nowrap;
 }
 
 
-.TimeOfDaySlider {
-   position: absolute;
-   display: flex;
-   top: 20rem;
-   width:300rem;
-   box-shadow: #000;
+.TimeOfDaySlider
+{
+    position: absolute;
+    display: flex;
+    top: 20rem;
+    width: 300rem;
+    box-shadow: #000;
 }
 
-.TimeOfDaySlider {
-   font-size: 20rem;
-   left: 250rem;
-   color: white;
-   box-shadow: #000;
-
+.TimeOfDaySlider
+{
+    font-size: 20rem;
+    left: 250rem;
+    color: white;
+    box-shadow: #000;
 }
 
-.LuminaVersion_Image {
+.LuminaVersion_Image
+{
     display: flex;
     position: absolute;
     top: 50rem;
@@ -1081,203 +1166,221 @@ $hueshift-top: 80rem;
     width: 500rem;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("https://github.com/NyokoDev/LuminaCS2/blob/master/XML/Images/V2.0R4.png?raw=true");
+    background-image: url("coui://ui-mods/Icons/V2.0R4.png?raw=true");
     border: 5px solid #000; /* Example border: 5px solid black */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Example box shadow: offset-x, offset-y, blur-radius, color */
 }
 
- .Version_Text {
-   display: flex;
-   position: absolute;
-   top: 50rem;
-   left: 300rem;
-   height: 200rem;
-   width: 500rem;
- }
- 
- .TonemappingDropdown {
-   position: absolute;
-   color: white;
-   width:300rem;
-   top: 5rem;
-   left: 650rem;
-   pointer-events: auto;
-   z-index: 4000;
- }
+.Version_Text
+{
+    display: flex;
+    position: absolute;
+    top: 50rem;
+    left: 300rem;
+    height: 200rem;
+    width: 500rem;
+}
 
- .LutLabelInUse {
-   position: absolute;
-   color: rgb(211, 211, 211);
-   font-size: 15rem;
-   top: 45rem;
-   left: 23rem;
+.TonemappingDropdown
+{
+    position: absolute;
+    color: white;
+    width: 300rem;
+    top: 5rem;
+    left: 650rem;
+    pointer-events: auto;
+    z-index: 4000;
+}
+
+.LutLabelInUse
+{
+    position: absolute;
+    color: rgb(211, 211, 211);
+    font-size: 15rem;
+    top: 45rem;
+    left: 23rem;
 }
 
 
- .LUTSDropdown {
-   position: absolute;
-   color: white;
-   width:500rem;
-   top: 60rem;
-   left: 15rem;
- }
-
- .PublicServiceAnnouncement {
-   position: absolute; 
-   display: flex;
-   top: 250rem; 
-   left: 0; 
-   width: 100%; 
-   height: 50rem; 
-   background-color: rgba(0, 0, 0, 0.944); 
+.LUTSDropdown
+{
+    position: absolute;
+    color: white;
+    width: 500rem;
+    top: 60rem;
+    left: 15rem;
 }
 
-.PublicServiceAnnouncement h1 {
-   position: absolute;
-   color: rgb(255, 255, 255);
-   font-size: 20rem;
-   top:-15rem;
-   text-transform: uppercase;
-   left: 130rem;
-
-
+.PublicServiceAnnouncement
+{
+    position: absolute;
+    display: flex;
+    top: 250rem;
+    left: 0;
+    width: 100%;
+    height: 50rem;
+    background-color: rgba(0, 0, 0, 0.944);
 }
 
-.PublicServiceAnnouncement h2 {
-   position: absolute;
-   color: rgb(255, 255, 255);
-   font-size: 20rem;
-   top:1rem;
-   text-transform: uppercase;
-   left: 130rem;
+    .PublicServiceAnnouncement h1
+    {
+        position: absolute;
+        color: rgb(255, 255, 255);
+        font-size: 20rem;
+        top: -15rem;
+        text-transform: uppercase;
+        left: 130rem;
+    }
 
+    .PublicServiceAnnouncement h2
+    {
+        position: absolute;
+        color: rgb(255, 255, 255);
+        font-size: 20rem;
+        top: 1rem;
+        text-transform: uppercase;
+        left: 130rem;
+    }
 
+.LoadLUTButton, .OpenLUTButton
+{
+    position: absolute;
+    height: 30rem;
+    width: 208rem;
+    top: 218rem;
+    box-sizing: border-box; /* Ensure consistent box-sizing */
 }
 
-.LoadLUTButton, .OpenLUTButton {
-   position: absolute;
-   height: 30rem;
-   width: 208rem;
-   top: 218rem;
-   box-sizing: border-box; /* Ensure consistent box-sizing */
+.LoadLUTButton
+{
+    left: 20rem;
 }
 
-.LoadLUTButton {
-   left: 20rem;
-}
-
-.OpenLUTButton {
-   left:20rem;
-   top:240rem !important;
-   z-index: 200;
-}
-
-
-.LutLabel {
-   color: rgb(255, 255, 255);
-   position: absolute;
-   top: 15rem;
-   left: -390rem;
-   width: 100%;
-   font-size: 18rem;
-}
-
-.ModeLabel{
-   position: absolute;
-   display: flex;
-   top: 15rem;
-   left: 480rem;
-   width: 100%;
-   font-size: 18rem;
+.OpenLUTButton
+{
+    left: 20rem;
+    top: 240rem !important;
+    z-index: 200;
 }
 
 
-.cubemap-intensity-slider {
-   position: absolute;
-   top:85rem;
-   width: 670rem;
-   left: 250rem;
+.LutLabel
+{
+    color: rgb(255, 255, 255);
+    position: absolute;
+    top: 15rem;
+    left: -390rem;
+    width: 100%;
+    font-size: 18rem;
 }
 
-.space-emission-label {
-   color: white;
-   position: absolute;
-   left:13rem;
-   text-transform: uppercase;
-   top:80rem;
+.ModeLabel
+{
+    position: absolute;
+    display: flex;
+    top: 15rem;
+    left: 480rem;
+    width: 100%;
+    font-size: 18rem;
 }
 
-.space-emission-texture-label {
-   color:white;
-   position: absolute;
-   left:35rem;
-   text-transform: uppercase;
-   top:58rem;
+
+.cubemap-intensity-slider
+{
+    position: absolute;
+    top: 85rem;
+    width: 670rem;
+    left: 250rem;
 }
 
-.custom-sun-label{
-   color: rgb(142, 139, 139);
-   position: absolute;
-   left:35rem;
-   text-transform: uppercase;
-   top:110rem;
+.space-emission-label
+{
+    color: white;
+    position: absolute;
+    left: 13rem;
+    text-transform: uppercase;
+    top: 80rem;
 }
 
-.sun-diameter-label{
-   color:wheat;
-   position: absolute;
-   left:13rem;
-   text-transform: uppercase;
-   top:143rem;
-   pointer-events: auto;
+.space-emission-texture-label
+{
+    color: white;
+    position: absolute;
+    left: 35rem;
+    text-transform: uppercase;
+    top: 58rem;
 }
 
-.sun-adjust-diameter-slider {
-   position: absolute;
-   top:150rem;
-   width: 350rem;
-   left: 150rem;
-   pointer-events: auto;
+.custom-sun-label
+{
+    color: rgb(142, 139, 139);
+    position: absolute;
+    left: 35rem;
+    text-transform: uppercase;
+    top: 110rem;
 }
 
-.sun-intensity-label{
-   color: wheat;
-   position: absolute;
-   left: 13rem;
-   text-transform: uppercase;
-   top: 173rem;
-   pointer-events: auto;
+.sun-diameter-label
+{
+    color: wheat;
+    position: absolute;
+    left: 13rem;
+    text-transform: uppercase;
+    top: 143rem;
+    pointer-events: auto;
 }
 
-.sun-adjust-intensity-slider {
-   position: absolute;
-   top: 180rem;
-   width: 350rem;
-   left: 150rem;
-   pointer-events: auto;
+.sun-adjust-diameter-slider
+{
+    position: absolute;
+    top: 150rem;
+    width: 350rem;
+    left: 150rem;
+    pointer-events: auto;
 }
 
-.sun-flare-size-label{
-   color: wheat;
-   position: absolute;
-   left: 13rem;
-   text-transform: uppercase;
-   top: 203rem;
-   pointer-events: auto;
+.sun-intensity-label
+{
+    color: wheat;
+    position: absolute;
+    left: 13rem;
+    text-transform: uppercase;
+    top: 173rem;
+    pointer-events: auto;
 }
 
-.sun-adjust-flare-size-slider{
-   position: absolute;
-   top: 210rem;
-   width: 350rem;
-   left: 150rem;
-   pointer-events: auto;
+.sun-adjust-intensity-slider
+{
+    position: absolute;
+    top: 180rem;
+    width: 350rem;
+    left: 150rem;
+    pointer-events: auto;
 }
 
-.ResetConfirmationDialog {
-   position: absolute;
-   top: inherit;
-   width: inherit;
-   height: inherit;
+.sun-flare-size-label
+{
+    color: wheat;
+    position: absolute;
+    left: 13rem;
+    text-transform: uppercase;
+    top: 203rem;
+    pointer-events: auto;
+}
 
- }
+.sun-adjust-flare-size-slider
+{
+    position: absolute;
+    top: 210rem;
+    width: 350rem;
+    left: 150rem;
+    pointer-events: auto;
+}
+
+.ResetConfirmationDialog
+{
+    position: absolute;
+    top: inherit;
+    width: inherit;
+    height: inherit;
+}
