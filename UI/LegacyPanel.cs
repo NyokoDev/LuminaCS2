@@ -310,14 +310,14 @@ namespace Lumina.UI
 
 
 #if DEBUG
-            GUI.Label(new Rect(20, YControl += 30, 100, 20), "Sha/Mid/HighL");
-            GUI.Label(new Rect(20, YControl += 30, 100, 20), "Shadows");
+            //GUI.Label(new Rect(20, YControl += 30, 100, 20), "Sha/Mid/HighL");
+            //GUI.Label(new Rect(20, YControl += 30, 100, 20), "Shadows");
 
-            Rect ShadowsSpaceRect = new Rect(20, YControl += 20, 300, 20);
-            Vector4 oldShadowsValue = Shadows.value;
-            oldShadowsValue.x = GUI.HorizontalSlider(ShadowsSpaceRect, oldShadowsValue.x, -10000f, 10000f);
-            Shadows.value = oldShadowsValue;
-            GlobalVariables.Instance.Shadows = Shadows;
+            //Rect ShadowsSpaceRect = new Rect(20, YControl += 20, 300, 20);
+            //Vector4 oldShadowsValue = Shadows.value;
+            //oldShadowsValue.x = GUI.HorizontalSlider(ShadowsSpaceRect, oldShadowsValue.x, -10000f, 10000f);
+            //Shadows.value = oldShadowsValue;
+            //GlobalVariables.Instance.Shadows = Shadows;
 #endif
             Rect Button1Rect = (new Rect(20, YControl += 30, 100, 20));
             if (GUI.Button(Button1Rect, "Save"))

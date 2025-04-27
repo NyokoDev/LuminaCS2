@@ -98,6 +98,12 @@
 		<EmbeddedResource Include="LUTS\Reds.cube" />
 		<EmbeddedResource Include="LUTS\Reds_Oranges_Yellows.cube" />
 	</ItemGroup>
+	<Target Name="GetCustomAssetsFiles" AfterTargets="DeployWIP">
+		<ItemGroup>
+			<AdditionalFilesToDeploy Include="Icons\**\*.*" />
+		</ItemGroup>
+		<Copy SourceFiles="@(AdditionalFilesToDeploy)" DestinationFiles="@(AdditionalFilesToDeploy->'$(DeployDir)\Icons\%(RecursiveDir)%(Filename)%(Extension)')" />
+	</Target>
 	<ItemGroup>
 		<Reference Include="Colossal.Collections">
 			<Private>false</Private>
@@ -195,7 +201,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Lumina\src\img\" />
 		<Folder Include="Lumina\src\classes\" />
 		<Folder Include="HTTP\" />
 		<Folder Include="XML\Images\" />
