@@ -259,10 +259,6 @@
 .Global
 {
     height: 100%; /* Make sure the body takes up the full height of the viewport */
-    margin: 0; /* Remove any default margin */
-    display: flex; /* Use flexbox for centering */
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
     pointer-events: auto;
 }
 

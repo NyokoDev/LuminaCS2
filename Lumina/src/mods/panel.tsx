@@ -10,7 +10,7 @@ import { Slider, PropsSlider, SliderValueTransformer } from "./slider";
 import { useLocalization } from "cs2/l10n";
 import mod from "../../mod.json";
 import "../luminapanel.scss"; 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import React, { Fragment } from 'react';
 import {SketchPicker} from 'react-color';
@@ -118,6 +118,12 @@ let tab2 = false;
 
 export const YourPanelComponent: React.FC<any> = () => {
   // Values
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const offset = useRef({ x: 0, y: 0 });
+  const isDragging = useRef(false);
+  const velocity = useRef({ x: 0, y: 0 });
+
+
   const PEValue = useValue(PostExposure$);
   const PostExposureActive = useValue<boolean>(PostExposureActive$);
   const ContrastActive = useValue<boolean>(ContrastActive$);
@@ -449,10 +455,51 @@ const handleHighlights = (value: number) => {
       trigger(mod.id, 'handleSunFlareSize', value);
     };
 
-
+    const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+      if (e.button !== 0) return; // Only drag with the left mouse button
+  
+      // Calculate the initial offset of the mouse position relative to the panel
+      const rect = (e.target as HTMLElement).getBoundingClientRect();
+      offset.current = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      };
+      isDragging.current = true; // Enable dragging
+    };
+  
+    const handleMouseMove = (e: React.MouseEvent) => {
+      if (!isDragging.current || e.button !== 0) return; // Only move if left mouse button is pressed
+  
+      // Calculate the new position of the panel based on mouse movement
+      const newX = e.clientX - offset.current.x;
+      const newY = e.clientY - offset.current.y;
+  
+      setPosition({
+        x: newX,
+        y: newY,
+      });
+    };
+  
+    const handleMouseUp = () => {
+      isDragging.current = false; // Disable dragging when mouse button is released
+    };
+  
 return (
 
-  <div className="Global">
+  <div className="Global"
+  onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp} // Stop dragging if mouse leaves the element
+      style={{
+        transform: `translate(${position.x}px, ${position.y}px)`, // Use transform for smooth movement
+        transition: 'transform 0.2s ease', // Smooth transition for dragging
+        cursor: 'move',
+        position: 'absolute',
+        left: position.x,
+        top: position.y,
+      }}
+    >
 
 
 <div className="TabsRow">
@@ -477,6 +524,7 @@ return (
     setSkyAndFog(false)
    }}>
 </button>
+
 </Tooltip>
 
 <Tooltip
