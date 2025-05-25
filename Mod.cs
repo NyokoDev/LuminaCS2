@@ -86,27 +86,28 @@ namespace Lumina
             SendNotification();
         }
 
-            private void CheckVersion()
+        private void CheckVersion()
         {
-            string url = "https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/XML/version.txt"; // URL for the version file
-            string currentVersion = GlobalPaths.Version; 
+            string url = "https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/XML/version.txt";
+            string currentVersion = GlobalPaths.Version;
 
             try
             {
-                // Create a WebClient to fetch the version from the URL
                 using (WebClient client = new WebClient())
                 {
-                    // Download the version file content synchronously
-                    string latestVersion = client.DownloadString(url).Trim(); // Fetch and trim the version string
+                    string latestVersion = client.DownloadString(url).Trim();
 
-                    // Compare the current version with the latest version
                     if (currentVersion == latestVersion)
                     {
                         Mod.Log.Info("The version is up to date. Current: " + currentVersion);
                     }
                     else
                     {
-                        Mod.Log.Info("New version available! Current: " + currentVersion + " Latest: " + latestVersion);
+                        string message = $"New version available! Current: {currentVersion} | Latest: {latestVersion}";
+                        Mod.Log.Info(message);
+
+                        // Unity message — shows up in the top-left of the game screen
+                        UnityEngine.Debug.LogError("<color=yellow><b>Lumina Update:</b></color> " + message);
                     }
                 }
             }
@@ -115,7 +116,9 @@ namespace Lumina
                 Mod.Log.Error("Error checking version: " + ex.Message);
             }
         }
-        
+
+
+
 
         private void SendNotification()
         {

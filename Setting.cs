@@ -123,6 +123,7 @@ namespace Lumina
         /// </summary>
         [SettingsUIButton]
         [SettingsUISection(KSection, KToggleGroup)]
+        [SettingsUIMultilineText("coui://ui-mods/Icons/Lumina.svg")]
         public bool Guides
         {
             set
@@ -154,6 +155,9 @@ namespace Lumina
             }
         }
 
+        [SettingsUISection(KSection, KToggleGroup)]
+        [SettingsUIMultilineText("coui://ui-mods/Icons/Lumina.svg")]
+        public string OtherSettings => string.Empty;
 
 
         /// <summary>
@@ -226,7 +230,7 @@ namespace Lumina
         {
             try
             {
-                string discordInviteLink = "https://github.com/NyokoDev/LuminaCS2";
+                string discordInviteLink = "https://skylinx.gitbook.io/lumina";
 
                 // Use Process.Start to open the URL in the default web browser
                 System.Diagnostics.Process.Start(discordInviteLink);

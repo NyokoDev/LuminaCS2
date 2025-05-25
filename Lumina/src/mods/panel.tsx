@@ -487,19 +487,42 @@ const handleHighlights = (value: number) => {
 return (
 
   <div className="Global"
-  onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp} // Stop dragging if mouse leaves the element
+  
+
       style={{
         transform: `translate(${position.x}px, ${position.y}px)`, // Use transform for smooth movement
-        transition: 'transform 0.2s ease', // Smooth transition for dragging
+        transition: 'transform 0.02s ease', // Smooth transition for dragging
         cursor: 'move',
         position: 'absolute',
         left: position.x,
         top: position.y,
       }}
     >
+<div
+  className="Drag"
+  onMouseDown={handleMouseDown}
+  onMouseMove={handleMouseMove}
+  onMouseUp={handleMouseUp}
+  onMouseLeave={handleMouseUp}
+  style={{
+    cursor: 'grab',
+    userSelect: 'none',
+    backgroundColor: '#4F46E5', // Indigo-600
+    color: 'white',
+    padding: '10px 20px',
+    borderRadius: '8px',
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+    fontSize: '14px',
+    fontWeight: 600,
+    border: 'none',
+    display: 'inline-block',
+    margin: '10px',
+    transition: 'background 0.2s ease',
+  }}
+>
+  🖱️ Drag this panel
+</div>
+
 
 
 <div className="TabsRow">

@@ -34,7 +34,7 @@ public class LocaleEN : IDictionarySource
             { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.ReloadAllPackagesOnRestart)), "Fetch all packages on restart" },
             { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.ReloadAllPackagesOnRestart)), "Determines whether to fetch all packages (Cubemaps, LUTs) on restart. When enabled, Lumina will reload all packages every time the game restarts, ensuring that the latest versions are used and cleaning up any textures that didn’t load properly." },
             { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.SaveAutomatically)), "Saves your settings automatically when the UI is opened or closed." },
-            { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.Guides)), "Lumina Guides" },
+            { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.Guides)), "Lumina Docs" },
             { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.Guides)), "Opens Lumina guides for information and documentation in a new tab." },
             { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.Support)), "Discord Server" },
             { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.Support)), "Opens the Support Discord server in a new tab." },
@@ -44,6 +44,7 @@ public class LocaleEN : IDictionarySource
             { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.OpenLocationButton)), "Opens the saved settings file in a new tab." },
             { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.UseTimeOfDaySlider)), "Use Time Of Day Slider" },
             { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.UseTimeOfDaySlider)), "Shows a time of day slider to switch between day and night. Disabled by default if Weather Plus or another time-changing mode is detected." },
+            { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.OtherSettings)), "More options can be adjusted directly in the in-game interface." },
         };
 
     public void Unload()
