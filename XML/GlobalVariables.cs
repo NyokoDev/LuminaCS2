@@ -233,7 +233,7 @@ namespace LuminaMod.XML
         public bool LuminaVolumeEnabled { get; set; }
 
         [XmlElement]
-        public bool LatLongEnabled { get; set; } = false;
+        public bool LatLongEnabled { get; set; }
 
         /// <summary>
         /// Serializes to a file.
@@ -366,6 +366,7 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.SunIntensity = loadedVariables?.SunIntensity ?? 0f;
                     GlobalVariables.Instance.SunFlareSize = loadedVariables?.SunFlareSize ?? 0f;
                     GlobalVariables.Instance.ReloadAllPackagesOnRestart = loadedVariables?.ReloadAllPackagesOnRestart ?? false;
+                    GlobalVariables.Instance.LatLongEnabled = loadedVariables?.LatLongEnabled ?? false;
 
                   
 

@@ -21,7 +21,9 @@ export const TimeOfDaySliderModuleRegistryExtend = (Component: React.ComponentTy
       <>
         {/* Time slider goes at the very top */}
         {TimeFloatIsActive && (
-          <div className="time-of-day-wrapper">
+          <div
+          
+          className="time-of-day-wrapper">
             <label className="time-of-day-label">Time of Day</label>
             <Slider
               value={TimeFloatValue}
@@ -34,7 +36,10 @@ export const TimeOfDaySliderModuleRegistryExtend = (Component: React.ComponentTy
               onChange={(number) => handleTimeOfDay(number)}
               disabled={false}
               noFill={false}
+
             />
+            <img id="lumina-time-of-day-image"
+            src="coui://ui-mods/Icons/Lumina.svg"></img>
           </div>
         )}
 
