@@ -89,7 +89,11 @@ namespace Lumina
         private void CheckVersion()
         {
             string url = "https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/XML/version.txt";
+            string Unityversion = Application.unityVersion;
             string currentVersion = GlobalPaths.Version;
+
+            Mod.Log.Info("Unity version " + Unityversion);
+
 
             try
             {

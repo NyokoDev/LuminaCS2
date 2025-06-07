@@ -232,6 +232,9 @@ namespace LuminaMod.XML
         [XmlElement]
         public bool LuminaVolumeEnabled { get; set; }
 
+        [XmlElement]
+        public bool LatLongEnabled { get; set; } = false;
+
         /// <summary>
         /// Serializes to a file.
         /// </summary>

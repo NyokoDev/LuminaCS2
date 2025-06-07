@@ -27,7 +27,7 @@ public class LocaleEN : IDictionarySource
             { setting.GetOptionTabLocaleID(Setting.KSection), "BASIC" },
             { setting.GetOptionGroupLocaleID(Setting.KButtonGroup), "Buttons" },
             { setting.GetOptionGroupLocaleID(Setting.KToggleGroup), $"Lumina {GlobalPaths.Version}" },
-            { setting.GetOptionGroupLocaleID(Setting.KSliderGroup), "Package Manager" },
+            { setting.GetOptionGroupLocaleID(Setting.KSliderGroup), "Feature Toggles" },
             { setting.GetOptionGroupLocaleID(Setting.KDropdownGroup), "Dropdowns" },
             { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.SaveAutomatically)), "Save automatically" },
             { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.LuminaByNyoko)), $"Lumina {GlobalPaths.Version} by Nyoko" },
@@ -45,6 +45,11 @@ public class LocaleEN : IDictionarySource
             { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.UseTimeOfDaySlider)), "Use Time Of Day Slider" },
             { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.UseTimeOfDaySlider)), "Shows a time of day slider to switch between day and night. Disabled by default if Weather Plus or another time-changing mode is detected." },
             { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.OtherSettings)), "More options can be adjusted directly in the in-game interface." },
+
+            { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.LatitudeAndLongitudeAdjustments)), "Latitude and Longitude Adjustments" },
+            { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.LatitudeAndLongitudeAdjustments)), "Enable this to allow manual latitude and longitude changes through the in-game interface." },
+
+
         };
 
     public void Unload()

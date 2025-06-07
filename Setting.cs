@@ -95,7 +95,17 @@ namespace Lumina
             }
         }
 
-        [SettingsUISection(KSection, KToggleGroup)]
+        [SettingsUISection(KSection, KSliderGroup)]
+        public bool LatitudeAndLongitudeAdjustments
+        {
+            get => GlobalVariables.Instance.LatLongEnabled;
+            set
+            {
+                GlobalVariables.Instance.LatLongEnabled = value;
+            }
+        }
+
+        [SettingsUISection(KSection, KSliderGroup)]
         public bool UseTimeOfDaySlider
         {
             get => TimeOfDayProcessor.Locked;

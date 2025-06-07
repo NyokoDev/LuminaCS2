@@ -32,6 +32,7 @@ import { LUTContributionSlider } from "./Sliders/LutContributionSlider";
 import { OpenFileDialogButton } from "./Buttons/UploadFileButton";
 import LuminaVolumeCheckbox from "./Components/UseLuminaVolumeCheckbox";
 import './Cubemaps/Cubemaps.scss'
+import DragButton from "./DraggableButton/DragButton";
 
 
 export let isInstalled$ = false;
@@ -119,7 +120,7 @@ let tab2 = false;
 export const YourPanelComponent: React.FC<any> = () => {
   // Values
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  const offset = useRef({ x: 0, y: 0 });
+  
   const isDragging = useRef(false);
   const velocity = useRef({ x: 0, y: 0 });
 
@@ -455,38 +456,12 @@ const handleHighlights = (value: number) => {
       trigger(mod.id, 'handleSunFlareSize', value);
     };
 
-    const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-      if (e.button !== 0) return; // Only drag with the left mouse button
-  
-      // Calculate the initial offset of the mouse position relative to the panel
-      const rect = (e.target as HTMLElement).getBoundingClientRect();
-      offset.current = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      };
-      isDragging.current = true; // Enable dragging
-    };
-  
-    const handleMouseMove = (e: React.MouseEvent) => {
-      if (!isDragging.current || e.button !== 0) return; // Only move if left mouse button is pressed
-  
-      // Calculate the new position of the panel based on mouse movement
-      const newX = e.clientX - offset.current.x;
-      const newY = e.clientY - offset.current.y;
-  
-      setPosition({
-        x: newX,
-        y: newY,
-      });
-    };
-  
-    const handleMouseUp = () => {
-      isDragging.current = false; // Disable dragging when mouse button is released
-    };
+    
   
 return (
 
   <div className="Global"
+id="Global"
   
 
       style={{
@@ -498,30 +473,10 @@ return (
         top: position.y,
       }}
     >
-<div
-  className="Drag"
-  onMouseDown={handleMouseDown}
-  onMouseMove={handleMouseMove}
-  onMouseUp={handleMouseUp}
-  onMouseLeave={handleMouseUp}
-  style={{
-    cursor: 'grab',
-    userSelect: 'none',
-    backgroundColor: '#4F46E5', // Indigo-600
-    color: 'white',
-    padding: '10px 20px',
-    borderRadius: '8px',
-    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
-    fontSize: '14px',
-    fontWeight: 600,
-    border: 'none',
-    display: 'inline-block',
-    margin: '10px',
-    transition: 'background 0.2s ease',
-  }}
->
-  🖱️ Drag this panel
-</div>
+
+<DragButton />
+
+
 
 
 
@@ -1142,7 +1097,9 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
   className="toggle_cca item-mouse-states_Fmi toggle_th_ LongitudeInput"
   onChange={(event) => handleLongitude(Number(event.target.value))}
 />
-
+<div style={{ marginTop: '16px', padding: '1px', borderRadius: '6px', fontSize: '14px', color: 'white', textAlign: 'center' }}>
+  Please ensure latitude and longitude adjustments are turned on in the game settings menu.
+</div>
 
    </div>
 }

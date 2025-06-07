@@ -69,4 +69,4 @@ namespace Lumina.XML
         /// </summary>
         public static string Version = "v2.1";
     }
-}///////////////////
+}

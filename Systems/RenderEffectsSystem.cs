@@ -939,8 +939,12 @@
         {
             try
             {
+                // Skip if latitude and longitude adjustments are disabled
+                if (!GlobalVariables.Instance.LatLongEnabled)
+                    return;
+
 #if DEBUG
-                Mod.Log.Info("Entered PlanetarySettings");
+        Mod.Log.Info("Entered PlanetarySettings");
 #endif
                 LightingSystem lightingSystemInstance = World.GetExistingSystemManaged<LightingSystem>();
                 if (lightingSystemInstance != null)
@@ -954,8 +958,6 @@
 
                         if (planetarySystemInstance != null)
                         {
-
-
                             Type planetarySystemType = typeof(PlanetarySystem);
                             FieldInfo latitudeField = planetarySystemType.GetField("m_Latitude", BindingFlags.NonPublic | BindingFlags.Instance);
                             FieldInfo longitudeField = planetarySystemType.GetField("m_Longitude", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -971,44 +973,43 @@
 
                                 latitudeField.SetValue(planetarySystemInstance, newLatitude);
                                 longitudeField.SetValue(planetarySystemInstance, newLongitude);
-
-
                             }
                             else
                             {
 #if DEBUG
-                                Mod.Log.Info("Latitude or longitude field not found.");
+                        Mod.Log.Info("Latitude or longitude field not found.");
 #endif
                             }
                         }
                         else
                         {
 #if DEBUG
-                            Mod.Log.Info("PlanetarySystemInstance is null.");
+                    Mod.Log.Info("PlanetarySystemInstance is null.");
 #endif
                         }
                     }
                     else
                     {
 #if DEBUG
-                        Mod.Log.Info("m_PlanetarySystem field not found in LightingSystem.");
+                Mod.Log.Info("m_PlanetarySystem field not found in LightingSystem.");
 #endif
                     }
                 }
                 else
                 {
 #if DEBUG
-                    Mod.Log.Info("LightingSystemInstance is null.");
+            Mod.Log.Info("LightingSystemInstance is null.");
 #endif
                 }
             }
             catch (Exception ex)
             {
 #if DEBUG
-                Mod.Log.Info("An error occurred: " + ex.Message);
+        Mod.Log.Info("An error occurred: " + ex.Message);
 #endif
             }
         }
+
 
         /// <summary>
         /// Sets tonemapping mode from dropdown.
