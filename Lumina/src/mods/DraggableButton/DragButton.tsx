@@ -67,15 +67,14 @@ const DragButton: React.FC = () => {
       onMouseDown={handleMouseDown}
       style={{
         position: 'absolute',
-        top: '700rem', // original rem position
-        left: '160rem', // original rem position
+        top: '-400rem', // original rem position
+        left: '60rem', // original rem position
         transform: 'translateX(-50%)',
         width: '56px',
         height: '56px',
         borderRadius: '14px',
         backgroundColor: 'rgba(255, 255, 255, 0.15)', // transparent white almost gray
         backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
         border: '1px solid rgba(255, 255, 255, 0.3)',
         boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.1)',
         display: 'flex',
@@ -83,7 +82,7 @@ const DragButton: React.FC = () => {
         justifyContent: 'center',
         cursor: isDragging ? 'grabbing' : 'grab',
         userSelect: 'none',
-        transition: 'box-shadow 0.3s ease, background-color 0.3s ease',
+        transition: 'box-shadow 0.01s ease, background-color 2s ease',
         zIndex: 1000,
       }}
       onMouseLeave={handleMouseUp}

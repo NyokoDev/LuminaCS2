@@ -1,31 +1,33 @@
-import './Checkboxes.scss';
-import './CheckboxesStyle.scss';
 import mod from "mod.json";
 import { bindValue, trigger, useValue } from 'cs2/api';
-import { useState } from 'react';
+import { useRef } from 'react';
+import './CheckboxesStyle.scss'
 
 export const Active$ = bindValue<boolean>(mod.id, "IsHDRISkyEnabled");
 
 export const SpaceEmissionCheckbox = () => {
   const isActive = useValue(Active$);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const toggle = () => {
     trigger(mod.id, "SetHDRISkyEnabled");
   };
 
   return (
-    <div className="hdri-strength-container">
-      {isActive && (
-        <div 
-          className="hdri-checkbox-image" 
+    <>
+      <div className="hdri-strength-container" ref={containerRef}>
+        {isActive && (
+          <div 
+            className="hdri-checkbox-image" 
+            onClick={toggle}
+          />
+        )}
+        <button
+          className="toggle_cca item-mouse-states_Fmi toggle_th_ hdristrength-checkbox-button"
           onClick={toggle}
-        ></div>
-      )}
-      <button
-        className="toggle_cca item-mouse-states_Fmi toggle_th_ hdristrength-checkbox-button"
-        onClick={toggle}
-      ></button>
-    </div>
+        />
+      </div>
+    </>
   );
 };
 

@@ -20,6 +20,7 @@ namespace Lumina
     using System.IO;
     using System.Net;
     using UnityEngine;
+    using Version = Game.Version;
 
     /// <summary>
     /// Main mod class.
@@ -89,11 +90,43 @@ namespace Lumina
         private void CheckVersion()
         {
             string url = "https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/XML/version.txt";
-            string Unityversion = Application.unityVersion;
+            string unityversion = Application.unityVersion;
             string currentVersion = GlobalPaths.Version;
+            string gameVersion = Version.current.fullVersion;
+            string supportedGameVersion = GlobalPaths.SupportedGameVersion;
 
-            Mod.Log.Info("Unity version " + Unityversion);
+            Mod.Log.Info($"Checking game version: {gameVersion}");
 
+            if (gameVersion != supportedGameVersion)
+            {
+                string errorMsg = $"[LUMINA] Unsupported game version: {gameVersion}. Supported version is {supportedGameVersion}.";
+                string recommendation =
+                    "Recommendations:\n" +
+                    "- Update your game to the latest supported version.\n" +
+                    "- Check for a newer version of the Lumina mod.\n" +
+                    "- Visit the Lumina support or GitHub page for help.\n" +
+                    "- Join the Discord for assistance: https://discord.gg/5gZgRNm29e";
+
+                Mod.Log.Error($"{errorMsg}\n{recommendation}");
+                UnityEngine.Debug.LogError(
+                    $"<color=red><b>Lumina Error:</b></color> Unsupported game version: {gameVersion}. Supported version is {supportedGameVersion}.\n" +
+                    $"<color=yellow>{recommendation.Replace("\n", "<br>")}</color>"
+                );
+
+                // Optionally, show a notification in-game
+                NotificationSystem.Push(
+                    identifier: "lumina_version_error",
+                    thumbnail: "https://i.imgur.com/6KKpq5g.jpeg",
+                    progress: 100,
+                    title: (LocalizedString)"Lumina",
+                    text: (LocalizedString)$"Unsupported game version: {gameVersion}. Supported: {supportedGameVersion}.\nSee log for recommendations.",
+                    onClicked: () => NotificationSystem.Pop("lumina_version_error")
+                );
+
+                return;
+            }
+
+            Mod.Log.Info("Unity version " + unityversion);
 
             try
             {
@@ -110,7 +143,6 @@ namespace Lumina
                         string message = $"New version available! Current: {currentVersion} | Latest: {latestVersion}";
                         Mod.Log.Info(message);
 
-                        // Unity message — shows up in the top-left of the game screen
                         UnityEngine.Debug.LogError("<color=yellow><b>Lumina Update:</b></color> " + message);
                     }
                 }

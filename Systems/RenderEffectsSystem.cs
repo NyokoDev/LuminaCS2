@@ -96,11 +96,59 @@
 
 
             GlobalVariables.LoadFromFile(GlobalPaths.GlobalModSavingPath);
+            CheckGPU();
             ConvertToHDRP();
             InitializeCubemap();
             GetPrivateFieldm_PhysicallyBasedSky();
 
         }
+
+        private void CheckGPU()
+        {
+            string gpuName = SystemInfo.graphicsDeviceName;
+            string gpuLower = gpuName.ToLower();
+
+            bool isRTX = gpuName.Contains("RTX");
+            bool is40Series = gpuName.Contains("RTX 40");
+            bool isGTX = gpuName.Contains("GTX");
+
+            bool isAMD = gpuLower.Contains("radeon") || gpuLower.Contains("amd");
+            bool isRDNA3 = gpuLower.Contains("rx 7") || gpuLower.Contains("rx 7900") || gpuLower.Contains("rx 7800");
+            bool isIntel = gpuLower.Contains("intel");
+
+            Mod.Log.Info($"🖥️ Detected GPU: {gpuName}");
+
+            if (is40Series)
+            {
+                Mod.Log.Info("🚀 RTX 40-series GPU detected. DLSS is supported in CS2.");
+            }
+            else if (isRTX)
+            {
+                Mod.Log.Info("✅ RTX GPU detected. DLSS is available in CS2 — enable them in graphics settings.");
+            }
+            else if (isGTX)
+            {
+                Mod.Log.Info("🧓 GTX GPU detected. No DLSS or Reflex — you're on classic gear. Tweak Lumina for performance.");
+            }
+            else if (isRDNA3)
+            {
+                Mod.Log.Info("🔥 RDNA3 GPU detected (RX 7000 series). DLSS isn’t supported, but FSR may be available.");
+            }
+            else if (isAMD)
+            {
+                Mod.Log.Info("🟥 AMD GPU detected. No DLSS, but CS2 may support FSR depending on your driver and settings.");
+            }
+            else if (isIntel)
+            {
+                Mod.Log.Info("💀 Intel integrated GPU detected. Turn everything down — including your expectations.");
+            }
+            else
+            {
+                Mod.Log.Info("❓ Unknown GPU detected. Results may vary — keep Lumina settings on the safe side.");
+            }
+        }
+
+
 
         public static void InitializeCubemap()
         {

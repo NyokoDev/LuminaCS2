@@ -1,10 +1,11 @@
 .Panel
 {
+    display: flex;
     position: absolute;
     width: 950rem;
     height: 500rem;
-    top: 500rem;
-    left: 200rem;
+    top: -600rem;
+    left:100rem;
     background-color: rgba(50, 50, 50, 0.8); /* Dark grey background with transparency */
     backdrop-filter: blur(10px); /* Apply blur to the background behind the panel */
     box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6); /* Blurred black inner shadow */
@@ -16,17 +17,6 @@
     color: #e0e0e0; /* Light grey text color for contrast */
     font-family: Overpass,"Noto Sans","Noto Sans KR","Noto Sans JP","Noto Sans SC","Noto Sans TC","Noto Sans Thai","Noto Sans Hebrew","Noto Sans Arabic","Noto Sans Bengali","Noto Sans Devanagari", sans-serif; /* Clean and modern font */
 }
-
-    .Panel .simplebar-scrollbar::before
-    {
-        width: 6px; /* Set a smaller width for the thumb */
-        background-color: #3498db;
-    }
-
-    .Panel .simplebar-track
-    {
-        width: 6px; /* Adjust track width as well */
-    }
 
 .Span1
 {
@@ -48,8 +38,8 @@
     display: flex;
     width: 950rem;
     height: 50rem;
-    top: 440rem;
-    left: 200rem;
+    top: -650rem;
+    left:100rem;
     border-radius: 20rem; /* Rounded corners */
     background-color: rgba(50, 50, 50, 0.8); /* Dark grey background with transparency */
     box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6); /* Blurred black inner shadow */

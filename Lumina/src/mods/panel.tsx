@@ -1278,8 +1278,6 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
     
   <label className="space-emission-texture-label">{translate("LUMINA.environmenthdrisky")}</label>
   <SpaceEmissionCheckbox
-
-
   />
 
 <CustomSunCheckbox

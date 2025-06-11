@@ -67,7 +67,7 @@ export const LuminaButton: ModuleRegistryExtend = (Component) => {
                 />
                 <div className={ToolBarTheme.divider}></div>
                 <Component {...otherProps} />
-                {isInstalled && <YourPanelComponent key={refreshKey} />} {/* Forces re-render */}
+                {isInstalled && <YourPanelComponent />} {/* Forces re-render */}
             </>
         );
     };

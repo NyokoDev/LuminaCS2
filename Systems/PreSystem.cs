@@ -185,7 +185,6 @@ namespace Lumina
                 // Ensure a .lumina file exists beside the file
                 if (!luminaFileExists)
                 {
-                    Lumina.Mod.Log.Info($"Skipping {fileName} as no corresponding .lumina file was found.");
                     continue;
                 }
 
@@ -197,7 +196,6 @@ namespace Lumina
                     var configPath = Path.Combine(fileDirectory, "maptextureconfig.json");
                     if (File.Exists(configPath))
                     {
-                        Lumina.Mod.Log.Info($"Skipping {fileName} as maptextureconfig.json is found in the same directory.");
                         continue;
                     }
                     destination = Path.Combine(hdrDirectory, fileName);
