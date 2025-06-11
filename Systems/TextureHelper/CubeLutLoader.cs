@@ -21,9 +21,6 @@ public class CubeLutLoader : MonoBehaviour
     /// <returns>Returns a texture 3d.</returns>
     public static Texture3D LoadLutFromFile(string cubeFilePath)
     {
-        // Force resource unloading
-        Resources.UnloadUnusedAssets();
-
         if (File.Exists(cubeFilePath))
         {
             var result = LoadCubeFile(cubeFilePath);

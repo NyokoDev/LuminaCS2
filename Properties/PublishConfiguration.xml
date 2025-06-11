@@ -62,13 +62,13 @@
 	<!--Link to the forum post where the mod can be discussed-->
 	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/lumina.1645623/" />
 	<!--Version of the mod-->
-	<ModVersion Value="2.2R1" />
+	<ModVersion Value="2.2R2" />
 	<!--Recommended version of the base game to use the mod-->
 	<GameVersion Value="1.*" />
 	<!--Dependency for the mod, can be set multiple times-->
 	<Dependency Id="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
-	<ChangeLog Value="Lumina 2.2
+	<ChangeLog Value="Lumina 2.2R2 is a minor update that fixes an incompatibility issue with Map Texture Replacer resetting the map textures to default when a LUT is set." />
 " />
 	<!--ChangeLog>
 	</ChangeLog-->

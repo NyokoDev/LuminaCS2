@@ -440,10 +440,6 @@
                     Mod.Log.Info("No existing Texture3D to destroy.");
                 }
 
-                // Force resource unloading to ensure that no residual data remains
-                Mod.Log.Info("Forcing resource unloading.");
-                Resources.UnloadUnusedAssets();
-
                 // Create a new Texture3D object to hold the LUT
                 Texture3D newLutTexture = null;
                 Mod.Log.Info($"Loading LUT with format: {GraphicsFormat.R16G16B16A16_SFloat}");
@@ -522,8 +518,6 @@
                 m_Tonemapping.lutTexture.value = null;
                 Mod.Log.Info("Tonemapping LUT: Previous LUT texture cleared.");
             }
-
-            Resources.UnloadUnusedAssets();
 
             // Attempt to load the new LUT texture from file
             Texture3D lutTexture = null;
