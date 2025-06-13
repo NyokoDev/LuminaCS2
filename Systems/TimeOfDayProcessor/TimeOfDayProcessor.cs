@@ -1,10 +1,6 @@
 ﻿namespace Lumina.Systems
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Colossal.Serialization.Entities;
     using Game;
     using Game.Simulation;
@@ -17,7 +13,6 @@
     /// </summary>
     internal partial class TimeOfDayProcessor : SystemBase
     {
-
         /// <summary>
         /// Determines if the user allows Time of Day to be locked.
         /// </summary>
@@ -31,7 +26,7 @@
         /// <summary>
         /// Planetary system instance.
         /// </summary>
-        public PlanetarySystem PlanetarySystem;
+        public PlanetarySystem? PlanetarySystem;
 
         /// <summary>
         /// Called when the system is created.
@@ -39,18 +34,37 @@
         protected override void OnCreate()
         {
             base.OnCreate();
+            Locked = GlobalVariables.Instance.TimeOfDayLocked; // Get the initial value from global variables.
             PlanetarySystem = World.GetExistingSystemManaged<PlanetarySystem>();
+            if (PlanetarySystem == null)
+            {
+                Lumina.Mod.Log.Info("[Lumina] TimeOfDayProcessor: PlanetarySystem not found. Time of day features will be disabled.");
+            }
         }
 
         /// <summary>
-        /// OnUpdate method helper.
+        /// Called every frame to update the system.
         /// </summary>
         protected override void OnUpdate()
         {
+            if (PlanetarySystem == null)
+            {
+                if (Locked)
+                {
+                    Lumina.Mod.Log.Info("[Lumina] TimeOfDayProcessor: PlanetarySystem is null in OnUpdate. Skipping time update.");
+                }
+                return;
+            }
+
             if (Locked)
             {
                 PlanetarySystem.overrideTime = true;
-                PlanetarySystem.time = Mathf.Lerp(PlanetarySystem.time, TimeFloat, 1.5f * UnityEngine.Time.deltaTime);
+                float lerpSpeed = Mathf.Max(1.5f * UnityEngine.Time.deltaTime, 0.001f);
+                PlanetarySystem.time = Mathf.Lerp(PlanetarySystem.time, TimeFloat, lerpSpeed);
+            }
+            else
+            {
+                PlanetarySystem.overrideTime = false; // Let the system handle time progression naturally
             }
         }
     }

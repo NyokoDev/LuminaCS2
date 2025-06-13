@@ -70,8 +70,8 @@ const DragButton: React.FC = () => {
         top: '-400rem', // original rem position
         left: '60rem', // original rem position
         transform: 'translateX(-50%)',
-        width: '56px',
-        height: '56px',
+        width: '56rem',
+        height: '56rem',
         borderRadius: '14px',
         backgroundColor: 'rgba(255, 255, 255, 0.15)', // transparent white almost gray
         backdropFilter: 'blur(10px)',

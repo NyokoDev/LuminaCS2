@@ -367,8 +367,9 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.SunFlareSize = loadedVariables?.SunFlareSize ?? 0f;
                     GlobalVariables.Instance.ReloadAllPackagesOnRestart = loadedVariables?.ReloadAllPackagesOnRestart ?? false;
                     GlobalVariables.Instance.LatLongEnabled = loadedVariables?.LatLongEnabled ?? false;
+                    GlobalVariables.Instance.TimeOfDayLocked = loadedVariables?.TimeOfDayLocked ?? false;
 
-                  
+
 
 
                     return loadedVariables;
