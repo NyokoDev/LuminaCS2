@@ -16,6 +16,7 @@ namespace Lumina
     using Lumina.Systems;
     using Lumina.XML;
     using LuminaMod.XML;
+    using MetroFramework.Forms;
     using System;
     using System.IO;
     using System.Net;
@@ -111,6 +112,8 @@ namespace Lumina
                 Mod.Log.Error($"{errorMsg}\n{recommendation}");
 
                 Setting.ShowModernMessageBox(errorMsg);
+                MainSupportForm.Instance?.ShowToastNotification(errorMsg);
+
 
                 return;
             }
@@ -133,6 +136,7 @@ namespace Lumina
                         Mod.Log.Info(message);
 
                         Setting.ShowModernMessageBox(message);
+                        MainSupportForm.Instance?.ShowToastNotification(message);
                     }
                 }
             }

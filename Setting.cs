@@ -234,7 +234,7 @@ namespace Lumina
                     return;
                 }
 
-                string tempDir = Path.GetTempPath();
+                string tempDir = GlobalPaths.AssemblyDirectory;
                 string zipPattern = "LuminaLogs_*.zip";
                 foreach (var oldZip in Directory.GetFiles(tempDir, zipPattern))
                 {

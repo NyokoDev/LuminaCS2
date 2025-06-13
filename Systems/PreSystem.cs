@@ -70,7 +70,7 @@ namespace Lumina
                     catch (Exception ex)
                     {
                         // Log an error if any issue arises
-                        Lumina.Mod.Log.Error($"Error clearing files in {directory}: {ex.Message}");
+                        Lumina.Mod.Log.Info($"Error clearing files in {directory}: {ex.Message}");
                     }
                 }
                 else
@@ -163,7 +163,7 @@ namespace Lumina
 
             if (missingInHdrDirectory.Any())
             {
-                Lumina.Mod.Log.Warn($"The following Cubemap files are missing from the HDR directory: {string.Join(", ", missingInHdrDirectory)}");
+                Lumina.Mod.Log.Info($"The following Cubemap files are missing from the HDR directory: {string.Join(", ", missingInHdrDirectory)}");
                 Mod.Log.Info($"Missing Cubemap files in the HDR directory: {string.Join(", ", missingInHdrDirectory)}");
             }
         }
@@ -214,7 +214,7 @@ namespace Lumina
                     }
                     catch (Exception ex)
                     {
-                        Lumina.Mod.Log.Error($"Failed to copy {fileName} to {destination}: {ex.Message}");
+                        Lumina.Mod.Log.Info($"Failed to copy {fileName} to {destination}: {ex.Message}");
                     }
                 }
             }
@@ -265,7 +265,7 @@ namespace Lumina
             // Access the instance of GlobalVariables and check if LUTName is null or empty
             if (GlobalVariables.Instance == null)
             {
-                Lumina.Mod.Log.Error("GlobalVariables.Instance is null.");
+                Lumina.Mod.Log.Info("GlobalVariables.Instance is null.");
                 return;
             }
 

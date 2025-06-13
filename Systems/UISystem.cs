@@ -238,7 +238,7 @@
                     }
                     catch (Exception ex)
                     {
-                        Lumina.Mod.Log.Error($"Error loading LUT texture: {ex.Message}");
+                        Lumina.Mod.Log.Info($"Error loading LUT texture: {ex.Message}");
                     }
                 }
                 else
@@ -731,7 +731,7 @@
             }
             else
             {
-                Lumina.Mod.Log.Error("RenderEffectsSystem.m_Tonemapping or GlobalVariables.Instance is null.");
+                Lumina.Mod.Log.Info("RenderEffectsSystem.m_Tonemapping or GlobalVariables.Instance is null.");
             }
         }
 

@@ -25,7 +25,7 @@ namespace Lumina.Systems.TextureHelper
             }
             catch (Exception e)
             {
-                Lumina.Mod.Log.Error(e);
+                Lumina.Mod.Log.Info(e);
                 return null;
             }
         }
