@@ -112,7 +112,7 @@ namespace Lumina
                 Mod.Log.Error($"{errorMsg}\n{recommendation}");
 
                 Setting.ShowModernMessageBox(errorMsg);
-                MainSupportForm.Instance?.ShowToastNotification(errorMsg);
+                ToastNotification.ShowToast(errorMsg);
 
 
                 return;
@@ -136,7 +136,7 @@ namespace Lumina
                         Mod.Log.Info(message);
 
                         Setting.ShowModernMessageBox(message);
-                        MainSupportForm.Instance?.ShowToastNotification(message);
+                        ToastNotification.ShowToast(message);
                     }
                 }
             }
