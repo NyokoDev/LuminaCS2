@@ -96,7 +96,23 @@ namespace Lumina.XML
             string iconFullPath = Path.Combine(baseDirectory, iconRelativePath);
 
             Lumina.Mod.Log.Info("Toast icon path: " + iconFullPath);
-            
+
+            return iconFullPath;
+        }
+
+        internal static string GetImagePath(string path)
+        {
+            // Use the provided relative path parameter instead of a hardcoded string
+            string iconRelativePath = path;
+
+            // Get the directory containing the DLL (Mod.ModPath points to the DLL file)
+            string baseDirectory = Path.GetDirectoryName(Mod.ModPath) ?? string.Empty;
+
+            // Combine base directory with the relative icon path to get full path
+            string iconFullPath = Path.Combine(baseDirectory, iconRelativePath);
+
+            Lumina.Mod.Log.Info("Requested image path: " + iconFullPath);
+
             return iconFullPath;
         }
     }

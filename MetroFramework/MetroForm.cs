@@ -3,6 +3,7 @@ using Lumina.XML;
 using MetroFramework;
 using MetroFramework.Controls;
 using MetroFramework.Forms;
+using Svg;
 using System;
 using System.Drawing;
 using System.IO;
@@ -40,7 +41,7 @@ public class ToastNotification : MetroForm
     {
 
         string Path = GlobalPaths.GetIconPath();
-       
+
 
         if (File.Exists(Path))
         {
@@ -58,6 +59,25 @@ public class ToastNotification : MetroForm
         {
             Lumina.Mod.Log.Warn("Toast icon file not found: " + Path);
         }
+
+        string svgPath = GlobalPaths.GetImagePath("Lumina.svg");
+
+        // Load the SVG document
+        var svgDoc = SvgDocument.Open(svgPath);
+
+        // Render the SVG to a Bitmap of desired size
+        Bitmap bmp = svgDoc.Draw(32, 32);
+
+        var pictureBox = new PictureBox
+        {
+            Image = bmp,
+            SizeMode = PictureBoxSizeMode.StretchImage,
+            Size = new Size(32, 32),
+            Location = new Point(20, 20)
+        };
+
+        this.Controls.Add(pictureBox);
+
 
 
         // Base style and setup
