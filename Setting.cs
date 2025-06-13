@@ -79,6 +79,7 @@ namespace Lumina
         /// </summary>
         public
         const string KDropdownGroup = "Dropdown";
+        private static SynchronizationContext _unityContext;
 
 
         /// <summary>
@@ -152,7 +153,11 @@ namespace Lumina
         [SettingsUISection(KSection, KToggleGroup)]
         public bool Support
         {
-            set => ZipAndOpenDiscordInvite();
+            set
+            {
+                System.Threading.Tasks.Task.Run(() => ZipAndOpenDiscordInvite());
+            }
+
         }
 
         /// <summary>
@@ -264,37 +269,65 @@ namespace Lumina
                 string settingsPath = GlobalPaths.GlobalModSavingPath;
 
                 if (Directory.Exists(logsDirectory))
-                    filesToZip.AddRange(Directory.GetFiles(logsDirectory, "*.*", SearchOption.AllDirectories));
+                {
+                    try
+                    {
+                        filesToZip.AddRange(Directory.GetFiles(logsDirectory, "*.*", SearchOption.AllDirectories));
+                    }
+                    catch (Exception ex)
+                    {
+                        Lumina.Mod.Log.Info($"Failed to collect logs: {ex.Message}");
+                    }
+                }
                 else
+                {
                     Lumina.Mod.Log.Info($"Logs directory not found: {logsDirectory}");
+                }
 
                 if (File.Exists(settingsPath))
+                {
                     filesToZip.Add(settingsPath);
+                }
                 else
+                {
                     Lumina.Mod.Log.Info($"Settings file not found: {settingsPath}");
+                }
 
                 if (filesToZip.Count == 0)
                 {
-                    {
-                        ShowModernMessageBox("No log or settings files found to zip.");
-                    }
-
+                    ShowModernMessageBox("No log or settings files found to zip.");
                     return;
                 }
 
                 string tempDir = GlobalPaths.AssemblyDirectory;
                 string zipPattern = "LuminaLogs_*.zip";
+
                 foreach (var oldZip in Directory.GetFiles(tempDir, zipPattern))
                 {
-                    try { File.Delete(oldZip); } catch { }
+                    try
+                    {
+                        File.Delete(oldZip);
+                    }
+                    catch (Exception ex)
+                    {
+                        Lumina.Mod.Log.Info($"Failed to delete old zip file {oldZip}: {ex.Message}");
+                    }
                 }
 
                 string zipPath = Path.Combine(tempDir, $"LuminaLogs_{DateTime.Now:yyyyMMdd_HHmmss}.zip");
+
                 using (var zip = ZipFile.Open(zipPath, ZipArchiveMode.Create))
                 {
                     foreach (var file in filesToZip)
                     {
-                        zip.CreateEntryFromFile(file, Path.GetFileName(file));
+                        try
+                        {
+                            zip.CreateEntryFromFile(file, Path.GetFileName(file));
+                        }
+                        catch (Exception ex)
+                        {
+                            Lumina.Mod.Log.Info($"Failed to zip {file}: {ex.Message}");
+                        }
                     }
 
                     string screenResolution = $"{UnityEngine.Screen.currentResolution.width}x{UnityEngine.Screen.currentResolution.height}";
@@ -313,10 +346,17 @@ namespace Lumina
                         $"RAM: {ram}{Environment.NewLine}" +
                         $"CPU: {cpuName}{Environment.NewLine}";
 
-                    var infoEntry = zip.CreateEntry("Lumina_System.txt");
-                    using (var writer = new StreamWriter(infoEntry.Open()))
+                    try
                     {
-                        writer.Write(infoContent);
+                        var infoEntry = zip.CreateEntry("Lumina_System.txt");
+                        using (var writer = new StreamWriter(infoEntry.Open()))
+                        {
+                            writer.Write(infoContent);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Lumina.Mod.Log.Info("Failed to write system info to zip: " + ex.Message);
                     }
                 }
 
@@ -327,44 +367,79 @@ namespace Lumina
                 }
 
                 Lumina.Mod.Log.Info($"Zip file created: {zipPath}");
-                Process.Start("explorer.exe", $"/select,\"{zipPath}\"");
+
+                try
+                {
+                    Process.Start("explorer.exe", $"/select,\"{zipPath}\"");
+                }
+                catch (Exception ex)
+                {
+                    Lumina.Mod.Log.Info("Failed to open File Explorer: " + ex.Message);
+                }
 
                 ShowModernMessageBox("A ZIP file with your Lumina logs and settings has been created and opened in File Explorer. Please upload this file in the #support channel on Discord. The Discord invite link has been opened in your browser to help you join. Thank you for supporting Lumina!");
 
-             
-
-
-                Process.Start(new ProcessStartInfo
+                try
                 {
-                    FileName = "https://discord.gg/NgYaXXdFnY",
-                    UseShellExecute = true
-                });
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = "https://discord.gg/NgYaXXdFnY",
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Lumina.Mod.Log.Info("Failed to open Discord invite link: " + ex.Message);
+                }
             }
             catch (Exception ex)
             {
-                Lumina.Mod.Log.Info("An error occurred: " + ex.Message);
-                    ShowModernMessageBox("An error occurred: " + ex.Message);
-                }
+                Lumina.Mod.Log.Info("Unexpected error in ZipAndOpenDiscordInvite: " + ex.Message);
+                ShowModernMessageBox("An error occurred: " + ex.Message);
             }
-        
+        }
 
 
+
+        /// <summary>
+        /// Shows a toast (Metro enabled) or logs (Metro disabled) from ANY thread.
+        /// </summary>
         public static void ShowModernMessageBox(string v)
         {
-            if (GlobalVariables.Instance.MetroEnabled)
+            // If we haven’t captured the main context yet, do it now.
+            // The first call is normally from the main Unity thread.
+            if (_unityContext == null)
             {
-                ToastNotification.ShowToast("An error occurred: " + v);
-                // Refresh the simulation system to apply changes if needed
-                RefreshSimulationSystem RefreshSimulationSystem = new RefreshSimulationSystem();
-                RefreshSimulationSystem.RefreshSimulation();
+                _unityContext = SynchronizationContext.Current;
+            }
 
+            // The work we actually want to perform on the main thread:
+            void DoMessage()
+            {
+                if (GlobalVariables.Instance.MetroEnabled)
+                {
+                    ToastNotification.ShowToast("An error occurred: " + v);
+                }
+                else
+                {
+                    Lumina.Mod.Log.Info(v);
+                }
+            }
+
+            // Are we already on the Unity main thread?
+            if (SynchronizationContext.Current == _unityContext)
+            {
+                DoMessage();              // Yes → just run it
+            }
+            else if (_unityContext != null)
+            {
+                _unityContext.Post(_ => DoMessage(), null);   // No → marshal to main thread
             }
             else
             {
-                Lumina.Mod.Log.Info(v);
+                // Fallback: context unknown (shouldn’t happen after first call)
+                Lumina.Mod.Log.Info("Could not capture Unity context; message logged:\n" + v);
             }
         }
-     
 
         
 
