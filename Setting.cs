@@ -4,23 +4,32 @@
 
 namespace Lumina
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.IO;
     using Colossal;
     using Colossal.IO.AssetDatabase;
     using Colossal.IO.AssetDatabase.Internal;
     using Game.Modding;
     using Game.Prefabs;
+    using Game.PSI;
+    using Game.SceneFlow;
     using Game.Settings;
     using Game.UI;
     using Game.UI.InGame;
+    using Game.UI.Localization;
     using Game.UI.Widgets;
     using Lumina.Systems;
     using Lumina.UI;
     using Lumina.XML;
     using LuminaMod.XML;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.Diagnostics;
+    using System.IO;
+    using System.IO.Compression;
+    using System.Threading;
+    using System.Windows.Forms;
+    using UnityEngine;
+    using Version = Game.Version;
 
     /// <summary>
     /// Main settings file.
@@ -149,7 +158,7 @@ namespace Lumina
         [SettingsUISection(KSection, KToggleGroup)]
         public bool Support
         {
-            set => OpenDiscordInvite();
+            set => ZipAndOpenDiscordInvite();
         }
 
         /// <summary>
@@ -198,21 +207,116 @@ namespace Lumina
         }
 
         /// <summary>
-        /// This opens the discord invite in a new tab.
+        /// Zips the necesssary log files and opens the Discord invite link.
         /// </summary>
-        public void OpenDiscordInvite()
+        public void ZipAndOpenDiscordInvite()
         {
             try
             {
-                string discordInviteLink = "https://discord.gg/5JcaKwDBHn";
+                var filesToZip = new List<string>();
 
-                // Use Process.Start to open the URL in the default web browser
-                System.Diagnostics.Process.Start(discordInviteLink);
+                string logsDirectory = GlobalPaths.logsassemblyPDXDirectory;
+                string settingsPath = GlobalPaths.GlobalModSavingPath;
+
+                if (Directory.Exists(logsDirectory))
+                    filesToZip.AddRange(Directory.GetFiles(logsDirectory, "*.*", SearchOption.AllDirectories));
+                else
+                    Lumina.Mod.Log.Info($"Logs directory not found: {logsDirectory}");
+
+                if (File.Exists(settingsPath))
+                    filesToZip.Add(settingsPath);
+                else
+                    Lumina.Mod.Log.Info($"Settings file not found: {settingsPath}");
+
+                if (filesToZip.Count == 0)
+                {
+                    ShowModernMessageBox("No log or settings files found to zip.");
+                    return;
+                }
+
+                string tempDir = Path.GetTempPath();
+                string zipPattern = "LuminaLogs_*.zip";
+                foreach (var oldZip in Directory.GetFiles(tempDir, zipPattern))
+                {
+                    try { File.Delete(oldZip); } catch { }
+                }
+
+                string zipPath = Path.Combine(tempDir, $"LuminaLogs_{DateTime.Now:yyyyMMdd_HHmmss}.zip");
+                using (var zip = ZipFile.Open(zipPath, ZipArchiveMode.Create))
+                {
+                    foreach (var file in filesToZip)
+                    {
+                        zip.CreateEntryFromFile(file, Path.GetFileName(file));
+                    }
+
+                    string screenResolution = $"{UnityEngine.Screen.currentResolution.width}x{UnityEngine.Screen.currentResolution.height}";
+                    string gpuName = SystemInfo.graphicsDeviceName;
+                    string ram = $"{SystemInfo.systemMemorySize} MB";
+                    string cpuName = SystemInfo.processorType;
+
+                    string infoContent =
+                        $"Lumina Support Info{Environment.NewLine}" +
+                        $"Date: {DateTime.Now}{Environment.NewLine}" +
+                        $"Mod Version: {GlobalPaths.Version}{Environment.NewLine}" +
+                        $"Game Version: {Version.current.fullVersion}{Environment.NewLine}" +
+                        $"OS: {SystemInfo.operatingSystem}{Environment.NewLine}" +
+                        $"Screen Resolution: {screenResolution}{Environment.NewLine}" +
+                        $"GPU: {gpuName}{Environment.NewLine}" +
+                        $"RAM: {ram}{Environment.NewLine}" +
+                        $"CPU: {cpuName}{Environment.NewLine}";
+
+                    var infoEntry = zip.CreateEntry("Lumina_System.txt");
+                    using (var writer = new StreamWriter(infoEntry.Open()))
+                    {
+                        writer.Write(infoContent);
+                    }
+                }
+
+                if (!File.Exists(zipPath))
+                {
+                    ShowModernMessageBox("Failed to create the zip file.");
+                    return;
+                }
+
+                Lumina.Mod.Log.Info($"Zip file created: {zipPath}");
+                Process.Start("explorer.exe", $"/select,\"{zipPath}\"");
+
+                ShowModernMessageBox("A ZIP file with your Lumina logs and settings has been created and opened in File Explorer. Please upload this file in the #support channel on Discord. The Discord invite link has been opened in your browser to help you join. Thank you for supporting Lumina!");
+
+
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = "https://discord.gg/NgYaXXdFnY",
+                    UseShellExecute = true
+                });
             }
             catch (Exception ex)
             {
-                Console.WriteLine("An error occurred: " + ex.Message);
+                Lumina.Mod.Log.Info("An error occurred: " + ex.Message);
+                ShowModernMessageBox($"An error occurred: {ex.Message}");
             }
+        }
+
+        private void ShowModernMessageBox(string message)
+        {
+            // Escape single quotes for PowerShell
+            string escapedMessage = message.Replace("'", "''");
+
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "powershell",
+                Arguments = $"-Command \"Add-Type -AssemblyName PresentationFramework;[System.Windows.MessageBox]::Show('{escapedMessage}', 'Lumina Support')\"",
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden
+            });
+        }
+
+
+
+        private string EscapeForPowerShell(string input)
+        {
+            return input.Replace("'", "''");
         }
 
         /// <summary>

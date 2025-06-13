@@ -36,8 +36,9 @@ public class LocaleEN : IDictionarySource
             { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.SaveAutomatically)), "Saves your settings automatically when the UI is opened or closed." },
             { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.Guides)), "Lumina Docs" },
             { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.Guides)), "Opens Lumina guides for information and documentation in a new tab." },
-            { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.Support)), "Discord Server" },
-            { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.Support)), "Opens the Support Discord server in a new tab." },
+{ setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.Support)), "Obtain Support" },
+{ setting.GetOptionDescLocaleID(nameof(Lumina.Setting.Support)), "Experiencing issues? Click this button to create a ZIP of your logs and settings, opens the folder to find it, it automatically opens our discord invite so you can join our support channel." },
+
             { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.Donate)), "Donate" },
             { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.Donate)), "Opens the PayPal donation wizard in a new tab. Thanks for considering supporting me!" },
             { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.OpenLocationButton)), "Open Saved Settings File" },

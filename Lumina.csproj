@@ -135,6 +135,7 @@
 		<Reference Include="Colossal.Localization">
 			<Private>false</Private>
 		</Reference>
+		<Reference Include="System.IO.Compression" />
 		<Reference Include="System.Windows.Forms" />
 		<Reference Include="Unity.RenderPipelines.Core.Runtime">
 			<Private>false</Private>

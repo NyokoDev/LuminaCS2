@@ -52,6 +52,12 @@ namespace Lumina.XML
         public static string LocalModsDirectory = Path.Combine(LocalLowDirectory, "Colossal Order", "Cities Skylines II", "Mods");
 
         private static string assemblyPDXDirectory = Path.Combine(LocalLowDirectory, "Colossal Order", "Cities Skylines II", "ModsData", "Lumina");
+
+        /// <summary>
+        /// Returns the logs assembly directory.
+        /// </summary>
+        public static string logsassemblyPDXDirectory = Path.Combine(LocalLowDirectory, "Colossal Order", "Cities Skylines II", "Logs");
+
         private static string settingsFilePath = Path.Combine(AssemblyDirectory, "Lumina.xml");
 
         /// <summary>
