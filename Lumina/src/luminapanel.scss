@@ -5,7 +5,6 @@ html, body {
 
 .Panel
 {
-    display: flex;
     position: absolute;
     width: 950rem;
     height: 500rem;
@@ -261,7 +260,6 @@ html, body {
 
 .Global
 {
-    height: 100%; /* Make sure the body takes up the full height of the viewport */
     pointer-events: auto;
 }
 
