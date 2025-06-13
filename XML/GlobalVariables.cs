@@ -235,6 +235,9 @@ namespace LuminaMod.XML
         [XmlElement]
         public bool LatLongEnabled { get; set; }
 
+        [XmlElement]
+        public bool MetroEnabled { get; set; }
+
         /// <summary>
         /// Serializes to a file.
         /// </summary>
@@ -369,6 +372,8 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.LatLongEnabled = loadedVariables?.LatLongEnabled ?? false;
                     GlobalVariables.Instance.TimeOfDayLocked = loadedVariables?.TimeOfDayLocked ?? false;
 
+                    // Metro Framework
+                    GlobalVariables.Instance.MetroEnabled = loadedVariables?.MetroEnabled ?? true;
 
 
 

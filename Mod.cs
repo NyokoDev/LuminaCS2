@@ -114,9 +114,14 @@ namespace Lumina
 
                 Mod.Log.Error($"{errorMsg}\n{recommendation}");
 
-                Setting.ShowModernMessageBox(errorMsg);
-                ToastNotification.ShowToast(errorMsg);
-
+                if (GlobalVariables.Instance.MetroEnabled) /// Check if MetroFramework is enabled
+                {
+                    ToastNotification.ShowToast(errorMsg); /// Show toast notification with error message
+                }
+                else
+                {
+                    Setting.ShowModernMessageBox(errorMsg); // / Show a modern message box with error message in case MetroFramework is not enabled.
+                }
 
                 return;
             }
@@ -138,7 +143,14 @@ namespace Lumina
                         string message = $"Lumina New version available! Current: {currentVersion} | Latest: {latestVersion}";
                         Mod.Log.Info(message);
 
-                        ToastNotification.ShowToast(message);
+                        if (GlobalVariables.Instance.MetroEnabled)
+                        {
+                            ToastNotification.ShowToast(message);
+                        }
+                        else
+                        {
+                            Setting.ShowModernMessageBox(message);
+                        }
                     }
                 }
             }

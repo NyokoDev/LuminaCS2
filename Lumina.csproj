@@ -199,7 +199,6 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Svg" Version="3.4.7" />
 	</ItemGroup>
 
 	<ItemGroup>

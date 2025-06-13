@@ -104,25 +104,7 @@ namespace Lumina
             }
         }
 
-        [SettingsUISection(KSection, KSliderGroup)]
-        public bool LatitudeAndLongitudeAdjustments
-        {
-            get => GlobalVariables.Instance.LatLongEnabled;
-            set
-            {
-                GlobalVariables.Instance.LatLongEnabled = value;
-            }
-        }
 
-        [SettingsUISection(KSection, KSliderGroup)]
-        public bool UseTimeOfDaySlider
-        {
-            get => TimeOfDayProcessor.Locked;
-            set
-            {
-                TimeOfDayProcessor.Locked = value;
-            }
-        }
 
         /// <summary>
         /// Sets a value indicating whether the location should be launched.
@@ -178,6 +160,52 @@ namespace Lumina
         [SettingsUIMultilineText("coui://ui-mods/Icons/Lumina.svg")]
         public string OtherSettings => string.Empty;
 
+        // Second page of settings
+
+        [SettingsUISection(KSection, KSliderGroup)]
+        public bool LatitudeAndLongitudeAdjustments
+        {
+            get => GlobalVariables.Instance.LatLongEnabled;
+            set
+            {
+                GlobalVariables.Instance.LatLongEnabled = value;
+            }
+        }
+
+        [SettingsUISection(KSection, KSliderGroup)]
+        public bool UseTimeOfDaySlider
+        {
+            get => TimeOfDayProcessor.Locked;
+            set
+            {
+                TimeOfDayProcessor.Locked = value;
+            }
+        }
+
+        /// <summary>
+        /// Metro Framework enabled setting.
+        /// </summary>
+        [SettingsUISection(KSection, KSliderGroup)]
+        public bool MetroFrameworkEnabled
+        {
+            get => GlobalVariables.Instance.MetroEnabled;
+            set
+            {
+                GlobalVariables.Instance.MetroEnabled = value;
+
+                string status = value ? "enabled" : "disabled";
+                string message = $"MetroFramework is now {status}. Please restart the game for changes to take effect. For best results use FullScreenWindowed if enabled.";
+
+                if (GlobalVariables.Instance.MetroEnabled)
+                {
+                    ToastNotification.ShowToast(message);
+                }
+                else
+                {
+                    ShowModernMessageBox(message);
+                }
+            }
+        }
 
         /// <summary>
         /// Opens the folder location.
@@ -230,7 +258,15 @@ namespace Lumina
 
                 if (filesToZip.Count == 0)
                 {
-                    ShowModernMessageBox("No log or settings files found to zip.");
+                    if (GlobalVariables.Instance.MetroEnabled)
+                    {
+                        ToastNotification.ShowToast("No log or settings files found to zip.");
+                    }
+                    else
+                    {
+                        ShowModernMessageBox("No log or settings files found to zip.");
+                    }
+
                     return;
                 }
 

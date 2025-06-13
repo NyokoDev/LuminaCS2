@@ -3,7 +3,6 @@ using Lumina.XML;
 using MetroFramework;
 using MetroFramework.Controls;
 using MetroFramework.Forms;
-using Svg;
 using System;
 using System.Drawing;
 using System.IO;
@@ -39,97 +38,92 @@ public class ToastNotification : MetroForm
 
     public ToastNotification(string message)
     {
+        string iconPath = GlobalPaths.GetIconPath();
 
-        string Path = GlobalPaths.GetIconPath();
+        int iconSize = 32;
+        int iconPaddingTop = 10;
+        int spacingAfterIcon = 10;
+        int toastWidth = ToastWidth;
+        int cornerRadius = CornerRadius;
 
+        PictureBox pictureBox = null;
 
-        if (File.Exists(Path))
+        if (File.Exists(iconPath))
         {
             try
             {
-                this.Icon = new Icon(Path);
+                this.Icon = new Icon(iconPath);
+
+                pictureBox = new PictureBox
+                {
+                    Image = Image.FromFile(iconPath),
+                    SizeMode = PictureBoxSizeMode.StretchImage,
+                    Size = new Size(iconSize, iconSize),
+                    Location = new Point((toastWidth - iconSize) / 2, iconPaddingTop),
+                };
+                this.Controls.Add(pictureBox);
+
                 Lumina.Mod.Log.Info("Toast icon loaded successfully.");
             }
             catch (Exception ex)
             {
-                Lumina.Mod.Log.Warn("Failed to load toast icon: " + ex.Message);
+                Lumina.Mod.Log.Info("Failed to load toast icon: " + ex.Message);
             }
         }
-        else
-        {
-            Lumina.Mod.Log.Warn("Toast icon file not found: " + Path);
-        }
-
-        string svgPath = GlobalPaths.GetImagePath("Lumina.svg");
-
-        // Load the SVG document
-        var svgDoc = SvgDocument.Open(svgPath);
-
-        // Render the SVG to a Bitmap of desired size
-        Bitmap bmp = svgDoc.Draw(32, 32);
-
-        var pictureBox = new PictureBox
-        {
-            Image = bmp,
-            SizeMode = PictureBoxSizeMode.StretchImage,
-            Size = new Size(32, 32),
-            Location = new Point(20, 20)
-        };
-
-        this.Controls.Add(pictureBox);
-
-
 
         // Base style and setup
         FormBorderStyle = FormBorderStyle.None;
+        ControlBox = false;
+        Text = string.Empty;
         ShowInTaskbar = false;
         TopMost = true;
         StartPosition = FormStartPosition.Manual;
         BackColor = Color.FromArgb(40, 40, 40);
         Theme = MetroThemeStyle.Dark;
-        Style = MetroColorStyle.Blue;
-
-
-
+        Style = MetroColorStyle.Silver;
 
         Font font = MetroFonts.DefaultBold(12f);
 
-        // Create label for dynamic height calculation
+        int labelTop = (pictureBox != null)
+            ? pictureBox.Bottom + spacingAfterIcon
+            : PaddingVertical;
+
+        // Measure height of label for word-wrapped text
         Label dummy = new Label
         {
             AutoSize = false,
             Font = font,
             Text = message,
-            MaximumSize = new Size(ToastWidth - 2 * PaddingHorizontal, 0),
+            MaximumSize = new Size(toastWidth - 2 * PaddingHorizontal, 0),
         };
-        dummy.Size = dummy.PreferredSize;
+        dummy.Size = TextRenderer.MeasureText(message, font, dummy.MaximumSize, TextFormatFlags.WordBreak);
 
         int labelHeight = dummy.Height;
 
-        int formHeight = labelHeight + 2 * PaddingVertical + ButtonHeight + SpaceBetween;
-        this.Width = ToastWidth;
+        int formHeight = labelTop + labelHeight + SpaceBetween + ButtonHeight + PaddingVertical;
+        this.Width = toastWidth;
         this.Height = formHeight;
 
         // Rounded corners
-        this.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, CornerRadius, CornerRadius));
+        this.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, cornerRadius, cornerRadius));
 
-        // Get the *primary* screen
+        // Center on screen
         Rectangle primaryScreenBounds = Screen.PrimaryScreen.WorkingArea;
         this.Location = new Point(
             primaryScreenBounds.Left + (primaryScreenBounds.Width - Width) / 2,
             primaryScreenBounds.Top + (primaryScreenBounds.Height - Height) / 2);
 
-        // Message Label
+        // Message label
         messageLabel = new MetroLabel
         {
             Text = message,
             AutoSize = false,
-            Width = ToastWidth - 2 * PaddingHorizontal,
+            Width = toastWidth - 2 * PaddingHorizontal,
             Height = labelHeight,
-            Location = new Point(PaddingHorizontal, PaddingVertical),
+            Location = new Point(PaddingHorizontal, labelTop),
             Font = font,
             ForeColor = Color.White,
-            TextAlign = ContentAlignment.MiddleLeft,
+            TextAlign = ContentAlignment.MiddleCenter,
             Theme = MetroThemeStyle.Dark,
             Style = MetroColorStyle.Blue,
             BackColor = Color.Transparent,
@@ -150,7 +144,7 @@ public class ToastNotification : MetroForm
         okButton.Click += (s, e) => Close();
         Controls.Add(okButton);
 
-        // Ensure no activation and topmost
+        // Keep it topmost without stealing focus
         this.Load += (s, e) =>
         {
             SetWindowPos(this.Handle, HWND_TOPMOST,
@@ -159,7 +153,6 @@ public class ToastNotification : MetroForm
         };
     }
 
-    // Keep fullscreen app active
     protected override CreateParams CreateParams
     {
         get
@@ -173,6 +166,8 @@ public class ToastNotification : MetroForm
             return cp;
         }
     }
+
+    protected override bool ShowWithoutActivation => true;
 
     // Static method to show the toast
     public static void ShowToast(string message)
