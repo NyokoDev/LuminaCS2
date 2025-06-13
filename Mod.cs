@@ -19,6 +19,7 @@ namespace Lumina
     using System;
     using System.IO;
     using System.Net;
+    using System.Windows.Forms;
     using UnityEngine;
     using Version = Game.Version;
 
@@ -90,7 +91,7 @@ namespace Lumina
         private void CheckVersion()
         {
             string url = "https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/XML/version.txt";
-            string unityversion = Application.unityVersion;
+            string unityversion = UnityEngine.Application.unityVersion;
             string currentVersion = GlobalPaths.Version;
             string gameVersion = Version.current.fullVersion;
             string supportedGameVersion = GlobalPaths.SupportedGameVersion;
@@ -108,20 +109,8 @@ namespace Lumina
                     "- Join the Discord for assistance: https://discord.gg/5gZgRNm29e";
 
                 Mod.Log.Error($"{errorMsg}\n{recommendation}");
-                UnityEngine.Debug.LogError(
-                    $"<color=red><b>Lumina Error:</b></color> Unsupported game version: {gameVersion}. Supported version is {supportedGameVersion}.\n" +
-                    $"<color=yellow>{recommendation.Replace("\n", "<br>")}</color>"
-                );
 
-                // Optionally, show a notification in-game
-                NotificationSystem.Push(
-                    identifier: "lumina_version_error",
-                    thumbnail: "https://i.imgur.com/6KKpq5g.jpeg",
-                    progress: 100,
-                    title: (LocalizedString)"Lumina",
-                    text: (LocalizedString)$"Unsupported game version: {gameVersion}. Supported: {supportedGameVersion}.\nSee log for recommendations.",
-                    onClicked: () => NotificationSystem.Pop("lumina_version_error")
-                );
+                Setting.ShowModernMessageBox(errorMsg);
 
                 return;
             }
@@ -143,7 +132,7 @@ namespace Lumina
                         string message = $"New version available! Current: {currentVersion} | Latest: {latestVersion}";
                         Mod.Log.Info(message);
 
-                        UnityEngine.Debug.LogError("<color=yellow><b>Lumina Update:</b></color> " + message);
+                        Setting.ShowModernMessageBox(message);
                     }
                 }
             }

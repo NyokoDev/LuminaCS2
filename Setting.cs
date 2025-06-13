@@ -202,7 +202,7 @@ namespace Lumina
             }
             catch (Exception ex)
             {
-                Console.WriteLine("An error occurred: " + ex.Message);
+                Mod.Log.Info("An error occurred: " + ex.Message);
             }
         }
 
@@ -297,7 +297,7 @@ namespace Lumina
             }
         }
 
-        private void ShowModernMessageBox(string message)
+        public static void ShowModernMessageBox(string message)
         {
             // Escape single quotes for PowerShell
             string escapedMessage = message.Replace("'", "''");
