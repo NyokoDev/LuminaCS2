@@ -79,5 +79,25 @@ namespace Lumina.XML
         /// SupportedGameVersion, returns the supported game version.
         /// </summary>
         public static string SupportedGameVersion = "1.3.3f1 (1166.34240) [5841.24389]";
+
+        /// <summary>
+        /// Returns icon path for toast notifications.
+        /// </summary>
+        /// <returns>Returns icon path.</returns>
+        internal static string GetIconPath()
+        {
+            string iconRelativePath = @"Icons\Lumina.ico";
+
+
+            // Get the directory containing the DLL (Mod.ModPath points to DLL file)
+            string baseDirectory = Path.GetDirectoryName(Mod.ModPath) ?? string.Empty;
+
+            // Combine directory + relative icon path
+            string iconFullPath = Path.Combine(baseDirectory, iconRelativePath);
+
+            Lumina.Mod.Log.Info("Toast icon path: " + iconFullPath);
+            
+            return iconFullPath;
+        }
     }
 }

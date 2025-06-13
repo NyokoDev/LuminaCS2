@@ -41,6 +41,8 @@ namespace Lumina
         private Setting setting;
 #pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
         private Harmony? harmony;
+
+        public static string ModPath { get; set; }
 #pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
 
         /// <inheritdoc/>
@@ -55,6 +57,7 @@ namespace Lumina
             // Log mod asset location if found
             if (GameManager.instance.modManager.TryGetExecutableAsset(this, out var asset))
             {
+                ModPath = asset.path;
                 Log.Info($"Mod asset location: {asset.path}");
             }
 
@@ -132,23 +135,18 @@ namespace Lumina
                     }
                     else
                     {
-                        string message = $"New version available! Current: {currentVersion} | Latest: {latestVersion}";
+                        string message = $"Lumina New version available! Current: {currentVersion} | Latest: {latestVersion}";
                         Mod.Log.Info(message);
 
-                        Setting.ShowModernMessageBox(message);
                         ToastNotification.ShowToast(message);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Mod.Log.Error("Error checking version: " + ex.Message);
+                Mod.Log.Info("Error checking version: " + ex.Message);
             }
         }
-
-
-
-
         private void SendNotification()
         {
                 // Notify if failed to retrieve Lumina settings
