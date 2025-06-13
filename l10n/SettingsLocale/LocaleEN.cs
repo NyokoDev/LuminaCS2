@@ -49,7 +49,7 @@ public class LocaleEN : IDictionarySource
 
             { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.LatitudeAndLongitudeAdjustments)), "Latitude and Longitude Adjustments" },
             { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.LatitudeAndLongitudeAdjustments)), "Enable this to allow manual latitude and longitude changes through the in-game interface." },
-              {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "MetroFramework Enabled" },
+              {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Metro Framework" },
         {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Enables the MetroFramework for Lumina, allowing for a more modern UI experience. This is enabled by default. Full Screen Windowed option must be enabled for best results." },
 
         };

@@ -145,12 +145,6 @@ namespace LuminaMod.XML
         [XmlElement]
         public bool HighlightsActive { get; set; }
 
-        /// <summary>
-        /// Gets or sets volumetric Clouds data.
-        /// </summary>
-        [XmlElement]
-        public VolumetricCloudsData VolumetricCloudsData { get; set; }
-
         [XmlElement]
         public float LUTContribution { get; set; } = 1f;
 
@@ -206,7 +200,7 @@ namespace LuminaMod.XML
         public bool SaveAutomatically { get; set; } = true;
 
         [XmlElement]
-        public string CubemapName { get; set; } 
+        public string CubemapName { get; set; }
 
         [XmlElement]
         public float spaceEmissionMultiplier { get; set; } = 1000f;
@@ -236,7 +230,7 @@ namespace LuminaMod.XML
         public bool LatLongEnabled { get; set; }
 
         [XmlElement]
-        public bool MetroEnabled { get; set; }
+        public bool MetroEnabled { get; set; } = true;
 
         /// <summary>
         /// Serializes to a file.
@@ -376,18 +370,19 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.MetroEnabled = loadedVariables?.MetroEnabled ?? true;
 
 
-
+                    Mod.Log.Info("Settings loaded successfully.");
                     return loadedVariables;
+
                 }
+         
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Mod.Log.Info("Failed to load Lumina settings. Ensure that at least one setting is set.");
-                NotificationSystem.Push(
-                    "lumina",
-                    thumbnail: "https://i.imgur.com/C9fZDiA.png",
-                    title: "Lumina",
-                    text: $"Please set a setting or verify the settings file.");
+                Mod.Log.Info($"Error loading settings: {ex.Message}");
+                if (ex.InnerException != null)
+                    Mod.Log.Info($"Inner: {ex.InnerException.Message}");
+
+                Setting.ShowModernMessageBox("Error loading settings. Please check the log for more details.");
 
                 return null;
             }

@@ -12,11 +12,14 @@ namespace Lumina
     using Game.PSI;
     using Game.SceneFlow;
     using Game.Settings;
+    using Game.Simulation;
     using Game.UI;
     using Game.UI.InGame;
     using Game.UI.Localization;
     using Game.UI.Widgets;
+    using Lumina.Metro;
     using Lumina.Systems;
+    using Lumina.Systems.SimulationRefresh;
     using Lumina.UI;
     using Lumina.XML;
     using LuminaMod.XML;
@@ -26,10 +29,14 @@ namespace Lumina
     using System.Diagnostics;
     using System.IO;
     using System.IO.Compression;
+    using System.Runtime.InteropServices;
     using System.Threading;
     using System.Windows.Forms;
+    using Unity.Entities;
     using UnityEngine;
+    using static UnityEngine.Rendering.DebugUI;
     using Version = Game.Version;
+
 
     /// <summary>
     /// Main settings file.
@@ -39,6 +46,10 @@ namespace Lumina
     [SettingsUIShowGroupName(KButtonGroup, KToggleGroup, KSliderGroup, KDropdownGroup)]
     public class Setting : ModSetting
     {
+
+    
+        
+
         /// <summary>
         /// Main section.
         /// </summary>
@@ -68,6 +79,7 @@ namespace Lumina
         /// </summary>
         public
         const string KDropdownGroup = "Dropdown";
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Setting"/> class.
@@ -183,7 +195,7 @@ namespace Lumina
         }
 
         /// <summary>
-        /// Metro Framework enabled setting.
+        /// Gets or sets a value indicating whether Metro Framework is enabled.
         /// </summary>
         [SettingsUISection(KSection, KSliderGroup)]
         public bool MetroFrameworkEnabled
@@ -192,20 +204,25 @@ namespace Lumina
             set
             {
                 GlobalVariables.Instance.MetroEnabled = value;
+                Eureka();
 
-                string status = value ? "enabled" : "disabled";
-                string message = $"MetroFramework is now {status}. Please restart the game for changes to take effect. For best results use FullScreenWindowed if enabled.";
-
-                if (GlobalVariables.Instance.MetroEnabled)
-                {
-                    ToastNotification.ShowToast(message);
-                }
-                else
-                {
-                    ShowModernMessageBox(message);
-                }
             }
         }
+
+        /// <summary>
+        /// This method is called when the MetroFrameworkEnabled setting is changed.
+        /// </summary>
+        private void Eureka()
+        {
+            bool value = GlobalVariables.Instance.MetroEnabled;
+
+            string status = value ? "enabled" : "disabled";
+            string message = $"MetroFramework is now {status}. Please restart the game for changes to take effect. For best results use FullScreenWindowed if enabled.";
+            {
+                ShowModernMessageBox(message);
+            }
+        }
+
 
         /// <summary>
         /// Opens the folder location.
@@ -258,11 +275,6 @@ namespace Lumina
 
                 if (filesToZip.Count == 0)
                 {
-                    if (GlobalVariables.Instance.MetroEnabled)
-                    {
-                        ToastNotification.ShowToast("No log or settings files found to zip.");
-                    }
-                    else
                     {
                         ShowModernMessageBox("No log or settings files found to zip.");
                     }
@@ -319,6 +331,8 @@ namespace Lumina
 
                 ShowModernMessageBox("A ZIP file with your Lumina logs and settings has been created and opened in File Explorer. Please upload this file in the #support channel on Discord. The Discord invite link has been opened in your browser to help you join. Thank you for supporting Lumina!");
 
+             
+
 
                 Process.Start(new ProcessStartInfo
                 {
@@ -329,31 +343,32 @@ namespace Lumina
             catch (Exception ex)
             {
                 Lumina.Mod.Log.Info("An error occurred: " + ex.Message);
-                ShowModernMessageBox($"An error occurred: {ex.Message}");
+                    ShowModernMessageBox("An error occurred: " + ex.Message);
+                }
+            }
+        
+
+
+        public static void ShowModernMessageBox(string v)
+        {
+            if (GlobalVariables.Instance.MetroEnabled)
+            {
+                ToastNotification.ShowToast("An error occurred: " + v);
+                // Refresh the simulation system to apply changes if needed
+                RefreshSimulationSystem RefreshSimulationSystem = new RefreshSimulationSystem();
+                RefreshSimulationSystem.RefreshSimulation();
+
+            }
+            else
+            {
+                Lumina.Mod.Log.Info(v);
             }
         }
+     
 
-        public static void ShowModernMessageBox(string message)
-        {
-            // Escape single quotes for PowerShell
-            string escapedMessage = message.Replace("'", "''");
-
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = "powershell",
-                Arguments = $"-Command \"Add-Type -AssemblyName PresentationFramework;[System.Windows.MessageBox]::Show('{escapedMessage}', 'Lumina Support')\"",
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                WindowStyle = ProcessWindowStyle.Hidden
-            });
-        }
+        
 
 
-
-        private string EscapeForPowerShell(string input)
-        {
-            return input.Replace("'", "''");
-        }
 
         /// <summary>
         /// This opens the paypal website in a new tab.

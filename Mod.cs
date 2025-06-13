@@ -13,6 +13,7 @@ namespace Lumina
     using HarmonyLib;
     using Lumina.Locale;
     using Lumina.ManagerSystems;
+    using Lumina.Metro;
     using Lumina.Systems;
     using Lumina.XML;
     using LuminaMod.XML;
@@ -114,11 +115,6 @@ namespace Lumina
 
                 Mod.Log.Error($"{errorMsg}\n{recommendation}");
 
-                if (GlobalVariables.Instance.MetroEnabled) /// Check if MetroFramework is enabled
-                {
-                    ToastNotification.ShowToast(errorMsg); /// Show toast notification with error message
-                }
-                else
                 {
                     Setting.ShowModernMessageBox(errorMsg); // / Show a modern message box with error message in case MetroFramework is not enabled.
                 }
@@ -142,12 +138,6 @@ namespace Lumina
                     {
                         string message = $"Lumina New version available! Current: {currentVersion} | Latest: {latestVersion}";
                         Mod.Log.Info(message);
-
-                        if (GlobalVariables.Instance.MetroEnabled)
-                        {
-                            ToastNotification.ShowToast(message);
-                        }
-                        else
                         {
                             Setting.ShowModernMessageBox(message);
                         }
