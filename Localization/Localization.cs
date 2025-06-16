@@ -6,16 +6,17 @@
 
 namespace Lumina.Locale
 {
+    using Colossal.Localization;
+    using Colossal.Logging;
+    using Game.Modding;
+    using Game.SceneFlow;
+    using Game.Settings;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Text;
-    using Colossal.Localization;
-    using Colossal.Logging;
-    using Game.Modding;
-    using Game.SceneFlow;
 
     /// <summary>
     /// Translation handling.
@@ -42,6 +43,8 @@ namespace Lumina.Locale
         /// <param name="log">Log to use.</param>
         public static void LoadTranslations(ModSetting settings, ILog log)
         {
+
+
             Assembly thisAssembly = Assembly.GetExecutingAssembly();
             string[] resourceNames = thisAssembly.GetManifestResourceNames();
 

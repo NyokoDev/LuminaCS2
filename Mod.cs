@@ -9,6 +9,7 @@ namespace Lumina
     using Game.Modding;
     using Game.PSI;
     using Game.SceneFlow;
+    using Game.UI;
     using Game.UI.Localization;
     using HarmonyLib;
     using Lumina.Locale;
@@ -65,9 +66,12 @@ namespace Lumina
             // Initialize and register mod settings
             this.setting = new Setting(this);
             this.setting.RegisterInOptionsUI();
-            GameManager.instance.localizationManager.AddSource("en-US", new LocaleEN(setting));
+
+
+
 
             // Load translations.
+            LoadSettingsTranslations();
             Localization.LoadTranslations(null, Log);
 
             CheckVersion();
@@ -91,6 +95,34 @@ namespace Lumina
 
 
             SendNotification();
+        }
+
+        private void LoadSettingsTranslations()
+        {
+            GameManager.instance.localizationManager.AddSource("en-US", new LocaleEN(setting));
+            GameManager.instance.localizationManager.AddSource("es-ES", new LocaleES(setting));
+            GameManager.instance.localizationManager.AddSource("fr-FR", new LocaleFR(setting));
+            GameManager.instance.localizationManager.AddSource("de-DE", new LocaleDE(setting));
+            GameManager.instance.localizationManager.AddSource("it-IT", new LocaleIT(setting));
+            GameManager.instance.localizationManager.AddSource("pt-BR", new LocalePT(setting));
+            GameManager.instance.localizationManager.AddSource("ru-RU", new LocaleRU(setting));
+            GameManager.instance.localizationManager.AddSource("zh-CN", new LocaleZH(setting));
+            GameManager.instance.localizationManager.AddSource("zh-TW", new LocaleZH_TW(setting));
+            GameManager.instance.localizationManager.AddSource("ja-JP", new LocaleJA(setting));
+            GameManager.instance.localizationManager.AddSource("ko-KR", new LocaleKO(setting));
+            GameManager.instance.localizationManager.AddSource("pl-PL", new LocalePL(setting));
+            GameManager.instance.localizationManager.AddSource("nl-NL", new LocaleNL(setting));
+            GameManager.instance.localizationManager.AddSource("sv-SE", new LocaleSV(setting));
+            GameManager.instance.localizationManager.AddSource("tr-TR", new LocaleTR(setting));
+            GameManager.instance.localizationManager.AddSource("cs-CZ", new LocaleCS(setting));
+            GameManager.instance.localizationManager.AddSource("fi-FI", new LocaleFI(setting));
+            GameManager.instance.localizationManager.AddSource("el-GR", new LocaleEL(setting));
+            GameManager.instance.localizationManager.AddSource("he-IL", new LocaleHE(setting));
+            GameManager.instance.localizationManager.AddSource("uk-UA", new LocaleUK(setting));
+            GameManager.instance.localizationManager.AddSource("hi-IN", new LocaleHI(setting));
+            GameManager.instance.localizationManager.AddSource("id-ID", new LocaleID(setting));
+            GameManager.instance.localizationManager.AddSource("vi-VN", new LocaleVI(setting));
+            GameManager.instance.localizationManager.AddSource("th-TH", new LocaleTH(setting));
         }
 
         private void CheckVersion()
