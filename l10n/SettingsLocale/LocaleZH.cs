@@ -58,9 +58,9 @@ public class LocaleZH : IDictionarySource
         { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Metro 框架" },
         { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "启用 MetroFramework 以提供更现代的 UI 体验。默认启用。建议启用全屏无边窗口模式以获得最佳效果。" },
 
-        { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+        { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "启用 Lumina 体积效果" },
-{ setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+{ setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "Lumina 正常运行所必需。启用 Unity HDRP 体积效果，应用自定义的光照和后期处理设置。这样可以使 Lumina 的高级视觉效果（如色彩校正和色调映射）在游戏中正确发挥作用。" },
 
     };

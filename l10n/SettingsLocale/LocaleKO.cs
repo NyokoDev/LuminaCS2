@@ -59,9 +59,9 @@ public class LocaleKO : IDictionarySource
         { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Lumina에 MetroFramework를 활성화하여 더 현대적인 UI 경험을 제공합니다. 기본적으로 활성화되어 있습니다. 최상의 결과를 위해 전체 화면 창 모드를 사용해야 합니다." },
 
 
-        { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+        { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "Lumina 볼륨 활성화" },
-{ setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+{ setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "Lumina가 정상적으로 작동하려면 필요합니다. 사용자 지정 조명 및 후처리 오버라이드를 적용하는 Unity HDRP 볼륨을 활성화합니다. 이를 통해 색상 보정 및 톤 매핑과 같은 Lumina의 고급 시각 효과가 게임 내에서 제대로 작동합니다." },
 
 

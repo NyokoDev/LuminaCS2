@@ -58,9 +58,9 @@ public class LocaleHI : IDictionarySource
         { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "मेट्रो फ्रेमवर्क" },
         { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "लूमिना के लिए मेट्रो फ्रेमवर्क सक्षम करता है, जो एक अधिक आधुनिक UI अनुभव प्रदान करता है। यह डिफ़ॉल्ट रूप से सक्षम है। सर्वोत्तम परिणामों के लिए फुल स्क्रीन विंडो विकल्प सक्षम होना चाहिए।" },
 
-        { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+        { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "Lumina वॉल्यूम सक्षम करें" },
-{ setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+{ setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "Lumina को सही ढंग से काम करने के लिए आवश्यक। यह Unity HDRP वॉल्यूम को सक्षम करता है जो कस्टम लाइटिंग और पोस्ट-प्रोसेसिंग ओवरराइड्स लागू करता है। इससे Lumina के उन्नत विज़ुअल इफेक्ट्स, जैसे रंग सुधार और टोन मैपिंग, खेल में सही तरीके से काम करते हैं।" },
 
 

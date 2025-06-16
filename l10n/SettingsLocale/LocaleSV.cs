@@ -58,9 +58,9 @@ public class LocaleSV : IDictionarySource
         { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Metro Framework" },
         { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Aktiverar MetroFramework för Lumina, vilket ger en mer modern UI-upplevelse. Detta är aktiverat som standard. Fullskärmsfönster måste vara aktiverat för bästa resultat." },
 
-        { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+        { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "Aktivera Lumina Volume" },
-{ setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+{ setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "Krävs för att Lumina ska fungera korrekt. Aktiverar ett Unity HDRP-volym som tillämpar anpassade belysnings- och efterbehandlingsinställningar. Detta gör att Luminas avancerade visuella effekter, såsom färgkorrigering och tonmappning, fungerar korrekt i spelet." },
 
     };

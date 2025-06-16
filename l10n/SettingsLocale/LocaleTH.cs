@@ -59,9 +59,9 @@ public class LocaleTH : IDictionarySource
         { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "เปิดใช้งาน MetroFramework สำหรับ Lumina เพื่อประสบการณ์ UI ที่ทันสมัยยิ่งขึ้น เปิดใช้งานโดยค่าเริ่มต้น ต้องเปิดใช้งาน Full Screen Windowed เพื่อผลลัพธ์ที่ดีที่สุด" },
 
 
-        { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+        { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "เปิดใช้งาน Lumina Volume" },
-{ setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+{ setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "จำเป็นสำหรับการทำงานที่ถูกต้องของ Lumina เปิดใช้งาน Unity HDRP volume ที่ใช้การตั้งค่าแสงและการประมวลผลหลังที่กำหนดเอง ซึ่งช่วยให้เอฟเฟกต์ภาพขั้นสูงของ Lumina เช่น การปรับสีและการทำ tone mapping ทำงานได้อย่างถูกต้องในเกม" },
 
 

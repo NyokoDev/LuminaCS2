@@ -58,9 +58,9 @@ public class LocaleHE : IDictionarySource
         { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "מסגרת Metro" },
         { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "מאפשרת את מסגרת Metro ללומינה, המציעה חווית ממשק מודרנית יותר. מופעל כברירת מחדל. יש להפעיל את אפשרות חלון מלא כדי לקבל תוצאות מיטביות." },
 
-        { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+        { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "הפעלת נפח Lumina" },
-{ setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+{ setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "נדרש כדי שלומינה תעבוד כראוי. מפעיל נפח Unity HDRP עם התאמות אישיות של תאורה ועיבוד פוסט. זה מאפשר לאפקטים חזותיים מתקדמים של Lumina, כמו תיקון צבע ומיפוי גוונים, לפעול כראוי בתוך המשחק." },
 
 

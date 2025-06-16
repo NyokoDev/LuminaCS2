@@ -58,9 +58,9 @@ public class LocaleNL : IDictionarySource
         { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Metro Framework" },
         { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Activeert het MetroFramework voor Lumina, voor een modernere UI-ervaring. Dit is standaard ingeschakeld. Voor de beste resultaten moet de volledige scherm-venstermodus aanstaan." },
 
-        { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+        { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "Lumina Volume inschakelen" },
-{ setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+{ setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "Vereist voor een correcte werking van Lumina. Schakelt een Unity HDRP-volume in dat aangepaste verlichting en post-processing overschrijvingen toepast. Hierdoor kunnen de geavanceerde visuele effecten van Lumina, zoals kleurcorrectie en tonemapping, correct functioneren in het spel." },
 
 
