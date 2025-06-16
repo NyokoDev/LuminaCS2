@@ -106,8 +106,8 @@ namespace Lumina
             GameManager.instance.localizationManager.AddSource("it-IT", new LocaleIT(setting));
             GameManager.instance.localizationManager.AddSource("pt-BR", new LocalePT(setting));
             GameManager.instance.localizationManager.AddSource("ru-RU", new LocaleRU(setting));
-            GameManager.instance.localizationManager.AddSource("zh-CN", new LocaleZH(setting));
-            GameManager.instance.localizationManager.AddSource("zh-TW", new LocaleZHTW(setting));
+            GameManager.instance.localizationManager.AddSource("zh-HANS", new LocaleZH(setting));
+            GameManager.instance.localizationManager.AddSource("zh-HANT", new LocaleZHTW(setting));
             GameManager.instance.localizationManager.AddSource("ja-JP", new LocaleJA(setting));
             GameManager.instance.localizationManager.AddSource("ko-KR", new LocaleKO(setting));
             GameManager.instance.localizationManager.AddSource("pl-PL", new LocalePL(setting));
