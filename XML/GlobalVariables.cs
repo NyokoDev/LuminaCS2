@@ -230,7 +230,7 @@ namespace LuminaMod.XML
         public bool LatLongEnabled { get; set; }
 
         [XmlElement]
-        public bool MetroEnabled { get; set; } = true;
+        public bool MetroEnabled { get; set; } 
 
         /// <summary>
         /// Serializes to a file.
@@ -367,7 +367,7 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.TimeOfDayLocked = loadedVariables?.TimeOfDayLocked ?? false;
 
                     // Metro Framework
-                    GlobalVariables.Instance.MetroEnabled = loadedVariables?.MetroEnabled ?? true;
+                    GlobalVariables.Instance.MetroEnabled = loadedVariables?.MetroEnabled ?? false;
 
 
                     Mod.Log.Info("Settings loaded successfully.");

@@ -57,6 +57,13 @@ public class LocaleCS : IDictionarySource
 
         { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Metro Framework" },
         { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Povolí MetroFramework pro Lumina, což umožňuje modernější uživatelské rozhraní. Ve výchozím nastavení povoleno. Pro nejlepší výsledky je třeba povolit režim okna na celou obrazovku." },
+
+        { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+  "Povolit Lumina Volume" },
+{ setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+  "Vyžadováno pro správné fungování Lumina. Aktivuje Unity HDRP volume, které aplikuje vlastní nastavení osvětlení a post-processingu. Díky tomu mohou pokročilé vizuální efekty Lumina, jako korekce barev a tonální mapování, správně fungovat ve hře." },
+
+
     };
 
     public void Unload()

@@ -57,6 +57,13 @@ public class LocaleID : IDictionarySource
 
         { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Metro Framework" },
         { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Mengaktifkan MetroFramework untuk Lumina, memungkinkan pengalaman UI yang lebih modern. Ini diaktifkan secara default. Opsi Jendela Layar Penuh harus diaktifkan untuk hasil terbaik." },
+
+        { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+  "Aktifkan Volume Lumina" },
+{ setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+  "Diperlukan agar Lumina berfungsi dengan benar. Mengaktifkan volume Unity HDRP yang menerapkan pengaturan pencahayaan dan post-processing khusus. Ini memungkinkan efek visual canggih Lumina, seperti koreksi warna dan tone mapping, bekerja dengan baik dalam permainan." },
+
+
     };
 
     public void Unload()

@@ -57,6 +57,13 @@ public class LocaleFI : IDictionarySource
 
         { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Metro Framework" },
         { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Ota MetroFramework käyttöön Luminalle modernimman käyttöliittymän kokemuksen saamiseksi. Tämä on oletuksena päällä. Paras tulos saavutetaan, kun koko näytön ikkuna on käytössä." },
+
+        { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+  "Ota Lumina Volume käyttöön" },
+{ setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+  "Vaaditaan Lumina-toimintojen oikeaan toimintaan. Aktivoi Unity HDRP -volyymin, joka käyttää mukautettuja valaistus- ja jälkikäsittelyasetuksia. Tämä mahdollistaa Lumina:n edistyneet visuaaliset efektit, kuten värikorjauksen ja sävyjen kartoituksen, toimimaan oikein pelissä." },
+
+
     };
 
     public void Unload()

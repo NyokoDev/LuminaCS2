@@ -57,6 +57,12 @@ public class LocaleZHTW : IDictionarySource
 
         { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Metro Framework" },
         { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "啟用 MetroFramework 以提供更現代的 UI 體驗。預設啟用。建議開啟全螢幕無邊視窗模式以獲得最佳效果。" },
+
+        { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+  "啟用 Lumina 體積效果" },
+{ setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+  "此功能為 Lumina 正常運作所必需。它會啟用 Unity HDRP 的體積效果，並套用自訂的光照與後製處理設定。這可讓 Lumina 的進階視覺效果（如色彩校正與色調對映）在遊戲中正確執行。" },
+
     };
 
     public void Unload()

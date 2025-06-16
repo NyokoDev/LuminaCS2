@@ -97,6 +97,17 @@ namespace Lumina
 
 
         [SettingsUISection(KSection, KToggleGroup)]
+        public bool EnableLuminaVolume
+        {
+            get => GlobalVariables.Instance.LuminaVolumeEnabled;
+            set
+            {
+                GlobalVariables.Instance.LuminaVolumeEnabled = value;
+            }
+        }
+
+
+        [SettingsUISection(KSection, KToggleGroup)]
         public bool ReloadAllPackagesOnRestart
         {
             get => GlobalVariables.Instance.ReloadAllPackagesOnRestart;
@@ -200,9 +211,10 @@ namespace Lumina
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether Metro Framework is enabled.
+        /// Gets or sets a value indicating whether Metro Framework is enabled. Always disabled.
         /// </summary>
         [SettingsUISection(KSection, KSliderGroup)]
+        [SettingsUIDisableByCondition(typeof(Setting), nameof(Setting.AlwaysDisableMetro))]
         public bool MetroFrameworkEnabled
         {
             get => GlobalVariables.Instance.MetroEnabled;
@@ -210,8 +222,13 @@ namespace Lumina
             {
                 GlobalVariables.Instance.MetroEnabled = value;
                 Eureka();
-
             }
+        }
+
+        public static bool AlwaysDisableMetro()
+        {
+            // Always return true to disable MetroFramework due to a bug in the current game version that prevents the game from working properly with MetroFramework enabled.
+            return true;
         }
 
         /// <summary>

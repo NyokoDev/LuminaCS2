@@ -57,6 +57,14 @@ public class LocaleTR : IDictionarySource
 
         { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Metro Framework" },
         { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Lumina için MetroFramework’ü etkinleştirir ve daha modern bir kullanıcı arayüzü deneyimi sağlar. Bu varsayılan olarak etkinleştirilmiştir. En iyi sonuçlar için Tam Ekran Pencere modunun etkin olması gerekir." },
+
+
+        { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+  "Lumina Hacmini Etkinleştir" },
+{ setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+  "Lumina’nın düzgün çalışması için gereklidir. Özel aydınlatma ve post-processing ayarları uygulayan Unity HDRP hacmini etkinleştirir. Bu sayede Lumina’nın gelişmiş görsel efektleri, renk düzeltme ve ton eşleme gibi, oyunda doğru şekilde çalışır." },
+
+
     };
 
     public void Unload()

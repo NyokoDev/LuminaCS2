@@ -57,6 +57,13 @@ public class LocaleRU : IDictionarySource
 
         { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Metro Framework" },
         { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Включает MetroFramework для Lumina, обеспечивая более современный интерфейс. Включено по умолчанию. Рекомендуется включить полноэкранное окно для лучшей работы." },
+
+        { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+  "Включить Lumina Volume" },
+{ setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+  "Требуется для корректной работы Lumina. Включает Unity HDRP volume с пользовательскими настройками освещения и постобработки. Это позволяет продвинутым визуальным эффектам Lumina, таким как цветокоррекция и тональный маппинг, работать правильно в игре." },
+
+
     };
 
     public void Unload()

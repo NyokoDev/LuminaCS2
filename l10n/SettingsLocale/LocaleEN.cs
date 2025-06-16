@@ -50,9 +50,17 @@ public class LocaleEN : IDictionarySource
             { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.LatitudeAndLongitudeAdjustments)), "Latitude and Longitude Adjustments" },
             { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.LatitudeAndLongitudeAdjustments)), "Enable this to allow manual latitude and longitude changes through the in-game interface." },
               {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Metro Framework" },
-        {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Enables the MetroFramework for Lumina, allowing for a more modern UI experience. This is enabled by default. Full Screen Windowed option must be enabled for best results." },
+        {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Enables the Metro Framework for Lumina, allowing for a more modern UI experience. Full Screen Windowed option must be enabled for best results.      " +
+            "Note: This option is greyed out to protect your gameplay experience. Although the Metro Framework provides a modern UI and generally works as intended, enabling it currently causes critical issues—such as being unable to save or load your game. To ensure stability, this setting is disabled and cannot be changed by players. It has not been discarded entirely because a future game update may resolve these issues and allow Metro Framework to work properly." },
 
-        };
+{ setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+  "Enable Lumina Volume" },
+{ setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+  "Required for Lumina to function correctly. Enables a Unity HDRP volume that applies custom lighting and post-processing overrides. This allows Lumina's advanced visual effects, such as color grading and tone mapping, to work properly in-game." },
+
+
+    };
+
 
     public void Unload()
     {

@@ -57,6 +57,13 @@ public class LocaleJA : IDictionarySource
 
         { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Metro Framework" },
         { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "LuminaのMetroFrameworkを有効にし、よりモダンなUI体験を提供します。デフォルトで有効です。ベストな結果のためにはフルスクリーンウィンドウモードを有効にしてください。" },
+
+        { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+  "Luminaボリュームを有効にする" },
+{ setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
+  "Luminaが正しく動作するために必要です。カスタムのライティングおよびポストプロセスのオーバーライドを適用するUnity HDRPボリュームを有効にします。これにより、色補正やトーンマッピングなど、Luminaの高度な視覚効果がゲーム内で正常に機能します。" },
+
+
     };
 
     public void Unload()
