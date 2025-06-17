@@ -95,9 +95,7 @@
             GlobalVariables.LoadFromFile(GlobalPaths.GlobalModSavingPath);
 
 
-#if DEBUG
-            DisableWater(); // Disable water rendering system in debug mode to avoid lag while testing UI.
-#endif 
+
 
             CheckGPU();
             ConvertToHDRP();
@@ -106,19 +104,6 @@
 
         }
 
-        private void DisableWater()
-        {
-WaterRenderSystem waterRenderSystem = World.GetExistingSystemManaged<WaterRenderSystem>();
-            if (waterRenderSystem != null)
-            {
-                waterRenderSystem.Enabled = false;
-                Mod.Log.Info("WaterRenderSystem disabled successfully.");
-            }
-            else
-            {
-                Mod.Log.Info("WaterRenderSystem not found, skipping disable.");
-            }
-        }
 
         private void CheckGPU()
         {

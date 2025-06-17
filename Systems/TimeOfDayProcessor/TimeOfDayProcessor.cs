@@ -35,6 +35,13 @@
         protected override void OnCreate()
         {
             base.OnCreate();
+
+
+#if DEBUG
+            DisableWater(); // Disable water rendering system in debug mode to avoid lag while testing UI.
+#endif 
+
+
             Locked = GlobalVariables.Instance.TimeOfDayLocked; // Get the initial value from global variables.
 
             PlanetarySystem = World.GetExistingSystemManaged<PlanetarySystem>();
@@ -43,6 +50,22 @@
                 Lumina.Mod.Log.Info("[Lumina] TimeOfDayProcessor: PlanetarySystem not found. Time of day features will be disabled.");
             }
         }
+
+
+        private void DisableWater()
+        {
+            WaterRenderSystem waterRenderSystem = World.GetExistingSystemManaged<WaterRenderSystem>();
+            if (waterRenderSystem != null)
+            {
+                waterRenderSystem.Enabled = false;
+                Mod.Log.Info("WaterRenderSystem disabled successfully.");
+            }
+            else
+            {
+                Mod.Log.Info("WaterRenderSystem not found, skipping disable.");
+            }
+        }
+
 
         /// <summary>
         /// Called every frame to update the system.
