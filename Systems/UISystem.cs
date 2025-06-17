@@ -204,7 +204,8 @@
                     {
                         string lutName = System.IO.Path.GetFileNameWithoutExtension(filePath);
                         RenderEffectsSystem.LutName_Example = lutName;
-                        RenderEffectsSystem.m_Tonemapping.lutTexture.value = lutTexture;
+                        GlobalVariables.Instance.LUTName = lutName;
+                        RenderEffectsSystem.m_Tonemapping.lutTexture.value = lutTexture; // Set directly (we already created the texture)
 
                         Lumina.Mod.Log.Info("LUT successfully loaded and applied.");
                     }

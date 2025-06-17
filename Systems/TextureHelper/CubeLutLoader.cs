@@ -68,65 +68,53 @@ public class CubeLutLoader : MonoBehaviour
     {
         bool Error(string msg)
         {
-             Mod.Log.Info(msg);
+            Mod.Log.Info(msg);
             return false;
         }
 
         var lines = File.ReadAllLines(filePath);
         int lutSize = -1;
-        int sizeCube = -1;
         var table = new List<Color>();
 
         for (int i = 0; i < lines.Length; i++)
         {
             var line = FilterLine(lines[i]);
 
-            if (string.IsNullOrEmpty(line))
-            {
+            if (string.IsNullOrEmpty(line) || line.StartsWith("TITLE") || line.StartsWith("DOMAIN_"))
                 continue;
-            }
-
-            if (line.StartsWith("TITLE"))
-            {
-                continue;
-            }
 
             if (line.StartsWith("LUT_3D_SIZE"))
             {
                 var sizeStr = line.Substring(11).TrimStart();
-
                 if (!int.TryParse(sizeStr, out var size))
                 {
-                     Mod.Log.Info($"Invalid data on line {i}");
+                    Mod.Log.Info($"Invalid LUT_3D_SIZE on line {i}");
+                    return null;
+                }
+
+                if (size != 32 && size != 33)
+                {
+                    Mod.Log.Info($"Unsupported LUT size: {size}. Only 32 and 33 supported.");
                     return null;
                 }
 
                 lutSize = size;
-                sizeCube = size * size * size;
-
-                continue;
-            }
-
-            if (line.StartsWith("DOMAIN_"))
-            {
                 continue;
             }
 
             var row = line.Split();
-
             if (row.Length != 3)
             {
-                 Mod.Log.Info($"Invalid data on line {i}");
+                Mod.Log.Info($"Invalid data on line {i}");
                 return null;
             }
 
             var color = Color.black;
-
             for (int j = 0; j < 3; j++)
             {
                 if (!float.TryParse(row[j], NumberStyles.Float, CultureInfo.InvariantCulture.NumberFormat, out var d))
                 {
-                     Mod.Log.Info($"Invalid data on line {i}");
+                    Mod.Log.Info($"Invalid data on line {i}");
                     return null;
                 }
 
@@ -136,14 +124,29 @@ public class CubeLutLoader : MonoBehaviour
             table.Add(color);
         }
 
-        if (sizeCube != table.Count)
+        if (lutSize == -1)
         {
-             Mod.Log.Info($"Wrong table size - Expected {sizeCube} elements, got {table.Count}");
+            Mod.Log.Info("Missing LUT_3D_SIZE.");
             return null;
+        }
+
+        int expectedCount = lutSize * lutSize * lutSize;
+        if (table.Count != expectedCount)
+        {
+            Mod.Log.Info($"Wrong table size - Expected {expectedCount} elements, got {table.Count}");
+            return null;
+        }
+
+        if (lutSize == 33)
+        {
+            Mod.Log.Info("Converting LUT_3D_SIZE 33 → 32 via trilinear resampling...");
+            var resizedPixels = ResampleCubeLUT(table.ToArray(), 33, 32);
+            return new ParseResult { LutSize = 32, Pixels = resizedPixels };
         }
 
         return new ParseResult { LutSize = lutSize, Pixels = table.ToArray() };
     }
+
 
     private static string FilterLine(string line)
     {
@@ -162,6 +165,72 @@ public class CubeLutLoader : MonoBehaviour
 
         return filtered.ToString();
     }
+
+    /// <summary>
+    /// Converts a 33x33x33 LUT to a 32x32x32 LUT using trilinear resampling.
+    /// </summary>
+    /// <param name="input"></param>
+    /// <param name="srcSize"></param>
+    /// <param name="dstSize"></param>
+    /// <returns></returns>
+    private static Color[] ResampleCubeLUT(Color[] input, int srcSize, int dstSize)
+    {
+        Color[,,] src = new Color[srcSize, srcSize, srcSize];
+        int index = 0;
+        for (int b = 0; b < srcSize; b++)
+            for (int g = 0; g < srcSize; g++)
+                for (int r = 0; r < srcSize; r++)
+                    src[r, g, b] = input[index++];
+
+        Color[] output = new Color[dstSize * dstSize * dstSize];
+        index = 0;
+
+        for (int b = 0; b < dstSize; b++)
+            for (int g = 0; g < dstSize; g++)
+                for (int r = 0; r < dstSize; r++)
+                {
+                    float fr = r / (float)(dstSize - 1) * (srcSize - 1);
+                    float fg = g / (float)(dstSize - 1) * (srcSize - 1);
+                    float fb = b / (float)(dstSize - 1) * (srcSize - 1);
+                    output[index++] = TrilinearSample(src, fr, fg, fb, srcSize);
+                }
+
+        return output;
+    }
+
+    private static Color TrilinearSample(Color[,,] lut, float x, float y, float z, int size)
+    {
+        int x0 = Mathf.FloorToInt(x);
+        int y0 = Mathf.FloorToInt(y);
+        int z0 = Mathf.FloorToInt(z);
+        int x1 = Mathf.Min(x0 + 1, size - 1);
+        int y1 = Mathf.Min(y0 + 1, size - 1);
+        int z1 = Mathf.Min(z0 + 1, size - 1);
+
+        float tx = x - x0;
+        float ty = y - y0;
+        float tz = z - z0;
+
+        Color c000 = lut[x0, y0, z0];
+        Color c100 = lut[x1, y0, z0];
+        Color c010 = lut[x0, y1, z0];
+        Color c110 = lut[x1, y1, z0];
+        Color c001 = lut[x0, y0, z1];
+        Color c101 = lut[x1, y0, z1];
+        Color c011 = lut[x0, y1, z1];
+        Color c111 = lut[x1, y1, z1];
+
+        Color c00 = Color.Lerp(c000, c100, tx);
+        Color c01 = Color.Lerp(c001, c101, tx);
+        Color c10 = Color.Lerp(c010, c110, tx);
+        Color c11 = Color.Lerp(c011, c111, tx);
+
+        Color c0 = Color.Lerp(c00, c10, ty);
+        Color c1 = Color.Lerp(c01, c11, ty);
+
+        return Color.Lerp(c0, c1, tz);
+    }
+
 
     // Private class to hold the LUT data
     private class ParseResult

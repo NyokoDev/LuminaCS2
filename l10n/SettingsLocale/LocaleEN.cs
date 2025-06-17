@@ -34,8 +34,8 @@ public class LocaleEN : IDictionarySource
             { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.ReloadAllPackagesOnRestart)), "Fetch all packages on restart" },
             { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.ReloadAllPackagesOnRestart)), "Determines whether to fetch all packages (Cubemaps, LUTs) on restart. When enabled, Lumina will reload all packages every time the game restarts, ensuring that the latest versions are used and cleaning up any textures that didn’t load properly." },
             { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.SaveAutomatically)), "Saves your settings automatically when the UI is opened or closed." },
-            { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.Guides)), "Lumina Docs" },
-            { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.Guides)), "Opens Lumina guides for information and documentation in a new tab." },
+            { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.Guides)), "GitBook" },
+            { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.Guides)), "Opens Lumina's GitBook documentation." },
 { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.Support)), "Obtain Support" },
 { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.Support)), "Experiencing issues? Click this button to create a ZIP of your logs and settings, opens the folder to find it, it automatically opens our discord invite so you can join our support channel." },
 

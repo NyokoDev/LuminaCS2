@@ -430,6 +430,8 @@ WaterRenderSystem waterRenderSystem = World.GetExistingSystemManaged<WaterRender
         {
             try
             {
+                GC.Collect();
+
                 var lutFilePath = Path.Combine(GlobalPaths.LuminaLUTSDirectory, LutName_Example + ".cube");
 
                 Mod.Log.Info($"Attempting to update LUT from file: {lutFilePath}");
@@ -497,6 +499,7 @@ WaterRenderSystem waterRenderSystem = World.GetExistingSystemManaged<WaterRender
                 Mod.Log.Info("Updated GlobalVariables.Instance.LUTName");
 
 
+
             }
             catch (Exception ex)
             {
@@ -508,6 +511,7 @@ WaterRenderSystem waterRenderSystem = World.GetExistingSystemManaged<WaterRender
         {
             Mod.Log.Info("Starting TonemappingLUT process.");
 
+            LogSizeAssureCorrectMode();
             ValidateLUTSDirectory();
 
             if (m_Tonemapping == null)
@@ -572,7 +576,7 @@ WaterRenderSystem waterRenderSystem = World.GetExistingSystemManaged<WaterRender
 
             // Validate and log the result
             bool isLUTValid = m_Tonemapping.ValidateLUT();
-            LogSizeAssureCorrectMode();
+
             Mod.Log.Info("LUT validation result: " + isLUTValid);
 
             if (!isLUTValid)
