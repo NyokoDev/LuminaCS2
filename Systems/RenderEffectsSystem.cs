@@ -41,9 +41,6 @@
         private VolumeProfile m_Profile;
 
         public RenderEffectsSystem PPS;
-
-        public Exposure m_Exposure;
-        public Vignette m_Vignette;
         public ColorAdjustments m_ColorAdjustments;
         public static Tonemapping m_Tonemapping;
         private WhiteBalance m_WhiteBalance;

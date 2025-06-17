@@ -1,19 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Text;
 using Lumina;
-using Lumina.Systems;
-using Lumina.Systems.TextureHelper;
-using LuminaMod.XML;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 
 public class CubeLutLoader : MonoBehaviour
 {
-
     /// <summary>
     /// Loads LUT as GraphicsFormat.R16G16B16A16_SFloat.
     /// </summary>
@@ -26,52 +20,41 @@ public class CubeLutLoader : MonoBehaviour
             var result = LoadCubeFile(cubeFilePath);
             if (result != null)
             {
-
                 // Create and configure the texture
-
                 var texture = new Texture3D(result.LutSize, result.LutSize, result.LutSize, GraphicsFormat.R16G16B16A16_SFloat, TextureCreationFlags.None)
                 {
-                    filterMode = FilterMode.Bilinear, // Properties from CubeLutImporter
+                    filterMode = FilterMode.Bilinear,
                     wrapMode = TextureWrapMode.Clamp,
                 };
 
                 texture.SetPixels(result.Pixels);
                 texture.Apply();
 
-                 Mod.Log.Info($"LUT Texture created: {result.LutSize}³, format: {texture.graphicsFormat}");
+                Mod.Log.Info($"LUT Texture created: {result.LutSize}³, format: {texture.graphicsFormat}");
 
                 return texture;
             }
             else
             {
-                 Mod.Log.Info("Failed to parse the .cube file.");
+                Mod.Log.Info("Failed to parse the .cube file.");
                 return null;
             }
         }
         else
         {
-             Mod.Log.Info($"File not found: {cubeFilePath}");
+            Mod.Log.Info($"File not found: {cubeFilePath}");
             return null;
         }
     }
 
-
     // Load and process the LUT file
     private static ParseResult LoadCubeFile(string path)
     {
-
         return ParseCubeData(path);
     }
 
-    // Refactored to return a result object instead of using out parameters
     private static ParseResult ParseCubeData(string filePath)
     {
-        bool Error(string msg)
-        {
-            Mod.Log.Info(msg);
-            return false;
-        }
-
         var lines = File.ReadAllLines(filePath);
         int lutSize = -1;
         var table = new List<Color>();
@@ -89,12 +72,6 @@ public class CubeLutLoader : MonoBehaviour
                 if (!int.TryParse(sizeStr, out var size))
                 {
                     Mod.Log.Info($"Invalid LUT_3D_SIZE on line {i}");
-                    return null;
-                }
-
-                if (size != 32 && size != 33)
-                {
-                    Mod.Log.Info($"Unsupported LUT size: {size}. Only 32 and 33 supported.");
                     return null;
                 }
 
@@ -137,21 +114,20 @@ public class CubeLutLoader : MonoBehaviour
             return null;
         }
 
-        if (lutSize == 33)
+        if (lutSize != 32)
         {
-            Mod.Log.Info("Converting LUT_3D_SIZE 33 → 32 via trilinear resampling...");
-            var resizedPixels = ResampleCubeLUT(table.ToArray(), 33, 32);
+            Mod.Log.Info($"Resampling LUT size {lutSize} → 32 via trilinear interpolation...");
+            var resizedPixels = ResampleCubeLUT(table.ToArray(), lutSize, 32);
             return new ParseResult { LutSize = 32, Pixels = resizedPixels };
         }
 
         return new ParseResult { LutSize = lutSize, Pixels = table.ToArray() };
     }
 
-
     private static string FilterLine(string line)
     {
         var filtered = new StringBuilder();
-        line = line.TrimStart().TrimEnd();
+        line = line.Trim();
         int len = line.Length;
         int o = 0;
 
@@ -167,12 +143,8 @@ public class CubeLutLoader : MonoBehaviour
     }
 
     /// <summary>
-    /// Converts a 33x33x33 LUT to a 32x32x32 LUT using trilinear resampling.
+    /// Converts a LUT of any size to 32x32x32 using trilinear resampling.
     /// </summary>
-    /// <param name="input"></param>
-    /// <param name="srcSize"></param>
-    /// <param name="dstSize"></param>
-    /// <returns></returns>
     private static Color[] ResampleCubeLUT(Color[] input, int srcSize, int dstSize)
     {
         Color[,,] src = new Color[srcSize, srcSize, srcSize];
@@ -231,8 +203,6 @@ public class CubeLutLoader : MonoBehaviour
         return Color.Lerp(c0, c1, tz);
     }
 
-
-    // Private class to hold the LUT data
     private class ParseResult
     {
         public int LutSize { get; set; }
