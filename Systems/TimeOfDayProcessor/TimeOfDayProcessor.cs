@@ -37,18 +37,11 @@
             base.OnCreate();
             Locked = GlobalVariables.Instance.TimeOfDayLocked; // Get the initial value from global variables.
 
-            DisableWater(); // Disable water to prevent lag when testing Lumina's new features.
-
             PlanetarySystem = World.GetExistingSystemManaged<PlanetarySystem>();
             if (PlanetarySystem == null)
             {
                 Lumina.Mod.Log.Info("[Lumina] TimeOfDayProcessor: PlanetarySystem not found. Time of day features will be disabled.");
             }
-        }
-        private void DisableWater()
-        {
-            WaterRenderSystem waterRenderSystemInstance = World.GetExistingSystemManaged<WaterRenderSystem>();
-            waterRenderSystemInstance.Enabled = false; // Disable water rendering system to prevent bloat when testing settings.
         }
 
         /// <summary>
@@ -56,24 +49,11 @@
         /// </summary>
         protected override void OnUpdate()
         {
-            if (PlanetarySystem == null)
-            {
-                if (Locked)
-                {
-                    Lumina.Mod.Log.Info("[Lumina] TimeOfDayProcessor: PlanetarySystem is null in OnUpdate. Skipping time update.");
-                }
-                return;
-            }
-
             if (Locked)
             {
                 PlanetarySystem.overrideTime = true;
                 float lerpSpeed = Mathf.Max(1.5f * UnityEngine.Time.deltaTime, 0.001f);
                 PlanetarySystem.time = Mathf.Lerp(PlanetarySystem.time, TimeFloat, lerpSpeed);
-            }
-            else
-            {
-                PlanetarySystem.overrideTime = false; // Let the system handle time progression naturally
             }
         }
     }

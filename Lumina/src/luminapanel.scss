@@ -22,11 +22,11 @@ html, body {
     font-family: Overpass,"Noto Sans","Noto Sans KR","Noto Sans JP","Noto Sans SC","Noto Sans TC","Noto Sans Thai","Noto Sans Hebrew","Noto Sans Arabic","Noto Sans Bengali","Noto Sans Devanagari", sans-serif; /* Clean and modern font */
 }
 
-@media (min-width: 2560px) {
+@media (min-width: 3840px) {
     .Panel {
-        width: 70rem;       /* ~1120px */
-        height: 35rem;      /* ~560px */
-        max-height: 30rem;  /* ~480px */
+        width: 70rem; /* ~1120px */
+        height: 35rem; /* ~560px */
+        max-height: 30rem; /* ~480px */
     }
 }
 

@@ -62,13 +62,13 @@
 	<!--Link to the forum post where the mod can be discussed-->
 	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/lumina.1645623/" />
 	<!--Version of the mod-->
-	<ModVersion Value="2.2R3" />
+	<ModVersion Value="2.2R5" />
 	<!--Recommended version of the base game to use the mod-->
 	<GameVersion Value="1.*" />
 	<!--Dependency for the mod, can be set multiple times-->
 	<Dependency Id="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
-	<ChangeLog Value="Lumina v2.2R3 introduces support for log file zipping to aid troubleshooting, improves the LUT file dialog and adds a fully localized “Enable Lumina Volume” toggle in settings. The update enhances translations across multiple languages and reduces unnecessary error logging by switching some errors to info logs. Several problematic SCSS properties were removed to fix UI issues, and logging was minimized to prevent lag. A second attempt was made to fix UI flickering on 4K+ monitors, with ongoing monitoring planned. Documentation was updated, including a new Getting Started page and improved LUTs guide on GitBook. MetroFramework integration was abandoned due to unresolved bugs impacting simulation and window behavior." />
+	<ChangeLog Value="Reset @media query for 4K resolutio only. Fix Time of Day Proccessor. Restore water." />
 " />
 	<!--ChangeLog>
 	</ChangeLog-->
