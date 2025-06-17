@@ -1,5 +1,5 @@
 import React from 'react';
-import UploadSVG from './../../img/upload-file-svgrepo-com.svg';
+import UploadSVG from './../../img/folder.png';
 import { trigger } from 'cs2/api';
 import mod from "./../../../mod.json";
 import './UploadFileButton.scss'

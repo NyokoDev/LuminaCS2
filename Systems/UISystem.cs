@@ -1,13 +1,5 @@
 ﻿namespace Lumina.Systems
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
-    using System.Threading;
-    using System.Threading.Tasks;
     using Colossal.UI.Binding;
     using Game;
     using Game.UI;
@@ -17,15 +9,23 @@
     using Lumina.UI;
     using Lumina.XML;
     using LuminaMod.XML;
+    using MetroFramework.Controls;
     using Microsoft.Win32;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using System.Windows.Forms;
     using Unity.Entities;
     using UnityEngine;
-    using MetroFramework.Controls;
     using UnityEngine.Experimental.Rendering;
     using UnityEngine.Rendering;
     using UnityEngine.Rendering.HighDefinition;
     using static UnityEngine.Rendering.DebugUI;
-    using System.Windows.Forms;
 
     internal partial class UISystem : ExtendedUISystemBase
     {
@@ -47,7 +47,6 @@
             base.OnCreate();
             InitializeLutName();
             CreateBindings();
-
         }
 
         /// <summary>
@@ -160,7 +159,7 @@
             // UI Update
             AddBinding(new TriggerBinding(Mod.MODUI, "UpdateUIElements", UpdateUIElements));
 
-            AddBinding(new TriggerBinding(Mod.MODUI, "UploadLUTFileDialog", UploadLUTFileDialog));
+            AddBinding(new TriggerBinding(Mod.MODUI, "UploadLUTFileDialog", OpenLUTFileDialog));
 
 
         }
@@ -191,68 +190,40 @@
         }
 
 
-
-        private void UploadLUTFileDialog()
+        public void OpenLUTFileDialog()
         {
-            // Create an instance of OpenFileDialog
-            System.Windows.Forms.OpenFileDialog openFileDialog = new OpenFileDialog
+            string filePath = ModernFileDialog.ShowDialog("Select a .cube LUT File", "LUT Cube Files", "*.cube");
+            if (!string.IsNullOrEmpty(filePath))
             {
-                Title = "Select a .cube File",
-                Filter = "Cube Files (*.cube)|*.cube",
-                FilterIndex = 1, // Set default filter index
-                RestoreDirectory = true, // Restore the previous directory
-                ShowHelp = false,
-                AutoUpgradeEnabled = true
-            };
+                Lumina.Mod.Log.Info($"Selected LUT path: {filePath}");
 
-            try
-            {
-                // Show the dialog and check if the user selected a file
-                DialogResult result = openFileDialog.ShowDialog();
-                Lumina.Mod.Log.Info($"Dialog result: {result}");
-
-                if (result == DialogResult.OK)
+                try
                 {
-                    // Get the selected file path
-                    string filePath = openFileDialog.FileName;
-                    Lumina.Mod.Log.Info($"Selected file path: {filePath}");
-
-                    // Attempt to load the LUT from the selected file
-                    try
+                    var lutTexture = CubeLutLoader.LoadLutFromFile(filePath);
+                    if (lutTexture != null)
                     {
-                        var lutTexture = CubeLutLoader.LoadLutFromFile(filePath);
-                        if (lutTexture != null)
-                        {
-                            // Remove the .cube extension from the file name
-                            string lutName = System.IO.Path.GetFileNameWithoutExtension(filePath);
+                        string lutName = System.IO.Path.GetFileNameWithoutExtension(filePath);
+                        RenderEffectsSystem.LutName_Example = lutName;
+                        RenderEffectsSystem.m_Tonemapping.lutTexture.value = lutTexture;
 
-                            // Set the LUT name and apply the texture
-                            RenderEffectsSystem.LutName_Example = lutName;
-                            RenderEffectsSystem.m_Tonemapping.lutTexture.value = lutTexture;
-                            Lumina.Mod.Log.Info("LUT texture successfully loaded and applied.");
-                        }
-                        else
-                        {
-                            Lumina.Mod.Log.Info("LUT texture could not be loaded from the file.");
-                        }
+                        Lumina.Mod.Log.Info("LUT successfully loaded and applied.");
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        Lumina.Mod.Log.Info($"Error loading LUT texture: {ex.Message}");
+                        Lumina.Mod.Log.Info("Failed to load LUT texture.");
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    Lumina.Mod.Log.Info("No file selected.");
+                    Lumina.Mod.Log.Info($"Exception during LUT loading: {ex.Message}");
                 }
             }
-            finally
+            else
             {
-                // Dispose of the OpenFileDialog to free up resources
-                openFileDialog.Dispose();
-                Lumina.Mod.Log.Info("OpenFileDialog disposed.");
+                Lumina.Mod.Log.Info("User cancelled file selection or closed dialog.");
             }
         }
+
 
 
         private float GetLutContributionValue()

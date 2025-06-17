@@ -1,10 +1,11 @@
 ﻿namespace Lumina.Systems
 {
-    using System;
     using Colossal.Serialization.Entities;
     using Game;
+    using Game.Rendering;
     using Game.Simulation;
     using LuminaMod.XML;
+    using System;
     using Unity.Entities;
     using UnityEngine;
 
@@ -35,11 +36,19 @@
         {
             base.OnCreate();
             Locked = GlobalVariables.Instance.TimeOfDayLocked; // Get the initial value from global variables.
+
+            DisableWater(); // Disable water to prevent lag when testing Lumina's new features.
+
             PlanetarySystem = World.GetExistingSystemManaged<PlanetarySystem>();
             if (PlanetarySystem == null)
             {
                 Lumina.Mod.Log.Info("[Lumina] TimeOfDayProcessor: PlanetarySystem not found. Time of day features will be disabled.");
             }
+        }
+        private void DisableWater()
+        {
+            WaterRenderSystem waterRenderSystemInstance = World.GetExistingSystemManaged<WaterRenderSystem>();
+            waterRenderSystemInstance.Enabled = false; // Disable water rendering system to prevent bloat when testing settings.
         }
 
         /// <summary>

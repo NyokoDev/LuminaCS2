@@ -96,11 +96,30 @@
 
 
             GlobalVariables.LoadFromFile(GlobalPaths.GlobalModSavingPath);
+
+
+
+            DisableWater();
+
             CheckGPU();
             ConvertToHDRP();
             InitializeCubemap();
             GetPrivateFieldm_PhysicallyBasedSky();
 
+        }
+
+        private void DisableWater()
+        {
+WaterRenderSystem waterRenderSystem = World.GetExistingSystemManaged<WaterRenderSystem>();
+            if (waterRenderSystem != null)
+            {
+                waterRenderSystem.Enabled = false;
+                Mod.Log.Info("WaterRenderSystem disabled successfully.");
+            }
+            else
+            {
+                Mod.Log.Info("WaterRenderSystem not found, skipping disable.");
+            }
         }
 
         private void CheckGPU()

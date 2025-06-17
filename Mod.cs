@@ -8,6 +8,7 @@ namespace Lumina
     using Game;
     using Game.Modding;
     using Game.PSI;
+    using Game.Rendering;
     using Game.SceneFlow;
     using Game.UI;
     using Game.UI.Localization;
@@ -23,6 +24,7 @@ namespace Lumina
     using System.IO;
     using System.Net;
     using System.Windows.Forms;
+    using Unity.Entities;
     using UnityEngine;
     using Version = Game.Version;
 
@@ -92,6 +94,8 @@ namespace Lumina
             updateSystem.UpdateAfter<CubemapUpdateSystem>(SystemUpdatePhase.GameSimulation);
 
             updateSystem.UpdateAfter<CustomSunManager>(SystemUpdatePhase.GameSimulation);
+
+
 
 
             SendNotification();

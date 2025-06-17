@@ -185,8 +185,32 @@
 		<Reference Update="System.Data">
 			<Private>false</Private>
 		</Reference>
+		<Reference Update="System.Buffers">
+			<Private>false</Private>
+		</Reference>
+		<Reference Update="System.Memory">
+			<Private>false</Private>
+		</Reference>
+		<Reference Update="System.Numerics.Vectors">
+			<Private>false</Private>
+		</Reference>
+		<Reference Update="System.Resources.Extensions">
+			<Private>false</Private>
+		</Reference>
+		<Reference Update="System.Runtime.CompilerServices.Unsafe">
+			<Private>false</Private>
+		</Reference>
 	</ItemGroup>
 
+
+	<Target Name="PostBuildCleanup" AfterTargets="Build">
+		<Delete Files="$(OutputPath)System.Buffers.dll" />
+		<Delete Files="$(OutputPath)System.Memory.dll" />
+		<Delete Files="$(OutputPath)System.Numerics.Vectors.dll" />
+		<Delete Files="$(OutputPath)System.Resources.Extensions.dll" />
+		<Delete Files="$(OutputPath)System.Runtime.CompilerServices.Unsafe.dll" />
+	</Target>
+	
 	<ItemGroup>
 		<None Include="$(ModPropsFile)" Link="Properties\Mod.props" />
 		<None Include="$(ModTargetsFile)" Link="Properties\Mod.targets" />
@@ -196,10 +220,13 @@
 		<PackageReference Include="Lib.Harmony" Version="2.2.2" />
 		<PackageReference Include="MetroFramework" Version="1.2.0.3" />
 		<PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
-			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
+
+	<Target Name="RemoveUnwantedPackageDlls" AfterTargets="ResolveAssemblyReferences">
+	</Target>
+
 
 	<ItemGroup>
 		<Folder Include="Lumina\src\classes\" />
