@@ -98,8 +98,9 @@
             GlobalVariables.LoadFromFile(GlobalPaths.GlobalModSavingPath);
 
 
-
-            DisableWater();
+#if DEBUG
+            DisableWater(); // Disable water rendering system in debug mode to avoid lag while testing UI.
+#endif 
 
             CheckGPU();
             ConvertToHDRP();
