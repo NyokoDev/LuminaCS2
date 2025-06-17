@@ -1,39 +1,14 @@
-# Lumina
-### for Cities: Skylines II
+# Lumina for Cities: Skylines II
 
-- [Lumina Docs](https://skylinx.gitbook.io/lumina)
+For full documentation, guides, and FAQs, visit the official Lumina GitBook:
 
-## Effects
+👉 [**Lumina Docs**](https://skylinx.gitbook.io/lumina)
 
-- [Color Adjustments](https://github.com/NyokoDev/LuminaCS2/blob/master/Documentation/ColorAdjustments.md)
-- [White Balance](https://github.com/NyokoDev/LuminaCS2/blob/master/Documentation/WhiteBalance.md)
-- [Shadows,Midtones,Highlights](https://github.com/NyokoDev/LuminaCS2/blob/master/Documentation/ShadowsMidtonesHighlights.md)
+---
 
-## Guides
+**Created by [Nyoko](https://steamcommunity.com/id/3092220398111/)**  
+Need help or want to support the project?
 
-
-- [Publish LUT to PDXMods](https://github.com/NyokoDev/LuminaCS2/blob/master/Documentation/PublishLUTToPdxMods.md)
-- [How to Use LUTs (Look-Up-Tables)](https://github.com/NyokoDev/LuminaCS2/blob/master/Documentation/LUTS.md)
-
-
-
-## FAQ
-
-### Can I use Photo Mode while using Lumina?
-Yes, you can use Photo Mode while using Lumina. Photo Mode will take priority when opened.
-
-### How do I set Lumina values using Photo Mode?
-To set Lumina values using Photo Mode:
-1. Open Photo Mode.
-2. Make your adjustments.
-3. Click the button that says 'Send to Lumina'. 
-   
-   **Note**: This will override your existing settings.
-
-## Information
-
-Lumina by [Nyoko](https://steamcommunity.com/id/3092220398111/)
-
-Contact:
-- [SkyLinx Discord](https://discord.gg/8sVkaSGXc8)
-- [PayPal](https://paypal.me/nyokodev)
+- 💬 [SkyLinx Discord](https://discord.gg/8sVkaSGXc8)  
+- ☕ [PayPal]( https://ko-fi.com/devnyoko)  
+- 🧡 [Patreon](https://www.patreon.com/Nyoko533/shop/lumina-for-cities-skylines-ii-662768)
