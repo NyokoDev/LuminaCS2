@@ -71,16 +71,18 @@ namespace Lumina.XML
         public static string GlobalPDXModSavingPath = Path.Combine(assemblyPDXDirectory, "Lumina.xml");
 
 
-        /// <summary>
-        /// Returns the version.
-        /// </summary>
-        public static string Version =
 #if DEBUG
-    "v2.2R5 - Experimental/Preview Test Version";
+        private static readonly string guid = Guid.NewGuid().ToString("N").Substring(0, 8);
+        /// <summary>
+        /// Returns the version with a unique debug GUID.
+        /// </summary>
+        public static readonly string Version = $"v{guid} - Experimental/Preview Test Version";
 #else
-            "v2.2R5";
+    /// <summary>
+    /// Returns the fixed release version.
+    /// </summary>
+    public static readonly string Version = "v2.2R5 - Stable Release";
 #endif
-
 
         /// <summary>
         /// SupportedGameVersion, returns the supported game version.

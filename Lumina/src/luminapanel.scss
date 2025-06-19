@@ -23,12 +23,25 @@ html, body {
 }
 
 @media (min-width: 3840px) {
-    .Panel {
-        width: 70rem; /* ~1120px */
-        height: 35rem; /* ~560px */
-        max-height: 30rem; /* ~480px */
-    }
+  .Panel {
+    position: absolute;
+    width: 950rem;
+    height: 500rem;
+    top: -600rem;
+    left:120rem;
+    background-color: rgba(50, 50, 50, 0.8); /* Dark grey background with transparency */
+    backdrop-filter: blur(10px); /* Apply blur to the background behind the panel */
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6); /* Blurred black inner shadow */
+    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 400rem;
+    pointer-events: auto;
+    cursor: pointer;
+    border-radius: 20rem; /* Rounded corners */
+    color: #e0e0e0; /* Light grey text color for contrast */
+    font-family: Overpass,"Noto Sans","Noto Sans KR","Noto Sans JP","Noto Sans SC","Noto Sans TC","Noto Sans Thai","Noto Sans Hebrew","Noto Sans Arabic","Noto Sans Bengali","Noto Sans Devanagari", sans-serif; /* Clean and modern font */
+  }
 }
+
 
 .Span1
 {
@@ -51,7 +64,7 @@ html, body {
     width: 950rem;
     height: 50rem;
     top: -650rem;
-    left:100rem;
+    left:120rem;
     border-radius: 20rem; /* Rounded corners */
     background-color: rgba(50, 50, 50, 0.8); /* Dark grey background with transparency */
     box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6); /* Blurred black inner shadow */
