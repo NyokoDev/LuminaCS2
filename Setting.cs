@@ -204,10 +204,10 @@ namespace Lumina
         [SettingsUISection(KSection, KSliderGroup)]
         public bool UseTimeOfDaySlider
         {
-            get => TimeOfDayProcessor.Locked;
+            get => GlobalVariables.Instance.ViewTimeOfDaySlider;
             set
             {
-                TimeOfDayProcessor.Locked = value;
+                GlobalVariables.Instance.ViewTimeOfDaySlider = value;
             }
         }
 

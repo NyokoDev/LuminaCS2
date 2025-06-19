@@ -2,6 +2,7 @@
 {
     using Colossal.UI.Binding;
     using Game;
+    using Game.Simulation;
     using Game.UI;
     using Game.UI.InGame;
     using Lumina.Systems.Presets;
@@ -29,6 +30,8 @@
 
     internal partial class UISystem : ExtendedUISystemBase
     {
+
+        public PlanetarySystem m_PlanetarySystem;
         public bool Visible { get; set; }
         public string CubemapName { get; set;}
         public bool UsingHDRSky = GlobalVariables.Instance.HDRISkyEnabled;
@@ -47,6 +50,7 @@
             base.OnCreate();
             InitializeLutName();
             CreateBindings();
+            m_PlanetarySystem = World.GetExistingSystemManaged<PlanetarySystem>();
         }
 
         /// <summary>
@@ -109,6 +113,10 @@
             //Cubemaps
             AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "CubemapName", ReturnCubemapName));
 
+            // Time Lock Status
+           
+             AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "TimeLockStatus", () => TimeLockStatus()));
+
             //TonemappingExternalMode
             AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsExternal", () => IsExternalMode()));
 
@@ -161,7 +169,18 @@
 
             AddBinding(new TriggerBinding(Mod.MODUI, "UploadLUTFileDialog", OpenLUTFileDialog));
 
+            AddBinding(new TriggerBinding(Mod.MODUI, "LockTime", HandleTimeLocked));
 
+
+        }
+
+        /// <summary>
+        /// Returns the current time lock status.
+        /// </summary>
+        /// <returns></returns>
+        private bool TimeLockStatus()
+        {
+            return GlobalVariables.Instance.TimeOfDayLocked;
         }
 
         private void UseLuminaVolume()
@@ -633,12 +652,36 @@
 
         private bool TimeFloatIsActive()
         {
-            return TimeOfDayProcessor.Locked;
+            return GlobalVariables.Instance.ViewTimeOfDaySlider;
+        }
+
+        private bool IsTimeLocked()
+        {
+                       return TimeOfDayProcessor.Locked;
+        }
+
+        private void HandleTimeLocked()
+        {
+            TimeOfDayProcessor.Locked = !TimeOfDayProcessor.Locked;
+            GlobalVariables.Instance.TimeOfDayLocked = TimeOfDayProcessor.Locked;
+            Mod.Log.Info($"Time of Day locked state changed to: {TimeOfDayProcessor.Locked}");
         }
 
         private void HandleTimeFloatValue(float obj)
         {
             TimeOfDayProcessor.TimeFloat = obj;
+            TimeOfDayProcessor.ChangingTime = true;
+            WaitForChangingTime();
+        }
+
+        private async Task WaitForChangingTime()
+        {
+            while (Math.Abs(m_PlanetarySystem.time - TimeOfDayProcessor.TimeFloat) > 0.0001f)
+            {
+                await Task.Delay(16); // Wait one frame (~60fps)
+            }
+
+            TimeOfDayProcessor.ChangingTime = false;
         }
 
         private float TimeFloatValue()

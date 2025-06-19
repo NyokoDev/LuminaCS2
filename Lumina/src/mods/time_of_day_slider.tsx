@@ -2,6 +2,7 @@ import { bindValue, trigger, useValue } from "cs2/api";
 import mod from "../../mod.json";
 import { Slider, SliderValueTransformer } from "./slider";
 import "./time-of-day-css.scss";
+import LockTimeButton from "./LockTimeButton/locktimebutton";
 
 // Reactive bindings
 export const TimeFloatValue$ = bindValue<number>(mod.id, 'TimeFloatValue');
@@ -40,6 +41,7 @@ export const TimeOfDaySliderModuleRegistryExtend = (Component: React.ComponentTy
             />
             <img id="lumina-time-of-day-image"
             src="coui://ui-mods/Icons/Lumina.svg"></img>
+            <LockTimeButton />
           </div>
         )}
 

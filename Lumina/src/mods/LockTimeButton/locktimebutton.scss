@@ -1,0 +1,33 @@
+.lock-time-button {
+    position: absolute;
+    right: 20rem;
+    color: white;
+
+    
+  .icon {
+    transition: stroke 0.3s, fill 0.3s;
+    stroke: #ccc;
+  }
+
+  &:hover {
+    color: aqua;
+
+    .icon {
+      stroke: aqua;
+    }
+  }
+
+  &.enabled {
+    color: #4caf50;
+
+    .icon {
+      stroke: #4caf50;
+    }
+  }
+}
+
+
+
+.lock-time-button:hover{
+color: aqua;
+}

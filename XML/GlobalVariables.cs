@@ -230,7 +230,13 @@ namespace LuminaMod.XML
         public bool LatLongEnabled { get; set; }
 
         [XmlElement]
-        public bool MetroEnabled { get; set; } 
+        public bool MetroEnabled { get; set; }
+
+        [XmlIgnore]
+        public bool ChangingTime { get; set; }
+
+        [XmlElement]
+        public bool ViewTimeOfDaySlider { get; set; }
 
         /// <summary>
         /// Serializes to a file.
@@ -364,7 +370,8 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.SunFlareSize = loadedVariables?.SunFlareSize ?? 0f;
                     GlobalVariables.Instance.ReloadAllPackagesOnRestart = loadedVariables?.ReloadAllPackagesOnRestart ?? false;
                     GlobalVariables.Instance.LatLongEnabled = loadedVariables?.LatLongEnabled ?? false;
-                    GlobalVariables.Instance.TimeOfDayLocked = loadedVariables?.TimeOfDayLocked ?? false;
+
+                    GlobalVariables.Instance.ViewTimeOfDaySlider = loadedVariables?.ViewTimeOfDaySlider ?? false;
 
                     // Metro Framework
                     GlobalVariables.Instance.MetroEnabled = loadedVariables?.MetroEnabled ?? false;
