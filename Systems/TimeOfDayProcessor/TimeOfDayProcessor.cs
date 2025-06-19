@@ -3,6 +3,8 @@ using Game;
 using Game.Common;
 using Game.Rendering;
 using Game.Simulation;
+using HarmonyLib;
+using Lumina.Patches;
 using LuminaMod.XML;
 using System;
 using Unity.Entities;
@@ -11,89 +13,76 @@ using UnityEngine;
 
 namespace Lumina.Systems
 {
-    internal partial class TimeOfDayProcessor : GameSystemBase
+    internal partial class TimeOfDayProcessor : SystemBase
     {
         public static bool Locked;
         public static float TimeFloat;
-        public static bool ChangingTime = GlobalVariables.Instance.ChangingTime;
+        public static bool ChangingTime;
 
+        public TimeSystem TimeSystem;
+        public PlanetarySystem PlanetarySystem;
         public SimulationSystem SimulationSystem;
-        private EntityQuery _timeDataQuery;
-        private bool isLerping = false;
-        private bool offsetSet = false; // Track if we set offset on this lock
+        public RenderingSystem RenderingSystem;
+
+        public bool AllDone { get; private set; }
 
         protected override void OnCreate()
         {
             base.OnCreate();
-           SimulationSystem = World.GetExistingSystemManaged<SimulationSystem>();
-        _timeDataQuery = GetEntityQuery(ComponentType.ReadWrite<TimeData>());
-            RequireForUpdate(_timeDataQuery);
+            SimulationSystem = World.GetExistingSystemManaged<SimulationSystem>();
+            PlanetarySystem = World.GetExistingSystemManaged<PlanetarySystem>();
+            RenderingSystem = World.GetExistingSystemManaged<RenderingSystem>();
         }
-
-        const int kTicksPerDay = 262144;
-
-        private bool timeChanged = false;
 
         protected override void OnUpdate()
         {
-            if (_timeDataQuery.IsEmpty)
+            ChangingTime = GlobalVariables.Instance.ChangingTime;
+
+            if (!GlobalVariables.Instance.ViewTimeOfDaySlider)
                 return;
-
-            var entity = _timeDataQuery.GetSingletonEntity();
-            var data = EntityManager.GetComponentData<TimeData>(entity);
-
-            int currentTicks = (int)(SimulationSystem.frameIndex - data.m_FirstFrame);
-            int desiredTicks = Mathf.RoundToInt(TimeFloat / 24f * kTicksPerDay);
 
             if (ChangingTime)
             {
-                // Smoothly interpolate towards the target TimeFloat
-                float currentTime = currentTicks / (float)kTicksPerDay * 24f;
-                float lerpSpeed = 2f * World.Time.DeltaTime; // Increase this for faster transitions
+                PlanetarySystem.overrideTime = true;
 
-                float newTime = Mathf.Lerp(currentTime, TimeFloat, lerpSpeed);
-                int newDesiredTicks = Mathf.RoundToInt(newTime / 24f * kTicksPerDay);
-                data.TimeOffset = newDesiredTicks - currentTicks;
-                EntityManager.SetComponentData(entity, data);
+                // Smoothly interpolate towards target time
+                float lerpSpeed = math.max(0.0005f * UnityEngine.Time.captureDeltaTime, 0.001f);
+                PlanetarySystem.time = math.lerp(PlanetarySystem.time, TimeFloat, lerpSpeed);
 
-                // Stop changing if close enough
-                if (Mathf.Abs(newTime - TimeFloat) < 0.01f)
+                PlanetarySystem.minute = (int)math.lerp(PlanetarySystem.time, TimeFloat, lerpSpeed);
+                PlanetarySystem.hour = (int)math.lerp(PlanetarySystem.time, TimeFloat, lerpSpeed);
+
+                // If we're close enough, snap to the target and mark as done
+                if (math.abs(PlanetarySystem.time - TimeFloat) < 0.001f)
                 {
-                    ChangingTime = false;
-                    Locked = true;
+                    PlanetarySystem.time = TimeFloat;
+              
+                    PlanetarySystem.minute = (int)math.lerp(PlanetarySystem.time, TimeFloat, lerpSpeed);
+                    PlanetarySystem.hour = (int)math.lerp(PlanetarySystem.time, TimeFloat, lerpSpeed);
+                    AllDone = true;
                 }
+
+                if (AllDone)
+                {
+                    PlanetarySystem.overrideTime = false;
+                    AllDone = false;
+                    GlobalVariables.Instance.ChangingTime = false;
+                }
+
+                Lumina.Mod.Log.Info($"Smoothly changing time to {TimeFloat:F2}");
             }
-            else if (Locked && !offsetSet)
+            else if (Locked)
             {
-                // Set once when lock activates
-                data.TimeOffset = desiredTicks - currentTicks;
-                EntityManager.SetComponentData(entity, data);
-                offsetSet = true;
+                float lerpSpeed = math.max(0.0005f * UnityEngine.Time.captureDeltaTime, 0.001f);
+                PlanetarySystem.overrideTime = true;
+                PlanetarySystem.time = TimeFloat;
+                PlanetarySystem.minute = (int)math.lerp(PlanetarySystem.time, TimeFloat, lerpSpeed);
+                PlanetarySystem.hour = (int)math.lerp(PlanetarySystem.time, TimeFloat, lerpSpeed);
             }
-            else if (!Locked && data.TimeOffset != 0)
+            else
             {
-                // Reset when unlocking
-                data.TimeOffset = 0;
-                EntityManager.SetComponentData(entity, data);
-                offsetSet = false;
+                PlanetarySystem.overrideTime = false;
             }
-        }
-
-
-
-        public void StartLerp(float newTime)
-        {
-            TimeFloat = newTime;
-            ChangingTime = true;
-            Locked = false; // Locked becomes true only when lerp finishes
-            offsetSet = false;
-        }
-
-        public void ReleaseLock()
-        {
-            Locked = false;
-            offsetSet = false;
-            // Keep current TimeOffset as-is so simulation time continues smoothly
         }
     }
 }

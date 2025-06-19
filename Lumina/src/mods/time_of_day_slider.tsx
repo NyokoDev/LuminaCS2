@@ -29,8 +29,8 @@ export const TimeOfDaySliderModuleRegistryExtend = (Component: React.ComponentTy
             <Slider
               value={TimeFloatValue}
               start={0}
-              end={50}
-              step={0.01}
+              end={180}
+              step={0.000000000000000000001}
               gamepadStep={0.001}
               className="time-of-day-slider"
               valueTransformer={SliderValueTransformer.floatTransformer}
