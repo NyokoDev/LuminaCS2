@@ -37,9 +37,9 @@
             base.OnCreate();
 
 
-#if DEBUG
+
             DisableWater(); // Disable water rendering system in debug mode to avoid lag while testing UI.
-#endif 
+
 
 
             Locked = GlobalVariables.Instance.TimeOfDayLocked; // Get the initial value from global variables.

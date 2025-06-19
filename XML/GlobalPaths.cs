@@ -15,6 +15,7 @@ namespace Lumina.XML
     using static HarmonyLib.Code;
     using Unity.Entities.UniversalDelegates;
     using UnityEngine;
+    using Game.UI.InGame;
 
     /// <summary>
     /// GlobalPaths class. This class is a utility for common paths.
@@ -71,18 +72,28 @@ namespace Lumina.XML
         public static string GlobalPDXModSavingPath = Path.Combine(assemblyPDXDirectory, "Lumina.xml");
 
 
-#if DEBUG
-        private static readonly string guid = Guid.NewGuid().ToString("N").Substring(0, 8);
-        /// <summary>
-        /// Returns the version with a unique debug GUID.
-        /// </summary>
-        public static readonly string Version = $"v{guid} - Experimental/Preview Test Version";
-#else
-    /// <summary>
-    /// Returns the fixed release version.
-    /// </summary>
-    public static readonly string Version = "v2.2R5 - Stable Release";
-#endif
+
+            private static readonly string guid = Guid.NewGuid().ToString("N").Substring(0, 8);
+
+            /// <summary>
+            /// Returns the version with a unique experimental GUID suffix if in experimental mode.
+            /// </summary>
+            public static readonly string Version = GetVersion();
+
+            private static string GetVersion()
+            {
+                bool isExperimental = true;
+
+                if (isExperimental)
+                {
+                    return $"v2.2R6-EXP-{guid}";
+                }
+                else
+                {
+                    return "v2.2R6";
+                }
+            }
+        
 
         /// <summary>
         /// SupportedGameVersion, returns the supported game version.

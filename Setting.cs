@@ -197,6 +197,7 @@ namespace Lumina
             set
             {
                 GlobalVariables.Instance.LatLongEnabled = value;
+                Mod.RunTranspilerPatch();
             }
         }
 

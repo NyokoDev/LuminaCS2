@@ -1,14 +1,5 @@
 ﻿namespace Lumina.Systems
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Drawing.Text;
-    using System.IO;
-    using System.Linq;
-    using System.Reflection;
-    using System.Runtime.InteropServices;
-    using System.Text;
-    using System.Threading.Tasks;
     using Game.Assets;
     using Game.Prefabs;
     using Game.Rendering;
@@ -18,6 +9,16 @@
     using Lumina.UI;
     using Lumina.XML;
     using LuminaMod.XML;
+    using System;
+    using System.Collections.Generic;
+    using System.Drawing.Text;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using System.Runtime.InteropServices;
+    using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Unity.Entities;
     using UnityEngine;
     using UnityEngine.Experimental.Rendering;
@@ -31,7 +32,7 @@
     /// <summary>
     /// Starts UNITY HDRP Volume and render effects.
     /// </summary>
-    internal partial class RenderEffectsSystem : SystemBase
+    internal partial class RenderEffectsSystem : LightingSystem
     {
         public static string lutFilePath = Path.Combine(GlobalPaths.LuminaLUTSDirectory, GlobalVariables.Instance.LUTName + ".cube");
         public static string[] LutFiles;
@@ -245,11 +246,6 @@
             {
                 SceneFlowChecker.CheckForErrors();
             }
-
-
-
-            // Start everything else
-            PlanetarySettings();
 
             UpdateNames();
 
@@ -981,84 +977,7 @@
             m_VolumetricClouds.shadowOpacityFallback.value = VolumetricCloudsData.shadowOpacityFallback;
         }
 #endif
-
-
-        private void PlanetarySettings()
-        {
-            try
-            {
-                // Skip if latitude and longitude adjustments are disabled
-                if (!GlobalVariables.Instance.LatLongEnabled)
-                    return;
-
-#if DEBUG
-        Mod.Log.Info("Entered PlanetarySettings");
-#endif
-                LightingSystem lightingSystemInstance = World.GetExistingSystemManaged<LightingSystem>();
-                if (lightingSystemInstance != null)
-                {
-                    Type lightingSystemType = typeof(LightingSystem);
-                    FieldInfo planetarySystemField = lightingSystemType.GetField("m_PlanetarySystem", BindingFlags.NonPublic | BindingFlags.Instance);
-
-                    if (planetarySystemField != null)
-                    {
-                        PlanetarySystem planetarySystemInstance = (PlanetarySystem)planetarySystemField.GetValue(lightingSystemInstance);
-
-                        if (planetarySystemInstance != null)
-                        {
-                            Type planetarySystemType = typeof(PlanetarySystem);
-                            FieldInfo latitudeField = planetarySystemType.GetField("m_Latitude", BindingFlags.NonPublic | BindingFlags.Instance);
-                            FieldInfo longitudeField = planetarySystemType.GetField("m_Longitude", BindingFlags.NonPublic | BindingFlags.Instance);
-
-                            if (latitudeField != null && longitudeField != null)
-                            {
-                                // Extract the current values of m_Latitude and m_Longitude from the instance
-                                PlanetarySettingsMerger.CurrentLatitude = (float)latitudeField.GetValue(planetarySystemInstance);
-                                PlanetarySettingsMerger.CurrentLongitude = (float)longitudeField.GetValue(planetarySystemInstance);
-
-                                float newLatitude = GlobalVariables.Instance.Latitude;
-                                float newLongitude = GlobalVariables.Instance.Longitude;
-
-                                latitudeField.SetValue(planetarySystemInstance, newLatitude);
-                                longitudeField.SetValue(planetarySystemInstance, newLongitude);
-                            }
-                            else
-                            {
-#if DEBUG
-                        Mod.Log.Info("Latitude or longitude field not found.");
-#endif
-                            }
-                        }
-                        else
-                        {
-#if DEBUG
-                    Mod.Log.Info("PlanetarySystemInstance is null.");
-#endif
-                        }
-                    }
-                    else
-                    {
-#if DEBUG
-                Mod.Log.Info("m_PlanetarySystem field not found in LightingSystem.");
-#endif
-                    }
-                }
-                else
-                {
-#if DEBUG
-            Mod.Log.Info("LightingSystemInstance is null.");
-#endif
-                }
-            }
-            catch (Exception ex)
-            {
-#if DEBUG
-        Mod.Log.Info("An error occurred: " + ex.Message);
-#endif
-            }
-        }
-
-
+      
         /// <summary>
         /// Sets tonemapping mode from dropdown.
         /// </summary>

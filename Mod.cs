@@ -10,12 +10,14 @@ namespace Lumina
     using Game.PSI;
     using Game.Rendering;
     using Game.SceneFlow;
+    using Game.Simulation;
     using Game.UI;
     using Game.UI.Localization;
     using HarmonyLib;
     using Lumina.Locale;
     using Lumina.ManagerSystems;
     using Lumina.Metro;
+    using Lumina.Patches;
     using Lumina.Systems;
     using Lumina.XML;
     using LuminaMod.XML;
@@ -44,7 +46,7 @@ namespace Lumina
         public static ILog Log = LogManager.GetLogger($"{nameof(Lumina)}.{nameof(Mod)}").SetShowsErrorsInUI(false);
         private Setting setting;
 #pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
-        private Harmony? harmony;
+        public static Harmony? harmony;
 
         public static string ModPath { get; set; }
 #pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
@@ -52,10 +54,28 @@ namespace Lumina
         /// <inheritdoc/>
         public void OnLoad(UpdateSystem updateSystem)
         {
-            // Initialize Harmony for patching
-            this.harmony = new Harmony($"{nameof(Lumina)}.{nameof(Mod)}");
-            this.harmony.PatchAll(typeof(Mod).Assembly);
-            Mod.Log.Info("Patching completed successfully.");
+            // Load global settings
+            GlobalVariables.LoadFromFile(GlobalPaths.GlobalModSavingPath);
+
+            harmony = new Harmony($"{nameof(Lumina)}.{nameof(Mod)}");
+
+            RunTranspilerPatch();
+
+
+            // Always patch PhotoModeRenderSystem.OnUpdate postfix
+            var photoModeOriginal = AccessTools.Method(typeof(PhotoModeRenderSystem), "OnUpdate");
+            var postfixPhotoMode = AccessTools.Method(typeof(PhotoModeRenderSystemPatch), "Postfix");
+
+            harmony.Patch(
+                photoModeOriginal,
+                postfix: postfixPhotoMode != null ? new HarmonyMethod(postfixPhotoMode) : null
+            );
+        
+    
+    Mod.Log.Info("Patching completed successfully.");
+
+
+
             Log.Info(nameof(OnLoad));
 
             // Log mod asset location if found
@@ -77,8 +97,7 @@ namespace Lumina
             Localization.LoadTranslations(null, Log);
 
             CheckVersion();
-            // Load global settings
-            GlobalVariables.LoadFromFile(GlobalPaths.GlobalModSavingPath);
+
 
             updateSystem.UpdateAfter<PreSystem>(SystemUpdatePhase.UIUpdate);
 
@@ -100,6 +119,34 @@ namespace Lumina
 
             SendNotification();
         }
+        public static void RunTranspilerPatch()
+        {
+            var originalOnUpdate = AccessTools.Method(typeof(PlanetarySystem), "OnUpdate");
+            var transpiler = AccessTools.Method(typeof(PlanetarySystem_OnUpdate_Patch), "Transpiler");
+
+            var originalOnCreate = AccessTools.Method(typeof(PlanetarySystem), "OnCreate");
+            var prefixOnCreate = AccessTools.Method(typeof(OverrideTime_OnUpdate_Patch), "Prefix");
+
+            if (GlobalVariables.Instance.LatLongEnabled)
+            {
+                harmony.Patch(
+                    originalOnUpdate,
+                    transpiler: transpiler != null ? new HarmonyMethod(transpiler) : null
+                );
+
+                harmony.Patch(
+                    originalOnCreate,
+                    prefix: prefixOnCreate != null ? new HarmonyMethod(prefixOnCreate) : null
+                );
+            }
+            else
+            {
+                // Use harmony ID string instead of MethodInfo
+                harmony.Unpatch(originalOnUpdate, HarmonyPatchType.Transpiler, "Lumina.Mod");
+                harmony.Unpatch(originalOnCreate, HarmonyPatchType.Prefix, "Lumina.Mod");
+            }
+        }
+
 
         private void LoadSettingsTranslations()
         {
@@ -187,18 +234,18 @@ namespace Lumina
         }
         private void SendNotification()
         {
-                // Notify if failed to retrieve Lumina settings
-                NotificationSystem.Push(
-                    identifier: "lumina",
-                    thumbnail: "https://i.imgur.com/6KKpq5g.jpeg",
-                    progress: 100, // 50% complete
-                    title: (LocalizedString)"Lumina",  // Assuming LocalizedString conversion
-                    text: (LocalizedString)"Loaded succesfully.",  // Assuming LocalizedString conversion
-                    onClicked: () =>
-                    {
-                        // Remove the notification when it is clicked
-                        NotificationSystem.Pop("lumina");
-                    });
+            // Notify if failed to retrieve Lumina settings
+            NotificationSystem.Push(
+                identifier: "lumina",
+                thumbnail: "https://i.imgur.com/6KKpq5g.jpeg",
+                progress: 100, // 50% complete
+                title: (LocalizedString)"Lumina",  // Assuming LocalizedString conversion
+                text: (LocalizedString)"Loaded succesfully.",  // Assuming LocalizedString conversion
+                onClicked: () =>
+                {
+                    // Remove the notification when it is clicked
+                    NotificationSystem.Pop("lumina");
+                });
             NotificationSystem.Pop("lumina");
 
         }
@@ -208,7 +255,7 @@ namespace Lumina
         {
             Log.Info(nameof(this.OnDispose));
 
-            this.harmony?.UnpatchAll($"{nameof(Lumina)}.{nameof(Mod)}");
+            harmony?.UnpatchAll($"{nameof(Lumina)}.{nameof(Mod)}");
 
             if (this.setting != null)
             {

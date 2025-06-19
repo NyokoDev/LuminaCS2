@@ -26,9 +26,9 @@
 	<!--Tag, can be set multiple times-->
 	<Tag Value="Code Mod" />
 	<!--Link to the forum post where the mod can be discussed-->
-	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/lumina.1645623/" />
+	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/lumina-experimental-dev-version.1787218/" />
 	<!--Version of the mod-->
-	<ModVersion Value="V2.2 Common Update 1" />
+	<ModVersion Value="LUMINA-EXP-2" />
 	<!--Recommended version of the base game to use the mod-->
 	<GameVersion Value="1.*" />
 	<!--Dependency for the mod, can be set multiple times-->
