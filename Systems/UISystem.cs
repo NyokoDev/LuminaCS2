@@ -12,11 +12,13 @@
     using LuminaMod.XML;
     using MetroFramework.Controls;
     using Microsoft.Win32;
+    using RoadWearAdjuster.Systems;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
@@ -32,6 +34,8 @@
     {
 
         public PlanetarySystem m_PlanetarySystem;
+        public ReplaceRoadWearSystem m_ReplaceRoadWearSystem;
+
         public bool Visible { get; set; }
         public string CubemapName { get; set;}
         public bool UsingHDRSky = GlobalVariables.Instance.HDRISkyEnabled;
@@ -51,6 +55,7 @@
             InitializeLutName();
             CreateBindings();
             m_PlanetarySystem = World.GetExistingSystemManaged<PlanetarySystem>();
+
         }
 
         /// <summary>
@@ -172,6 +177,45 @@
             AddBinding(new TriggerBinding(Mod.MODUI, "LockTime", HandleTimeLocked));
 
 
+            // Road Networks - Textures Replacer
+
+            // Value bindings for the sliders
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetOpacity", () => GlobalVariables.Instance.TextureOpacity));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetBrightness", () => GlobalVariables.Instance.TextureBrightness));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetSmoothness", () => GlobalVariables.Instance.RoadTextureSmoothness));
+
+            // Trigger bindings for slider changes
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetOpacity", SetOpacity));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetBrightness", SetBrightness));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetSmoothness", SetSmoothness));
+
+        }
+
+        private void SetOpacity(float value)
+        {
+            GlobalVariables.Instance.TextureOpacity = value;
+            ApplyRoadVisuals();
+        }
+
+        private void SetBrightness(float value)
+        {
+            GlobalVariables.Instance.TextureBrightness = value;
+            ApplyRoadVisuals();
+        }
+
+        private void SetSmoothness(float value)
+        {
+            GlobalVariables.Instance.RoadTextureSmoothness = value;
+            ApplyRoadVisuals();
+        }
+
+        private void ApplyRoadVisuals()
+        {
+            var system = World.DefaultGameObjectInjectionWorld?.GetExistingSystemManaged<ReplaceRoadWearSystem>();
+            if (system != null)
+            {
+                system.ReloadAndApplyRoadTextures(); // or system.ApplyValuesToMaterials(...)
+            }
         }
 
         /// <summary>

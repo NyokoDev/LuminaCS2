@@ -1,8 +1,4 @@
-﻿/// <summary>
-/// Several parts of this code are thanks to the RoadWearAdjuster project. https://github.com/HX2003/RoadWearAdjuster
-/// <summary>
-
-using Game;
+﻿using Game;
 using Game.Objects;
 using Lumina;
 using Lumina.XML;
@@ -23,11 +19,23 @@ namespace RoadWearAdjuster.Systems
         private Material gravelLaneMaterial;
 
         private bool hasGeneratedTextures = false;
-        private const string fileName = "RoadWearTexture"; 
+        private const string fileName = "RoadWearTexture";
+
+        // Cache original pixels to avoid compounding brightness/opacity on each update
+        private Color[] originalColourPixels;
 
         protected override void OnCreate()
         {
             base.OnCreate();
+
+
+            LogAllLaneMaterialFloats();
+
+            if (!Directory.Exists(GlobalPaths.TexturesPDXDirectory))
+            {
+                Directory.CreateDirectory(GlobalPaths.TexturesPDXDirectory);
+                Mod.Log.Info("Created Textures directory at: " + GlobalPaths.TexturesPDXDirectory);
+            }
 
             roadWearColourTexture = new Texture2D(1024, 1024, TextureFormat.RGBA32, true, true);
             roadWearNormalTexture = new Texture2D(1024, 1024, TextureFormat.ARGB32, true, true);
@@ -82,8 +90,8 @@ namespace RoadWearAdjuster.Systems
         {
             Mod.Log.Info("Generating and updating stored textures");
 
-            string colourFilePath = Path.Combine(GlobalPaths.GlobalModSavingPath, fileName + "_colour.png");
-            string normalFilePath = Path.Combine(GlobalPaths.GlobalModSavingPath, fileName + "_normal.png");
+            string colourFilePath = Path.Combine(GlobalPaths.TexturesPDXDirectory, fileName + "_colour.png");
+            string normalFilePath = Path.Combine(GlobalPaths.TexturesPDXDirectory, fileName + "_normal.png");
 
             if (!File.Exists(colourFilePath) || !File.Exists(normalFilePath))
             {
@@ -99,20 +107,11 @@ namespace RoadWearAdjuster.Systems
                 return false;
             }
 
-            Color[] pixels = roadWearColourTexture.GetPixels(0);
-            float brightness = GlobalVariables.Instance.TextureBrightness;
-            float opacity = GlobalVariables.Instance.TextureOpacity;
+            // Cache original pixels for later brightness/opacity adjustments
+            originalColourPixels = roadWearColourTexture.GetPixels(0);
 
-            for (int i = 0; i < pixels.Length; i++)
-            {
-                pixels[i].r *= brightness;
-                pixels[i].g *= brightness;
-                pixels[i].b *= brightness;
-                pixels[i].a *= opacity;
-            }
-
-            roadWearColourTexture.SetPixels(pixels);
-            roadWearColourTexture.Apply(true);
+            // Apply initial brightness and opacity from global variables to cached pixels
+            ApplyBrightnessOpacityToTexture(GlobalVariables.Instance.TextureBrightness, GlobalVariables.Instance.TextureOpacity);
 
             // Load normal texture
             byte[] normalData = File.ReadAllBytes(normalFilePath);
@@ -126,7 +125,7 @@ namespace RoadWearAdjuster.Systems
 
             if (tempNormalTexture.width != roadWearNormalTexture.width || tempNormalTexture.height != roadWearNormalTexture.height)
             {
-                roadWearNormalTexture.Resize(tempNormalTexture.width, tempNormalTexture.height, TextureFormat.ARGB32, true);
+                roadWearNormalTexture.Reinitialize(tempNormalTexture.width, tempNormalTexture.height, TextureFormat.ARGB32, true);
             }
 
             Graphics.CopyTexture(tempNormalTexture, roadWearNormalTexture);
@@ -144,6 +143,122 @@ namespace RoadWearAdjuster.Systems
             if (!hasGeneratedTextures)
             {
                 RefreshRoadWearTextures();
+            }
+        }
+
+        private void ApplySmoothnessToMaterials(float smoothness)
+        {
+            if (carLaneMaterial != null)
+                carLaneMaterial.SetFloat("_Smoothness", smoothness);
+
+            if (gravelLaneMaterial != null)
+                gravelLaneMaterial.SetFloat("_Smoothness", smoothness);
+        }
+
+        public void LogAllLaneMaterialFloats()
+        {
+            void LogFloats(Material material, string name)
+            {
+                if (material == null)
+                {
+                    Mod.Log.Info($"{name} is null.");
+                    return;
+                }
+
+                Shader shader = material.shader;
+                int count = shader.GetPropertyCount();
+
+                Mod.Log.Info($"Logging float properties for {name} (Shader: {shader.name}):");
+
+                for (int i = 0; i < count; i++)
+                {
+                    var propType = shader.GetPropertyType(i);
+                    if (propType == UnityEngine.Rendering.ShaderPropertyType.Float ||
+                        propType == UnityEngine.Rendering.ShaderPropertyType.Range)
+                    {
+                        string propName = shader.GetPropertyName(i);
+                        float val = material.GetFloat(propName);
+                        Mod.Log.Info($"  {propName} = {val}");
+                    }
+                }
+            }
+
+            LogFloats(carLaneMaterial, "CarLaneMaterial");
+            LogFloats(gravelLaneMaterial, "GravelLaneMaterial");
+        }
+
+
+        private void ApplyBrightnessOpacityToTexture(float brightness, float opacity)
+        {
+            if (roadWearColourTexture == null || originalColourPixels == null)
+                return;
+
+            Color[] modifiedPixels = new Color[originalColourPixels.Length];
+            for (int i = 0; i < originalColourPixels.Length; i++)
+            {
+                Color c = originalColourPixels[i];
+                c.r *= brightness;
+                c.g *= brightness;
+                c.b *= brightness;
+                c.a *= opacity;
+                modifiedPixels[i] = c;
+            }
+
+            roadWearColourTexture.SetPixels(modifiedPixels);
+            roadWearColourTexture.Apply(true);
+
+            // Re-apply the updated texture to materials to reflect changes immediately
+            ApplyTextures(carLaneMaterial);
+            ApplyTextures(gravelLaneMaterial);
+
+            Mod.Log.Info($"Applied brightness {brightness} and opacity {opacity} to roadWearColourTexture and materials.");
+        }
+
+        private void ApplyValuesToMaterials(float brightness, float opacity, float smoothness)
+        {
+            ApplyBrightnessOpacityToTexture(brightness, opacity);
+            ApplySmoothnessToMaterials(smoothness);
+        }
+
+        public void ApplyTexturesToAllLaneMaterials()
+        {
+            ApplyTextures(carLaneMaterial);
+            ApplyTextures(gravelLaneMaterial);
+            Mod.Log.Info("Reapplied updated textures to lane materials.");
+        }
+
+
+        public void ReloadAndApplyRoadTextures()
+        {
+            if (UpdateStoredTextures())
+            {
+                ApplyTexturesToAllLaneMaterials();
+                Mod.Log.Info("Reloaded road wear textures from disk and reapplied to materials.");
+            }
+            else
+            {
+                Mod.Log.Info("Failed to reload road wear textures from disk.");
+            }
+        }
+
+
+
+        public static void SetAndApplyGlobalRoadValues(ReplaceRoadWearSystem system, float value)
+        {
+            Mod.Log.Info($"Setting global road values to {value}");
+
+            GlobalVariables.Instance.TextureBrightness = value;
+            GlobalVariables.Instance.TextureOpacity = value;
+            GlobalVariables.Instance.RoadTextureSmoothness = value;
+
+            if (system != null)
+            {
+                Mod.Log.Info("Applying values to lane materials");
+                system.ApplyValuesToMaterials(value, value, value);
+            }
+            else
+            {
+                Mod.Log.Info("ReplaceRoadWearSystem instance is null, skipping material application");
             }
         }
 

@@ -1,0 +1,77 @@
+.RoadButtonSelect {
+    position: absolute;
+    display: flex;
+    background-image: url('../../img/road.svg');
+    background-size: cover; /* Make sure the background image covers the entire area */
+    width: 45rem;
+    height: 45rem;
+    left: 700rem; /* Adjusted left position */
+    transition: transform 0.01s ease-in-out;
+}
+
+.RoadButtonSelect {
+    position: absolute;
+    display: flex;
+    background-image: url('../../img/road.svg');
+    background-size: cover; /* Make sure the background image covers the entire area */
+    width: 45rem;
+    height: 45rem;
+    left: 700rem; /* Adjusted left position */
+    transition: transform 0.01s ease-in-out;
+}
+
+.RoadButtonSelect:hover
+{
+    transform: translateY(-15%);
+}
+
+.opacity-container {
+  position: absolute;
+  width:200rem;
+  top: 50rem;    /* Stacked below opacity */
+  left: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.brightness-container {
+  position: absolute;
+  top: 100rem;    /* Stacked below opacity */
+    width:200rem;
+  left: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.smoothness-container {
+  position: absolute;
+  top: 150rem;   /* Stacked below brightness */
+      width:200rem;
+  left: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.slider-label-1 {
+  position: absolute;
+  top: -20rem;  /* or whatever negative offset you want */
+  left: 0;      /* or right: 0, depending on alignment */
+}
+
+.slider-label-2 {
+  position: absolute;
+  top: -20rem;  /* different offset for second label */
+  left: 0;
+}
+
+.slider-label-3 {
+  position: absolute;
+  top: -20rem;       /* third label position */
+  left: 0;
+}
+
+
+

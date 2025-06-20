@@ -33,6 +33,8 @@ import { OpenFileDialogButton } from "./Buttons/UploadFileButton";
 import LuminaVolumeCheckbox from "./Components/UseLuminaVolumeCheckbox";
 import './Cubemaps/Cubemaps.scss'
 import DragButton from "./DraggableButton/DragButton";
+import './RoadPanel/roadpanel.scss';
+import { RoadPanelBase } from "./RoadPanel/RoadPanelBase";
 
 
 export let isInstalled$ = false;
@@ -175,7 +177,6 @@ const SunIntensity = useValue(SunIntensity$);
 const SunFlareSize = useValue(SunFlareSize$);
 
 
-
 // Initialize state variables using useState hook
 const [ColorAdjustmentsEnabled$, setCA] = useState(true);
 const [SettingsEnabled$, setSettings] = useState(false);
@@ -183,6 +184,7 @@ const [SkyAndFogEnabled$, setSkyAndFog] = useState(false);
 const [ToneMappingEnabled$, setTonemapping] = useState(false);
 const [PlanetaryEnabled$, setPlanetaryTab] = useState(false);
 const [OnImport, OnImportChange] = useState(false);
+const [RoadPanel, setRoadPanel] = useState(false);
 
 const [IsClicked, setIsClicked] = useState(false);
 
@@ -456,8 +458,6 @@ const handleHighlights = (value: number) => {
       trigger(mod.id, 'handleSunFlareSize', value);
     };
 
-    
-  
 return (
 
   <div className="Global"
@@ -500,6 +500,7 @@ id="Global"
     setPlanetaryTab(false)
     setTonemapping(false)
     setSkyAndFog(false)
+    setRoadPanel(false)
    }}>
 </button>
 
@@ -521,6 +522,7 @@ id="Global"
     setPlanetaryTab(false)
     setTonemapping(false)
     setSkyAndFog(false)
+    setRoadPanel(false)
  ;}}>
 </button>
 
@@ -546,6 +548,7 @@ id="Global"
     setPlanetaryTab(true)
     setTonemapping(false)
     setSkyAndFog(false)
+    setRoadPanel(false)
  ;}}>
 </button>
 </Tooltip>
@@ -566,6 +569,7 @@ id="Global"
     setPlanetaryTab(false)
     setTonemapping(true)
     setSkyAndFog(false)
+    setRoadPanel(false)
  ;}}>
 </button>
 </Tooltip>
@@ -586,11 +590,34 @@ id="Global"
     setPlanetaryTab(false)
     setTonemapping(false)
     setSkyAndFog(true)
+    setRoadPanel(false)
  ;}}>
 </button>
 </Tooltip>
 
 
+    <Tooltip
+  tooltip={translate("LUMINA.roadtooltip")} // Specify the content of the tooltip
+  disabled={false} // Specify whether the tooltip is disabled (default: false)
+  alignment="center" // Specify the alignment of the tooltip (e.g., "start", "center", "end")
+  className="custom-tooltip" // Specify additional class names for styling purposes
+>
+<button 
+  className={tab1 ? 'RoadButtonSelect' : 'RoadButtonSelect'} 
+  onSelect={() => {
+    setRoadPanel(true);
+    console.log("[LUMINA] Toggled Road panel.");
+  }}
+  onClick={() => { setCA(false)
+    setSettings(false)
+    setPlanetaryTab(false)
+    setTonemapping(false)
+    setSkyAndFog(false)
+    setRoadPanel(true)
+   }}>
+</button>
+
+</Tooltip>
 
 
     </div>
@@ -1332,6 +1359,12 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
   </div>
 
 }
+{RoadPanel && <div className="RoadPanelBase"> 
+
+<RoadPanelBase />
+  </div>
+  }
+  
 </div>
 
 

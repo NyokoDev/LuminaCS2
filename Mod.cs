@@ -22,6 +22,7 @@ namespace Lumina
     using Lumina.XML;
     using LuminaMod.XML;
     using MetroFramework.Forms;
+    using RoadWearAdjuster.Systems;
     using System;
     using System.IO;
     using System.Net;
@@ -111,6 +112,8 @@ namespace Lumina
             updateSystem.UpdateAt<TimeOfDayProcessor>(SystemUpdatePhase.GameSimulation);
 
             updateSystem.UpdateAfter<CubemapUpdateSystem>(SystemUpdatePhase.GameSimulation);
+
+            updateSystem.UpdateAfter<ReplaceRoadWearSystem>(SystemUpdatePhase.GameSimulation);
 
             updateSystem.UpdateAfter<CustomSunManager>(SystemUpdatePhase.GameSimulation);
 

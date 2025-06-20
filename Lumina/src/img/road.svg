@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Curved road base -->
+  <path d="M16,64 C24,40 40,24 48,0" fill="none" stroke="#222" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- Dashed center line -->
+  <path d="M16,64 C24,40 40,24 48,0" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-dasharray="6,8"/>
+</svg>

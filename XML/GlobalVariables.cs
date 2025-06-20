@@ -239,7 +239,13 @@ namespace LuminaMod.XML
         public bool ViewTimeOfDaySlider { get; set; }
 
         [XmlElement]
-        public float RoadTextureSmoothness { get; set; }
+        public float RoadTextureSmoothness { get; set; } = 100f;
+
+        [XmlElement]
+        public float TextureBrightness { get; set; } = 100f;
+
+        [XmlElement]
+        public float TextureOpacity { get; set; } = 100f;
 
         /// <summary>
         /// Serializes to a file.
@@ -380,7 +386,9 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.MetroEnabled = loadedVariables?.MetroEnabled ?? false;
 
                     // Road Texture Smoothness
-                    GlobalVariables.Instance.RoadTextureSmoothness = loadedVariables?.RoadTextureSmoothness ?? 0.5f;
+                    GlobalVariables.Instance.RoadTextureSmoothness = loadedVariables?.RoadTextureSmoothness ?? 100f;
+                    GlobalVariables.Instance.TextureBrightness = loadedVariables?.TextureBrightness ?? 100f;
+                    GlobalVariables.Instance.TextureOpacity = loadedVariables?.TextureOpacity ?? 100f;
 
 
                     Mod.Log.Info("Settings loaded successfully.");
@@ -422,7 +430,6 @@ namespace LuminaMod.XML
             }
         }
 
-        public float TextureBrightness { get; internal set; }
-        public float TextureOpacity { get; internal set; }
+
     }
 }
