@@ -180,13 +180,18 @@ namespace RoadWearAdjuster.Systems
 
         protected override void OnUpdate()
         {
-            FindLaneMaterialsOnce();
-
-            if (!hasGeneratedTextures)
+            if (GlobalVariables.Instance.UseRoadTextures)
             {
-                RefreshRoadWearTextures();
+                FindLaneMaterialsOnce();
+
+                if (!hasGeneratedTextures)
+                {
+                    RefreshRoadWearTextures();
+                }
             }
         }
+
+
 
         private void ApplySmoothnessToMaterials(float smoothness)
         {
