@@ -132,6 +132,8 @@ namespace RoadWearAdjuster.Systems
             material.SetTexture("_BaseColorMap", roadWearColourTexture);
             material.SetTexture("_NormalMap", roadWearNormalTexture);
             material.SetFloat("_Smoothness", GlobalVariables.Instance.RoadTextureSmoothness);
+            material.SetFloat("_Opacity", GlobalVariables.Instance.TextureOpacity);
+            material.SetFloat("_Brightness", GlobalVariables.Instance.TextureBrightness);
         }
 
         public void ApplyRoadTextureValues()
@@ -351,15 +353,9 @@ namespace RoadWearAdjuster.Systems
         {
             ApplyBrightnessOpacityToTexture(brightness, opacity);
             ApplySmoothnessToMaterials(smoothness);
-        }
 
-        public void ApplyTexturesToAllLaneMaterials()
-        {
-            ApplyTextures(carLaneMaterial);
-            ApplyTextures(gravelLaneMaterial);
-            Mod.Log.Info("Reapplied updated textures to lane materials.");
-        }
 
+        }
 
         public void ReloadAndApplyRoadTextures()
         {
@@ -387,6 +383,136 @@ namespace RoadWearAdjuster.Systems
                 Mod.Log.Info("ReplaceRoadWearSystem instance is null, skipping material application");
             }
         }
+
+
+        /// <summary>
+        /// Reloads textures from disk (colour + normal), updates texture data,
+        /// caches original pixels, and reapplies textures to materials.
+        /// </summary>
+        public bool ReloadRoadWearTexturesFromDisk()
+        {
+            Mod.Log.Info("Reloading road wear textures from disk");
+
+            string colourFilePath = Path.Combine(GlobalPaths.TexturesPDXDirectory, fileName + "_colour.png");
+            string normalFilePath = Path.Combine(GlobalPaths.TexturesPDXDirectory, fileName + "_normal.png");
+
+            if (!File.Exists(colourFilePath) || !File.Exists(normalFilePath))
+            {
+                Mod.Log.Info("Missing texture files for reload.");
+                return false;
+            }
+
+            // Load colour texture
+            byte[] colourData = File.ReadAllBytes(colourFilePath);
+            if (!roadWearColourTexture.LoadImage(colourData))
+            {
+                Mod.Log.Info("Failed to load colour texture");
+                return false;
+            }
+            originalColourPixels = roadWearColourTexture.GetPixels(0);
+
+            // Load normal texture
+            byte[] normalData = File.ReadAllBytes(normalFilePath);
+            Texture2D tempNormal = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+            if (!tempNormal.LoadImage(normalData))
+            {
+                Mod.Log.Info("Failed to load normal texture");
+                Object.Destroy(tempNormal);
+                return false;
+            }
+
+            if (tempNormal.width != roadWearNormalTexture.width || tempNormal.height != roadWearNormalTexture.height)
+            {
+                roadWearNormalTexture.Reinitialize(tempNormal.width, tempNormal.height, TextureFormat.ARGB32, true);
+            }
+            Graphics.CopyTexture(tempNormal, roadWearNormalTexture);
+            roadWearNormalTexture.Apply();
+            Object.Destroy(tempNormal);
+
+            hasGeneratedTextures = true;
+
+            ApplyTexturesToAllLaneMaterials();
+
+            return true;
+        }
+
+        /// <summary>
+        /// Applies brightness, opacity and smoothness floats to the textures and materials
+        /// using current global variable values.
+        /// </summary>
+        public void RefreshAndApplyRoadWearFloats()
+        {
+            if (roadWearColourTexture == null || originalColourPixels == null)
+                return;
+
+            float brightness = GlobalVariables.Instance.TextureBrightness;
+            float opacity = GlobalVariables.Instance.TextureOpacity;
+            float smoothness = GlobalVariables.Instance.RoadTextureSmoothness;
+
+            // Apply brightness & opacity to the texture pixels
+            Color[] modifiedPixels = new Color[originalColourPixels.Length];
+            for (int i = 0; i < originalColourPixels.Length; i++)
+            {
+                Color c = originalColourPixels[i];
+                c.r *= brightness;
+                c.g *= brightness;
+                c.b *= brightness;
+                c.a *= opacity;
+                modifiedPixels[i] = c;
+            }
+
+            roadWearColourTexture.SetPixels(modifiedPixels);
+            roadWearColourTexture.Apply(true);
+
+            // Apply smoothness and texture parameters to materials
+            if (carLaneMaterial != null)
+            {
+                carLaneMaterial.SetFloat("_Smoothness", smoothness);
+                carLaneMaterial.SetFloat("_Opacity", opacity);
+                carLaneMaterial.SetFloat("_Brightness", brightness);
+            }
+            if (gravelLaneMaterial != null)
+            {
+                gravelLaneMaterial.SetFloat("_Smoothness", smoothness);
+                gravelLaneMaterial.SetFloat("_Opacity", opacity);
+                gravelLaneMaterial.SetFloat("_Brightness", brightness);
+            }
+
+            Mod.Log.Info("Refreshed road wear floats and applied to textures and materials.");
+        }
+
+        /// <summary>
+        /// Helper to apply currently loaded textures to lane materials.
+        /// </summary>
+        public void ApplyTexturesToAllLaneMaterials()
+        {
+            if (carLaneMaterial != null)
+            {
+                carLaneMaterial.SetTexture("_BaseColorMap", roadWearColourTexture);
+                carLaneMaterial.SetTexture("_NormalMap", roadWearNormalTexture);
+            }
+
+            if (gravelLaneMaterial != null)
+            {
+                gravelLaneMaterial.SetTexture("_BaseColorMap", roadWearColourTexture);
+                gravelLaneMaterial.SetTexture("_NormalMap", roadWearNormalTexture);
+            }
+
+            Mod.Log.Info("Applied textures to all lane materials.");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         protected override void OnDestroy()
         {

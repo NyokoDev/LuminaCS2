@@ -207,16 +207,30 @@
         private void SetOpacity(float value)
         {
             GlobalVariables.Instance.TextureOpacity = value;
+
+            ApplyImmediately();
+ 
+        }
+
+        private void ApplyImmediately()
+        {
+            var system = World.DefaultGameObjectInjectionWorld?.GetExistingSystemManaged<ReplaceRoadWearSystem>();
+            if (system != null)
+            {
+                system.SetAndApplyGlobalRoadValues(GlobalVariables.Instance.TextureBrightness, GlobalVariables.Instance.TextureOpacity, GlobalVariables.Instance.RoadTextureSmoothness);
+            }
         }
 
         private void SetBrightness(float value)
         {
             GlobalVariables.Instance.TextureBrightness = value;
+            ApplyImmediately();
         }
 
         private void SetSmoothness(float value)
         {
             GlobalVariables.Instance.RoadTextureSmoothness = value;
+            ApplyImmediately();
         }
 
         private void ApplyRoadVisuals()
@@ -224,7 +238,7 @@
             var system = World.DefaultGameObjectInjectionWorld?.GetExistingSystemManaged<ReplaceRoadWearSystem>();
             if (system != null)
             {
-                system.ReloadAndApplyRoadTextures(); // or system.ApplyValuesToMaterials(...)
+                system.ReloadRoadWearTexturesFromDisk(); 
             }
         }
 

@@ -113,7 +113,7 @@ export const RoadPanelBase: React.FC<RoadPanelBaseProps> = ({
 
             <button
         onClick={ApplyTextures}
-        className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS ApplyTextures">
+        className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS ApplyTexturesButton">
         {translate("LUMINA.applytexturesbutton")}
       </button>
 
