@@ -19,7 +19,7 @@ type RoadPanelBaseProps = {
 export const RoadPanelBase: React.FC<RoadPanelBaseProps> = ({
   title = "",
   children,
-  className = "road-panel-base",
+  className = "",
 }) => {
   const HandleOpacity = (value: number) => {
     trigger(mod.id, "SetOpacity", value);
@@ -44,9 +44,17 @@ export const RoadPanelBase: React.FC<RoadPanelBaseProps> = ({
       trigger(mod.id, 'OpenTexturesFolder'); 
     }
 
+ const ApplyTextures= () => {
+      trigger(mod.id, 'ApplyRoadTextures'); 
+    }
+
   return (
     <div className={className}>
+
+<h1 className="title_SVH title_zQN roadconfiglabel"> Road Configuration</h1>
+      
 <div className="road-panel-base">
+
 
 
   <div className="opacity-container">
@@ -101,6 +109,12 @@ export const RoadPanelBase: React.FC<RoadPanelBaseProps> = ({
         onClick={OpenLUTFolder}
         className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS OpenRoadTexturesButton">
         {translate("LUMINA.opentexturesbutton")}
+      </button>
+
+            <button
+        onClick={ApplyTextures}
+        className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS ApplyTextures">
+        {translate("LUMINA.applytexturesbutton")}
       </button>
 
 </div>

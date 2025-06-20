@@ -83,6 +83,22 @@ namespace RoadWearAdjuster.Systems
             }
         }
 
+        public void SetAndApplyGlobalRoadValues(float brightness, float opacity, float smoothness)
+        {
+            Mod.Log.Info($"Setting global road values: Brightness={brightness}, Opacity={opacity}, Smoothness={smoothness}");
+
+            // Step 1: Set global values
+            GlobalVariables.Instance.TextureBrightness = brightness;
+            GlobalVariables.Instance.TextureOpacity = opacity;
+            GlobalVariables.Instance.RoadTextureSmoothness = smoothness;
+
+            // Step 2: Apply them to the textures and materials
+            ApplyValuesToMaterials(brightness, opacity, smoothness);
+
+            Mod.Log.Info("Applied global road values to lane materials and textures.");
+        }
+
+
         private void FindLaneMaterialsOnce()
         {
             if (carLaneMaterial != null && gravelLaneMaterial != null)
@@ -116,6 +132,20 @@ namespace RoadWearAdjuster.Systems
             material.SetTexture("_NormalMap", roadWearNormalTexture);
             material.SetFloat("_Smoothness", GlobalVariables.Instance.RoadTextureSmoothness);
         }
+
+        public void ApplyRoadTextureValues()
+        {
+            float brightness = GlobalVariables.Instance.TextureBrightness;
+            float opacity = GlobalVariables.Instance.TextureOpacity;
+            float smoothness = GlobalVariables.Instance.RoadTextureSmoothness;
+
+            ApplyBrightnessOpacityToTexture(brightness, opacity); // modifies the color texture
+            ApplySmoothnessToMaterials(smoothness);               // modifies materials only
+
+            Mod.Log.Info("Applied brightness, opacity, and smoothness to road textures and materials.");
+        }
+
+
 
         public void RefreshRoadWearTextures()
         {
@@ -308,10 +338,6 @@ namespace RoadWearAdjuster.Systems
             roadWearColourTexture.SetPixels(modifiedPixels);
             roadWearColourTexture.Apply(true);
 
-            // Re-apply the updated texture to materials to reflect changes immediately
-            ApplyTextures(carLaneMaterial);
-            ApplyTextures(gravelLaneMaterial);
-
             Mod.Log.Info($"Applied brightness {brightness} and opacity {opacity} to roadWearColourTexture and materials.");
         }
 
@@ -331,15 +357,8 @@ namespace RoadWearAdjuster.Systems
 
         public void ReloadAndApplyRoadTextures()
         {
-            if (UpdateStoredTextures())
-            {
-                ApplyTexturesToAllLaneMaterials();
-                Mod.Log.Info("Reloaded road wear textures from disk and reapplied to materials.");
-            }
-            else
-            {
-                Mod.Log.Info("Failed to reload road wear textures from disk.");
-            }
+            ApplyTextures(carLaneMaterial);
+            ApplyTextures(gravelLaneMaterial);
         }
 
 

@@ -409,17 +409,24 @@ const handleHighlights = (value: number) => {
 
 
 
-    const handleLatitude = (value: number) => {
-      const id = planetstart + (value * planetstepSize);
-      trigger(mod.id, 'SetLatitude', id);
-    };
-    
-    
+const isValidCoordinate = (value: any, min: number, max: number): value is number => {
+  return typeof value === 'number' && !isNaN(value) && value >= min && value <= max;
+};
 
-    const handleLongitude = (value: number) => {
-      const id = planetstart + (value * planetstepSize);
-      trigger(mod.id, 'SetLongitude', id);
-    };
+const handleLatitude = (raw: any) => {
+  const value = Number(raw);
+  if (!isValidCoordinate(value, -90, 90)) return;
+
+  trigger(mod.id, 'SetLatitude', value);
+};
+
+const handleLongitude = (raw: any) => {
+  const value = Number(raw);
+  if (!isValidCoordinate(value, -180, 180)) return;
+
+  trigger(mod.id, 'SetLongitude', value);
+};
+
 
     const handleLUTContribution = (value: number) => {
       const id = planetstart + (value * planetstepSize);
@@ -1081,10 +1088,10 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
     value={LatitudeValue}
     start={-90}
     end={90}
-    step={0.0000001}
+    step={0.000000000000000001}
     className="LatitudeSlider"
-    gamepadStep={0.0000001}
-    valueTransformer={SliderValueTransformer.intTransformer}
+    gamepadStep={0.000000000000000001}
+    valueTransformer={SliderValueTransformer.floatTransformer}
     disabled={false}
     noFill={false}
     onChange={handleLatitude}
@@ -1095,9 +1102,9 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
     type="range"
     min={-90}
     max={90}
-    step={0.0000001}
+    step={0.000000000000000001}
     className="toggle_cca item-mouse-states_Fmi toggle_th_ LatitudeInput"
-    onChange={(e) => handleLatitude(Number(e.target.value))}
+    onChange={(e) => handleLatitude(parseFloat(e.target.value))}
   />
 
   {/* Longitude */}
@@ -1109,10 +1116,10 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
     value={LongitudeValue}
     start={-180}
     end={180}
-    step={0.0000001}
+    step={0.000000000000000001}
     className="LongitudeSlider"
-    gamepadStep={0.0000001}
-    valueTransformer={SliderValueTransformer.intTransformer}
+    gamepadStep={0.000000000000000001}
+    valueTransformer={SliderValueTransformer.floatTransformer}
     disabled={false}
     noFill={false}
     onChange={handleLongitude}
@@ -1123,9 +1130,9 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
     type="range"
     min={-180}
     max={180}
-    step={0.0000001}
+    step={0.000000000000000001}
     className="toggle_cca item-mouse-states_Fmi toggle_th_ LongitudeInput"
-    onChange={(e) => handleLongitude(Number(e.target.value))}
+ onChange={(e) => handleLongitude(parseFloat(e.target.value))}
   />
 
   <div style={{

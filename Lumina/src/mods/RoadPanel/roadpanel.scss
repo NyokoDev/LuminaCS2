@@ -25,6 +25,17 @@
     transform: translateY(-15%);
 }
 
+.road-panel-base {
+  position: absolute;
+  left: 20rem;
+  width: 500rem;
+  height: auto;
+  background-color: rgb(243, 0, 0); /* no alpha here */
+ 
+}
+
+
+
 .opacity-container {
   position: absolute;
   width:200rem;
@@ -78,6 +89,13 @@
     top: 170rem;
     width:150%
     
+}
+
+.roadconfiglabel{
+  position: absolute;
+  left:700rem;
+  font-size: 20rem;
+
 }
 
 

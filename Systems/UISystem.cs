@@ -190,6 +190,12 @@
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetSmoothness", SetSmoothness));
 
             AddBinding(new TriggerBinding(Mod.MODUI, "OpenTexturesFolder", OpenTexturesFolder));
+            AddBinding(new TriggerBinding(Mod.MODUI, "ApplyRoadTextures", ApplyRoadTextures));
+        }
+
+        private void ApplyRoadTextures()
+        {
+            ApplyRoadVisuals();
         }
 
         private void OpenTexturesFolder()
@@ -201,19 +207,16 @@
         private void SetOpacity(float value)
         {
             GlobalVariables.Instance.TextureOpacity = value;
-            ApplyRoadVisuals();
         }
 
         private void SetBrightness(float value)
         {
             GlobalVariables.Instance.TextureBrightness = value;
-            ApplyRoadVisuals();
         }
 
         private void SetSmoothness(float value)
         {
             GlobalVariables.Instance.RoadTextureSmoothness = value;
-            ApplyRoadVisuals();
         }
 
         private void ApplyRoadVisuals()

@@ -34,7 +34,7 @@
 	<!--Dependency for the mod, can be set multiple times-->
 	<Dependency Id="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
-	<ChangeLog Value="Initially copy vanilla textures over, update road icon." />
+	<ChangeLog Value="Reformat Lat/Long to use real world values." />
 " />
 	<!--ChangeLog>
 	</ChangeLog-->
