@@ -386,9 +386,9 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.MetroEnabled = loadedVariables?.MetroEnabled ?? false;
 
                     // Road Texture Smoothness
-                    GlobalVariables.Instance.RoadTextureSmoothness = loadedVariables?.RoadTextureSmoothness ?? 100f;
-                    GlobalVariables.Instance.TextureBrightness = loadedVariables?.TextureBrightness ?? 100f;
-                    GlobalVariables.Instance.TextureOpacity = loadedVariables?.TextureOpacity ?? 100f;
+                    GlobalVariables.Instance.RoadTextureSmoothness = loadedVariables?.RoadTextureSmoothness ?? -0.09171251f;
+                    GlobalVariables.Instance.TextureBrightness = loadedVariables?.TextureBrightness ?? 0.6878377f;
+                    GlobalVariables.Instance.TextureOpacity = loadedVariables?.TextureOpacity ?? 1.22928f;
 
 
                     Mod.Log.Info("Settings loaded successfully.");

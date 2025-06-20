@@ -189,6 +189,13 @@
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetBrightness", SetBrightness));
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetSmoothness", SetSmoothness));
 
+            AddBinding(new TriggerBinding(Mod.MODUI, "OpenTexturesFolder", OpenTexturesFolder));
+        }
+
+        private void OpenTexturesFolder()
+        {
+            string luminaLUTSDirectory = GlobalPaths.TexturesPDXDirectory;
+            Process.Start(luminaLUTSDirectory);
         }
 
         private void SetOpacity(float value)

@@ -41,7 +41,7 @@ export const RoadPanelBase: React.FC<RoadPanelBaseProps> = ({
     const { translate } = useLocalization();
 
  const OpenLUTFolder= () => {
-      trigger(mod.id, 'OpenLUTFolder'); 
+      trigger(mod.id, 'OpenTexturesFolder'); 
     }
 
   return (
