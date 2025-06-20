@@ -28,8 +28,7 @@ namespace RoadWearAdjuster.Systems
         {
             base.OnCreate();
 
-
-            LogAllLaneMaterialFloats();
+            LogAllLaneMaterialsProperties();
 
             if (!Directory.Exists(GlobalPaths.TexturesPDXDirectory))
             {
@@ -153,6 +152,60 @@ namespace RoadWearAdjuster.Systems
 
             if (gravelLaneMaterial != null)
                 gravelLaneMaterial.SetFloat("_Smoothness", smoothness);
+        }
+
+        public void LogAllMaterialProperties(Material material, string materialName)
+        {
+            if (material == null)
+            {
+                Mod.Log.Info($"{materialName} is null.");
+                return;
+            }
+
+            Shader shader = material.shader;
+            int propertyCount = shader.GetPropertyCount();
+
+            Mod.Log.Info($"Logging all properties for {materialName} (Shader: {shader.name}):");
+
+            for (int i = 0; i < propertyCount; i++)
+            {
+                string propName = shader.GetPropertyName(i);
+                var propType = shader.GetPropertyType(i);
+
+                switch (propType)
+                {
+                    case UnityEngine.Rendering.ShaderPropertyType.Color:
+                        Color colVal = material.GetColor(propName);
+                        Mod.Log.Info($"  Color: {propName} = {colVal}");
+                        break;
+
+                    case UnityEngine.Rendering.ShaderPropertyType.Vector:
+                        Vector4 vecVal = material.GetVector(propName);
+                        Mod.Log.Info($"  Vector: {propName} = {vecVal}");
+                        break;
+
+                    case UnityEngine.Rendering.ShaderPropertyType.Float:
+                    case UnityEngine.Rendering.ShaderPropertyType.Range:
+                        float floatVal = material.GetFloat(propName);
+                        Mod.Log.Info($"  Float: {propName} = {floatVal}");
+                        break;
+
+                    case UnityEngine.Rendering.ShaderPropertyType.Texture:
+                        Texture texVal = material.GetTexture(propName);
+                        Mod.Log.Info($"  Texture: {propName} = {(texVal != null ? texVal.name : "null")}");
+                        break;
+
+                    default:
+                        Mod.Log.Info($"  Unknown type: {propName}");
+                        break;
+                }
+            }
+        }
+
+        public void LogAllLaneMaterialsProperties()
+        {
+            LogAllMaterialProperties(carLaneMaterial, "CarLaneMaterial");
+            LogAllMaterialProperties(gravelLaneMaterial, "GravelLaneMaterial");
         }
 
         public void LogAllLaneMaterialFloats()

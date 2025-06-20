@@ -228,10 +228,25 @@
 	<Target Name="RemoveUnwantedPackageDlls" AfterTargets="ResolveAssemblyReferences">
 	</Target>
 
+	<Target Name="CopyTexturesToGameModsFolder" AfterTargets="Build">
+		<PropertyGroup>
+			<LuminaModDataPath>$(UserProfile)\AppData\LocalLow\Colossal Order\Cities Skylines II\ModsData\Lumina</LuminaModDataPath>
+		</PropertyGroup>
+
+		<ItemGroup>
+			<TexturesToCopy Include="Textures\**\*.*" />
+		</ItemGroup>
+
+		<Copy
+		  SourceFiles="@(TexturesToCopy)"
+		  DestinationFiles="@(TexturesToCopy->'$(LuminaModDataPath)\Textures\%(RecursiveDir)%(Filename)%(Extension)')"
+		  SkipUnchangedFiles="true" />
+	</Target>
 
 	<ItemGroup>
 		<Folder Include="Lumina\src\classes\" />
 		<Folder Include="HTTP\" />
+		<Folder Include="Textures\" />
 		<Folder Include="XML\Images\" />
 	</ItemGroup>
 
