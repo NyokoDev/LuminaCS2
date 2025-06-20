@@ -55,6 +55,11 @@ namespace Lumina.XML
         private static string assemblyPDXDirectory = Path.Combine(LocalLowDirectory, "Colossal Order", "Cities Skylines II", "ModsData", "Lumina");
 
         /// <summary>
+        /// Returns the textures directory for Paradox mods.
+        /// </summary>
+        public static string TexturesPDXDirectory = Path.Combine(LocalLowDirectory, "Colossal Order", "Cities Skylines II", "ModsData", "Lumina", "Textures");
+
+        /// <summary>
         /// Returns the logs assembly directory.
         /// </summary>
         public static string logsassemblyPDXDirectory = Path.Combine(LocalLowDirectory, "Colossal Order", "Cities Skylines II", "Logs");
