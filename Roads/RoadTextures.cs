@@ -1,4 +1,8 @@
-﻿using Game;
+﻿/// <summary>
+/// Several parts of this code are thanks to the RoadWearAdjuster project. https://github.com/HX2003/RoadWearAdjuster
+/// <summary>
+
+using Game;
 using Game.Objects;
 using Lumina;
 using Lumina.XML;
