@@ -63,6 +63,9 @@ public class LocaleFI : IDictionarySource
 { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "Vaaditaan Lumina-toimintojen oikeaan toimintaan. Aktivoi Unity HDRP -volyymin, joka käyttää mukautettuja valaistus- ja jälkikäsittelyasetuksia. Tämä mahdollistaa Lumina:n edistyneet visuaaliset efektit, kuten värikorjauksen ja sävyjen kartoituksen, toimimaan oikein pelissä." },
 
+        {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "Käytä tiepintoja" },
+        {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "Mahdollistaa mukautettujen tiepintojen käytön ja kirkkauden, läpinäkyvyyden sekä sileysasteen säätämisen." }
+
 
     };
 

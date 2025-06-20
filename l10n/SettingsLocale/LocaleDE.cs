@@ -63,6 +63,10 @@ public class LocaleDE : IDictionarySource
 { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "Erforderlich, damit Lumina korrekt funktioniert. Aktiviert ein Unity HDRP-Volume, das benutzerdefinierte Beleuchtungs- und Post-Processing-Überschreibungen anwendet. Dadurch können Luminas erweiterte visuelle Effekte wie Farbkorrektur und Tonemapping im Spiel korrekt dargestellt werden." },
 
+
+        {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "Straßen Texturen verwenden" },
+        {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "Ermöglicht die Verwendung von benutzerdefinierten Straßentexturen und die Anpassung von Helligkeit, Transparenz und Glätte."   }
+
     };
 
     public void Unload()

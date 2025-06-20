@@ -63,6 +63,12 @@ public class LocaleZH : IDictionarySource
 { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "Lumina 正常运行所必需。启用 Unity HDRP 体积效果，应用自定义的光照和后期处理设置。这样可以使 Lumina 的高级视觉效果（如色彩校正和色调映射）在游戏中正确发挥作用。" },
 
+
+
+
+        {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "使用道路纹理" },
+        {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "启用自定义道路纹理，并可调整亮度、不透明度和平滑度。" }
+
     };
 
     public void Unload()

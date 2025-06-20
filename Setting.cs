@@ -201,6 +201,19 @@ namespace Lumina
             }
         }
 
+
+        [SettingsUISection(KSection, KSliderGroup)]
+        public bool UseRoadTextures
+        {
+            get => GlobalVariables.Instance.UseRoadTextures;
+            set
+            {
+                GlobalVariables.Instance.UseRoadTextures = value;
+            }
+        }
+
+
+
         [SettingsUISection(KSection, KSliderGroup)]
         public bool UseTimeOfDaySlider
         {

@@ -64,6 +64,10 @@ public class LocaleRU : IDictionarySource
   "Требуется для корректной работы Lumina. Включает Unity HDRP volume с пользовательскими настройками освещения и постобработки. Это позволяет продвинутым визуальным эффектам Lumina, таким как цветокоррекция и тональный маппинг, работать правильно в игре." },
 
 
+        {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "Использовать текстуры дорог" },
+        {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "Включает использование пользовательских текстур дорог и изменение яркости, непрозрачности и гладкости." }  
+
+
     };
 
     public void Unload()

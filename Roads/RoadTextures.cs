@@ -1,5 +1,6 @@
 ﻿using Game;
 using Game.Objects;
+using Game.UI.InGame;
 using Lumina;
 using Lumina.XML;
 using LuminaMod.XML;
@@ -212,6 +213,8 @@ namespace RoadWearAdjuster.Systems
         {
             if (GlobalVariables.Instance.UseRoadTextures)
             {
+                this.Enabled = true;
+
                 FindLaneMaterialsOnce();
 
                 if (!hasGeneratedTextures)
@@ -219,8 +222,11 @@ namespace RoadWearAdjuster.Systems
                     RefreshRoadWearTextures();
                 }
             }
+            else
+            {
+                this.Enabled = false;
+            }
         }
-
 
 
         private void ApplySmoothnessToMaterials(float smoothness)
