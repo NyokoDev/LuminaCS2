@@ -28,6 +28,7 @@ namespace RoadWearAdjuster.Systems
         {
             base.OnCreate();
 
+
             LogAllLaneMaterialsProperties();
 
             if (!Directory.Exists(GlobalPaths.TexturesPDXDirectory))
@@ -36,8 +37,50 @@ namespace RoadWearAdjuster.Systems
                 Mod.Log.Info("Created Textures directory at: " + GlobalPaths.TexturesPDXDirectory);
             }
 
+            InitiallyCopyVanillaTextures();
+
             roadWearColourTexture = new Texture2D(1024, 1024, TextureFormat.RGBA32, true, true);
             roadWearNormalTexture = new Texture2D(1024, 1024, TextureFormat.ARGB32, true, true);
+        }
+
+        private void InitiallyCopyVanillaTextures()
+        {
+            string targetDir = GlobalPaths.TexturesPDXDirectory;
+
+            if (!Directory.Exists(targetDir))
+            {
+                Directory.CreateDirectory(targetDir);
+                Mod.Log.Info("Created Textures directory at: " + targetDir);
+            }
+
+            var assembly = typeof(ReplaceRoadWearSystem).Assembly;
+            var resourceNames = assembly.GetManifestResourceNames();
+
+            foreach (var resourceName in resourceNames)
+            {
+                // Only handle resources inside the Textures folder
+                if (!resourceName.StartsWith("Lumina.Textures.")) continue;
+
+                string fileName = resourceName.Substring("Lumina.Textures.".Length);
+                string targetPath = Path.Combine(targetDir, fileName);
+
+                if (File.Exists(targetPath))
+                {
+                    Mod.Log.Info($"Texture already exists, skipping: {fileName}");
+                    continue;
+                }
+
+                using Stream? stream = assembly.GetManifestResourceStream(resourceName);
+                if (stream == null)
+                {
+                    Mod.Log.Info($"Failed to get stream for resource: {resourceName}");
+                    continue;
+                }
+
+                using FileStream fs = new FileStream(targetPath, FileMode.Create, FileAccess.Write);
+                stream.CopyTo(fs);
+                Mod.Log.Info($"Extracted: {fileName} → {targetPath}");
+            }
         }
 
         private void FindLaneMaterialsOnce()

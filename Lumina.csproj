@@ -61,6 +61,8 @@
 		<None Remove="LUTS\Reds.cube" />
 		<None Remove="LUTS\Reds_Oranges_Yellows.cube" />
 		<None Remove="stylecop.json" />
+		<None Remove="Textures\RoadWearTexture_colour.png" />
+		<None Remove="Textures\RoadWearTexture_normal.png" />
 	</ItemGroup>
 	<ItemGroup>
 		<AdditionalFiles Include="stylecop.json" />
@@ -97,6 +99,8 @@
 		<EmbeddedResource Include="LUTS\Purple.cube" />
 		<EmbeddedResource Include="LUTS\Reds.cube" />
 		<EmbeddedResource Include="LUTS\Reds_Oranges_Yellows.cube" />
+		<EmbeddedResource Include="Textures\RoadWearTexture_colour.png" />
+		<EmbeddedResource Include="Textures\RoadWearTexture_normal.png" />
 	</ItemGroup>
 	<Target Name="GetCustomAssetsFiles" AfterTargets="DeployWIP">
 		<ItemGroup>
@@ -228,25 +232,9 @@
 	<Target Name="RemoveUnwantedPackageDlls" AfterTargets="ResolveAssemblyReferences">
 	</Target>
 
-	<Target Name="CopyTexturesToGameModsFolder" AfterTargets="Build">
-		<PropertyGroup>
-			<LuminaModDataPath>$(UserProfile)\AppData\LocalLow\Colossal Order\Cities Skylines II\ModsData\Lumina</LuminaModDataPath>
-		</PropertyGroup>
-
-		<ItemGroup>
-			<TexturesToCopy Include="Textures\**\*.*" />
-		</ItemGroup>
-
-		<Copy
-		  SourceFiles="@(TexturesToCopy)"
-		  DestinationFiles="@(TexturesToCopy->'$(LuminaModDataPath)\Textures\%(RecursiveDir)%(Filename)%(Extension)')"
-		  SkipUnchangedFiles="true" />
-	</Target>
-
 	<ItemGroup>
 		<Folder Include="Lumina\src\classes\" />
 		<Folder Include="HTTP\" />
-		<Folder Include="Textures\" />
 		<Folder Include="XML\Images\" />
 	</ItemGroup>
 
