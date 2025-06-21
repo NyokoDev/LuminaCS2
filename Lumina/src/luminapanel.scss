@@ -313,7 +313,14 @@ html, body {
     position: absolute;
     right: 200rem;
     width: 800rem;
+     color: white !important; 
+ 
 }
+
+.ColorAdjustments label{
+       color: white !important; 
+}
+
 
 .FirstTabLabel
 {
@@ -349,6 +356,7 @@ $distance: 30rem;
     left: 480rem;
     top: $global-height + $distance + 20rem;
     width: 500rem;
+        color: white;
 }
 
 .PostExposureLabel
@@ -360,6 +368,7 @@ $distance: 30rem;
     width: 150rem;
     top: $global-height + $distance + 20rem;
     white-space: nowrap;
+        color: white;
 }
 
 .PostExposureValue
@@ -420,7 +429,7 @@ $contrast-top: 50rem;
 .ContrastLabel
 {
     position: absolute;
-    color: rgb(118, 118, 118);
+     color: white;
     font-size: 20rem;
     left: 200rem;
     width: 150rem;

@@ -226,6 +226,7 @@ namespace RoadWearAdjuster.Systems
             }
             else
             {
+                hasGeneratedTextures = false;
                 this.Enabled = false;
             }
         }

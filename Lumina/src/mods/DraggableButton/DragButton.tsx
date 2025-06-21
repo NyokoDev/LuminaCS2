@@ -67,15 +67,13 @@ const DragButton: React.FC = () => {
       onMouseDown={handleMouseDown}
       style={{
         position: 'absolute',
-        top: '-400rem', // original rem position
-        left: '60rem', // original rem position
-        transform: 'translateX(-50%)',
+        top: '-650rem', // original rem position
+        left: '200rem', // original rem position
         width: '56rem',
         height: '56rem',
         borderRadius: '14px',
         backgroundColor: 'rgba(255, 255, 255, 0.15)', // transparent white almost gray
         backdropFilter: 'blur(10px)',
-        border: '1px solid rgba(255, 255, 255, 0.3)',
         boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.1)',
         display: 'flex',
         alignItems: 'center',
@@ -90,17 +88,20 @@ const DragButton: React.FC = () => {
     >
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  height="24"
-  width="40"  // wider to fill more horizontal space
   viewBox="0 0 40 24"
   fill="rgba(255,255,255,0.8)"
-  style={{ filter: 'drop-shadow(0 0 1px rgba(0,0,0,0.1))' }}
+  style={{
+    width: '100%',
+    height: '100%',
+    filter: 'drop-shadow(0 0 1px rgba(0,0,0,0.1))',
+  }}
+  preserveAspectRatio="xMidYMid meet"
 >
-  {/* 3 horizontal bars */}
   <rect x="0" y="4" width="40" height="3" rx="1.5" />
   <rect x="0" y="10.5" width="40" height="3" rx="1.5" />
   <rect x="0" y="17" width="40" height="3" rx="1.5" />
 </svg>
+
     </div>
   );
 };
