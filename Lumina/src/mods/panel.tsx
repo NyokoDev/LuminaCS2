@@ -14,10 +14,6 @@ import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import React, { Fragment } from 'react';
 import {SketchPicker} from 'react-color';
-import Box from "@mui/material/Box";
-import { Checkbox, Slider as Slider2, TextField, createTheme } from '@mui/material';
-import { ThemeProvider } from '@mui/material/styles';
-import red from "@mui/material/colors/red";
 import FilePicker from "./FilePicker";
 import { TonemappingDropdown } from "./TonemappingDropdown";
 import { LUTSDropdown } from "./LUTSDropdown";
@@ -93,14 +89,6 @@ export const SunIntensity$ = bindValue<number>(mod.id, "SunIntensity");
 export const SunFlareSize$ = bindValue<number>(mod.id, "SunFlareSize");
 
 
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: red[500],
-    },
-  },
-});
 
 
 // const SliderTheme: Theme | any = getModule(

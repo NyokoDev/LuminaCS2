@@ -1,6 +1,6 @@
 /* NVIDIA-style container for time of day */
 .time-of-day-wrapper {
-  pointer-events: all;
+  pointer-events: auto;
   position: absolute;
   height: 50rem;
   top: -50rem;
@@ -13,7 +13,6 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
   border: 1px solid #444;
   transition: box-shadow 0.2s ease-in-out;
 }
@@ -21,7 +20,7 @@
 // Troubleshoot time of day slider in 4K resolutions
 @media (min-width: 3840px) {
   .time-of-day-wrapper {
-    pointer-events: all;
+    pointer-events: auto;
     position: absolute;
     height: 50rem;
     top: -50rem;
@@ -34,7 +33,6 @@
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
     border: 1px solid #444;
     transition: box-shadow 0.2s ease-in-out;
   }
@@ -42,13 +40,13 @@
 
 
 .time-of-day-wrapper:hover {
-    pointer-events: all;
+    pointer-events: auto;
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
 }
 
 /* NVIDIA-style label */
 .time-of-day-label {
-    pointer-events: all;
+    pointer-events: auto;
   position: absolute;
   height: 40rem;
   font-weight: 700;
@@ -62,7 +60,7 @@
 
 /* Make the slider larger and bold-looking */
 .time-of-day-slider {
-    pointer-events: all;
+    pointer-events: auto;
   position: absolute;
   width: 100%;
   top:28rem;
@@ -77,14 +75,14 @@
 
 /* Slider hover effect */
 .time-of-day-slider:hover {
-    pointer-events: all;
+    pointer-events: auto;
   background-color: #424645;
   opacity: 0.9;
   box-shadow: 0 0 6px rgba(117, 117, 117, 0.5);
 }
 
 #lumina-time-of-day-image{
-    pointer-events: all;
+    pointer-events: auto;
     position: absolute;
     top:-9rem;
     left:6rem;
