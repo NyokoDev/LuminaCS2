@@ -211,6 +211,12 @@ namespace Lumina
             set
             {
                 GlobalVariables.Instance.UseRoadTextures = value;
+                var world = World.DefaultGameObjectInjectionWorld;         // or whichever is correct for you
+                if (world == null) return;                                 // safety
+
+                m_ReplaceRoadWearSystem ??=
+                    world.GetExistingSystemManaged<ReplaceRoadWearSystem>();  // 🚫 not GetOrCreate
+                m_ReplaceRoadWearSystem.RevertTextures(); // revert textures if they were already applied
             }
         }
 
@@ -240,6 +246,8 @@ namespace Lumina
                 Eureka();
             }
         }
+
+        public ReplaceRoadWearSystem m_ReplaceRoadWearSystem { get; private set; }
 
         public static bool AlwaysDisableMetro()
         {

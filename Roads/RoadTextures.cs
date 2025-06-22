@@ -44,7 +44,12 @@ namespace RoadWearAdjuster.Systems
             roadWearNormalTexture = new Texture2D(1024, 1024, TextureFormat.ARGB32, true, true);
 
             InitiallyCopyVanillaTextures();
+
+            // Always do one scan to save vanilla textures even if we're not going to apply them yet
+            ReloadTexturesCompletely();
+            ReplaceTextures();
         }
+
 
         private void InitiallyCopyVanillaTextures()
         {
@@ -144,15 +149,6 @@ namespace RoadWearAdjuster.Systems
         {
             Mod.Log.Info("Reloading all road wear textures");
 
-            if (roadWearColourTexture != null)
-                Object.Destroy(roadWearColourTexture);
-
-            if (roadWearNormalTexture != null)
-                Object.Destroy(roadWearNormalTexture);
-
-            roadWearColourTexture = new Texture2D(1024, 1024);
-            roadWearNormalTexture = new Texture2D(1024, 1024, TextureFormat.ARGB32, true, true);
-
             // ✅ Reset everything
             originalColourPixels = null;
             hasLoadedOriginalData = false;
@@ -166,24 +162,106 @@ namespace RoadWearAdjuster.Systems
             Mod.Log.Info("Reload complete: textures reloaded and replaced.");
         }
 
-        private void RevertTextures()
+        /// Make sure original textures & materials are captured
+        private void EnsureOriginalTexturesCached()
         {
-            if (hasReplacedCarLaneRoadWearTexture && carLaneMaterial != null)
-            {
-                carLaneMaterial.SetTexture("_BaseColorMap", originalCarLaneBaseTexture);
-                carLaneMaterial.SetTexture("_NormalMap", originalCarLaneNormalTexture);
-                hasReplacedCarLaneRoadWearTexture = false;
-            }
+            if (originalCarLaneBaseTexture != null &&
+                originalGravelLaneBaseTexture != null)
+                return; // already cached
 
-            if (hasReplacedGravelLaneRoadWearTexture && gravelLaneMaterial != null)
-            {
-                gravelLaneMaterial.SetTexture("_BaseColorMap", originalGravelLaneBaseTexture);
-                gravelLaneMaterial.SetTexture("_NormalMap", originalGravelLaneNormalTexture);
-                hasReplacedGravelLaneRoadWearTexture = false;
-            }
+            var materials = Resources.FindObjectsOfTypeAll<Material>();
 
-            hasGeneratedTextures = false;
+            foreach (var m in materials)
+            {
+                if (!m.HasTexture("_BaseColorMap")) continue;
+
+                Texture baseTex = m.GetTexture("_BaseColorMap");
+                if (baseTex == null) continue;
+
+                if (baseTex.name.StartsWith("CarLane_BaseColor") &&
+                    originalCarLaneBaseTexture == null)
+                {
+                    originalCarLaneBaseTexture = baseTex;
+                    originalCarLaneNormalTexture = m.GetTexture("_NormalMap");
+                    carLaneMaterial = m;  // remember it for later
+                }
+                else if (baseTex.name.StartsWith("GravelLane_BaseColor") &&
+                         originalGravelLaneBaseTexture == null)
+                {
+                    originalGravelLaneBaseTexture = baseTex;
+                    originalGravelLaneNormalTexture = m.GetTexture("_NormalMap");
+                    gravelLaneMaterial = m;
+                }
+
+                // Early-out once both are cached
+                if (originalCarLaneBaseTexture != null &&
+                    originalGravelLaneBaseTexture != null)
+                    break;
+            }
         }
+
+        /// ***FORCEFUL*** revert — no flag checks, no early returns
+        public void RevertTextures()
+        {
+            Mod.Log.Info("Forceful road-wear revert: scanning all materials…");
+
+            // 1️⃣ Make sure originals exist
+            EnsureOriginalTexturesCached();
+
+            // 2️⃣ Swap back on every material that still uses the injected texture
+            var materials = Resources.FindObjectsOfTypeAll<Material>();
+
+            foreach (var m in materials)
+            {
+                if (!m.HasTexture("_BaseColorMap")) continue;
+
+                Texture currentBase = m.GetTexture("_BaseColorMap");
+                if (currentBase == null) continue;
+
+                // Is this one of OUR injected textures?
+                bool isInjected =
+                    ReferenceEquals(currentBase, roadWearColourTexture) ||
+                    currentBase.name == roadWearColourTexture.name;
+
+                if (!isInjected) continue;
+
+                if (m.name.Contains("CarLane"))
+                {
+                    if (originalCarLaneBaseTexture != null &&
+                        originalCarLaneNormalTexture != null)
+                    {
+                        m.SetTexture("_BaseColorMap", originalCarLaneBaseTexture);
+                        m.SetTexture("_NormalMap", originalCarLaneNormalTexture);
+                        Mod.Log.Info($"Reverted CarLane material: {m.name}");
+                    }
+                    else Mod.Log.Warn($"Missing originals for {m.name}");
+                }
+                else if (m.name.Contains("GravelLane"))
+                {
+                    if (originalGravelLaneBaseTexture != null &&
+                        originalGravelLaneNormalTexture != null)
+                    {
+                        m.SetTexture("_BaseColorMap", originalGravelLaneBaseTexture);
+                        m.SetTexture("_NormalMap", originalGravelLaneNormalTexture);
+                        Mod.Log.Info($"Reverted GravelLane material: {m.name}");
+                    }
+                    else Mod.Log.Warn($"Missing originals for {m.name}");
+                }
+                else
+                {
+                    // If needed, handle other road types here
+                    Mod.Log.Info($"Skipped non-lane material still using injected texture: {m.name}");
+                }
+            }
+
+            // 3️⃣ Reset internal state unconditionally
+            hasReplacedCarLaneRoadWearTexture = false;
+            hasReplacedGravelLaneRoadWearTexture = false;
+            hasGeneratedTextures = false;
+
+            Mod.Log.Info("Forceful revert complete.");
+        }
+
 
 
         public void ReplaceTextures()
@@ -235,9 +313,6 @@ namespace RoadWearAdjuster.Systems
                 RevertTextures();
                 return;
             }
-
-            // Always update and apply brightness/opacity directly to texture pixels
-            UpdateStoredTextures(); // this handles pixel modification
 
             // Only replace materials once (avoids redundant work)
             ReplaceTextures();
