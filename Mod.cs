@@ -7,6 +7,7 @@ namespace Lumina
     using Colossal.Logging;
     using Game;
     using Game.Modding;
+    using Game.Prefabs;
     using Game.PSI;
     using Game.Rendering;
     using Game.SceneFlow;
@@ -29,6 +30,7 @@ namespace Lumina
     using System.Windows.Forms;
     using Unity.Entities;
     using UnityEngine;
+    using Localization = Locale.Localization;
     using Version = Game.Version;
 
     /// <summary>
@@ -113,7 +115,7 @@ namespace Lumina
 
             updateSystem.UpdateAfter<CubemapUpdateSystem>(SystemUpdatePhase.GameSimulation);
 
-            updateSystem.UpdateAfter<ReplaceRoadWearSystem>(SystemUpdatePhase.GameSimulation);
+            updateSystem.UpdateAfter<ReplaceRoadWearSystem, PrefabInitializeSystem>(SystemUpdatePhase.PrefabUpdate);
 
             updateSystem.UpdateAfter<CustomSunManager>(SystemUpdatePhase.GameSimulation);
 

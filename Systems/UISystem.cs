@@ -34,10 +34,11 @@
     {
 
         public PlanetarySystem m_PlanetarySystem;
+
         public ReplaceRoadWearSystem m_ReplaceRoadWearSystem;
 
         public bool Visible { get; set; }
-        public string CubemapName { get; set;}
+        public string CubemapName { get; set; }
         public bool UsingHDRSky = GlobalVariables.Instance.HDRISkyEnabled;
 
         private ValueBindingHelper<string[]> LutArrayExtended;
@@ -55,6 +56,7 @@
             InitializeLutName();
             CreateBindings();
             m_PlanetarySystem = World.GetExistingSystemManaged<PlanetarySystem>();
+            m_ReplaceRoadWearSystem = World.GetExistingSystemManaged<ReplaceRoadWearSystem>();
 
         }
 
@@ -119,8 +121,8 @@
             AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "CubemapName", ReturnCubemapName));
 
             // Time Lock Status
-           
-             AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "TimeLockStatus", () => TimeLockStatus()));
+
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "TimeLockStatus", () => TimeLockStatus()));
 
             //TonemappingExternalMode
             AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsExternal", () => IsExternalMode()));
@@ -211,51 +213,35 @@
         private void SetOpacity(float value)
         {
             GlobalVariables.Instance.TextureOpacity = value;
-            if (GlobalVariables.Instance.UseRoadTextures)
-            {
-                ApplyImmediately();
-            }
 
 
 
-            }
+        }
 
         private void ApplyImmediately()
         {
-            var system = World.DefaultGameObjectInjectionWorld?.GetExistingSystemManaged<ReplaceRoadWearSystem>();
-            if (system != null)
-            {
-                system.SetAndApplyGlobalRoadValues(GlobalVariables.Instance.TextureBrightness, GlobalVariables.Instance.TextureOpacity, GlobalVariables.Instance.RoadTextureSmoothness);
-            }
+            ApplyRoadVisuals();
         }
+    
+
 
         private void SetBrightness(float value)
         {
             GlobalVariables.Instance.TextureBrightness = value;
-            if (GlobalVariables.Instance.UseRoadTextures)
-            {
-                ApplyImmediately();
-            }
         }
 
         private void SetSmoothness(float value)
         {
             GlobalVariables.Instance.RoadTextureSmoothness = value;
-            if (GlobalVariables.Instance.UseRoadTextures)
-            {
-                ApplyImmediately();
-            }
+
         }
 
         private void ApplyRoadVisuals()
         {
             if (GlobalVariables.Instance.UseRoadTextures)
             {
-                var system = World.DefaultGameObjectInjectionWorld?.GetExistingSystemManaged<ReplaceRoadWearSystem>();
-                if (system != null)
-                {
-                    system.ReloadRoadWearTexturesFromDisk();
-                }
+                m_ReplaceRoadWearSystem.RequestReload();
+                
             }
 
         }
