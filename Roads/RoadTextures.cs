@@ -85,6 +85,10 @@ namespace RoadWearAdjuster.Systems
             }
         }
 
+        private Color[] originalColourPixels;
+        private bool hasLoadedOriginalData = false;
+
+
         public void UpdateStoredTextures()
         {
             string colourPath = Path.Combine(GlobalPaths.TexturesPDXDirectory, fileName + "_colour.png");
@@ -96,32 +100,41 @@ namespace RoadWearAdjuster.Systems
                 return;
             }
 
-            byte[] colourData = File.ReadAllBytes(colourPath);
-            roadWearColourTexture.LoadImage(colourData);
+            if (!hasLoadedOriginalData)
+            {
+                // Load and cache the original color texture
+                byte[] colourData = File.ReadAllBytes(colourPath);
+                roadWearColourTexture.LoadImage(colourData);
+                originalColourPixels = roadWearColourTexture.GetPixels(0); // cache raw pixels
+                hasLoadedOriginalData = true;
 
+                // Load normal texture only once
+                byte[] normalData = File.ReadAllBytes(normalPath);
+                roadWearNormalTexture.LoadImage(normalData);
+                roadWearNormalTexture.Apply();
+            }
+
+            // Modify cached pixels per-frame
             float brightness = GlobalVariables.Instance.TextureBrightness;
             float opacity = GlobalVariables.Instance.TextureOpacity;
 
-            Color[] pixels = roadWearColourTexture.GetPixels(0);
-            for (int i = 0; i < pixels.Length; i++)
+            Color[] modifiablePixels = new Color[originalColourPixels.Length];
+            for (int i = 0; i < originalColourPixels.Length; i++)
             {
-                pixels[i].r *= brightness;
-                pixels[i].g *= brightness;
-                pixels[i].b *= brightness;
-                pixels[i].a *= opacity;
+                Color px = originalColourPixels[i];
+                px.r *= brightness;
+                px.g *= brightness;
+                px.b *= brightness;
+                px.a *= opacity;
+                modifiablePixels[i] = px;
             }
-            roadWearColourTexture.SetPixels(pixels);
-            roadWearColourTexture.Apply(true);
 
-            byte[] normalData = File.ReadAllBytes(normalPath);
-            Texture2D tempNormal = new Texture2D(2, 2);
-            tempNormal.LoadImage(normalData);
-            Graphics.CopyTexture(tempNormal, roadWearNormalTexture);
-            roadWearNormalTexture.Apply();
-            Object.Destroy(tempNormal);
+            roadWearColourTexture.SetPixels(modifiablePixels);
+            roadWearColourTexture.Apply(true);
 
             hasGeneratedTextures = true;
         }
+
 
         /// <summary>
         /// Completely reloads the textures and reapplies them to materials.
@@ -129,18 +142,26 @@ namespace RoadWearAdjuster.Systems
         /// </summary>
         public void ReloadTexturesCompletely()
         {
-            Object.Destroy(roadWearColourTexture);
-            Object.Destroy(roadWearNormalTexture);
+            Mod.Log.Info("Reloading all road wear textures");
+
+            if (roadWearColourTexture != null)
+                Object.Destroy(roadWearColourTexture);
+
+            if (roadWearNormalTexture != null)
+                Object.Destroy(roadWearNormalTexture);
 
             roadWearColourTexture = new Texture2D(1024, 1024);
             roadWearNormalTexture = new Texture2D(1024, 1024, TextureFormat.ARGB32, true, true);
 
             hasGeneratedTextures = false;
+            hasLoadedOriginalData = false;
             hasReplacedCarLaneRoadWearTexture = false;
             hasReplacedGravelLaneRoadWearTexture = false;
 
-            UpdateStoredTextures();
-            ReplaceTextures();
+            UpdateStoredTextures(); // re-load image and apply brightness/opacity
+            ReplaceTextures();      // rebind new textures to materials
+
+            Mod.Log.Info("Reload complete: textures reloaded and replaced.");
         }
 
         private void RevertTextures()
@@ -223,12 +244,6 @@ namespace RoadWearAdjuster.Systems
             float smoothness = GlobalVariables.Instance.RoadTextureSmoothness;
             carLaneMaterial?.SetFloat("_Smoothness", smoothness);
             gravelLaneMaterial?.SetFloat("_Smoothness", smoothness);
-
-            if (reloadRequested)
-            {
-                ReloadTexturesCompletely();
-                reloadRequested = false;
-            }
 
         }
 

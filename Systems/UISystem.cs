@@ -241,6 +241,7 @@
             if (GlobalVariables.Instance.UseRoadTextures)
             {
                 m_ReplaceRoadWearSystem.RequestReload();
+                m_ReplaceRoadWearSystem.ReloadTexturesCompletely();
                 
             }
 
