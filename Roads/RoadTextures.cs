@@ -100,19 +100,19 @@ namespace RoadWearAdjuster.Systems
                 return;
             }
 
-            if (!hasLoadedOriginalData)
+            if (!hasLoadedOriginalData || originalColourPixels == null || originalColourPixels.Length == 0)
             {
-                // Load and cache the original color texture
+                Mod.Log.Info("Reloading texture from disk into memory...");
                 byte[] colourData = File.ReadAllBytes(colourPath);
                 roadWearColourTexture.LoadImage(colourData);
-                originalColourPixels = roadWearColourTexture.GetPixels(0); // cache raw pixels
+                originalColourPixels = roadWearColourTexture.GetPixels(0);
                 hasLoadedOriginalData = true;
 
-                // Load normal texture only once
                 byte[] normalData = File.ReadAllBytes(normalPath);
                 roadWearNormalTexture.LoadImage(normalData);
                 roadWearNormalTexture.Apply();
             }
+
 
             // Modify cached pixels per-frame
             float brightness = GlobalVariables.Instance.TextureBrightness;
@@ -153,13 +153,15 @@ namespace RoadWearAdjuster.Systems
             roadWearColourTexture = new Texture2D(1024, 1024);
             roadWearNormalTexture = new Texture2D(1024, 1024, TextureFormat.ARGB32, true, true);
 
-            hasGeneratedTextures = false;
+            // ✅ Reset everything
+            originalColourPixels = null;
             hasLoadedOriginalData = false;
+            hasGeneratedTextures = false;
             hasReplacedCarLaneRoadWearTexture = false;
             hasReplacedGravelLaneRoadWearTexture = false;
 
-            UpdateStoredTextures(); // re-load image and apply brightness/opacity
-            ReplaceTextures();      // rebind new textures to materials
+            UpdateStoredTextures(); // re-load image and cache pixels
+            ReplaceTextures();      // rebind textures to materials
 
             Mod.Log.Info("Reload complete: textures reloaded and replaced.");
         }

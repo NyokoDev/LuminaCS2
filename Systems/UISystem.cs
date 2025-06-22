@@ -192,16 +192,7 @@
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetSmoothness", SetSmoothness));
 
             AddBinding(new TriggerBinding(Mod.MODUI, "OpenTexturesFolder", OpenTexturesFolder));
-            AddBinding(new TriggerBinding(Mod.MODUI, "ApplyRoadTextures", ApplyRoadTextures));
-        }
-
-        private void ApplyRoadTextures()
-        {
-            if (GlobalVariables.Instance.UseRoadTextures)
-            {
-                ApplyRoadVisuals();
-            }
-
+            AddBinding(new TriggerBinding(Mod.MODUI, "ApplyRoadTextures", ApplyImmediately));
         }
 
         private void OpenTexturesFolder()
@@ -220,9 +211,17 @@
 
         private void ApplyImmediately()
         {
-            ApplyRoadVisuals();
+            if (m_ReplaceRoadWearSystem != null)
+            {
+                m_ReplaceRoadWearSystem.ReloadTexturesCompletely();
+            }
+            else
+            {
+                m_ReplaceRoadWearSystem = World.GetOrCreateSystemManaged<ReplaceRoadWearSystem>();
+                m_ReplaceRoadWearSystem.ReloadTexturesCompletely();
+                Mod.Log.Info("Reloading road wear textures.");
+            }
         }
-    
 
 
         private void SetBrightness(float value)
@@ -236,16 +235,7 @@
 
         }
 
-        private void ApplyRoadVisuals()
-        {
-            if (GlobalVariables.Instance.UseRoadTextures)
-            {
-                m_ReplaceRoadWearSystem.RequestReload();
-                m_ReplaceRoadWearSystem.ReloadTexturesCompletely();
-                
-            }
 
-        }
 
         /// <summary>
         /// Returns the current time lock status.
