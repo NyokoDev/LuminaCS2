@@ -47,7 +47,6 @@ namespace RoadWearAdjuster.Systems
 
             // Always do one scan to save vanilla textures even if we're not going to apply them yet
             ReloadTexturesCompletely();
-            ReplaceTextures();
         }
 
 
@@ -310,12 +309,8 @@ namespace RoadWearAdjuster.Systems
         {
             if (!GlobalVariables.Instance.UseRoadTextures)
             {
-                RevertTextures();
                 return;
             }
-
-            // Only replace materials once (avoids redundant work)
-            ReplaceTextures();
 
             // Only Smoothness is a shader float – apply it every frame
             float smoothness = GlobalVariables.Instance.RoadTextureSmoothness;

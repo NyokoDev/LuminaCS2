@@ -13,7 +13,6 @@ Pending description...
 	<!--Thumbnail-->
 	<Thumbnail Value="Properties/Thumbnail.png" />
 	<!--Screenshot, can be set multiple times-->
-	<Screenshot Value="Properties/DeveloperLuminaScreenshot.png" />
 	<Screenshot Value="Properties/Screenshot10.png" />
 	<Screenshot Value="Properties/Screenshot4.png" />
 	<Screenshot Value="Properties/Screenshot5.png" />
@@ -24,15 +23,15 @@ Pending description...
 	<!--Tag, can be set multiple times-->
 	<Tag Value="Code Mod" />
 	<!--Link to the forum post where the mod can be discussed-->
-	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/lumina-experimental-dev-version.1787218/" />
+	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/lumina.1645623/" />
 	<!--Version of the mod-->
-	<ModVersion Value="v2.3" />
+	<ModVersion Value="v2.3R1" />
 	<!--Recommended version of the base game to use the mod-->
 	<GameVersion Value="1.*" />
 	<!--Dependency for the mod, can be set multiple times-->
 	<Dependency Id="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
-	<ChangeLog Value="Improve performance #2. Always revert textures when the toggle is clicked. " />
+	<ChangeLog Value="Improve performance #3 " />
 " />
 	<!--ChangeLog>
 	</ChangeLog-->
