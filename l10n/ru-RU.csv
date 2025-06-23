@@ -51,3 +51,7 @@
 "LUMINA.opentexturesbutton","Открыть папку текстур"
 "LUMINA.applytexturesbutton","Применить текстуры"
 "LUMINA.roadtooltip","Настройки дороги"
+"LUMINA.roadconfig","Настройка дороги"
+"LUMINA.opacity","Непрозрачность"
+"LUMINA.brightness","Яркость"
+"LUMINA.smoothness","Гладкость"

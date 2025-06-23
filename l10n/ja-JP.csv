@@ -51,4 +51,8 @@
 "LUMINA.opentexturesbutton","テクスチャフォルダを開く"
 "LUMINA.applytexturesbutton","テクスチャを適用"
 "LUMINA.roadtooltip","道路設定"
+"LUMINA.roadconfig","道路設定"
+"LUMINA.opacity","不透明度"
+"LUMINA.brightness","明るさ"
+"LUMINA.smoothness","滑らかさ"
 

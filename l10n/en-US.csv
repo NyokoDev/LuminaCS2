@@ -51,5 +51,8 @@
 "LUMINA.opentexturesbutton","Open Textures Folder"
 "LUMINA.applytexturesbutton", "Apply Textures"
 "LUMINA.roadtooltip","Road Settings"
-
+"LUMINA.roadconfig","Road Configuration"
+"LUMINA.opacity","Opacity"
+"LUMINA.brightness","Brightness"
+"LUMINA.smoothness","Smoothness"
 

@@ -51,14 +51,14 @@ export const RoadPanelBase: React.FC<RoadPanelBaseProps> = ({
   return (
     <div className={className}>
 
-<h1 className="title_SVH title_zQN roadconfiglabel"> Road Configuration</h1>
+<h1 className="title_SVH title_zQN roadconfiglabel">{translate("LUMINA.roadconfig")}</h1>
       
 <div className="road-panel-base">
 
 
 
   <div className="opacity-container">
-    <div className="slider-label-1">Opacity</div>
+    <div className="slider-label-1">{translate("LUMINA.opacity")}</div>
     <Slider
       value={GetOpacity}
       start={-1}
@@ -74,7 +74,7 @@ export const RoadPanelBase: React.FC<RoadPanelBaseProps> = ({
   </div>
 
   <div className="brightness-container">
-    <div className="slider-label-2">Brightness</div>
+    <div className="slider-label-2"> {translate("LUMINA.brightness")}</div>
     <Slider
       value={GetBrightness}
       start={-1}
@@ -90,7 +90,7 @@ export const RoadPanelBase: React.FC<RoadPanelBaseProps> = ({
   </div>
 
   <div className="smoothness-container">
-    <div className="slider-label-3">Smoothness</div>
+    <div className="slider-label-3"> {translate("LUMINA.smoothness")}</div>
     <Slider
       value={GetSmoothness}
       start={-1}
