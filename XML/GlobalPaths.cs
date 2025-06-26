@@ -91,11 +91,11 @@ namespace Lumina.XML
 
                 if (isExperimental)
                 {
-                    return $"v2.2R6-EXP-{guid}";
+                    return $"v2.2R2-EXP-{guid}";
                 }
                 else
                 {
-                    return "v2.3";
+                    return "v2.3R2";
                 }
             }
         

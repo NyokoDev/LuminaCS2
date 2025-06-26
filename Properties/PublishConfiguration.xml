@@ -25,7 +25,7 @@ Pending description...
 	<!--Link to the forum post where the mod can be discussed-->
 	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/lumina.1645623/" />
 	<!--Version of the mod-->
-	<ModVersion Value="v2.3R1" />
+	<ModVersion Value="v2.3R2" />
 	<!--Recommended version of the base game to use the mod-->
 	<GameVersion Value="1.*" />
 	<!--Dependency for the mod, can be set multiple times-->

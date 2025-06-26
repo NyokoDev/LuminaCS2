@@ -1,5 +1,6 @@
 ﻿namespace Lumina.Systems
 {
+    using Game;
     using Game.Assets;
     using Game.Prefabs;
     using Game.Rendering;
@@ -32,7 +33,7 @@
     /// <summary>
     /// Starts UNITY HDRP Volume and render effects.
     /// </summary>
-    internal partial class RenderEffectsSystem : LightingSystem
+    internal partial class RenderEffectsSystem : GameSystemBase
     {
         public static string lutFilePath = Path.Combine(GlobalPaths.LuminaLUTSDirectory, GlobalVariables.Instance.LUTName + ".cube");
         public static string[] LutFiles;
