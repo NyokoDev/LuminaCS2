@@ -112,6 +112,21 @@ using dialog = Game.UI.MessageDialog;
 
         private void CheckForMods()
         {
+            if (GlobalVariables.Instance.ViewTimeOfDaySlider &&
+                CompatibilityHelper.CheckForIncompatibleMods("TimeWeatherAnarchy"))
+            {
+                // Disable the slider if incompatible mod is active
+                GlobalVariables.Instance.ViewTimeOfDaySlider = false;
+
+                var dialog = new SimpleMessageDialog(
+                    "Incompatible mod detected: Time and Weather Anarchy.\n\n" +
+                    "This mod conflicts with Lumina's Time of Day Slider.\n" +
+                    "To prevent conflicts, the slider has been disabled.\n\n" +
+                    "Please remove Time and Weather Anarchy to use the slider again."
+                );
+                GameManager.instance.userInterface.appBindings.ShowMessageDialog(dialog, null);
+            }
+
             if (!GlobalVariables.Instance.UseRoadTextures) return;
 
             string[] incompatibleMods = { "RoadWearRemover", "RoadWearAdjuster" };
@@ -125,7 +140,7 @@ using dialog = Game.UI.MessageDialog;
                         "To ensure stability, Lumina's road texture system has been disabled.\n" +
                         $"Please remove {modName} to take full advantage of Lumina's features.";
 
-                    Mod.Log.Error(errorMessage);
+                    Mod.Log.Info(errorMessage);
                     GlobalVariables.Instance.UseRoadTextures = false;
 
                     var dialog = new SimpleMessageDialog(errorMessage);
@@ -135,7 +150,6 @@ using dialog = Game.UI.MessageDialog;
                 }
             }
         }
-
 
         private void CheckGPU()
         {
