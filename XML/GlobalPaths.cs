@@ -87,7 +87,7 @@ namespace Lumina.XML
 
             private static string GetVersion()
             {
-                bool isExperimental = false;
+                bool isExperimental = true;
 
                 if (isExperimental)
                 {

@@ -4,7 +4,9 @@
     using Game.Assets;
     using Game.Prefabs;
     using Game.Rendering;
+    using Game.SceneFlow;
     using Game.Simulation;
+    using Game.UI.Menu;
     using JetBrains.Annotations;
     using Lumina.Systems.TextureHelper;
     using Lumina.UI;
@@ -25,10 +27,12 @@
     using UnityEngine.Experimental.Rendering;
     using UnityEngine.Rendering;
     using UnityEngine.Rendering.HighDefinition;
+using dialog = Game.UI.MessageDialog;
     using static UnityEngine.Rendering.DebugUI;
     using static UnityEngine.Rendering.HighDefinition.CameraSettings;
     using static UnityEngine.Rendering.HighDefinition.VolumetricClouds;
     using static UnityEngine.Rendering.HighDefinition.WindParameter;
+    using Game.UI;
 
     /// <summary>
     /// Starts UNITY HDRP Volume and render effects.
@@ -95,7 +99,7 @@
 
 
             GlobalVariables.LoadFromFile(GlobalPaths.GlobalModSavingPath);
-
+            CheckForMods();
 
 
 
@@ -104,6 +108,32 @@
             InitializeCubemap();
             GetPrivateFieldm_PhysicallyBasedSky();
 
+        }
+
+        private void CheckForMods()
+        {
+            if (!GlobalVariables.Instance.UseRoadTextures) return;
+
+            string[] incompatibleMods = { "RoadWearRemover", "RoadWearAdjuster" };
+            foreach (var modName in incompatibleMods)
+            {
+                if (CompatibilityHelper.CheckForIncompatibleMods(modName))
+                {
+                    string errorMessage =
+                        $"Incompatible mod detected: {modName}.\n" +
+                        $"Both Lumina and {modName} modify road textures, which can cause visual glitches or conflicts.\n" +
+                        "To ensure stability, Lumina's road texture system has been disabled.\n" +
+                        $"Please remove {modName} to take full advantage of Lumina's features.";
+
+                    Mod.Log.Error(errorMessage);
+                    GlobalVariables.Instance.UseRoadTextures = false;
+
+                    var dialog = new SimpleMessageDialog(errorMessage);
+                    GameManager.instance.userInterface.appBindings.ShowMessageDialog(dialog, null);
+
+                    break;
+                }
+            }
         }
 
 
@@ -736,6 +766,7 @@
         {
             if (!m_SetupDone)
             {
+                CheckForOtherVolumes();
 
                 // Create new Global Volume GameObject
                 GameObject globalVolume = new GameObject("Lumina");
@@ -797,6 +828,85 @@
             }
         }
 
+        private void CheckForOtherVolumes()
+        {
+            try
+            {
+                var allVolumes = UnityEngine.Object.FindObjectsOfType<UnityEngine.Rendering.Volume>();
+
+                if (allVolumes == null || allVolumes.Length == 0)
+                {
+                    Mod.Log.Info("[LUMINA] No HDRP Volumes found in the scene.");
+                    return;
+                }
+
+                Mod.Log.Info($"[LUMINA] Found {allVolumes.Length} HDRP Volume(s) in the scene:");
+
+                foreach (var volume in allVolumes)
+                {
+                    string name = volume.gameObject.name;
+                    float priority = volume.priority;
+                    bool isGlobal = volume.isGlobal;
+                    int componentCount = volume.profile?.components?.Count ?? 0;
+
+                    // Print hierarchy path
+                    string path = GetHierarchyPath(volume.transform);
+                    Mod.Log.Info($"[LUMINA] Volume: '{name}', Priority: {priority}, Global: {isGlobal}, Components: {componentCount}, Path: {path}");
+                }
+
+                // Now handle duplicates
+                var grouped = allVolumes.GroupBy(v => v.gameObject.name);
+
+                foreach (var group in grouped)
+                {
+                    var list = group.ToList();
+                    if (list.Count <= 1)
+                        continue;
+
+                    var reference = list[0];
+
+                    for (int i = 1; i < list.Count; i++)
+                    {
+                        var candidate = list[i];
+
+                        if (reference == null || candidate == null)
+                            continue;
+
+                        if (reference.priority != candidate.priority || reference.isGlobal != candidate.isGlobal)
+                            continue;
+
+                        var compsA = reference.profile?.components;
+                        var compsB = candidate.profile?.components;
+
+                        if (compsA == null || compsB == null || compsA.Count != compsB.Count)
+                            continue;
+
+                        // Optional: deeper check for exact types can go here
+
+                        string dupPath = GetHierarchyPath(candidate.transform);
+                        Mod.Log.Info($"[LUMINA] Deleting duplicate volume '{candidate.gameObject.name}' at path: {dupPath}");
+                        UnityEngine.Object.Destroy(candidate.gameObject);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mod.Log.Error($"[LUMINA] Error while checking HDRP volumes: {ex}");
+            }
+
+            // Local function to avoid clutter
+            string GetHierarchyPath(Transform t)
+            {
+                if (t == null) return "[null]";
+                string path = t.name;
+                while (t.parent != null)
+                {
+                    t = t.parent;
+                    path = t.name + "/" + path;
+                }
+                return path;
+            }
+        }
 
 
 #if DEBUG
@@ -978,7 +1088,7 @@
             m_VolumetricClouds.shadowOpacityFallback.value = VolumetricCloudsData.shadowOpacityFallback;
         }
 #endif
-      
+
         /// <summary>
         /// Sets tonemapping mode from dropdown.
         /// </summary>
