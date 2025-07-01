@@ -2,6 +2,7 @@
 {
     using Colossal.UI.Binding;
     using Game;
+    using Game.SceneFlow;
     using Game.Simulation;
     using Game.UI;
     using Game.UI.InGame;
@@ -212,6 +213,19 @@
 
         private void ApplyImmediately()
         {
+            if (!GlobalVariables.Instance.UseRoadTextures)
+            {
+                // If RoadTextures is not enabled, log the error and show a dialog
+                string errorMessage = "Please enable 'Use Road Textures' in the Options menu and try again.";
+
+                Mod.Log.Info(errorMessage);
+
+                var dialog = new SimpleMessageDialog(errorMessage);
+                GameManager.instance.userInterface.appBindings.ShowMessageDialog(dialog, null);
+                return;
+            }
+
+
             if (m_ReplaceRoadWearSystem != null)
             {
                 m_ReplaceRoadWearSystem.ReloadTexturesCompletely();

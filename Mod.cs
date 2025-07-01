@@ -115,7 +115,7 @@ namespace Lumina
 
             updateSystem.UpdateAfter<CubemapUpdateSystem>(SystemUpdatePhase.GameSimulation);
 
-            updateSystem.UpdateAfter<ReplaceRoadWearSystem, PrefabInitializeSystem>(SystemUpdatePhase.PrefabUpdate);
+            updateSystem.UpdateAfter<ReplaceRoadWearSystem>(SystemUpdatePhase.GameSimulation);
 
             updateSystem.UpdateAfter<CustomSunManager>(SystemUpdatePhase.GameSimulation);
 
