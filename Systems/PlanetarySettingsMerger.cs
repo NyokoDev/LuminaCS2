@@ -1,4 +1,5 @@
-﻿using Lumina;
+﻿using Game.SceneFlow;
+using Lumina;
 using Lumina.Systems;
 using LuminaMod.XML;
 
@@ -18,11 +19,32 @@ internal partial class PlanetarySettingsMerger : RenderEffectsSystem
 
     internal static void SetLatitude(float obj)
     {
+        if (!GlobalVariables.Instance.LatLongEnabled)
+        {
+        
+            string errorMessage = "Please enable 'Latitude and Longitude Adjustments' in the options menu and try again.";
+
+            Mod.Log.Info(errorMessage);
+
+            var dialog = new SimpleMessageDialog(errorMessage);
+            GameManager.instance.userInterface.appBindings.ShowMessageDialog(dialog, null);
+            return;
+        }
         GlobalVariables.Instance.Latitude = obj;
     }
 
     internal static void SetLongitude(float obj)
     {
+        if (!GlobalVariables.Instance.LatLongEnabled)
+        {
+            string errorMessage = "Please enable 'Latitude and Longitude Adjustments' in the options menu and try again.";
+
+            Mod.Log.Info(errorMessage);
+
+            var dialog = new SimpleMessageDialog(errorMessage);
+            GameManager.instance.userInterface.appBindings.ShowMessageDialog(dialog, null);
+            return;
+        }
         GlobalVariables.Instance.Longitude = obj;
     }
 
