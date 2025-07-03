@@ -244,7 +244,6 @@
             GlobalVariables.Instance.TextureBrightness = value;
             m_ReplaceRoadWearSystem = World.GetOrCreateSystemManaged<ReplaceRoadWearSystem>();
             m_ReplaceRoadWearSystem.UpdateStoredTextures();
-            Mod.Log.Info("Reloading road wear textures.");
         }
 
         private void SetSmoothness(float value)

@@ -255,7 +255,9 @@ namespace RoadWearAdjuster.Systems
             }
             else
             {
+#if DEBUG
                 Mod.Log.Info("[RoadTextureUpdater] UseRoadTextures is false, skipping all logic.");
+#endif
             }
         }
 

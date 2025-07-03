@@ -140,7 +140,9 @@ using dialog = Game.UI.MessageDialog;
                         "To ensure stability, Lumina's road texture system has been disabled.\n" +
                         $"Please remove {modName} to take full advantage of Lumina's features.";
 
+#if DEBUG
                     Mod.Log.Info(errorMessage);
+#endif
                     GlobalVariables.Instance.UseRoadTextures = false;
 
                     var dialog = new SimpleMessageDialog(errorMessage);
