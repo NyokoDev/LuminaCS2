@@ -6,6 +6,7 @@
     using Game.Simulation;
     using Game.UI;
     using Game.UI.InGame;
+    using Lumina.Roads;
     using Lumina.Systems.Presets;
     using Lumina.Systems.Tonemapping_Custom;
     using Lumina.UI;
@@ -45,6 +46,8 @@
         private ValueBindingHelper<string[]> LutArrayExtended;
         private ValueBindingHelper<string[]> CubemapArrayExtended;
         private ValueBindingHelper<string> LutName;
+        private float _primaryRoadHue;
+
         private bool customSunEnabled { get; set; }
         private float SunDiameterValue { get; set; }
         public float SunIntensityValue { get; set; }
@@ -196,22 +199,77 @@
             AddBinding(new TriggerBinding(Mod.MODUI, "ApplyRoadTextures", ApplyImmediately));
 
             // Road Colors
-            AddBinding(new TriggerBinding<Color>(Mod.MODUI, "HandlePrimaryRoadColor", HandlePrimaryRoadColor));
-            AddUpdateBinding(new GetterValueBinding<Color>(Mod.MODUI, "PrimaryRoadColor", () => GlobalVariables.Instance.PrimaryRoadColor));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandlePrimaryRoadColor", HandlePrimaryRoadColor));
+            AddBinding(new TriggerBinding<string>(Mod.MODUI, "HandlePrimaryRoadColorHex", HandlePrimaryRoadColorHex));
+
+
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "PrimaryRoadColor", GetPrimaryRoadHue));
 
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleSecondaryRoadColor", HandleSecondaryRoadColor));
         }
+
+        private void HandlePrimaryRoadColorHex(string hex)
+        {
+            if (string.IsNullOrEmpty(hex))
+                return;
+
+            if (hex.StartsWith("#"))
+                hex = hex.Substring(1);
+
+            if (hex.Length == 3)
+            {
+                hex = new string(new[] { hex[0], hex[0], hex[1], hex[1], hex[2], hex[2] });
+            }
+
+            if (hex.Length != 6 || !int.TryParse(hex, System.Globalization.NumberStyles.HexNumber, null, out int hexColor))
+            {
+                Mod.Log.Info($"[LUMINA] Invalid hex input: {hex}");
+                return;
+            }
+
+
+            float r = ((hexColor >> 16) & 0xFF) / 255f;
+            float g = ((hexColor >> 8) & 0xFF) / 255f;
+            float b = (hexColor & 0xFF) / 255f;
+
+            Color color = new Color(r, g, b, 1f);
+            GlobalVariables.Instance.PrimaryRoadColor = color;
+
+            Color.RGBToHSV(color, out float hue, out _, out _);
+            _primaryRoadHue = hue;
+
+            Mod.Log.Info($"[LUMINA] Set PrimaryRoadColor from hex #{hex} → RGB({r:F2}, {g:F2}, {b:F2}) → Hue {hue:F3}");
+            RoadColorReplacer.UpdateColors(); // Update the road colors immediately
+        }
+
+        private float GetPrimaryRoadHue()
+        {
+            Color color = GlobalVariables.Instance.PrimaryRoadColor;
+
+            // Extract hue (0–1), discard saturation and value
+            Color.RGBToHSV(color, out float hue, out _, out _);
+
+            return hue;
+        }
+
 
         private void HandleSecondaryRoadColor(float obj)
         {
         
         }
 
-        private void HandlePrimaryRoadColor(Color color)
+        private void HandlePrimaryRoadColor(float hue)
         {
+            hue = Mathf.Clamp01(hue); // Ensure value is within 0–1
+            float _primaryRoadHue = hue;
+
+            Color color = Color.HSVToRGB(hue, 1f, 1f); // full saturation & brightness
             GlobalVariables.Instance.PrimaryRoadColor = color;
-            Mod.Log.Info($"PrimaryRoadColor set to: {color}");
+
+            Mod.Log.Info($"[LUMINA] PrimaryRoadColor set via hue {hue} -> RGB {color}");
+            RoadColorReplacer.UpdateColors(); // Update the road colors immediately
         }
+
 
 
         private void OpenTexturesFolder()

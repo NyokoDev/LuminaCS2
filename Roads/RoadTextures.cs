@@ -34,11 +34,9 @@ namespace RoadWearAdjuster.Systems
         private const string fileName = "RoadWearTexture";
 
         public bool AppliedYet = false;
-        private Color newBaseColor = Color.red;
-        private Color newEmissionColor = Color.yellow;
         public Texture replacementTexture; // Optional: assign via Inspector
 
-        public void FindAndModifyMaterials()
+        public static void FindAndModifyMaterials()
         {
             string shaderName = "BH/NetCompositionMeshLitShader";
             Shader targetShader = Shader.Find(shaderName);
@@ -59,15 +57,15 @@ namespace RoadWearAdjuster.Systems
 
                     if (mat.HasProperty("_BaseColor"))
                     {
-                        mat.SetColor("_BaseColor", newBaseColor);
-                        Mod.Log.Info($"  → Changed _BaseColor to {newBaseColor}");
+                        mat.SetColor("_BaseColor", GlobalVariables.Instance.PrimaryRoadColor);
+                        Mod.Log.Info($"  → Changed _BaseColor to {GlobalVariables.Instance.PrimaryRoadColor}");
                     }
 
                     if (mat.HasProperty("_EmissionColor"))
                     {
-                        mat.SetColor("_EmissionColor", newEmissionColor);
+                        mat.SetColor("_EmissionColor", GlobalVariables.Instance.SecondaryRoadColor);
                         mat.EnableKeyword("_EMISSION");
-                        Mod.Log.Info($"  → Changed _EmissionColor to {newEmissionColor}");
+                        Mod.Log.Info($"  → Changed _EmissionColor to {GlobalVariables.Instance.SecondaryRoadColor}");
                     }
 
                     // Check common texture properties
@@ -330,6 +328,11 @@ namespace RoadWearAdjuster.Systems
             Mod.Log.Info("Cleaning up");
             Object.Destroy(roadWearColourTexture);
             Object.Destroy(roadWearNormalTexture);
+        }
+
+        internal static void UpdateColors()
+        {
+            FindAndModifyMaterials();
         }
     }
 }

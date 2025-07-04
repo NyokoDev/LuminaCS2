@@ -7,15 +7,13 @@ import { useLocalization } from "cs2/l10n";
 import { ChromePicker } from "react-color";
 import { useState } from "react";
 import { Color } from "cs2/bindings";
-import { VanillaComponentResolver } from "./VanillaComponentResolver";
 import { getModule } from "cs2/modding";
-import { SafeColorField } from "./SafeColorPicker";
 
 // Imports
 export const GetOpacity$ = bindValue<number>(mod.id, "GetOpacity");
 export const GetBrightness$ = bindValue<number>(mod.id, "GetBrightness");
 export const GetSmoothness$ = bindValue<number>(mod.id, "GetSmoothness");
-export const primaryRoadColor = bindValue<Color>(mod.id, "PrimaryRoadColor");
+export const primaryRoadColor$ = bindValue<number>(mod.id, "PrimaryRoadColor");
 
 type RoadPanelBaseProps = {
   title?: string;
@@ -30,12 +28,11 @@ export const RoadPanelBase: React.FC<RoadPanelBaseProps> = ({
 }) => {
 
 
-const PrimaryRoadColorExt = useValue(primaryRoadColor);
 
-  const handlePrimaryRoadColorChange = (color: Color) => {
-    trigger(mod.id, "HandlePrimaryRoadColor", color);
-  };
 
+ const handlePrimaryRoadHueChange = (value: number) => {
+  trigger(mod.id, "HandlePrimaryRoadColor", value); // send float to C#
+};
   const HandleOpacity = (value: number) => {
     trigger(mod.id, "SetOpacity", value);
   };
@@ -56,6 +53,7 @@ const PrimaryRoadColorExt = useValue(primaryRoadColor);
   const GetOpacity = useValue(GetOpacity$);
   const GetBrightness = useValue(GetBrightness$);
   const GetSmoothness = useValue(GetSmoothness$);
+  const PrimaryRoadColor = useValue(primaryRoadColor$);
 
     //Use localization
     const { translate } = useLocalization();
@@ -68,7 +66,16 @@ const PrimaryRoadColorExt = useValue(primaryRoadColor);
       trigger(mod.id, 'ApplyRoadTextures'); 
     }
 
+// Add in component
+const [hexInput, setHexInput] = useState("#FF0000");
 
+const handleHexChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const value = e.target.value;
+  setHexInput(value);
+
+  // Send it directly — validation is done in C#
+  trigger(mod.id, "HandlePrimaryRoadColorHex", value);
+};
 
 
   return (
@@ -130,21 +137,40 @@ const PrimaryRoadColorExt = useValue(primaryRoadColor);
 
 <div className="color-container">
   <div className="color-label-1">{translate("LUMINA.roadcolor")}</div>
-  <SafeColorField
-    value={PrimaryRoadColorExt}
-    onChange={handlePrimaryRoadColorChange}
-    className="color-picker"
+<Slider
+         
+             start={0}
+      end={1}
+      step={0.1}
+            value={PrimaryRoadColor}
+            className="color-slider"
+            valueTransformer={SliderValueTransformer.floatTransformer}
+            onChange={handlePrimaryRoadHueChange} gamepadStep={0} disabled={false} noFill={false}    />
+</div>
+
+<div className="hex-input-container">
+  <div className="color-label-hex">{translate("LUMINA.hexcolor")}</div>
+  <input
+    type="text"
+    value={hexInput}
+    onChange={handleHexChange}
+    placeholder="#RRGGBB"
+    maxLength={7}
+    className="hex-input"
   />
 </div>
+
+
+
 
 
       <div className="second-color-container">
     <div className="second-color-label-1"> {translate("LUMINA.roadcolorsecond")}</div>
     <Slider
       value={GetSmoothness}
-      start={-1}
-      end={5}
-      step={0.00001}
+      start={0}
+      end={1}
+      step={0.1}
       className="second-color-slider"
       gamepadStep={0.00001}
       valueTransformer={SliderValueTransformer.floatTransformer}
@@ -153,6 +179,9 @@ const PrimaryRoadColorExt = useValue(primaryRoadColor);
       onChange={HandleSecondaryRoadColor}
     />
   </div>
+
+
+
 
       <button
         onClick={OpenLUTFolder}

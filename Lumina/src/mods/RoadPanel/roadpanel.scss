@@ -107,7 +107,12 @@
 
 .color-container {
     position: absolute;
-  top: 0rem;   /* Stacked below brightness */
+  top: 50rem;   /* Stacked below brightness */
+    left: 700rem;
+          width:200rem;
+  
+  display: flex;
+  flex-direction: column;
 }
 
 .second-color-container {
