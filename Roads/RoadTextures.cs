@@ -1,6 +1,7 @@
 ﻿using Game;
 using Game.Objects;
 using Game.SceneFlow;
+using Game.Simulation;
 using Game.UI.InGame;
 using Lumina;
 using Lumina.XML;
@@ -33,10 +34,72 @@ namespace RoadWearAdjuster.Systems
         private const string fileName = "RoadWearTexture";
 
         public bool AppliedYet = false;
+        private Color newBaseColor = Color.red;
+        private Color newEmissionColor = Color.yellow;
+        public Texture replacementTexture; // Optional: assign via Inspector
+
+        public void FindAndModifyMaterials()
+        {
+            string shaderName = "BH/NetCompositionMeshLitShader";
+            Shader targetShader = Shader.Find(shaderName);
+
+            if (targetShader == null)
+            {
+                Mod.Log.Info($"Shader '{shaderName}' not found.");
+                return;
+            }
+
+            Material[] allMaterials = Resources.FindObjectsOfTypeAll<Material>();
+
+            foreach (Material mat in allMaterials)
+            {
+                if (mat.shader == targetShader)
+                {
+                    Mod.Log.Info($"Found Material: {mat.name} using Shader: {shaderName}");
+
+                    if (mat.HasProperty("_BaseColor"))
+                    {
+                        mat.SetColor("_BaseColor", newBaseColor);
+                        Mod.Log.Info($"  → Changed _BaseColor to {newBaseColor}");
+                    }
+
+                    if (mat.HasProperty("_EmissionColor"))
+                    {
+                        mat.SetColor("_EmissionColor", newEmissionColor);
+                        mat.EnableKeyword("_EMISSION");
+                        Mod.Log.Info($"  → Changed _EmissionColor to {newEmissionColor}");
+                    }
+
+                    // Check common texture properties
+                    string[] textureProps = new[] { "_BaseMap", "_MainTex", "_EmissionMap" };
+
+                    foreach (string texProp in textureProps)
+                    {
+                        if (mat.HasProperty(texProp))
+                        {
+                            Texture tex = mat.GetTexture(texProp);
+                            Mod.Log.Info($"  Texture Slot '{texProp}': {(tex != null ? tex.name : "None")}");
+
+#if DEBUG
+                            // If a replacement texture is set, replace it
+                            if (replacementTexture != null)
+                            {
+                                mat.SetTexture(texProp, replacementTexture);
+                                Mod.Log.Info($"  → Replaced {texProp} with '{replacementTexture.name}'");
+                            }
+#endif
+                        }
+                    }
+                }
+            }
+        }
+
 
         protected override void OnCreate()
         {
             base.OnCreate();
+
+            FindAndModifyMaterials();
 
             roadWearColourTexture = new Texture2D(1024, 1024);
             roadWearNormalTexture = new Texture2D(1024, 1024, TextureFormat.ARGB32, true, true);

@@ -67,13 +67,13 @@
 	<!--Link to the forum post where the mod can be discussed-->
 	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/lumina.1645623/" />
 	<!--Version of the mod-->
-	<ModVersion Value="v2.3R3" />
+	<ModVersion Value="v2.3R3-1" />
 	<!--Recommended version of the base game to use the mod-->
 	<GameVersion Value="1.*" />
 	<!--Dependency for the mod, can be set multiple times-->
 	<Dependency Id="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
-	<ChangeLog Value="Ensure road wear textures load initially on game start.// Add message dialog when road textures is disabled when trying to apply textures." />
+	<ChangeLog Value="Reduce logging." />
 " />
 	<!--ChangeLog>
 	</ChangeLog-->

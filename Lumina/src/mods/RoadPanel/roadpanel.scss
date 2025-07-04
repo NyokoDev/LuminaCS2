@@ -105,3 +105,17 @@
 }
 
 
+.color-container {
+    position: absolute;
+  top: 0rem;   /* Stacked below brightness */
+}
+
+.second-color-container {
+    position: absolute;
+  top: 100rem;   /* Stacked below brightness */
+      width:200rem;
+  left: 700rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+}

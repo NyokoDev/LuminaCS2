@@ -18,6 +18,7 @@ namespace LuminaMod.XML
     using UnityEngine.Experimental.Rendering;
     using UnityEngine.Rendering;
     using UnityEngine.Rendering.HighDefinition;
+    using Color = UnityEngine.Color;
 
     /// <summary>
     /// GlobalVariables class.
@@ -250,6 +251,12 @@ namespace LuminaMod.XML
         [XmlElement]
         public bool UseRoadTextures { get; set; }
 
+        [XmlElement]
+        public Color PrimaryRoadColor { get; set; }
+
+        [XmlElement]
+        public Color SecondaryRoadColor { get; set; }
+
 
         /// <summary>
         /// Serializes to a file.
@@ -395,6 +402,12 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.TextureOpacity = loadedVariables?.TextureOpacity ?? 1.22928f;
 
                     GlobalVariables.Instance.UseRoadTextures = loadedVariables?.UseRoadTextures ?? false;
+
+                    // Road Colors
+                    GlobalVariables.Instance.PrimaryRoadColor = loadedVariables?.PrimaryRoadColor ?? new Color(0.5f, 0.5f, 0.5f, 1f);
+                    GlobalVariables.Instance.SecondaryRoadColor = loadedVariables?.SecondaryRoadColor ?? new Color(0.5f, 0.5f, 0.5f, 1f);
+
+
 
 
                     Mod.Log.Info("Settings loaded successfully.");

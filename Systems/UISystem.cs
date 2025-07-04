@@ -194,7 +194,25 @@
 
             AddBinding(new TriggerBinding(Mod.MODUI, "OpenTexturesFolder", OpenTexturesFolder));
             AddBinding(new TriggerBinding(Mod.MODUI, "ApplyRoadTextures", ApplyImmediately));
+
+            // Road Colors
+            AddBinding(new TriggerBinding<Color>(Mod.MODUI, "HandlePrimaryRoadColor", HandlePrimaryRoadColor));
+            AddUpdateBinding(new GetterValueBinding<Color>(Mod.MODUI, "PrimaryRoadColor", () => GlobalVariables.Instance.PrimaryRoadColor));
+
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleSecondaryRoadColor", HandleSecondaryRoadColor));
         }
+
+        private void HandleSecondaryRoadColor(float obj)
+        {
+        
+        }
+
+        private void HandlePrimaryRoadColor(Color color)
+        {
+            GlobalVariables.Instance.PrimaryRoadColor = color;
+            Mod.Log.Info($"PrimaryRoadColor set to: {color}");
+        }
+
 
         private void OpenTexturesFolder()
         {

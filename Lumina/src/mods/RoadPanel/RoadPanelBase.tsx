@@ -1,14 +1,21 @@
 import { bindValue, trigger, useValue } from "cs2/api";
 import { Slider, SliderValueTransformer } from "mods/slider";
-import React from "react";
+import React, { useEffect } from "react";
 import mod from "../../../mod.json";
 import './roadpanel.scss';
 import { useLocalization } from "cs2/l10n";
+import { ChromePicker } from "react-color";
+import { useState } from "react";
+import { Color } from "cs2/bindings";
+import { VanillaComponentResolver } from "./VanillaComponentResolver";
+import { getModule } from "cs2/modding";
+import { SafeColorField } from "./SafeColorPicker";
 
 // Imports
 export const GetOpacity$ = bindValue<number>(mod.id, "GetOpacity");
 export const GetBrightness$ = bindValue<number>(mod.id, "GetBrightness");
 export const GetSmoothness$ = bindValue<number>(mod.id, "GetSmoothness");
+export const primaryRoadColor = bindValue<Color>(mod.id, "PrimaryRoadColor");
 
 type RoadPanelBaseProps = {
   title?: string;
@@ -21,6 +28,14 @@ export const RoadPanelBase: React.FC<RoadPanelBaseProps> = ({
   children,
   className = "",
 }) => {
+
+
+const PrimaryRoadColorExt = useValue(primaryRoadColor);
+
+  const handlePrimaryRoadColorChange = (color: Color) => {
+    trigger(mod.id, "HandlePrimaryRoadColor", color);
+  };
+
   const HandleOpacity = (value: number) => {
     trigger(mod.id, "SetOpacity", value);
   };
@@ -31,6 +46,11 @@ export const RoadPanelBase: React.FC<RoadPanelBaseProps> = ({
 
   const HandleSmoothness = (value: number) => {
     trigger(mod.id, "SetSmoothness", value);
+  };
+
+
+      const HandleSecondaryRoadColor = (value: number) => {
+    trigger(mod.id, "HandleSecondaryRoadColor", value);
   };
 
   const GetOpacity = useValue(GetOpacity$);
@@ -47,6 +67,9 @@ export const RoadPanelBase: React.FC<RoadPanelBaseProps> = ({
  const ApplyTextures= () => {
       trigger(mod.id, 'ApplyRoadTextures'); 
     }
+
+
+
 
   return (
     <div className={className}>
@@ -102,6 +125,32 @@ export const RoadPanelBase: React.FC<RoadPanelBaseProps> = ({
       disabled={false}
       noFill={false}
       onChange={HandleSmoothness}
+    />
+  </div>
+
+<div className="color-container">
+  <div className="color-label-1">{translate("LUMINA.roadcolor")}</div>
+  <SafeColorField
+    value={PrimaryRoadColorExt}
+    onChange={handlePrimaryRoadColorChange}
+    className="color-picker"
+  />
+</div>
+
+
+      <div className="second-color-container">
+    <div className="second-color-label-1"> {translate("LUMINA.roadcolorsecond")}</div>
+    <Slider
+      value={GetSmoothness}
+      start={-1}
+      end={5}
+      step={0.00001}
+      className="second-color-slider"
+      gamepadStep={0.00001}
+      valueTransformer={SliderValueTransformer.floatTransformer}
+      disabled={false}
+      noFill={false}
+      onChange={HandleSecondaryRoadColor}
     />
   </div>
 
