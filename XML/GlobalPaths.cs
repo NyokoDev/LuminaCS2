@@ -6,16 +6,17 @@ namespace Lumina.XML
 {
     using Colossal.IO.AssetDatabase;
     using Game.Citizens;
+    using Game.SceneFlow;
+    using Game.UI.InGame;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    using static HarmonyLib.Code;
     using Unity.Entities.UniversalDelegates;
     using UnityEngine;
-    using Game.UI.InGame;
+    using static HarmonyLib.Code;
 
     /// <summary>
     /// GlobalPaths class. This class is a utility for common paths.
@@ -95,10 +96,30 @@ namespace Lumina.XML
                 }
                 else
                 {
-                    return "v2.3R3-1";
+                    return "v2.4";
                 }
             }
-        
+
+
+        public static void SendMessage(string message)
+        {
+            string errorMessage = message;
+            Mod.Log.Info($"SendMessage called with: {errorMessage}");
+
+            if (GameManager.instance == null)
+            {
+                Mod.Log.Error("GameManager.instance is null! Cannot show message dialog.");
+                return;
+            }
+            if (GameManager.instance.userInterface == null)
+            {
+                Mod.Log.Error("GameManager.instance.userInterface is null! Cannot show message dialog.");
+                return;
+            }
+
+            var dialog = new SimpleMessageDialog(errorMessage);
+            GameManager.instance.userInterface.appBindings.ShowMessageDialog(dialog, null);
+        }
 
         /// <summary>
         /// SupportedGameVersion, returns the supported game version.

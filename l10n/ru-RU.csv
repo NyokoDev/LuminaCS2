@@ -55,3 +55,8 @@
 "LUMINA.opacity","Непрозрачность"
 "LUMINA.brightness","Яркость"
 "LUMINA.smoothness","Гладкость"
+"LUMINA.hexsecondcolor","Вторичный цвет в формате HEX"
+"LUMINA.hexprimarycolor","Основной цвет в формате HEX"
+"LUMINA.colorpicker","Выбор цвета"
+"LUMINA.randomize","Случайные цвета"
+

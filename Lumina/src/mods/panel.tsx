@@ -166,13 +166,13 @@ const SunFlareSize = useValue(SunFlareSize$);
 
 
 // Initialize state variables using useState hook
-const [ColorAdjustmentsEnabled$, setCA] = useState(false);
+const [ColorAdjustmentsEnabled$, setCA] = useState(true);
 const [SettingsEnabled$, setSettings] = useState(false);
 const [SkyAndFogEnabled$, setSkyAndFog] = useState(false);
 const [ToneMappingEnabled$, setTonemapping] = useState(false);
 const [PlanetaryEnabled$, setPlanetaryTab] = useState(false);
 const [OnImport, OnImportChange] = useState(false);
-const [RoadPanel, setRoadPanel] = useState(true);
+const [RoadPanel, setRoadPanel] = useState(false);
 
 const [IsClicked, setIsClicked] = useState(false);
 
@@ -592,7 +592,7 @@ id="Global"
 
 
     <Tooltip
-  tooltip={translate("LUMINA.roadtooltip")} // Specify the content of the tooltip
+  tooltip={translate("LUMINA.roadconfig")} // Specify the content of the tooltip
   disabled={false} // Specify whether the tooltip is disabled (default: false)
   alignment="center" // Specify the alignment of the tooltip (e.g., "start", "center", "end")
   className="custom-tooltip" // Specify additional class names for styling purposes

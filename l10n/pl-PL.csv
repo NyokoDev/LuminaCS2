@@ -55,3 +55,8 @@
 "LUMINA.opacity","Nieprzezroczystość"
 "LUMINA.brightness","Jasność"
 "LUMINA.smoothness","Gładkość"
+"LUMINA.hexsecondcolor","Szesnastkowy kolor dodatkowy"
+"LUMINA.hexprimarycolor","Szesnastkowy kolor podstawowy"
+"LUMINA.colorpicker","Wybór koloru"
+"LUMINA.randomize","Losowe kolory"
+

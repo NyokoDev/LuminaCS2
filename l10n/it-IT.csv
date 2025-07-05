@@ -55,3 +55,8 @@
 "LUMINA.opacity","Opacità"
 "LUMINA.brightness","Luminosità"
 "LUMINA.smoothness","Levigatezza"
+"LUMINA.hexsecondcolor","Colore secondario esadecimale"
+"LUMINA.hexprimarycolor","Colore primario esadecimale"
+"LUMINA.colorpicker","Selettore colore"
+"LUMINA.randomize","Colori casuali"
+

@@ -55,3 +55,8 @@
 "LUMINA.opacity","Opacidade"
 "LUMINA.brightness","Brilho"
 "LUMINA.smoothness","Suavidade"
+"LUMINA.hexsecondcolor","Cor Secundária Hex"
+"LUMINA.hexprimarycolor","Cor Primária Hex"
+"LUMINA.colorpicker","Seletor de Cores"
+"LUMINA.randomize","Cores Aleatórias"
+

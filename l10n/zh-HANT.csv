@@ -55,3 +55,7 @@
 "LUMINA.opacity","不透明度"
 "LUMINA.brightness","亮度"
 "LUMINA.smoothness","平滑度"
+"LUMINA.hexsecondcolor","十六進位次要顏色"
+"LUMINA.hexprimarycolor","十六進位主要顏色"
+"LUMINA.colorpicker","顏色選擇器"
+"LUMINA.randomize","隨機顏色"

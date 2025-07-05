@@ -55,4 +55,9 @@
 "LUMINA.opacity","不透明度"
 "LUMINA.brightness","明るさ"
 "LUMINA.smoothness","滑らかさ"
+"LUMINA.hexsecondcolor","16進数セカンダリカラー"
+"LUMINA.hexprimarycolor","16進数プライマリカラー"
+"LUMINA.colorpicker","カラーピッカー"
+"LUMINA.randomize","色をランダム化"
+
 

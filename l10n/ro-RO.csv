@@ -55,3 +55,8 @@
 "LUMINA.opacity","Opacitate"
 "LUMINA.brightness","Luminozitate"
 "LUMINA.smoothness","Netezime"
+"LUMINA.hexsecondcolor","Culoare secundară hex"
+"LUMINA.hexprimarycolor","Culoare primară hex"
+"LUMINA.colorpicker","Selector de culori"
+"LUMINA.randomize","Culori aleatorii"
+

@@ -211,7 +211,7 @@ useEffect(() => {
   </div>
 
 <div className="color-container">
-  <div className="color-label-1">HEX Base Color</div>
+  <div className="color-label-1">{translate("LUMINA.hexprimarycolor")}</div>
 
 <input
             type="text"
@@ -222,7 +222,7 @@ useEffect(() => {
           />
 
 
-<Tooltip tooltip={"Open Color Picker"}> 
+<Tooltip tooltip={translate("LUMINA.colorpicker")}> 
 <button
   onClick={() => trigger(mod.id, "OpenColorPickerSite")}
   title="Open HTML Color Codes"
@@ -240,7 +240,7 @@ useEffect(() => {
 </button>
 </Tooltip>
 
-<Tooltip tooltip={"Randomize"}> 
+<Tooltip tooltip={translate("LUMINA.randomize")}> 
 <button
   onClick={handleRandomizeClick}
   title="Randomize Color"
@@ -264,7 +264,7 @@ useEffect(() => {
 
 {/* Secondary Color Input */}
         <div className="color-container-2" style={{ marginTop: "1rem" }}>
-          <div className="color-label-2">HEX Secondary Base Color</div>
+          <div className="color-label-2">{translate("LUMINA.hexsecondcolor")}</div>
           <input
             type="text"
             value={secondaryHex}

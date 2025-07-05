@@ -20,6 +20,7 @@
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Net;
     using System.Reflection;
     using System.Text;
     using System.Threading;
@@ -31,6 +32,7 @@
     using UnityEngine.Rendering;
     using UnityEngine.Rendering.HighDefinition;
     using static UnityEngine.Rendering.DebugUI;
+    using Version = Game.Version;
 
     internal partial class UISystem : ExtendedUISystemBase
     {
@@ -440,6 +442,62 @@
             }
         }
 
+        private void CheckVersion()
+        {
+            string url = "https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/XML/version.txt";
+            string unityversion = UnityEngine.Application.unityVersion;
+            string currentVersion = GlobalPaths.Version;
+            string gameVersion = Version.current.fullVersion;
+            string supportedGameVersion = GlobalPaths.SupportedGameVersion;
+
+            Mod.Log.Info($"Checking game version: {gameVersion}");
+
+            if (gameVersion != supportedGameVersion)
+            {
+                string errorMsg = $"[LUMINA] Unsupported game version: {gameVersion}. Supported version is {supportedGameVersion}.";
+                string recommendation =
+                    "Recommendations:\n" +
+                    "- Update your game to the latest supported version.\n" +
+                    "- Check for a newer version of the Lumina mod.\n" +
+                    "- Visit the Lumina support or GitHub page for help.\n" +
+                    "- Join the Discord for assistance: https://discord.gg/5gZgRNm29e";
+
+                Mod.Log.Error($"{errorMsg}\n{recommendation}");
+
+                {
+                    GlobalPaths.SendMessage(errorMsg); // Show a message box with the version information
+                }
+
+                return;
+            }
+
+            Mod.Log.Info("Unity version " + unityversion);
+
+            try
+            {
+                using (WebClient client = new WebClient())
+                {
+                    string latestVersion = client.DownloadString(url).Trim();
+
+                    if (currentVersion == latestVersion)
+                    {
+                        Mod.Log.Info("Lumina is up to date with version: " + currentVersion);
+                    }
+                    else
+                    {
+                        string message = string.Format("Lumina new version available! Current: {0} | Latest: {1}", currentVersion, latestVersion);
+                        GlobalPaths.SendMessage(message); // Show a message box with the version information
+                        Mod.Log.Info(message);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mod.Log.Info("Error checking version: " + ex.Message);
+            }
+        }
+
+
         private void SendMessage()
         {
             // If RoadTextures is not enabled, log the error and show a dialog
@@ -714,6 +772,7 @@
 
         private void SaveAutomatically()
         {
+            CheckVersion(); // Check the version before saving
             // Check if the save automatically flag is true
             if (GlobalVariables.Instance.SaveAutomatically)
             {

@@ -55,3 +55,8 @@
 "LUMINA.opacity","불투명도"
 "LUMINA.brightness","밝기"
 "LUMINA.smoothness","매끄러움"
+"LUMINA.hexsecondcolor","16진수 보조 색상"
+"LUMINA.hexprimarycolor","16진수 기본 색상"
+"LUMINA.colorpicker","색상 선택기"
+"LUMINA.randomize","색상 무작위화"
+

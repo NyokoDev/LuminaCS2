@@ -204,7 +204,7 @@ namespace Lumina
                 Mod.Log.Error($"{errorMsg}\n{recommendation}");
 
                 {
-                    Setting.ShowModernMessageBox(errorMsg); // / Show a modern message box with error message in case MetroFramework is not enabled.
+                    GlobalPaths.SendMessage(errorMsg); // Show a message box with the version information
                 }
 
                 return;
@@ -220,15 +220,13 @@ namespace Lumina
 
                     if (currentVersion == latestVersion)
                     {
-                        Mod.Log.Info("The version is up to date. Current: " + currentVersion);
+                        Mod.Log.Info("Lumina is up to date with version: " + currentVersion);
                     }
                     else
                     {
-                        string message = $"Lumina New version available! Current: {currentVersion} | Latest: {latestVersion}";
+                        string message = string.Format("Lumina new version available! Current: {0} | Latest: {1}", currentVersion, latestVersion);
+                        GlobalPaths.SendMessage(message); // Show a message box with the version information
                         Mod.Log.Info(message);
-                        {
-                            Setting.ShowModernMessageBox(message);
-                        }
                     }
                 }
             }

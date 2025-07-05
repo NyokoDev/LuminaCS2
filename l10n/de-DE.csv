@@ -55,3 +55,7 @@
 "LUMINA.opacity","Deckkraft"
 "LUMINA.brightness","Helligkeit"
 "LUMINA.smoothness","Glätte"
+"LUMINA.hexsecondcolor","Hex-Sekundärfarbe"
+"LUMINA.hexprimarycolor","Hex-Primärfarbe"
+"LUMINA.colorpicker","Farbwähler"
+"LUMINA.randomize","Farben zufällig auswählen"
