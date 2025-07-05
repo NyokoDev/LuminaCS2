@@ -86,7 +86,7 @@
 
 .OpenRoadTexturesButton{
     position: absolute;
-    top: 170rem;
+    top: 200rem;
     width:150%
     
 }
@@ -100,7 +100,7 @@
 
 .ApplyTexturesButton {
       position: absolute;
-    top: 220rem;
+    top: 250rem;
     width:150%
 }
 
@@ -110,16 +110,6 @@
   top: 50rem;   /* Stacked below brightness */
     left: 700rem;
           width:200rem;
-}
-
-.second-color-container {
-    position: absolute;
-  top: 100rem;   /* Stacked below brightness */
-      width:200rem;
-  left: 700rem;
-  right: 1rem;
-  display: flex;
-  flex-direction: column;
 }
 
 .color-label-1 {
@@ -211,4 +201,27 @@
     inset 3rem 3rem 5rem #1c1c1c,
     inset -3rem -3rem 5rem #383838;
   background: linear-gradient(145deg, #272727, #212121);
+}
+
+
+.color-container-2 {
+    position: absolute;
+  top: 80rem;   /* Stacked below brightness */
+    left: 700rem;
+          width:200rem;
+}
+
+.color-label-2 {
+  position: absolute;
+  top:50rem;
+  right:1rem;
+}
+
+.hex-input-2 {
+  z-index: 1000;
+  position: inherit;
+  top: inherit;
+  width: inherit;
+  color: white;
+  pointer-events: all;
 }

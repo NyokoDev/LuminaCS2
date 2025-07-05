@@ -14,7 +14,10 @@ import { Tooltip } from "cs2/ui";
 export const GetOpacity$ = bindValue<number>(mod.id, "GetOpacity");
 export const GetBrightness$ = bindValue<number>(mod.id, "GetBrightness");
 export const GetSmoothness$ = bindValue<number>(mod.id, "GetSmoothness");
-export const primaryRoadColor$ = bindValue<number>(mod.id, "PrimaryRoadColor");
+export const primaryRoadColor$ = bindValue<string>(mod.id, "PrimaryRoadColor");
+
+  // New secondary color bind
+export const secondaryRoadColor$ = bindValue<string>(mod.id, "SecondaryRoadColor");
 
 type RoadPanelBaseProps = {
   title?: string;
@@ -58,10 +61,17 @@ const handleRandomizeClick = () => {
     trigger(mod.id, "HandleSecondaryRoadColor", value);
   };
 
+
   const GetOpacity = useValue(GetOpacity$);
   const GetBrightness = useValue(GetBrightness$);
   const GetSmoothness = useValue(GetSmoothness$);
   const PrimaryRoadColor = useValue(primaryRoadColor$);
+  const SecondaryRoadColor = useValue(secondaryRoadColor$);
+
+  const [primaryHex, setPrimaryHex] = useState("#ffffff");
+  const [secondaryHex, setSecondaryHex] = useState("#ffffff");
+
+
 
     //Use localization
     const { translate } = useLocalization();
@@ -74,12 +84,73 @@ const handleRandomizeClick = () => {
       trigger(mod.id, 'ApplyRoadTextures'); 
     }
 
-const handleHexChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const value = e.target.value;
+    function hueToHex(hue: number): string {
+  const rgb = hsvToRgb(hue, 1, 1); // Full saturation/value
+  return "#" + rgb.map(x => x.toString(16).padStart(2, "0")).join("");
+}
 
-  // Send it directly — validation is done in C#
-  trigger(mod.id, "HandlePrimaryRoadColorHex", value);
-};
+function hsvToRgb(h: number, s: number, v: number): [number, number, number] {
+  let r = 0, g = 0, b = 0;
+  const i = Math.floor(h * 6);
+  const f = h * 6 - i;
+  const p = v * (1 - s);
+  const q = v * (1 - f * s);
+  const t = v * (1 - (1 - f) * s);
+
+  switch (i % 6) {
+    case 0: r = v; g = t; b = p; break;
+    case 1: r = q; g = v; b = p; break;
+    case 2: r = p; g = v; b = t; break;
+    case 3: r = p; g = q; b = v; break;
+    case 4: r = t; g = p; b = v; break;
+    case 5: r = v; g = p; b = q; break;
+  }
+
+  return [
+    Math.round(r * 255),
+    Math.round(g * 255),
+    Math.round(b * 255),
+  ];
+}
+
+
+const [hexInput, setHexInput] = useState("#ffffff");
+
+
+useEffect(() => {
+    if (PrimaryRoadColor?.startsWith("#") && primaryHex.toLowerCase() !== PrimaryRoadColor.toLowerCase()) {
+      setPrimaryHex(PrimaryRoadColor);
+    }
+  }, [PrimaryRoadColor]);
+
+  useEffect(() => {
+    if (SecondaryRoadColor?.startsWith("#") && secondaryHex.toLowerCase() !== SecondaryRoadColor.toLowerCase()) {
+      setSecondaryHex(SecondaryRoadColor);
+    }
+  }, [SecondaryRoadColor]);
+
+
+  const handlePrimaryHexChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setPrimaryHex(val);
+    if (/^#?[0-9a-fA-F]{6}$/.test(val)) {
+      const formatted = val.startsWith("#") ? val : `#${val}`;
+      trigger(mod.id, "HandlePrimaryRoadColorHex", formatted);
+    }
+  };
+
+ const handleSecondaryHueChange = (value: number) => {
+    trigger(mod.id, "HandleSecondaryRoadColor", value);
+  };
+  const handleSecondaryHexChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setSecondaryHex(val);
+    if (/^#?[0-9a-fA-F]{6}$/.test(val)) {
+      const formatted = val.startsWith("#") ? val : `#${val}`;
+      trigger(mod.id, "HandleSecondaryRoadColorHex", formatted);
+    }
+  };
+
 
 
   return (
@@ -142,13 +213,14 @@ const handleHexChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 <div className="color-container">
   <div className="color-label-1">HEX Base Color</div>
 
-  <input
-    type="text"
-    value={PrimaryRoadColor}
-    onChange={handleHexChange}
-    maxLength={8}
-    className="toggle_cca item-mouse-states_Fmi toggle_th_ hex-input"
-  />
+<input
+            type="text"
+            value={primaryHex}
+            onChange={handlePrimaryHexChange}
+            maxLength={7}
+            className="toggle_cca item-mouse-states_Fmi toggle_th_ hex-input"
+          />
+
 
 <Tooltip tooltip={"Open Color Picker"}> 
 <button
@@ -189,6 +261,18 @@ const handleHexChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
 
 </div>
+
+{/* Secondary Color Input */}
+        <div className="color-container-2" style={{ marginTop: "1rem" }}>
+          <div className="color-label-2">HEX Secondary Base Color</div>
+          <input
+            type="text"
+            value={secondaryHex}
+            onChange={handleSecondaryHexChange}
+            maxLength={7}
+            className="toggle_cca item-mouse-states_Fmi toggle_th_ hex-input-2"
+          />
+        </div>
 
 
 

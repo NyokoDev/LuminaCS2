@@ -18,6 +18,7 @@ namespace Lumina
     using Game.UI.Localization;
     using Game.UI.Widgets;
     using Lumina.Metro;
+    using Lumina.Roads;
     using Lumina.Systems;
     using Lumina.Systems.SimulationRefresh;
     using Lumina.UI;
@@ -217,6 +218,7 @@ namespace Lumina
                 m_ReplaceRoadWearSystem ??=
                     world.GetExistingSystemManaged<ReplaceRoadWearSystem>();  // 🚫 not GetOrCreate
                 m_ReplaceRoadWearSystem.RevertTextures(); // revert textures if they were already applied
+                RoadColorReplacer.RestoreOriginalColors(); // restore original colors if they were already applied
 
                 CheckForMods(); // check for incompatible mods
             }

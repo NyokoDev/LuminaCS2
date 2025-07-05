@@ -201,19 +201,65 @@
             // Road Colors
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandlePrimaryRoadColor", HandlePrimaryRoadColor));
             AddBinding(new TriggerBinding<string>(Mod.MODUI, "HandlePrimaryRoadColorHex", HandlePrimaryRoadColorHex));
+            AddBinding(new TriggerBinding<string>(Mod.MODUI, "HandleSecondaryRoadColorHex", HandleSecondaryRoadColorHex));
             AddBinding(new TriggerBinding(Mod.MODUI, "HandleRandomizer", HandleRandomizer));
             AddBinding(new TriggerBinding(Mod.MODUI, "OpenColorPickerSite", OpenColorPickerSite));
 
 
             AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "PrimaryRoadColor", GetPrimaryRoadHex));
+            AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "SecondaryRoadColor", GetSecondaryRoadHex));
 
-            AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleSecondaryRoadColor", HandleSecondaryRoadColor));
+            
          
 
         }
 
+        private void HandleSecondaryRoadColorHex(string hex)
+        {
+            if (!GlobalVariables.Instance.UseRoadTextures)
+            {
+                SendMessage();
+                return;
+            }
+            if (string.IsNullOrEmpty(hex))
+                return;
+
+            if (hex.StartsWith("#"))
+                hex = hex.Substring(1);
+
+            if (hex.Length == 3)
+            {
+                hex = new string(new[] { hex[0], hex[0], hex[1], hex[1], hex[2], hex[2] });
+            }
+
+            if (hex.Length != 6 || !int.TryParse(hex, System.Globalization.NumberStyles.HexNumber, null, out int hexColor))
+            {
+                Mod.Log.Info($"[LUMINA] Invalid hex input: {hex}");
+                return;
+            }
+
+
+            float r = ((hexColor >> 16) & 0xFF) / 255f;
+            float g = ((hexColor >> 8) & 0xFF) / 255f;
+            float b = (hexColor & 0xFF) / 255f;
+
+            Color color = new Color(r, g, b, 1f);
+            GlobalVariables.Instance.SecondaryRoadColor = color;
+
+            Color.RGBToHSV(color, out float hue, out _, out _);
+            _primaryRoadHue = hue;
+
+            Mod.Log.Info($"[LUMINA] Set PrimaryRoadColor from hex #{hex} → RGB({r:F2}, {g:F2}, {b:F2}) → Hue {hue:F3}");
+            RoadColorReplacer.UpdateColors(); // Update the road colors immediately
+        }
+
         private void HandleRandomizer()
         {
+            if (!GlobalVariables.Instance.UseRoadTextures)
+            {
+                SendMessage();
+                return;
+            }
             // Generate random grayscale value between 0 and 1
             float grayscale = UnityEngine.Random.Range(0f, 1f);
 
@@ -234,8 +280,13 @@
         }
 
         private void OpenColorPickerSite()
-    {
-        try
+        {
+            if (!GlobalVariables.Instance.UseRoadTextures)
+            {
+                SendMessage();
+                return;
+            }
+            try
         {
             Process.Start(new ProcessStartInfo
             {
@@ -252,6 +303,12 @@
 
     private void HandlePrimaryRoadColorHex(string hex)
         {
+            if (!GlobalVariables.Instance.UseRoadTextures)
+            {
+                SendMessage();
+                return;
+            }
+
             if (string.IsNullOrEmpty(hex))
                 return;
 
@@ -299,14 +356,42 @@
             return hex;
         }
 
-
-        private void HandleSecondaryRoadColor(float obj)
+        private string GetSecondaryRoadHex()
         {
-        
+            Color color = GlobalVariables.Instance.SecondaryRoadColor;
+
+            // Convert color channels (r,g,b) from [0,1] float to 0-255 int
+            int r = Mathf.Clamp(Mathf.RoundToInt(color.r * 255f), 0, 255);
+            int g = Mathf.Clamp(Mathf.RoundToInt(color.g * 255f), 0, 255);
+            int b = Mathf.Clamp(Mathf.RoundToInt(color.b * 255f), 0, 255);
+
+            // Format as hex string with leading '#'
+            string hex = $"#{r:X2}{g:X2}{b:X2}";
+
+            return hex;
+        }
+
+
+
+        private void HandleSecondaryRoadColor(float hue)
+        {
+            hue = Mathf.Clamp01(hue); // Ensure value is within 0–1
+            float _primaryRoadHue = hue;
+
+            Color color = Color.HSVToRGB(hue, 1f, 1f); // full saturation & brightness
+            GlobalVariables.Instance.SecondaryRoadColor = color;
+
+            Mod.Log.Info($"[LUMINA] SecondaryRoadColor set via hue {hue} -> RGB {color}");
+            RoadColorReplacer.UpdateColors(); // Update the road colors immediately
         }
 
         private void HandlePrimaryRoadColor(float hue)
         {
+            if (!GlobalVariables.Instance.UseRoadTextures)
+            {
+                SendMessage();
+                return;
+            }
             hue = Mathf.Clamp01(hue); // Ensure value is within 0–1
             float _primaryRoadHue = hue;
 
@@ -338,13 +423,7 @@
         {
             if (!GlobalVariables.Instance.UseRoadTextures)
             {
-                // If RoadTextures is not enabled, log the error and show a dialog
-                string errorMessage = "Please enable 'Use Road Textures' in the Options menu and try again.";
-
-                Mod.Log.Info(errorMessage);
-
-                var dialog = new SimpleMessageDialog(errorMessage);
-                GameManager.instance.userInterface.appBindings.ShowMessageDialog(dialog, null);
+                SendMessage();
                 return;
             }
 
@@ -361,6 +440,16 @@
             }
         }
 
+        private void SendMessage()
+        {
+            // If RoadTextures is not enabled, log the error and show a dialog
+            string errorMessage = "Please enable 'Use Road Textures' in the Options menu and try again.";
+
+            Mod.Log.Info(errorMessage);
+
+            var dialog = new SimpleMessageDialog(errorMessage);
+            GameManager.instance.userInterface.appBindings.ShowMessageDialog(dialog, null);
+        }
 
         private void SetBrightness(float value)
         {

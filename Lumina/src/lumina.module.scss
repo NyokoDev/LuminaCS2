@@ -1,18 +1,80 @@
 :root {
-    --size: 46rem;
+  --size: 46rem;
 }
 
 .LuminaIcon {
-    pointer-events: auto;
-    width: var(--size);
-    height: var(--size);
+  pointer-events: auto;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease;
+  transform-origin: center;
+  will-change: transform, box-shadow;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(6px);
 }
 
 .LuminaIcon img {
-    width: 30rem;
-    height: 30rem;
+  width: 100%;
+  height: 100%;
+  /* remove object-fit */
+  /* object-fit: cover; */
+  
+  /* add for sharper SVG rendering */
+  image-rendering: optimizeSpeed;             /* Older browsers */
+  image-rendering: -webkit-optimize-contrast; /* Safari, Chrome */
+  image-rendering: crisp-edges;
+  image-rendering: pixelated; /* last resort, usually pixelates */
+  
+  transition: filter 0.4s ease;
+  border-radius: 50%;
 }
 
-.Tab1{
-    display: none;
+.LuminaIcon::after {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  transform: rotate(25deg);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+.LuminaIcon:hover {
+  transform: scale(1.05) rotate(0.5deg);
+  box-shadow: 0 0 2rem rgba(255, 255, 255, 0.1), 0 0 3rem rgba(0, 200, 255, 0.3);
+}
+
+.LuminaIcon:hover img {
+  filter: brightness(1.1) saturate(1.3);
+}
+
+.LuminaIcon:hover::after {
+  opacity: 1;
+  animation: shimmer 1.2s infinite linear;
+}
+
+.LuminaIcon:active {
+  transform: scale(0.97);
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translate(-100%, -100%) rotate(25deg);
+  }
+  100% {
+    transform: translate(100%, 100%) rotate(25deg);
+  }
 }

@@ -7,6 +7,7 @@ using Lumina;
 using Lumina.XML;
 using LuminaMod.XML;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Unity.Entities;
 using UnityEngine;
@@ -24,6 +25,8 @@ namespace RoadWearAdjuster.Systems
         private Texture originalGravelLaneBaseTexture;
         private Texture originalGravelLaneNormalTexture;
 
+        public static Texture2D roadColorTexture;
+
         private Texture2D roadWearColourTexture;
         private Texture2D roadWearNormalTexture;
 
@@ -34,10 +37,16 @@ namespace RoadWearAdjuster.Systems
         private const string fileName = "RoadWearTexture";
 
         public bool AppliedYet = false;
-        public Texture replacementTexture; // Optional: assign via Inspector
+
+
+        // Store original material data here
+        public static Dictionary<Material, (Color? baseColor, Color? emissionColor)> OriginalColors
+            = new Dictionary<Material, (Color?, Color?)>();
 
         public static void FindAndModifyMaterials()
         {
+         
+
             string shaderName = "BH/NetCompositionMeshLitShader";
             Shader targetShader = Shader.Find(shaderName);
 
@@ -55,20 +64,41 @@ namespace RoadWearAdjuster.Systems
                 {
                     Mod.Log.Info($"Found Material: {mat.name} using Shader: {shaderName}");
 
+                    Color? originalBaseColor = null;
+                    Color? originalEmissionColor = null;
+
                     if (mat.HasProperty("_BaseColor"))
                     {
-                        mat.SetColor("_BaseColor", GlobalVariables.Instance.PrimaryRoadColor);
-                        Mod.Log.Info($"  → Changed _BaseColor to {GlobalVariables.Instance.PrimaryRoadColor}");
+                        originalBaseColor = mat.GetColor("_BaseColor");
+
+
+                        if (GlobalVariables.Instance.UseRoadTextures)
+                        {
+                            mat.SetColor("_BaseColor", GlobalVariables.Instance.PrimaryRoadColor);
+                            Mod.Log.Info($"  → Changed _BaseColor to {GlobalVariables.Instance.PrimaryRoadColor}");
+                        }
+                       
                     }
 
                     if (mat.HasProperty("_EmissionColor"))
                     {
-                        mat.SetColor("_EmissionColor", GlobalVariables.Instance.SecondaryRoadColor);
-                        mat.EnableKeyword("_EMISSION");
-                        Mod.Log.Info($"  → Changed _EmissionColor to {GlobalVariables.Instance.SecondaryRoadColor}");
+                        originalEmissionColor = mat.GetColor("_EmissionColor");
+                        if (GlobalVariables.Instance.UseRoadTextures)
+                        {
+                            mat.SetColor("_EmissionColor", GlobalVariables.Instance.SecondaryRoadColor);
+                            mat.EnableKeyword("_EMISSION");
+                        }
+
+                            Mod.Log.Info($"  → Changed _EmissionColor to {GlobalVariables.Instance.SecondaryRoadColor}");
                     }
 
-                    // Check common texture properties
+                    // Save original colors if at least one exists
+                    if (originalBaseColor.HasValue || originalEmissionColor.HasValue)
+                    {
+                        OriginalColors[mat] = (originalBaseColor, originalEmissionColor);
+                    }
+
+                    // Check and log common texture properties
                     string[] textureProps = new[] { "_BaseMap", "_MainTex", "_EmissionMap" };
 
                     foreach (string texProp in textureProps)
@@ -79,18 +109,42 @@ namespace RoadWearAdjuster.Systems
                             Mod.Log.Info($"  Texture Slot '{texProp}': {(tex != null ? tex.name : "None")}");
 
 #if DEBUG
-                            // If a replacement texture is set, replace it
-                            if (replacementTexture != null)
-                            {
-                                mat.SetTexture(texProp, replacementTexture);
-                                Mod.Log.Info($"  → Replaced {texProp} with '{replacementTexture.name}'");
-                            }
+                        if (roadColorTexture != null)
+                        {
+                            mat.SetTexture(texProp, roadColorTexture);
+                            Mod.Log.Info($"  → Replaced {texProp} with '{roadColorTexture.name}'");
+                        }
 #endif
                         }
                     }
                 }
             }
         }
+
+        // Optional: Restore method
+        public static void RestoreOriginalColors()
+        {
+            foreach (var kvp in OriginalColors)
+            {
+                Material mat = kvp.Key;
+                var (baseColor, emissionColor) = kvp.Value;
+
+                if (baseColor.HasValue && mat.HasProperty("_BaseColor"))
+                {
+                    mat.SetColor("_BaseColor", baseColor.Value);
+                }
+
+                if (emissionColor.HasValue && mat.HasProperty("_EmissionColor"))
+                {
+                    mat.SetColor("_EmissionColor", emissionColor.Value);
+                }
+
+                Mod.Log.Info($"Restored colors for material: {mat.name}");
+            }
+
+            OriginalColors.Clear();
+        }
+
 
 
         protected override void OnCreate()
@@ -99,6 +153,7 @@ namespace RoadWearAdjuster.Systems
 
             FindAndModifyMaterials();
 
+            roadColorTexture = new Texture2D(1024, 1024, TextureFormat.ARGB32, true, true);
             roadWearColourTexture = new Texture2D(1024, 1024);
             roadWearNormalTexture = new Texture2D(1024, 1024, TextureFormat.ARGB32, true, true);
 
@@ -154,12 +209,14 @@ namespace RoadWearAdjuster.Systems
             }
 
             byte[] colourData = File.ReadAllBytes(colourPath);
+            roadColorTexture.LoadImage(colourData);
             roadWearColourTexture.LoadImage(colourData);
             originalColourPixels = roadWearColourTexture.GetPixels(0);
 
             byte[] normalData = File.ReadAllBytes(normalPath);
             roadWearNormalTexture.LoadImage(normalData);
             roadWearNormalTexture.Apply();
+            roadColorTexture.Apply();
 
             float brightness = GlobalVariables.Instance.TextureBrightness;
             float opacity = GlobalVariables.Instance.TextureOpacity;
@@ -176,6 +233,7 @@ namespace RoadWearAdjuster.Systems
             }
 
             roadWearColourTexture.SetPixels(modifiablePixels);
+            roadColorTexture.SetPixels(modifiablePixels);
             roadWearColourTexture.Apply(true);
         }
 

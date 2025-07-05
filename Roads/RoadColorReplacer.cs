@@ -17,6 +17,12 @@ namespace Lumina.Roads
         {
             ReplaceRoadWearSystem.UpdateColors();
         }
+
+        internal static void RestoreOriginalColors()
+        {
+            ReplaceRoadWearSystem.RestoreOriginalColors();
+        }
+
         protected override void OnUpdate()
         {
             
