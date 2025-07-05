@@ -450,7 +450,7 @@
             string gameVersion = Version.current.fullVersion;
             string supportedGameVersion = GlobalPaths.SupportedGameVersion;
 
-            Mod.Log.Info($"Checking game version: {gameVersion}");
+       
 
             if (gameVersion != supportedGameVersion)
             {
@@ -471,7 +471,7 @@
                 return;
             }
 
-            Mod.Log.Info("Unity version " + unityversion);
+     
 
             try
             {
@@ -481,13 +481,13 @@
 
                     if (currentVersion == latestVersion)
                     {
-                        Mod.Log.Info("Lumina is up to date with version: " + currentVersion);
+                       
                     }
                     else
                     {
                         string message = string.Format("Lumina new version available! Current: {0} | Latest: {1}", currentVersion, latestVersion);
                         GlobalPaths.SendMessage(message); // Show a message box with the version information
-                        Mod.Log.Info(message);
+               
                     }
                 }
             }
