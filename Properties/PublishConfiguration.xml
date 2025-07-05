@@ -1,17 +1,17 @@
 ﻿<Publish>
 	<!--Id must be set in order to update existed mod. it is not required for publishing mod for the first time-->
-	<ModId Value="113470" />
+	<ModId Value="94394" />
 	<!--Name of the mod to display to players-->
-	<DisplayName Value="Lumina [Experimental]" />
+	<DisplayName Value="Lumina" />
 	<!--Short description of the mod-->
 	<ShortDescription Value="Fine tune post-processing settings." />
 	<!--Long description of the mod. Single line or multi line. Supports minimal markdown subset-->
 	<LongDescription>
-		This is not the stable version of Lumina. It is a developer version that is used to test new features and bug fixes before they are released to the public. It may contain bugs and issues that are not present in the stable version. Use at your own risk. Experimental release for new features and bug fixes. This version is not recommended for regular users, but it is available for those who want to test new features and provide feedback.
+		Lumina, formerly known as ColorAdjustments, is a post-processing mod for Cities: Skylines, crafted to significantly enhance in-game visuals. It allows players to save and load color settings, eliminating the need to reconfigure them each time the game is launched. Currently in Beta, Lumina features: Road wear textures replacement Cubemap replacement A time-of-day slider LUT selection Detailed color adjustments such as exposure, contrast, hue, and white balance Planetary settings and brightness control Compatibility with the game editor As one of the most complex mods I've ever designed and coded, Lumina's detailed overview of features and updates can be found on the project's GitHub repository. 📘 Documentation: https://skylinx.gitbook.io/lumina 🛠️ Credits Konsi – for code related to Time of Day Quboid and Move It – for code related to the icon Yenyang – for input TritonSupreme – for code related to the sliders DanielNotFound22 – for testing and advice T.D.W – for input and help HX2003 and cgameworld - Road Wear code insight. 🌐 Translations Translations for this mod are available in several languages, including: German (Germany) English (United States) Spanish by elgendo87 French (France) Italian (Italy) Japanese (Japan) Korean (South Korea) Dutch (Netherlands) Polish (Poland) Portuguese (Brazil) Romanian (Romania) Russian (Russia) Chinese (Simplified) Chinese (Traditional)
 	</LongDescription>
 
 	<!--Thumbnail-->
-	<Thumbnail Value="Properties/ExpThumbnail.png" />
+	<Thumbnail Value="Properties/Thumbnail.png" />
 	<!--Screenshot, can be set multiple times-->
 	<Screenshot Value="Properties/Screenshot10.png" />
 	<Screenshot Value="Properties/Screenshot4.png" />
@@ -23,9 +23,9 @@
 	<!--Tag, can be set multiple times-->
 	<Tag Value="Code Mod" />
 	<!--Link to the forum post where the mod can be discussed-->
-	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/lumina-experimental-dev-version.1787218/" />
+	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/lumina.1645623/" />
 	<!--Version of the mod-->
-	<ModVersion Value="v2.4-Prerelease-1" />
+	<ModVersion Value="v2.4" />
 	<!--Recommended version of the base game to use the mod-->
 	<GameVersion Value="1.*" />
 	<!--Dependency for the mod, can be set multiple times-->
