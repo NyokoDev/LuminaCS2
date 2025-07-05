@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Iro Color Picker</title>
+  <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
+  <style>
+    body {
+      margin: 0;
+      background: #1e1e1e;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <div id="picker"></div>
+  <script>
+    const colorPicker = new iro.ColorPicker("#picker", {
+      width: 250,
+      color: "#f00"
+    });
+
+    colorPicker.on("color:change", (color) => {
+      // Send color.hexString to your mod through messaging (if supported)
+      console.log("HEX:", color.hexString);
+    });
+  </script>
+</body>
+</html>

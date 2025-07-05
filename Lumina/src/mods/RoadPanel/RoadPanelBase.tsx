@@ -8,6 +8,7 @@ import { ChromePicker } from "react-color";
 import { useState } from "react";
 import { Color } from "cs2/bindings";
 import { getModule } from "cs2/modding";
+import { Tooltip } from "cs2/ui";
 
 // Imports
 export const GetOpacity$ = bindValue<number>(mod.id, "GetOpacity");
@@ -28,6 +29,13 @@ export const RoadPanelBase: React.FC<RoadPanelBaseProps> = ({
 }) => {
 
 
+const handleRandomizeClick = () => {
+  // Generate random float 0 to 1 for your color hue or whatever logic
+  const randomHue = Math.random();
+
+  // Trigger your mod method
+  trigger(mod.id, "HandleRandomizer");
+};
 
 
  const handlePrimaryRoadHueChange = (value: number) => {
@@ -66,12 +74,8 @@ export const RoadPanelBase: React.FC<RoadPanelBaseProps> = ({
       trigger(mod.id, 'ApplyRoadTextures'); 
     }
 
-// Add in component
-const [hexInput, setHexInput] = useState("#FF0000");
-
 const handleHexChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   const value = e.target.value;
-  setHexInput(value);
 
   // Send it directly — validation is done in C#
   trigger(mod.id, "HandlePrimaryRoadColorHex", value);
@@ -136,49 +140,56 @@ const handleHexChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   </div>
 
 <div className="color-container">
-  <div className="color-label-1">{translate("LUMINA.roadcolor")}</div>
-<Slider
-         
-             start={0}
-      end={1}
-      step={0.1}
-            value={PrimaryRoadColor}
-            className="color-slider"
-            valueTransformer={SliderValueTransformer.floatTransformer}
-            onChange={handlePrimaryRoadHueChange} gamepadStep={0} disabled={false} noFill={false}    />
-</div>
+  <div className="color-label-1">HEX Base Color</div>
 
-<div className="hex-input-container">
-  <div className="color-label-hex">{translate("LUMINA.hexcolor")}</div>
   <input
     type="text"
-    value={hexInput}
+    value={PrimaryRoadColor}
     onChange={handleHexChange}
-    placeholder="#RRGGBB"
-    maxLength={7}
-    className="hex-input"
+    maxLength={8}
+    className="toggle_cca item-mouse-states_Fmi toggle_th_ hex-input"
   />
+
+<Tooltip tooltip={"Open Color Picker"}> 
+<button
+  onClick={() => trigger(mod.id, "OpenColorPickerSite")}
+  title="Open HTML Color Codes"
+  className="ColorPickerButton1"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="white"
+  >
+    <path d="M12 2C6.486 2 2 6.017 2 11c0 3.225 2.078 6.048 5.081 7.293-.001.002-.008.026-.011.07-.019.214-.081.828.137 1.352.144.345.381.703.754.964.374.263.855.395 1.386.395 1.132 0 2.01-.742 2.01-2v-1.037c0-.222.187-.403.421-.382C19.106 18.484 22 15.002 22 11c0-4.983-4.486-9-10-9zm-4 10c-.552 0-1-.447-1-1s.448-1 1-1 1 .447 1 1-.448 1-1 1zm3-4c-.552 0-1-.447-1-1s.448-1 1-1 1 .447 1 1-.448 1-1 1zm4 0c-.552 0-1-.447-1-1s.448-1 1-1 1 .447 1 1-.448 1-1 1zm2 4c-.552 0-1-.447-1-1s.448-1 1-1 1 .447 1 1-.448 1-1 1z" />
+  </svg>
+</button>
+</Tooltip>
+
+<Tooltip tooltip={"Randomize"}> 
+<button
+  onClick={handleRandomizeClick}
+  title="Randomize Color"
+  className="ColorPickerButtonRandomize"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="white"
+  >
+    {/* Simple dice icon for randomize */}
+    <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-8 13a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm-4-4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm8 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm-4-4a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+  </svg>
+</button>
+</Tooltip>
+
+
 </div>
 
-
-
-
-
-      <div className="second-color-container">
-    <div className="second-color-label-1"> {translate("LUMINA.roadcolorsecond")}</div>
-    <Slider
-      value={GetSmoothness}
-      start={0}
-      end={1}
-      step={0.1}
-      className="second-color-slider"
-      gamepadStep={0.00001}
-      valueTransformer={SliderValueTransformer.floatTransformer}
-      disabled={false}
-      noFill={false}
-      onChange={HandleSecondaryRoadColor}
-    />
-  </div>
 
 
 

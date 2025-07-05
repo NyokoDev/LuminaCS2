@@ -201,14 +201,56 @@
             // Road Colors
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandlePrimaryRoadColor", HandlePrimaryRoadColor));
             AddBinding(new TriggerBinding<string>(Mod.MODUI, "HandlePrimaryRoadColorHex", HandlePrimaryRoadColorHex));
+            AddBinding(new TriggerBinding(Mod.MODUI, "HandleRandomizer", HandleRandomizer));
+            AddBinding(new TriggerBinding(Mod.MODUI, "OpenColorPickerSite", OpenColorPickerSite));
 
 
-            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "PrimaryRoadColor", GetPrimaryRoadHue));
+            AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "PrimaryRoadColor", GetPrimaryRoadHex));
 
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleSecondaryRoadColor", HandleSecondaryRoadColor));
+         
+
         }
 
-        private void HandlePrimaryRoadColorHex(string hex)
+        private void HandleRandomizer()
+        {
+            // Generate random grayscale value between 0 and 1
+            float grayscale = UnityEngine.Random.Range(0f, 1f);
+
+            // Clamp just in case (not strictly needed)
+            grayscale = Mathf.Clamp01(grayscale);
+
+            // Create grayscale color
+            Color color = new Color(grayscale, grayscale, grayscale, 1f);
+
+            GlobalVariables.Instance.PrimaryRoadColor = color;
+
+            Color.RGBToHSV(color, out float hue, out _, out _);
+            _primaryRoadHue = hue;
+
+            Mod.Log.Info($"[LUMINA] Set PrimaryRoadColor to grayscale {grayscale:F3} → RGB({grayscale:F3}, {grayscale:F3}, {grayscale:F3})");
+
+            RoadColorReplacer.UpdateColors(); // refresh visuals immediately
+        }
+
+        private void OpenColorPickerSite()
+    {
+        try
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://htmlcolorcodes.com/",
+                UseShellExecute = true // Opens in the default system browser
+            });
+        }
+        catch (Exception ex)
+        {
+            Mod.Log.Info($"[LUMINA] Failed to open browser: {ex.Message}");
+        }
+    }
+
+
+    private void HandlePrimaryRoadColorHex(string hex)
         {
             if (string.IsNullOrEmpty(hex))
                 return;
@@ -242,14 +284,19 @@
             RoadColorReplacer.UpdateColors(); // Update the road colors immediately
         }
 
-        private float GetPrimaryRoadHue()
+        private string GetPrimaryRoadHex()
         {
             Color color = GlobalVariables.Instance.PrimaryRoadColor;
 
-            // Extract hue (0–1), discard saturation and value
-            Color.RGBToHSV(color, out float hue, out _, out _);
+            // Convert color channels (r,g,b) from [0,1] float to 0-255 int
+            int r = Mathf.Clamp(Mathf.RoundToInt(color.r * 255f), 0, 255);
+            int g = Mathf.Clamp(Mathf.RoundToInt(color.g * 255f), 0, 255);
+            int b = Mathf.Clamp(Mathf.RoundToInt(color.b * 255f), 0, 255);
 
-            return hue;
+            // Format as hex string with leading '#'
+            string hex = $"#{r:X2}{g:X2}{b:X2}";
+
+            return hex;
         }
 
 

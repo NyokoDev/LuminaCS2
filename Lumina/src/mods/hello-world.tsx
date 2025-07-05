@@ -37,7 +37,7 @@ export const LuminaButton: ModuleRegistryExtend = (Component) => {
         const { children, ...otherProps } = props || {};
         const MIT_ToolEnabled = isInstalled$
         const moveItIconSrc = MIT_ToolEnabled ? "coui://ui-mods/images/Lumina.svg" : "coui://ui-mods/images/Lumina.svg";
-        const [isInstalled, setIsInstalled] = useState(false); // assuming you meant to use useState to manage isInstalled state
+        const [isInstalled, setIsInstalled] = useState(true); // assuming you meant to use useState to manage isInstalled state
         const [refreshKey, setRefreshKey] = useState(0); // Key for forcing re-render
 
         let a = iconOff;

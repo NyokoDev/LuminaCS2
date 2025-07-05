@@ -110,9 +110,6 @@
   top: 50rem;   /* Stacked below brightness */
     left: 700rem;
           width:200rem;
-  
-  display: flex;
-  flex-direction: column;
 }
 
 .second-color-container {
@@ -123,4 +120,95 @@
   right: 1rem;
   display: flex;
   flex-direction: column;
+}
+
+.color-label-1 {
+  position: absolute;
+  top:20rem;
+  right:1rem;
+}
+
+.hex-input {
+  z-index: 1000;
+  position: inherit;
+  top: inherit;
+  width: inherit;
+  color: white;
+  pointer-events: all;
+}
+
+.ColorPickerButton1 {
+  position: absolute;
+  right: 150rem;
+  width: 40rem;
+  height: 40rem;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #2e2e2e, #252525);
+  box-shadow:
+    5rem 5rem 15rem #1c1c1c,
+    -5rem -5rem 15rem #383838;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s ease,
+    background 0.3s ease;
+}
+
+.ColorPickerButton1:hover {
+  transform: translateY(-3rem) scale(1.1);
+  background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+  box-shadow:
+    8rem 8rem 20rem #171717,
+    -8rem -8rem 20rem #404040,
+    0 0 10rem 3rem #4d90fe99;
+}
+
+.ColorPickerButton1:active {
+  transform: translateY(0) scale(0.95);
+  box-shadow:
+    inset 3rem 3rem 5rem #1c1c1c,
+    inset -3rem -3rem 5rem #383838;
+  background: linear-gradient(145deg, #272727, #212121);
+}
+
+.ColorPickerButtonRandomize {
+  position: absolute;
+  right: 200rem; /* Adjust horizontal position as needed */
+  width: 40rem;
+  height: 40rem;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #2e2e2e, #252525);
+  box-shadow:
+    5rem 5rem 15rem #1c1c1c,
+    -5rem -5rem 15rem #383838;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s ease,
+    background 0.3s ease;
+}
+
+.ColorPickerButtonRandomize:hover {
+  transform: translateY(-3rem) scale(1.1);
+  background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+  box-shadow:
+    8rem 8rem 20rem #171717,
+    -8rem -8rem 20rem #404040,
+    0 0 10rem 3rem #4d90fe99;
+}
+
+.ColorPickerButtonRandomize:active {
+  transform: translateY(0) scale(0.95);
+  box-shadow:
+    inset 3rem 3rem 5rem #1c1c1c,
+    inset -3rem -3rem 5rem #383838;
+  background: linear-gradient(145deg, #272727, #212121);
 }
