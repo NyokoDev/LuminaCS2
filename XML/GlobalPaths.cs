@@ -96,7 +96,7 @@ namespace Lumina.XML
                 }
                 else
                 {
-                    return "v2.4";
+                    return "v2.4R1";
                 }
             }
 

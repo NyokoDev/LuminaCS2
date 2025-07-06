@@ -31,7 +31,7 @@
 	<!--Dependency for the mod, can be set multiple times-->
 	<Dependency Id="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
-	<ChangeLog Value="Road color implementation." />
+	<ChangeLog Value="Road color implementation. Bug fixes." />
 " />
 	<!--ChangeLog>
 	</ChangeLog-->

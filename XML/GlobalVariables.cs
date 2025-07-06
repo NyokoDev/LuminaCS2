@@ -252,10 +252,38 @@ namespace LuminaMod.XML
         public bool UseRoadTextures { get; set; }
 
         [XmlElement]
-        public Color PrimaryRoadColor { get; set; }
+        public Color PrimaryRoadColor { get; set; } = Color.white;
 
         [XmlElement]
-        public Color SecondaryRoadColor { get; set; }
+        public Color SecondaryRoadColor { get; set; } = Color.white;
+
+
+        public static void EnsureSettingsFileExists(string filePath)
+        {
+            // Ensure directory exists
+            if (!Directory.Exists(GlobalPaths.AssemblyDirectory))
+            {
+                Directory.CreateDirectory(GlobalPaths.AssemblyDirectory);
+            }
+
+            // Exit early if file already exists
+            if (File.Exists(filePath))
+            {
+                return;
+            }
+
+            // Create and save default GlobalVariables instance
+            GlobalVariables defaultVariables = new GlobalVariables();
+            XmlSerializer serializer = new XmlSerializer(typeof(GlobalVariables));
+
+            using (TextWriter writer = new StreamWriter(filePath))
+            {
+                serializer.Serialize(writer, defaultVariables);
+            }
+
+            Mod.Log.Info("Settings file not found. Created new file with default GlobalVariables.");
+        }
+
 
 
         /// <summary>
@@ -403,9 +431,10 @@ namespace LuminaMod.XML
 
                     GlobalVariables.Instance.UseRoadTextures = loadedVariables?.UseRoadTextures ?? false;
 
-                    // Road Colors
-                    GlobalVariables.Instance.PrimaryRoadColor = loadedVariables?.PrimaryRoadColor ?? new Color(0.5f, 0.5f, 0.5f, 1f);
-                    GlobalVariables.Instance.SecondaryRoadColor = loadedVariables?.SecondaryRoadColor ?? new Color(0.5f, 0.5f, 0.5f, 1f);
+                    // Road Colors (default: RGB 172, 169, 169)
+                    GlobalVariables.Instance.PrimaryRoadColor = loadedVariables?.PrimaryRoadColor ?? (Color.grey);
+                    GlobalVariables.Instance.SecondaryRoadColor = loadedVariables?.SecondaryRoadColor ?? (Color.grey);
+
 
 
 
@@ -422,7 +451,7 @@ namespace LuminaMod.XML
                 if (ex.InnerException != null)
                     Mod.Log.Info($"Inner: {ex.InnerException.Message}");
 
-                Setting.ShowModernMessageBox("Error loading settings. Please check the log for more details.");
+                GlobalPaths.SendMessage("Error loading settings. Please check the log for more details.");
 
                 return null;
             }

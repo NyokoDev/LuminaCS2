@@ -58,6 +58,7 @@ namespace Lumina
         public void OnLoad(UpdateSystem updateSystem)
         {
             // Load global settings
+            GlobalVariables.EnsureSettingsFileExists(GlobalPaths.GlobalModSavingPath);
             GlobalVariables.LoadFromFile(GlobalPaths.GlobalModSavingPath);
 
             harmony = new Harmony($"{nameof(Lumina)}.{nameof(Mod)}");

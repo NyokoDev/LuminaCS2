@@ -11,6 +11,7 @@ namespace Lumina.UI
 {
     using Game.Rendering.CinematicCamera;
     using Game.UI;
+    using Lumina.Roads;
     using Lumina.Systems;
     using Lumina.XML;
     using LuminaMod.XML;
@@ -494,6 +495,8 @@ namespace Lumina.UI
             GlobalVariables.Instance.SunIntensity = 0f;
             GlobalVariables.Instance.SunFlareSize = 0f;
 
+
+            RoadColorReplacer.RestoreOriginalColors(); // Restore original road colors.
             RenderEffectsSystem.DisableCubemap(); // Disable cubemap.
 
             // Save changes
