@@ -1,4 +1,5 @@
 ﻿using Lumina.XML;
+using LuminaMod.XML;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -39,11 +40,16 @@ namespace Lumina.Systems
             // Log the updated cubemap files
             if (RenderEffectsSystem.CubemapFiles.Length > 0)
             {
+                if (GlobalVariables.Instance.EnableDebugLogs) { 
                 Mod.Log.Info("Cubemap files updated:\n" + string.Join(Environment.NewLine, RenderEffectsSystem.CubemapFiles));
+                }
             }
             else
             {
-                Mod.Log.Info("No cubemap files found.");
+                if (GlobalVariables.Instance.EnableDebugLogs)
+                {
+                    Mod.Log.Info("No cubemap files found.");
+                }
                 RenderEffectsSystem.CubemapFiles = Array.Empty<string>();
             }
 

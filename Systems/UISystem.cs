@@ -754,7 +754,9 @@
                 if (RenderEffectsSystem.CubemapFiles == null || RenderEffectsSystem.CubemapFiles.Length == 0)
                 {
                     // Log a warning if no cubemap files are found
-                    Mod.Log.Info("No cubemap files found.");
+                    if (GlobalVariables.Instance.EnableDebugLogs) { 
+                        Mod.Log.Info("No cubemap files found.");
+                    }
                     return new string[] { "None" }; // Return "None" instead of an empty array
                 }
 
