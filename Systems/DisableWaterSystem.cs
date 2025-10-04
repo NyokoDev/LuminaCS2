@@ -33,6 +33,15 @@ namespace Lumina.Systems
             if (lightingSystem != null)
                 lightingSystem.Enabled = shouldEnable;
 
+            // Rendering system (affects post-processing, etc.)
+            var RenderingSystem = World.GetExistingSystemManaged<RenderingSystem>();
+            if (RenderingSystem != null)
+                RenderingSystem.Enabled = shouldEnable;
+
+            var TerrainSystem = World.GetExistingSystemManaged<TerrainRenderSystem>();
+            if (TerrainSystem != null)
+                TerrainSystem.Enabled = shouldEnable;
+
             _lastState = shouldEnable;
             _lastMode = mode;
         }
