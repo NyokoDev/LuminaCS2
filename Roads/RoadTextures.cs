@@ -131,17 +131,20 @@ namespace RoadWearAdjuster.Systems
 
                 if (baseColor.HasValue && mat.HasProperty("_BaseColor"))
                 {
+                    GlobalVariables.Instance.PrimaryRoadColor = baseColor.Value; 
                     mat.SetColor("_BaseColor", baseColor.Value);
                 }
 
                 if (emissionColor.HasValue && mat.HasProperty("_EmissionColor"))
                 {
+                    GlobalVariables.Instance.SecondaryRoadColor = emissionColor.Value; 
                     mat.SetColor("_EmissionColor", emissionColor.Value);
                 }
 
                 Mod.Log.Info($"Restored colors for material: {mat.name}");
             }
 
+            FindAndModifyMaterials(); // Reapply to ensure changes are reflected
             OriginalColors.Clear();
         }
 

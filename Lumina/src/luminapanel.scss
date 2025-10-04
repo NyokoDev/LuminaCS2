@@ -5,6 +5,7 @@ html, body {
 
 .Panel
 {
+    z-index: -1;
     position: absolute;
     width: 950rem;
     height: 500rem;
@@ -24,6 +25,7 @@ html, body {
 
 @media (min-width: 3840px) {
   .Panel {
+        z-index: -1;
     position: absolute;
     width: 950rem;
     height: 500rem;

@@ -3,7 +3,8 @@
 }
 
 .LuminaIcon {
-  pointer-events: auto;
+  z-index: 0;
+  pointer-events: all;
   width: var(--size);
   height: var(--size);
   border-radius: 50%;
@@ -21,12 +22,6 @@
   height: 100%;
   /* remove object-fit */
   /* object-fit: cover; */
-  
-  /* add for sharper SVG rendering */
-  image-rendering: optimizeSpeed;             /* Older browsers */
-  image-rendering: -webkit-optimize-contrast; /* Safari, Chrome */
-  image-rendering: crisp-edges;
-  image-rendering: pixelated; /* last resort, usually pixelates */
   
   transition: filter 0.4s ease;
   border-radius: 50%;
@@ -68,13 +63,4 @@
 
 .LuminaIcon:active {
   transform: scale(0.97);
-}
-
-@keyframes shimmer {
-  0% {
-    transform: translate(-100%, -100%) rotate(25deg);
-  }
-  100% {
-    transform: translate(100%, 100%) rotate(25deg);
-  }
 }

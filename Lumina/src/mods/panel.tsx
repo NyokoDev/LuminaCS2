@@ -32,7 +32,6 @@ import DragButton from "./DraggableButton/DragButton";
 import './RoadPanel/roadpanel.scss';
 import { RoadPanelBase } from "./RoadPanel/RoadPanelBase";
 
-
 export let isInstalled$ = false;
 export let ColorAdjustmentsEnabled = true;
 export let ToneMappingEnabled = false;
@@ -476,6 +475,7 @@ id="Global"
 
 
 <div className="TabsRow">
+
 
 
     <Tooltip

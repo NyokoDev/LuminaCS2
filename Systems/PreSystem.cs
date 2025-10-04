@@ -28,6 +28,7 @@ namespace Lumina
         protected override void OnCreate()
         {
             base.OnCreate();
+            
             ValidateLUTSDirectory();
             ValidateCubemapsDirectory();
             CheckForNullLUTName();

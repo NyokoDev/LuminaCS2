@@ -27,7 +27,7 @@
     height: 20rem;
     width: 20rem;
     left: -30rem;
-    z-index: 1000;
+    z-index: 0;
 }
 
 .toestrength-checkbox-button {
@@ -86,7 +86,7 @@
     height: 20rem;
     width: 20rem;
     left: -30rem;
-    z-index: 1000;
+    z-index: 0;
 }
 
 .toeLength-checkbox-button {
@@ -146,7 +146,7 @@
     width: 235rem; /* unchanged */
     top: 120rem; /* 70rem + 20rem */
     left: 20rem;
-    z-index: 1000;
+    z-index: 0;
 }
 
 .shoulderStrength-checkbox-image {
@@ -155,7 +155,7 @@
     height: 20rem; /* unchanged */
     width: 20rem; /* unchanged */
     left: -30rem; /* unchanged */
-    z-index: 100;
+    z-index: 0;
 }
 
 .shoulderstrength-checkbox-button {
@@ -196,7 +196,7 @@
           background-size: cover;
           filter: invert(100%);
           pointer-events: auto;
-          z-index:1000;
+        z-index: 0;
         }
 
         .hdristrength-checkbox-button {
@@ -223,7 +223,7 @@
           width: 20rem;
           top: 110rem;
           left: 10rem;
-z-index: 9999 !important;
+z-index: 1;
 
     pointer-events: auto;
 
@@ -237,7 +237,7 @@ z-index: 9999 !important;
           left: auto;
           width: 20rem;
           height: 20rem;
-z-index: 9999 !important;
+z-index: 1;
 
     filter: invert(100%);
     pointer-events: auto;

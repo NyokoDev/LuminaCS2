@@ -26,6 +26,7 @@ const ToolBarTheme: Theme | any = getModule(
 import iconOff from "../img/Lumina.svg";
 import iconActive from "../img/Lumina.svg";
 import styles from "../lumina.module.scss";
+import { FixPanelStyles } from "./Scripts/we";
 
 
 
@@ -45,6 +46,7 @@ export const LuminaButton: ModuleRegistryExtend = (Component) => {
 
         return (
             <>    
+            <FixPanelStyles />
             
                 <Button
                     src={moveItIconSrc}
