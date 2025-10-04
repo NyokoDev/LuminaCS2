@@ -110,6 +110,9 @@ namespace Lumina
             // Update system after RenderEffectsSystem but before culling
             updateSystem.UpdateAfter<RenderEffectsSystem>(SystemUpdatePhase.PreCulling);
 
+            /// Update system after DisableWaterSystem to ensure water rendering is managed correctly
+            updateSystem.UpdateAfter<DisableWaterSystem>(SystemUpdatePhase.MainLoop);
+
             updateSystem.UpdateAt<UISystem>(SystemUpdatePhase.UIUpdate);
 
             updateSystem.UpdateAt<TimeOfDayProcessor>(SystemUpdatePhase.GameSimulation);

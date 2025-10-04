@@ -257,6 +257,9 @@ namespace LuminaMod.XML
         [XmlElement]
         public Color SecondaryRoadColor { get; set; } = Color.white;
 
+        [XmlElement]
+        public bool EnableDebugLogs { get; set; } = false;
+
 
         public static void EnsureSettingsFileExists(string filePath)
         {
@@ -434,6 +437,8 @@ namespace LuminaMod.XML
                     // Road Colors (default: RGB 172, 169, 169)
                     GlobalVariables.Instance.PrimaryRoadColor = loadedVariables?.PrimaryRoadColor ?? (Color.grey);
                     GlobalVariables.Instance.SecondaryRoadColor = loadedVariables?.SecondaryRoadColor ?? (Color.grey);
+
+                    GlobalVariables.Instance.EnableDebugLogs = loadedVariables?.EnableDebugLogs ?? false;
 
 
 

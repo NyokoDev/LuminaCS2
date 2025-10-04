@@ -22,13 +22,13 @@ namespace Lumina
 {
     internal partial class PreSystem : SystemBase
     {
-
+        DisableWaterSystem disableWaterSystem;
 
         /// <inheritdoc/>
         protected override void OnCreate()
         {
             base.OnCreate();
-            
+            DisableWater();
             ValidateLUTSDirectory();
             ValidateCubemapsDirectory();
             CheckForNullLUTName();
@@ -40,6 +40,11 @@ namespace Lumina
             }
             CheckAndReplaceAdditionalPackages();
 
+        }
+
+        private void DisableWater()
+        {
+            DisableWaterSystem disableWaterSystem = World.GetOrCreateSystemManaged<DisableWaterSystem>();
         }
 
         private void ClearPackagesDirectory()
@@ -146,10 +151,12 @@ namespace Lumina
                                     .ToList();
 
             // Debugging log for file names comparison
-            Lumina.Mod.Log.Info($"Package LUT files: {string.Join(", ", packageLutFiles)}");
+            if (GlobalVariables.Instance.EnableDebugLogs) { 
+                Lumina.Mod.Log.Info($"Package LUT files: {string.Join(", ", packageLutFiles)}");
             Lumina.Mod.Log.Info($"Package Cubemap files: {string.Join(", ", packageCubemapFiles)}");
             Lumina.Mod.Log.Info($"LUT files in lutsDirectory: {string.Join(", ", lutsFiles)}");
             Lumina.Mod.Log.Info($"Cubemap files in hdrDirectory: {string.Join(", ", hdrFiles)}");
+            }
 
             // Check if any .cube files are missing from lutsDirectory
             var missingInLutsDirectory = packageLutFiles.Except(lutsFiles).ToList();
@@ -158,14 +165,20 @@ namespace Lumina
             // If there are missing files in the target directories, notify the user
             if (missingInLutsDirectory.Any())
             {
-                Lumina.Mod.Log.Info($"The following LUT files are missing from the LUTs directory: {string.Join(", ", missingInLutsDirectory)}");
-                Mod.Log.Info($"Missing LUT files in the LUTs directory: {string.Join(", ", missingInLutsDirectory)}");
+                if (GlobalVariables.Instance.EnableDebugLogs)
+                {
+                    Lumina.Mod.Log.Info($"The following LUT files are missing from the LUTs directory: {string.Join(", ", missingInLutsDirectory)}");
+                    Mod.Log.Info($"Missing LUT files in the LUTs directory: {string.Join(", ", missingInLutsDirectory)}");
+                }
             }
 
             if (missingInHdrDirectory.Any())
             {
-                Lumina.Mod.Log.Info($"The following Cubemap files are missing from the HDR directory: {string.Join(", ", missingInHdrDirectory)}");
-                Mod.Log.Info($"Missing Cubemap files in the HDR directory: {string.Join(", ", missingInHdrDirectory)}");
+                if (GlobalVariables.Instance.EnableDebugLogs)
+                {
+                    Lumina.Mod.Log.Info($"The following Cubemap files are missing from the HDR directory: {string.Join(", ", missingInHdrDirectory)}");
+                    Mod.Log.Info($"Missing Cubemap files in the HDR directory: {string.Join(", ", missingInHdrDirectory)}");
+                }
             }
         }
 

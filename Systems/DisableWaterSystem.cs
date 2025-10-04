@@ -6,31 +6,35 @@ using Unity.Entities;
 namespace Lumina.Systems
 {
     /// <summary>
-    /// “Automatically turns water rendering on when you’re playing or editing the map, and off when you’re not (like in menus or loading).”
+    /// Automatically toggles water and lighting systems based on game mode.
+    /// Disabled in menus/loading screens, enabled in Game or Editor mode.
     /// </summary>
     internal partial class DisableWaterSystem : SystemBase
     {
-        /// <summary>
-        /// / On update , check the current game mode and enable or disable water rendering accordingly.
-        /// </summary>
+        private bool _lastState;       // Tracks last enabled state
+        private GameMode _lastMode;    // Tracks last known game mode
+
         protected override void OnUpdate()
         {
-            var waterRenderSystem = World.GetExistingSystemManaged<WaterRenderSystem>();
-            if (waterRenderSystem == null)
+            var mode = GameManager.instance.gameMode;
+            bool shouldEnable = (mode & GameMode.GameOrEditor) != 0;
+
+            // Only update if state or mode changed
+            if (shouldEnable == _lastState && mode == _lastMode)
                 return;
 
-            // Retrieve the current game mode safely
-            var mode = GameManager.instance.gameMode;
+            // Water system
+            var waterRenderSystem = World.GetExistingSystemManaged<WaterRenderSystem>();
+            if (waterRenderSystem != null)
+                waterRenderSystem.Enabled = shouldEnable;
 
-            // Disable water rendering unless in Game or Editor mode
-            if ((mode & GameMode.GameOrEditor) != 0)
-            {
-                waterRenderSystem.Enabled = true;
-            }
-            else
-            {
-                waterRenderSystem.Enabled = false;
-            }
+            // Lighting system
+            var lightingSystem = World.GetExistingSystemManaged<LightingSystem>();
+            if (lightingSystem != null)
+                lightingSystem.Enabled = shouldEnable;
+
+            _lastState = shouldEnable;
+            _lastMode = mode;
         }
     }
 }
