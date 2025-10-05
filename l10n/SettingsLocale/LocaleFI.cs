@@ -64,7 +64,11 @@ public class LocaleFI : IDictionarySource
   "Vaaditaan Lumina-toimintojen oikeaan toimintaan. Aktivoi Unity HDRP -volyymin, joka käyttää mukautettuja valaistus- ja jälkikäsittelyasetuksia. Tämä mahdollistaa Lumina:n edistyneet visuaaliset efektit, kuten värikorjauksen ja sävyjen kartoituksen, toimimaan oikein pelissä." },
 
         {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "Käytä tiepintoja" },
-        {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "Mahdollistaa mukautettujen tiepintojen käytön ja kirkkauden, läpinäkyvyyden sekä sileysasteen säätämisen." }
+        {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "Mahdollistaa mukautettujen tiepintojen käytön ja kirkkauden, läpinäkyvyyden sekä sileysasteen säätämisen." },
+        {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Ota debug-lokin käyttöön" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Ottaa käyttöön yksityiskohtaisen debug-lokin vianetsintää varten. Tämä luo laajempia lokitiedostoja, jotka voivat auttaa ongelmien tunnistamisessa, mutta voivat hieman vaikuttaa suorituskykyyn." },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Suorituskykytila" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Kun tämä on käytössä, Lumina viivästyttää maaston, valaistuksen ja veden järjestelmien lataamista, kunnes peli on täysin ladattu. Tämä voi auttaa vähentämään viivettä päävalikossa ja tarjota sujuvamman pelikokemuksen pelin alussa. Latauksen aikana voi kuitenkin esiintyä lievää ruudunpäivityksen hidastumista. Jos koet kaatumisia tai epävakautta, harkitse tämän asetuksen poistamista käytöstä." },
 
 
     };

@@ -61,6 +61,10 @@ public class LocaleEN : IDictionarySource
         {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "Use Road Textures" },
         {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "Enables the use of custom road textures and change brightness, opacity and smoothness." },
 
+        {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Enable Debug Logging" },
+        {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Enables detailed debug logging for troubleshooting purposes. This will generate more verbose log files, which can help identify issues but may also impact performance slightly." },
+        {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Performance Mode" },
+        {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "When enabled, Lumina will postpone the loading of terrain, lighting and water systems until the game is fully loaded. This can help reduce lag in the main menu, providing a smoother experience when starting the game. However, it may cause a slight frame drop during the loading process. If you experience crashes or instability, consider disabling this option." },
 
     };
 

@@ -65,8 +65,12 @@ public class LocaleRU : IDictionarySource
 
 
         {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "Использовать текстуры дорог" },
-        {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "Включает использование пользовательских текстур дорог и изменение яркости, непрозрачности и гладкости." }  
+        {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "Включает использование пользовательских текстур дорог и изменение яркости, непрозрачности и гладкости." },
 
+        {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Включить отладочное логирование" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Включает подробное отладочное логирование для устранения неполадок. Это создаст более объёмные файлы логов, которые могут помочь в выявлении проблем, но может немного повлиять на производительность." },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Режим производительности" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "При включении Lumina отложит загрузку систем рельефа, освещения и воды до полной загрузки игры. Это может помочь снизить задержки в главном меню и обеспечить более плавное начало игры. Однако во время загрузки может наблюдаться небольшое падение FPS. Если возникают сбои или нестабильность, рассмотрите возможность отключения этой опции." },
 
     };
 

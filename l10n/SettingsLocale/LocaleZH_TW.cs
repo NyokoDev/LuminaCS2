@@ -66,7 +66,13 @@ public class LocaleZHTW : IDictionarySource
  
 
         {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "使用道路紋理" },
-        {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "啟用自訂道路紋理並調整亮度、不透明度與平滑度。" }
+        {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "啟用自訂道路紋理並調整亮度、不透明度與平滑度。" },
+
+        {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "啟用除錯日誌" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "啟用詳細除錯日誌以進行故障排除。此功能會生成更詳細的日誌檔案，有助於識別問題，但可能會略微影響效能。" },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "效能模式" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "啟用後，Lumina 將延遲載入地形、光源和水系統，直到遊戲完全載入。這可幫助減少主選單延遲，並提供更順暢的遊戲啟動體驗。但在載入過程中可能會略微降低幀數。如果遇到當機或不穩定情況，請考慮停用此選項。" },
+
 
     };
 

@@ -63,6 +63,10 @@ public class LocaleNL : IDictionarySource
 { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "Vereist voor een correcte werking van Lumina. Schakelt een Unity HDRP-volume in dat aangepaste verlichting en post-processing overschrijvingen toepast. Hierdoor kunnen de geavanceerde visuele effecten van Lumina, zoals kleurcorrectie en tonemapping, correct functioneren in het spel." },
 
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Debuglog inschakelen" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Schakelt gedetailleerde debuglogging in voor probleemoplossing. Dit genereert uitgebreidere logbestanden die kunnen helpen bij het identificeren van problemen, maar kan de prestaties iets beïnvloeden." },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Prestatiemodus" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Wanneer ingeschakeld, zal Lumina het laden van terrein-, licht- en watersystemen uitstellen totdat het spel volledig is geladen. Dit kan helpen om vertragingen in het hoofdmenu te verminderen en een soepelere start van het spel te bieden. Tijdens het laden kan er echter een lichte frame-daling optreden. Als je crashes of instabiliteit ervaart, overweeg dan deze optie uit te schakelen." },
 
     };
 

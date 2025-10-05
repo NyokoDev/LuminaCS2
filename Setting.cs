@@ -7,6 +7,7 @@ namespace Lumina
     using Colossal;
     using Colossal.IO.AssetDatabase;
     using Colossal.IO.AssetDatabase.Internal;
+    using Game;
     using Game.Modding;
     using Game.Prefabs;
     using Game.PSI;
@@ -109,6 +110,43 @@ namespace Lumina
             }
         }
 
+        [SettingsUIAdvanced]
+        [SettingsUISection(KSection, KToggleGroup)]
+        public bool EnableDebugLogging
+        {
+            get => GlobalVariables.Instance.EnableDebugLogs;
+            set
+            {
+                GlobalVariables.Instance.EnableDebugLogs = value;
+                WarningNotification.SendRestartNotification();
+            }
+        }
+
+        [SettingsUIAdvanced]
+        [SettingsUISection(KSection, KToggleGroup)]
+        public bool EnablePerformanceMode
+        {
+            get => GlobalVariables.Instance.PerformanceMode;
+            set
+            {
+                var mode = GameManager.instance.gameMode;
+
+                // Only allow changing if NOT in-game
+                if ((mode & GameMode.GameOrEditor) == 0)
+                {
+                    GlobalVariables.Instance.PerformanceMode = value;
+
+                    // Notify the user that a restart is required
+                    WarningNotification.SendRestartNotification();
+                }
+                else
+                {
+                    // Notify that the option cannot be changed while in-game
+                    WarningNotification.CannotChangeMessage();
+                }
+            }
+        }
+
 
         [SettingsUISection(KSection, KToggleGroup)]
         public bool ReloadAllPackagesOnRestart
@@ -117,6 +155,7 @@ namespace Lumina
             set
             {
                 GlobalVariables.Instance.ReloadAllPackagesOnRestart = value;
+                WarningNotification.SendRestartNotification();
             }
         }
 

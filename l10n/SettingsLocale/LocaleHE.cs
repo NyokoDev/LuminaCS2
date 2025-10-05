@@ -62,6 +62,10 @@ public class LocaleHE : IDictionarySource
   "הפעלת נפח Lumina" },
 { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "נדרש כדי שלומינה תעבוד כראוי. מפעיל נפח Unity HDRP עם התאמות אישיות של תאורה ועיבוד פוסט. זה מאפשר לאפקטים חזותיים מתקדמים של Lumina, כמו תיקון צבע ומיפוי גוונים, לפעול כראוי בתוך המשחק." },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "הפעלת רישום איתור באגים" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "מפעיל רישום מפורט למטרות איתור באגים. זה ייצור קבצי לוג מפורטים יותר, שיכולים לעזור בזיהוי בעיות, אך עלול להשפיע במעט על הביצועים." },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "מצב ביצועים" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "כאשר מופעל, Lumina תדחה את טעינת מערכות השטח, התאורה והמים עד שהמשחק ייטען במלואו. זה יכול להפחית עיכובים בתפריט הראשי ולספק חוויית הפעלה חלקה יותר. עם זאת, ייתכן ירידה קלה במספר הפריימים בזמן הטעינה. אם חווים קריסות או חוסר יציבות, שקול להשבית אפשרות זו." },
 
 
 

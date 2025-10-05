@@ -57,6 +57,13 @@ public class LocaleVI : IDictionarySource
 
     { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Metro Framework" },
     { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Bật MetroFramework cho Lumina, cho trải nghiệm giao diện người dùng hiện đại hơn. Mặc định bật. Tùy chọn cửa sổ toàn màn hình phải bật để có kết quả tốt nhất." },
+    {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Bật ghi nhật ký gỡ lỗi" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Bật ghi nhật ký chi tiết để khắc phục sự cố. Điều này sẽ tạo ra các tệp nhật ký chi tiết hơn, có thể giúp xác định vấn đề, nhưng có thể ảnh hưởng nhẹ đến hiệu suất." },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Chế độ hiệu năng" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Khi bật, Lumina sẽ trì hoãn việc tải các hệ thống địa hình, ánh sáng và nước cho đến khi trò chơi được tải hoàn toàn. Điều này có thể giúp giảm độ trễ ở menu chính và mang lại trải nghiệm khởi động mượt mà hơn. Tuy nhiên, trong quá trình tải có thể xảy ra giảm nhẹ số khung hình. Nếu gặp sự cố treo hoặc không ổn định, hãy cân nhắc tắt tùy chọn này." },
+
+
+
 };
 
     public void Unload()

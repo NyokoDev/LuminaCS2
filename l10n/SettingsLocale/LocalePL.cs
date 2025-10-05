@@ -62,6 +62,10 @@ public class LocalePL : IDictionarySource
   "Włącz Lumina Volume" },
 { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "Wymagane do prawidłowego działania Lumina. Aktywuje wolumen Unity HDRP, który stosuje niestandardowe nadpisania oświetlenia i post-processingu. Dzięki temu zaawansowane efekty wizualne Lumina, takie jak korekcja kolorów i mapowanie tonów, działają poprawnie w grze." },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Włącz logowanie debugowania" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Włącza szczegółowe logowanie debugowania w celach diagnostycznych. Spowoduje to tworzenie bardziej rozbudowanych plików logów, które mogą pomóc w identyfikacji problemów, ale mogą nieznacznie wpłynąć na wydajność." },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Tryb wydajności" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Po włączeniu Lumina opóźni ładowanie systemów terenu, oświetlenia i wody do momentu pełnego załadowania gry. Może to pomóc zmniejszyć opóźnienia w menu głównym i zapewnić płynniejsze uruchamianie gry. Jednak podczas ładowania może wystąpić niewielki spadek liczby klatek. Jeśli doświadczasz awarii lub niestabilności, rozważ wyłączenie tej opcji." },
 
 
 

@@ -62,6 +62,10 @@ public class LocaleSV : IDictionarySource
   "Aktivera Lumina Volume" },
 { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "Krävs för att Lumina ska fungera korrekt. Aktiverar ett Unity HDRP-volym som tillämpar anpassade belysnings- och efterbehandlingsinställningar. Detta gör att Luminas avancerade visuella effekter, såsom färgkorrigering och tonmappning, fungerar korrekt i spelet." },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Aktivera felsökningslogg" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Aktiverar detaljerad felsökningsloggning för problemidentifiering. Detta skapar mer omfattande loggfiler som kan hjälpa till att identifiera problem, men kan påverka prestandan något." },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Prestandaläge" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "När aktiverat kommer Lumina att skjuta upp laddningen av terräng-, ljus- och vattensystem tills spelet är helt laddat. Detta kan hjälpa till att minska fördröjning i huvudmenyn och ge en smidigare upplevelse vid spelstart. Under laddning kan dock en liten bildfrekvensminskning förekomma. Om du upplever krascher eller instabilitet, överväg att inaktivera detta alternativ." },
 
     };
 

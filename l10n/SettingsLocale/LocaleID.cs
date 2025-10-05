@@ -63,6 +63,10 @@ public class LocaleID : IDictionarySource
 { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "Diperlukan agar Lumina berfungsi dengan benar. Mengaktifkan volume Unity HDRP yang menerapkan pengaturan pencahayaan dan post-processing khusus. Ini memungkinkan efek visual canggih Lumina, seperti koreksi warna dan tone mapping, bekerja dengan baik dalam permainan." },
 
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Aktifkan Pencatatan Debug" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Mengaktifkan pencatatan debug yang rinci untuk tujuan pemecahan masalah. Ini akan menghasilkan file log yang lebih lengkap, yang dapat membantu mengidentifikasi masalah, namun mungkin sedikit mempengaruhi kinerja." },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Mode Performa" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Saat diaktifkan, Lumina akan menunda pemuatan sistem terrain, pencahayaan, dan air hingga game sepenuhnya dimuat. Ini dapat membantu mengurangi lag di menu utama dan memberikan pengalaman yang lebih lancar saat memulai game. Namun, bisa terjadi sedikit penurunan frame selama proses pemuatan. Jika mengalami crash atau ketidakstabilan, pertimbangkan untuk menonaktifkan opsi ini." },
 
     };
 

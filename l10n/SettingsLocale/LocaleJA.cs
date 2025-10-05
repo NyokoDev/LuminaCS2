@@ -63,6 +63,10 @@ public class LocaleJA : IDictionarySource
 { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "Luminaが正しく動作するために必要です。カスタムのライティングおよびポストプロセスのオーバーライドを適用するUnity HDRPボリュームを有効にします。これにより、色補正やトーンマッピングなど、Luminaの高度な視覚効果がゲーム内で正常に機能します。" },
 
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "デバッグログを有効化" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "トラブルシューティング用に詳細なデバッグログを有効にします。これによりより詳細なログファイルが生成され、問題の特定に役立ちますが、パフォーマンスに若干の影響を与える場合があります。" },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "パフォーマンスモード" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "有効にすると、Luminaはゲームが完全に読み込まれるまで、地形、ライティング、水のシステムの読み込みを遅延させます。これにより、メインメニューでのラグが軽減され、ゲーム開始時のスムーズな体験が提供されます。ただし、読み込み中にわずかなフレーム低下が発生する可能性があります。クラッシュや不安定さが発生する場合は、このオプションを無効にしてください。" },
 
     };
 

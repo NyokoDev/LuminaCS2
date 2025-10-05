@@ -59,7 +59,13 @@ public class LocaleUK : IDictionarySource
 
         { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.MetroFrameworkEnabled)), "Note: This option is greyed out to protect your gameplay experience. Although the Metro Framework provides a modern UI and generally works as intended, enabling it currently causes critical issues—such as being unable to save or load your game. To ensure stability, this setting is disabled and cannot be changed by players. It has not been discarded entirely because a future game update may resolve these issues and allow Metro Framework to work properly." },
         { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)), "Enable Lumina Volume" },
-        { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)), "Required for Lumina to function correctly. Enables a Unity HDRP volume that applies custom lighting and post-processing overrides. This allows Lumina's advanced visual effects, such as color grading and tone mapping, to work properly in-game." }
+        { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)), "Required for Lumina to function correctly. Enables a Unity HDRP volume that applies custom lighting and post-processing overrides. This allows Lumina's advanced visual effects, such as color grading and tone mapping, to work properly in-game." },
+        {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Увімкнути відлагоджувальний журнал" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Увімкнення детального відлагоджувального журналу для усунення неполадок. Це створить більш об'ємні файли журналів, які можуть допомогти у виявленні проблем, але може трохи вплинути на продуктивність." },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Режим продуктивності" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "При увімкненні Lumina відкладе завантаження систем рельєфу, освітлення та води до повного завантаження гри. Це може допомогти зменшити затримки у головному меню та забезпечити більш плавний старт гри. Проте під час завантаження можливе невелике падіння FPS. Якщо виникають збої або нестабільність, розгляньте можливість вимкнення цієї опції." },
+
+
     };
 
     public void Unload()

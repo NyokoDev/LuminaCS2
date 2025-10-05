@@ -62,6 +62,10 @@ public class LocalePT : IDictionarySource
   "Ativar Volume Lumina" },
 { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "Necessário para o funcionamento correto do Lumina. Ativa um volume Unity HDRP que aplica configurações personalizadas de iluminação e pós-processamento. Isso permite que os efeitos visuais avançados do Lumina, como correção de cor e tone mapping, funcionem corretamente no jogo." },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Ativar registro de depuração" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Ativa registros detalhados para depuração. Isso gerará arquivos de log mais completos, que podem ajudar a identificar problemas, mas pode afetar ligeiramente o desempenho." },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Modo de desempenho" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Quando ativado, o Lumina atrasará o carregamento dos sistemas de terreno, iluminação e água até que o jogo esteja totalmente carregado. Isso pode ajudar a reduzir o lag no menu principal e proporcionar uma experiência mais suave ao iniciar o jogo. Entretanto, pode ocorrer uma leve queda de frames durante o carregamento. Se você enfrentar travamentos ou instabilidade, considere desativar esta opção." },
 
     };
 

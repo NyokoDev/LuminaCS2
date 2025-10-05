@@ -64,6 +64,10 @@ public class LocaleKO : IDictionarySource
 { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "Lumina가 정상적으로 작동하려면 필요합니다. 사용자 지정 조명 및 후처리 오버라이드를 적용하는 Unity HDRP 볼륨을 활성화합니다. 이를 통해 색상 보정 및 톤 매핑과 같은 Lumina의 고급 시각 효과가 게임 내에서 제대로 작동합니다." },
 
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "디버그 로그 활성화" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "문제 해결을 위해 자세한 디버그 로그를 활성화합니다. 이로 인해 더 상세한 로그 파일이 생성되어 문제를 파악하는 데 도움이 될 수 있지만, 성능에 약간의 영향을 줄 수 있습니다." },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "성능 모드" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "활성화하면 Lumina는 게임이 완전히 로드될 때까지 지형, 조명, 수면 시스템의 로드를 지연합니다. 이를 통해 메인 메뉴에서 지연이 줄어들고 게임 시작 시 더 부드러운 경험을 제공합니다. 단, 로딩 중에는 약간의 프레임 저하가 발생할 수 있습니다. 충돌이나 불안정이 발생하면 이 옵션을 비활성화하는 것을 고려하세요." },
 
     };
 

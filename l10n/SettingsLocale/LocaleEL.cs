@@ -62,6 +62,10 @@ public class LocaleEL : IDictionarySource
   "Ενεργοποίηση Lumina Volume" },
 { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "Απαραίτητο για τη σωστή λειτουργία του Lumina. Ενεργοποιεί ένα Unity HDRP volume που εφαρμόζει προσαρμοσμένες ρυθμίσεις φωτισμού και επεξεργασίας μετά την εικόνα. Αυτό επιτρέπει στα προηγμένα οπτικά εφέ του Lumina, όπως διόρθωση χρώματος και τονισμό τόνων, να λειτουργούν σωστά μέσα στο παιχνίδι." },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Ενεργοποίηση καταγραφής εντοπισμού σφαλμάτων" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Ενεργοποιεί λεπτομερή καταγραφή για εντοπισμό προβλημάτων. Αυτό θα δημιουργήσει πιο εκτενή αρχεία καταγραφής, που μπορούν να βοηθήσουν στον εντοπισμό σφαλμάτων, αλλά μπορεί να επηρεάσουν ελαφρώς την απόδοση." },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Λειτουργία απόδοσης" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Όταν είναι ενεργοποιημένο, το Lumina θα καθυστερήσει τη φόρτωση των συστημάτων εδάφους, φωτισμού και νερού μέχρι να φορτωθεί πλήρως το παιχνίδι. Αυτό μπορεί να μειώσει τις καθυστερήσεις στο κύριο μενού και να προσφέρει πιο ομαλή εμπειρία κατά την εκκίνηση του παιχνιδιού. Ωστόσο, μπορεί να υπάρξει μικρή πτώση καρέ κατά τη διάρκεια της φόρτωσης. Εάν αντιμετωπίζετε σφάλματα ή αστάθεια, σκεφτείτε να απενεργοποιήσετε αυτήν την επιλογή." },
 
 
     };

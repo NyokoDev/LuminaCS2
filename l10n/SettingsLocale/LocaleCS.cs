@@ -63,6 +63,10 @@ public class LocaleCS : IDictionarySource
 { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "Vyžadováno pro správné fungování Lumina. Aktivuje Unity HDRP volume, které aplikuje vlastní nastavení osvětlení a post-processingu. Díky tomu mohou pokročilé vizuální efekty Lumina, jako korekce barev a tonální mapování, správně fungovat ve hře." },
 
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Povolit ladicí protokolování" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Povolí podrobné ladicí protokoly pro řešení problémů. To vytvoří obsáhlejší soubory protokolů, které mohou pomoci při identifikaci problémů, ale může mírně ovlivnit výkon." },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Režim výkonu" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Po aktivaci Lumina odloží načítání systémů terénu, osvětlení a vody, dokud nebude hra plně načtena. To může pomoci snížit zpoždění v hlavním menu a zajistit plynulejší spuštění hry. Během načítání však může dojít k mírnému poklesu snímkové frekvence. Pokud zažíváte pády nebo nestabilitu, zvažte deaktivaci této volby." },
 
     };
 

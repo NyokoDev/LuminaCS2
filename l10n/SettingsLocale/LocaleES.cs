@@ -66,6 +66,11 @@ public class LocaleES : IDictionarySource
         { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "Usar texturas de carreteras" },
         { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "Habilita el uso de texturas personalizadas para carreteras y permite cambiar el brillo, opacidad y suavidad." },
 
+        {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Habilitar registro de depuración" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Habilita un registro detallado para la depuración. Esto generará archivos de registro más extensos, lo que puede ayudar a identificar problemas, pero también podría afectar ligeramente el rendimiento." },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Modo de rendimiento" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Cuando está activado, Lumina retrasará la carga de los sistemas de terreno, iluminación y agua hasta que el juego esté completamente cargado. Esto puede ayudar a reducir el retraso en el menú principal, proporcionando una experiencia más fluida al iniciar el juego. Sin embargo, podría causar una ligera caída de frames durante el proceso de carga. Si experimentas bloqueos o inestabilidad, considera desactivar esta opción." },
+
     };
 
     public void Unload()

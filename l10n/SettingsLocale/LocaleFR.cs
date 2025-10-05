@@ -65,7 +65,11 @@ public class LocaleFR : IDictionarySource
 
 
         {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "Utiliser les textures de route" },
-        {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "Permet l’utilisation de textures de route personnalisées et le réglage de la luminosité, de la transparence et de la rugosité." }
+        {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "Permet l’utilisation de textures de route personnalisées et le réglage de la luminosité, de la transparence et de la rugosité." },
+        {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Activer le journal de débogage" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Active un journal détaillé pour le débogage. Cela génèrera des fichiers de journal plus complets, ce qui peut aider à identifier des problèmes, mais pourrait légèrement affecter les performances." },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Mode performance" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Lorsque cette option est activée, Lumina retardera le chargement des systèmes de terrain, d’éclairage et d’eau jusqu’à ce que le jeu soit entièrement chargé. Cela peut aider à réduire les ralentissements dans le menu principal et offrir une expérience de démarrage plus fluide. Cependant, une légère baisse de FPS peut survenir pendant le chargement. Si vous rencontrez des plantages ou de l’instabilité, envisagez de désactiver cette option." },
 
 
 

@@ -64,6 +64,10 @@ public class LocaleTH : IDictionarySource
 { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "จำเป็นสำหรับการทำงานที่ถูกต้องของ Lumina เปิดใช้งาน Unity HDRP volume ที่ใช้การตั้งค่าแสงและการประมวลผลหลังที่กำหนดเอง ซึ่งช่วยให้เอฟเฟกต์ภาพขั้นสูงของ Lumina เช่น การปรับสีและการทำ tone mapping ทำงานได้อย่างถูกต้องในเกม" },
 
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "เปิดการบันทึกดีบัก" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "เปิดการบันทึกรายละเอียดสำหรับการแก้ไขปัญหา จะสร้างไฟล์ล็อกที่ละเอียดมากขึ้น ซึ่งช่วยระบุปัญหาได้ แต่ก็อาจส่งผลต่อประสิทธิภาพเล็กน้อย" },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "โหมดประสิทธิภาพ" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "เมื่อเปิดใช้งาน Lumina จะเลื่อนการโหลดระบบภูมิประเทศ ระบบแสง และระบบน้ำจนกว่าเกมจะโหลดเสร็จสมบูรณ์ ซึ่งช่วยลดอาการหน่วงในเมนูหลักและให้ประสบการณ์การเริ่มเกมที่ลื่นไหลขึ้น อย่างไรก็ตาม อาจเกิดการลดเฟรมเล็กน้อยระหว่างการโหลด หากเกิดปัญหาเกมค้างหรือไม่เสถียร ควรพิจารณาปิดตัวเลือกนี้" },
 
     };
 

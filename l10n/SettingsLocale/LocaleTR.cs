@@ -64,6 +64,10 @@ public class LocaleTR : IDictionarySource
 { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "Lumina’nın düzgün çalışması için gereklidir. Özel aydınlatma ve post-processing ayarları uygulayan Unity HDRP hacmini etkinleştirir. Bu sayede Lumina’nın gelişmiş görsel efektleri, renk düzeltme ve ton eşleme gibi, oyunda doğru şekilde çalışır." },
 
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Hata Ayıklama Günlüğünü Etkinleştir" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Sorun giderme amacıyla ayrıntılı hata ayıklama günlüklerini etkinleştirir. Bu, daha kapsamlı günlük dosyaları oluşturacak ve sorunları belirlemeye yardımcı olabilir, ancak performansı biraz etkileyebilir." },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Performans Modu" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Etkinleştirildiğinde Lumina, oyun tamamen yüklenene kadar arazi, aydınlatma ve su sistemlerinin yüklenmesini erteleyebilir. Bu, ana menüdeki gecikmeyi azaltmaya ve oyunun başlatılmasını daha akıcı hale getirmeye yardımcı olabilir. Ancak yükleme sırasında küçük bir FPS düşüşü olabilir. Çökme veya kararsızlık yaşarsanız, bu seçeneği devre dışı bırakmayı düşünebilirsiniz." },
 
     };
 

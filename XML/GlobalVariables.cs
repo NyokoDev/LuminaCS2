@@ -260,6 +260,12 @@ namespace LuminaMod.XML
         [XmlElement]
         public bool EnableDebugLogs { get; set; } = false;
 
+        [XmlElement]
+        public bool SafeMode { get; set; } = false;
+
+        [XmlElement]
+        public bool PerformanceMode { get; set; } = false;
+
 
         public static void EnsureSettingsFileExists(string filePath)
         {
@@ -439,6 +445,8 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.SecondaryRoadColor = loadedVariables?.SecondaryRoadColor ?? (Color.grey);
 
                     GlobalVariables.Instance.EnableDebugLogs = loadedVariables?.EnableDebugLogs ?? false;
+                    GlobalVariables.Instance.SafeMode = loadedVariables?.SafeMode ?? false;
+                    GlobalVariables.Instance.PerformanceMode = loadedVariables?.PerformanceMode ?? false;
 
 
 

@@ -62,6 +62,10 @@ public class LocaleHI : IDictionarySource
   "Lumina वॉल्यूम सक्षम करें" },
 { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableLuminaVolume)),
   "Lumina को सही ढंग से काम करने के लिए आवश्यक। यह Unity HDRP वॉल्यूम को सक्षम करता है जो कस्टम लाइटिंग और पोस्ट-प्रोसेसिंग ओवरराइड्स लागू करता है। इससे Lumina के उन्नत विज़ुअल इफेक्ट्स, जैसे रंग सुधार और टोन मैपिंग, खेल में सही तरीके से काम करते हैं।" },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "डिबग लॉगिंग सक्षम करें" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "समस्या निवारण के लिए विस्तृत डिबग लॉगिंग सक्षम करता है। यह अधिक विस्तृत लॉग फ़ाइलें बनाएगा, जो समस्याओं की पहचान में मदद कर सकती हैं, लेकिन प्रदर्शन पर हल्का प्रभाव डाल सकती हैं।" },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "प्रदर्शन मोड" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "सक्रिय होने पर, Lumina भूभाग, प्रकाश और पानी की प्रणालियों को तब तक लोड करने में देरी करेगा जब तक कि गेम पूरी तरह से लोड न हो जाए। यह मुख्य मेनू में लैग को कम करने और गेम शुरू होने पर सुचारू अनुभव प्रदान करने में मदद कर सकता है। हालांकि, लोडिंग के दौरान फ़्रेम में थोड़ी गिरावट हो सकती है। यदि आप क्रैश या अस्थिरता का सामना कर रहे हैं, तो इस विकल्प को अक्षम करने पर विचार करें।" },
 
 
     };

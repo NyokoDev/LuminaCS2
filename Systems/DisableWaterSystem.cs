@@ -1,13 +1,14 @@
 ﻿using Game;
 using Game.Rendering;
 using Game.SceneFlow;
+using LuminaMod.XML;
 using Unity.Entities;
 
 namespace Lumina.Systems
 {
     /// <summary>
-    /// Automatically toggles water and lighting systems based on game mode.
-    /// Disabled in menus/loading screens, enabled in Game or Editor mode.
+    /// Automatically toggles water, lighting, terrain, and rendering systems based on game mode.
+    /// SafeMode only disables water. Runs only in PerformanceMode.
     /// </summary>
     internal partial class DisableWaterSystem : SystemBase
     {
@@ -16,33 +17,36 @@ namespace Lumina.Systems
 
         protected override void OnUpdate()
         {
-            var mode = GameManager.instance.gameMode;
-            bool shouldEnable = (mode & GameMode.GameOrEditor) != 0;
-
-            // Only update if state or mode changed
-            if (shouldEnable == _lastState && mode == _lastMode)
+            // Run only if PerformanceMode is on
+            if (!GlobalVariables.Instance.PerformanceMode)
                 return;
 
-            // Water system
+            var mode = GameManager.instance.gameMode;
+            bool gameOrEditor = (mode & GameMode.GameOrEditor) != 0;
+
+            // Only update if state or mode changed
+            if (gameOrEditor == _lastState && mode == _lastMode)
+                return;
+
+            // Water system: disable if SafeMode is on
             var waterRenderSystem = World.GetExistingSystemManaged<WaterRenderSystem>();
             if (waterRenderSystem != null)
-                waterRenderSystem.Enabled = shouldEnable;
+                waterRenderSystem.Enabled = !GlobalVariables.Instance.SafeMode && gameOrEditor;
 
-            // Lighting system
+            // Other systems: follow game mode
             var lightingSystem = World.GetExistingSystemManaged<LightingSystem>();
             if (lightingSystem != null)
-                lightingSystem.Enabled = shouldEnable;
+                lightingSystem.Enabled = gameOrEditor;
 
-            // Rendering system (affects post-processing, etc.)
-            var RenderingSystem = World.GetExistingSystemManaged<RenderingSystem>();
-            if (RenderingSystem != null)
-                RenderingSystem.Enabled = shouldEnable;
+            var renderingSystem = World.GetExistingSystemManaged<RenderingSystem>();
+            if (renderingSystem != null)
+                renderingSystem.Enabled = gameOrEditor;
 
-            var TerrainSystem = World.GetExistingSystemManaged<TerrainRenderSystem>();
-            if (TerrainSystem != null)
-                TerrainSystem.Enabled = shouldEnable;
+            var terrainSystem = World.GetExistingSystemManaged<TerrainRenderSystem>();
+            if (terrainSystem != null)
+                terrainSystem.Enabled = gameOrEditor;
 
-            _lastState = shouldEnable;
+            _lastState = gameOrEditor;
             _lastMode = mode;
         }
     }

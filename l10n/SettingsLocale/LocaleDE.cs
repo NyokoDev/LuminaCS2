@@ -65,7 +65,11 @@ public class LocaleDE : IDictionarySource
 
 
         {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "Straßen Texturen verwenden" },
-        {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "Ermöglicht die Verwendung von benutzerdefinierten Straßentexturen und die Anpassung von Helligkeit, Transparenz und Glätte."   }
+        {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.UseRoadTextures)), "Ermöglicht die Verwendung von benutzerdefinierten Straßentexturen und die Anpassung von Helligkeit, Transparenz und Glätte."   },
+        {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Debug-Protokollierung aktivieren" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnableDebugLogging)), "Aktiviert detaillierte Debug-Protokolle zur Fehlerbehebung. Dies erzeugt umfangreichere Log-Dateien, die bei der Identifizierung von Problemen helfen können, die Leistung jedoch leicht beeinträchtigen können." },
+{setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Leistungsmodus" },
+{setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Wenn aktiviert, verzögert Lumina das Laden von Terrain-, Licht- und Wassersystemen, bis das Spiel vollständig geladen ist. Dies kann helfen, Verzögerungen im Hauptmenü zu reduzieren und einen flüssigeren Start zu ermöglichen. Während des Ladeprozesses kann es jedoch zu einem leichten Frame-Einbruch kommen. Bei Abstürzen oder Instabilität sollte diese Option deaktiviert werden." },
 
     };
 
