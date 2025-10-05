@@ -17,7 +17,7 @@ namespace Lumina.UI
 
         public static void CannotChangeMessage()
         {
-            string errorMsg = $"[LUMINA] This setting cannot be switched while in-game.";
+            string errorMsg = $"[LUMINA] This setting cannot be switched while in-game. Save your work if any and return to the main menu.";
             GlobalPaths.SendMessage(errorMsg);
         }
 
