@@ -1,32 +1,58 @@
 :root {
   --size: 46rem;
+  --hover-tint: rgba(0, 200, 255, 0.35);
 }
 
+
 .LuminaIcon {
-  z-index: 0;
-  pointer-events: all;
+  width: 200px; /* size */
+  cursor: pointer;
+  color: black; /* default color */
+  transition: color 0.5s ease;
+}
+
+.LuminaIcon:hover {
+  color: #00c8ff; /* new color on hover */
+}
+
+
+/* ==== BASE ICON ==== */
+.LuminaIcon {
   width: var(--size);
   height: var(--size);
   border-radius: 50%;
   overflow: hidden;
   position: relative;
-  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease;
-  transform-origin: center;
-  will-change: transform, box-shadow;
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(6px);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 2rem rgba(255, 255, 255, 0.05);
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1),
+              box-shadow 0.4s ease;
 }
 
+/* ==== IMAGE ==== */
 .LuminaIcon img {
   width: 100%;
   height: 100%;
-  /* remove object-fit */
-  /* object-fit: cover; */
-  
-  transition: filter 0.4s ease;
   border-radius: 50%;
+  display: block;
+  transition: filter 0.5s ease;
 }
 
+/* ==== COLOR OVERLAY ==== */
+.LuminaIcon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--hover-tint);
+  mix-blend-mode: overlay;
+  opacity: 0;
+  border-radius: 50%;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+/* ==== SHIMMER ==== */
 .LuminaIcon::after {
   content: "";
   position: absolute;
@@ -37,30 +63,49 @@
   background: linear-gradient(
     120deg,
     rgba(255, 255, 255, 0.05) 0%,
-    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.2) 50%,
     rgba(255, 255, 255, 0.05) 100%
   );
   transform: rotate(25deg);
   opacity: 0;
+  border-radius: 50%;
   transition: opacity 0.4s ease;
   pointer-events: none;
-  border-radius: 50%;
 }
 
+/* ==== HOVER ==== */
 .LuminaIcon:hover {
-  transform: scale(1.05) rotate(0.5deg);
-  box-shadow: 0 0 2rem rgba(255, 255, 255, 0.1), 0 0 3rem rgba(0, 200, 255, 0.3);
+  transform: scale(1.05);
+  box-shadow: 0 0 2rem rgba(0, 200, 255, 0.2),
+              0 0 3rem rgba(0, 200, 255, 0.3);
 }
 
 .LuminaIcon:hover img {
-  filter: brightness(1.1) saturate(1.3);
+  animation: hueShift 3s linear infinite;
+  filter: brightness(1.2) saturate(1.4);
+}
+
+.LuminaIcon:hover::before {
+  opacity: 1;
 }
 
 .LuminaIcon:hover::after {
   opacity: 1;
-  animation: shimmer 1.2s infinite linear;
+  animation: shimmer 1.5s infinite linear;
 }
 
+/* ==== CLICK ==== */
 .LuminaIcon:active {
-  transform: scale(0.97);
+  transform: scale(0.96);
+}
+
+/* ==== ANIMATIONS ==== */
+@keyframes hueShift {
+  0%   { filter: hue-rotate(0deg) brightness(1.2) saturate(1.4); }
+  100% { filter: hue-rotate(360deg) brightness(1.2) saturate(1.4); }
+}
+
+@keyframes shimmer {
+  0%   { transform: translateX(-50%) rotate(25deg); }
+  100% { transform: translateX(50%) rotate(25deg); }
 }

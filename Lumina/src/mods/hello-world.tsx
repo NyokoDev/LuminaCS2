@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ButtonTheme, Button, ConfirmationDialog, Panel, Portal, FloatingButton, PanelSection, PanelSectionRow, FormattedParagraphs } from "cs2/ui";
 import { bindValue, trigger, useValue } from "cs2/api";
 import { game, tool, Theme } from "cs2/bindings";
@@ -23,6 +23,10 @@ const ToolBarTheme: Theme | any = getModule(
     "classes"
 );
 
+import iconSolidBlue from "../img/Lumina_SolidBlue.svg";
+import iconLightBlue from "../img/Lumina_LightBlue.svg";
+import iconSolidRed from "../img/Lumina_SolidRed.svg";
+
 import iconOff from "../img/Lumina.svg";
 import iconActive from "../img/Lumina.svg";
 import styles from "../lumina.module.scss";
@@ -40,6 +44,22 @@ export const LuminaButton: ModuleRegistryExtend = (Component) => {
         const moveItIconSrc = MIT_ToolEnabled ? "coui://ui-mods/images/Lumina.svg" : "coui://ui-mods/images/Lumina.svg";
         const [isInstalled, setIsInstalled] = useState(false); // assuming you meant to use useState to manage isInstalled state
         const [refreshKey, setRefreshKey] = useState(0); // Key for forcing re-render
+         const [hovered, setHovered] = useState(false);
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    const svgVariants = [moveItIconSrc, iconSolidBlue, iconLightBlue, iconSolidRed];
+
+    // Cycle through SVGs while hovering
+    useEffect(() => {
+      if (!hovered) {
+        setCurrentIndex(0); // reset to default
+        return;
+      }
+      const interval = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % svgVariants.length);
+      }, 800); // change every 0.8s
+      return () => clearInterval(interval);
+    }, [hovered]);
 
         let a = iconOff;
         a = iconActive;
@@ -49,7 +69,7 @@ export const LuminaButton: ModuleRegistryExtend = (Component) => {
             <FixPanelStyles />
             
                 <Button
-                    src={moveItIconSrc}
+                    src={svgVariants[currentIndex]}
                     className={ToolBarButtonTheme.button + ' ' + styles.LuminaIcon}
                     variant="icon"
                     focusKey={VanillaComponentResolver.instance.FOCUS_DISABLED}
