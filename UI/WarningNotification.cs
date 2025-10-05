@@ -11,7 +11,7 @@ namespace Lumina.UI
     {
         public static void SendRestartNotification()
         {
-            string errorMsg = $"[LUMINA] Restart your game to apply changes";
+            string errorMsg = $"[LUMINA] Operation completed. Restart your game to apply changes.";
             GlobalPaths.SendMessage(errorMsg);
         }
 
