@@ -1158,7 +1158,7 @@ $hueshift-top: 80rem;
     width: 500rem;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("coui://ui-mods/Icons/version.png?raw=true");
+    background-image: url('../../Icons/version.png');
     border: 5px solid #000; /* Example border: 5px solid black */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Example box shadow: offset-x, offset-y, blur-radius, color */
 }
@@ -1172,6 +1172,82 @@ $hueshift-top: 80rem;
     height: 200rem;
     width: 500rem;
 }
+
+
+.Version_Buttons {
+  display: flex;
+  position: absolute;
+  top: 150rem;
+  left: -110rem;
+  z-index: 100;
+  justify-content: space-evenly;
+  width: 100%;
+  gap: 1.5rem;
+}
+
+/* Base button styling */
+.Version_Buttons button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out; /* smoother transition for glow */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 40rem 40rem; /* icon size */
+  width: 40rem;
+  height: 40rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2); /* subtle base shadow */
+}
+
+/* Hover animation */
+.Version_Buttons button:hover {
+  transform: scale(1.1); /* slightly enlarge */
+  box-shadow: 0 0 20px 5px rgba(255,255,255,0.7), 
+              0 0 40px 10px rgba(255,255,255,0.3); /* glowing effect */
+}
+
+/* Discord */
+.Version_Buttons button.discord {
+  background-color: #5865f2;
+  background-image: url("././img/discord-icon-svgrepo-com.svg");
+}
+
+.Version_Buttons button.discord:hover {
+  background-color: #4752c4;
+  box-shadow: 0 0 20px 5px #5865f2, 0 0 40px 10px #5865f2;
+}
+
+/* PayPal */
+.Version_Buttons button.paypal {
+  background-color: #0070ba;
+  background-image: url("././img/paypal-3-svgrepo-com.svg");
+}
+
+.Version_Buttons button.paypal:hover {
+  background-color: #00457c;
+  box-shadow: 0 0 20px 5px #0070ba, 0 0 40px 10px #0070ba;
+}
+
+/* Ko-fi */
+.Version_Buttons button.kofi {
+  background-color: #ff5e5b;
+  background-image: url("././img/ko-fi-svgrepo-com.svg");
+}
+
+.Version_Buttons button.kofi:hover {
+  background-color: #e14b48;
+  box-shadow: 0 0 20px 5px #ff5e5b, 0 0 40px 10px #ff5e5b;
+}
+
+
+
+
+
 
 .TonemappingDropdown
 {

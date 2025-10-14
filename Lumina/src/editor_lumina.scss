@@ -9,12 +9,14 @@
 }
 
 .EditorIcon img{
+        pointer-events: all;
     width: 45rem;
     height: 45rem;
 
 }
 
 .EditorIcon {
+    pointer-events: all;
     position: absolute;
     width: 56.000000rem;
     height: 56.000000rem;

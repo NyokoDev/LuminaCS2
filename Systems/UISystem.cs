@@ -211,10 +211,49 @@
             AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "PrimaryRoadColor", GetPrimaryRoadHex));
             AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "SecondaryRoadColor", GetSecondaryRoadHex));
 
-            
+            AddSupportBindings();
          
 
         }
+
+        private void AddSupportBindings()
+        {
+            AddBinding(new TriggerBinding(Mod.MODUI, "discordlink", DiscordLink));
+            AddBinding(new TriggerBinding(Mod.MODUI, "paypallink", PayPalLink));
+            AddBinding(new TriggerBinding(Mod.MODUI, "kofilink", KoFiLink));
+        }
+
+        // Method to open Discord
+        private void DiscordLink()
+        {
+            OpenUrl("https://discord.gg/5gZgRNm29e");
+        }
+
+        // Method to open PayPal
+        private void PayPalLink()
+        {
+            OpenUrl("https://paypal.me/nyokodev");
+        }
+
+        // Method to open Ko-fi
+        private void KoFiLink()
+        {
+            OpenUrl("https://ko-fi.com/devnyoko");
+        }
+
+        // Helper to open URLs safely from Unity
+        private void OpenUrl(string url)
+        {
+            try
+            {
+                UnityEngine.Application.OpenURL(url);
+            }
+            catch (Exception e)
+            {
+                GlobalPaths.SendMessage($"Failed to open URL {url}: {e}");
+            }
+        }
+
 
         private void HandleSecondaryRoadColorHex(string hex)
         {

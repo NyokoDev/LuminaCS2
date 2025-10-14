@@ -1,4 +1,4 @@
-﻿<Publish>
+<Publish>
 	<!--Id must be set in order to update existed mod. it is not required for publishing mod for the first time-->
 	<ModId Value="94394" />
 	<!--Name of the mod to display to players-->
@@ -7,8 +7,58 @@
 	<ShortDescription Value="Fine tune post-processing settings." />
 	<!--Long description of the mod. Single line or multi line. Supports minimal markdown subset-->
 	<LongDescription>
-		Lumina, formerly known as ColorAdjustments, is a post-processing mod for Cities: Skylines, crafted to significantly enhance in-game visuals. It allows players to save and load color settings, eliminating the need to reconfigure them each time the game is launched. Currently in Beta, Lumina features: Road wear textures replacement Cubemap replacement A time-of-day slider LUT selection Detailed color adjustments such as exposure, contrast, hue, and white balance Planetary settings and brightness control Compatibility with the game editor As one of the most complex mods I've ever designed and coded, Lumina's detailed overview of features and updates can be found on the project's GitHub repository. 📘 Documentation: https://skylinx.gitbook.io/lumina 🛠️ Credits Konsi – for code related to Time of Day Quboid and Move It – for code related to the icon Yenyang – for input TritonSupreme – for code related to the sliders DanielNotFound22 – for testing and advice T.D.W – for input and help HX2003 and cgameworld - Road Wear code insight. 🌐 Translations Translations for this mod are available in several languages, including: German (Germany) English (United States) Spanish by elgendo87 French (France) Italian (Italy) Japanese (Japan) Korean (South Korea) Dutch (Netherlands) Polish (Poland) Portuguese (Brazil) Romanian (Romania) Russian (Russia) Chinese (Simplified) Chinese (Traditional)
+		# Lumina
+
+		Lumina, formerly known as **ColorAdjustments**, is a post-processing mod for *Cities: Skylines*, crafted to significantly enhance in-game visuals. It allows players to save and load color settings, eliminating the need to reconfigure them each time the game is launched.
+
+		## Beta Features
+
+		Currently in Beta, Lumina features:
+
+		- Road wear textures replacement
+		- Road color adjustment
+		- Cubemap replacement
+		- A time-of-day slider
+		- LUT selection
+		- Detailed color adjustments such as exposure, contrast, hue, and white balance
+		- Planetary settings and brightness control
+		- Compatibility with the game editor
+
+		As one of the most complex mods I've ever designed and coded, Lumina's detailed overview of features and updates can be found on the project's GitHub repository.
+
+		📘 **Documentation:** [Lumina GitBook](https://skylinx.gitbook.io/lumina)
+
+		## 🛠️ Credits
+
+		- **Konsi** – code related to Time of Day
+		- **Quboid and Move It** – code related to the icon
+		- **Yenyang** – input
+		- **TritonSupreme** – code related to the sliders
+		- **DanielNotFound22** – testing and advice
+		- **T.D.W** – input and help
+		- **HX2003 and cgameworld** – Road Wear code insight
+
+		## 🌐 Translations
+
+		Translations for this mod are available in several languages:
+
+		- German (Germany)
+		- English (United States)
+		- Spanish by elgendo87
+		- French (France)
+		- Italian (Italy)
+		- Japanese (Japan)
+		- Korean (South Korea)
+		- Dutch (Netherlands)
+		- Polish (Poland)
+		- Portuguese (Brazil)
+		- Romanian (Romania)
+		- Russian (Russia)
+		- Chinese (Simplified)
+		- Chinese (Traditional)
 	</LongDescription>
+
+
 
 	<!--Thumbnail-->
 	<Thumbnail Value="Properties/Thumbnail.png" />
@@ -25,13 +75,13 @@
 	<!--Link to the forum post where the mod can be discussed-->
 	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/lumina.1645623/" />
 	<!--Version of the mod-->
-	<ModVersion Value="v2.4R1" />
+	<ModVersion Value="v2.4R2" />
 	<!--Recommended version of the base game to use the mod-->
 	<GameVersion Value="1.*" />
 	<!--Dependency for the mod, can be set multiple times-->
 	<Dependency Id="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
-	<ChangeLog Value="Fix road colors using black as default. // Improvements" />
+	<ChangeLog Value="New version // Improvements" />
 " />
 	<!--ChangeLog>
 	</ChangeLog-->

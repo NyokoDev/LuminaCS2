@@ -452,6 +452,51 @@ const handleLongitude = (raw: any) => {
       trigger(mod.id, 'handleSunFlareSize', value);
     };
 
+const openUrl = (url: string): void => {
+  try {
+    // 1️⃣ Try the standard window.open first
+    const newTab = window.open(url, "_blank", "noopener,noreferrer");
+    if (newTab) {
+      newTab.opener = null;
+      return;
+    }
+
+    // 2️⃣ Create and simulate clicking an anchor
+    const a = document.createElement("a");
+    a.href = url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    // 3️⃣ Fallback: open blank then assign location
+    const blankWin = window.open("", "_blank");
+    if (blankWin) {
+      blankWin.location.href = url;
+      return;
+    }
+
+    // 4️⃣ Last resort: form submit
+    const form = document.createElement("form");
+    form.action = url;
+    form.method = "GET";
+    form.target = "_blank";
+    document.body.appendChild(form);
+    form.submit();
+    form.remove();
+  } catch (err) {
+    console.error("openUrl failed:", err);
+    try {
+      // 5️⃣ If running inside Unity COUI, send a message to the engine
+      (window as any).unityInstance?.SendMessage?.("Main", "OpenExternalURL", url);
+    } catch (innerErr) {
+      console.error("Unity fallback also failed:", innerErr);
+    }
+  }
+};
+
 return (
 
   <div className="Global"
@@ -1049,6 +1094,16 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
   <div className="Version_Text"
   ><h1></h1> 
   
+
+
+<div className="Version_Buttons">
+  <button className="discord" onClick={() => trigger(mod.id, 'discordlink')} />
+  <button className="paypal"  onClick={() => trigger(mod.id, 'paypallink')} />
+  <button className="kofi"    onClick={() => trigger(mod.id, 'kofilink')} />
+</div>
+
+
+
   </div>
 </div>
 
