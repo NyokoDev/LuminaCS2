@@ -4,8 +4,9 @@ namespace LuminaMod.API
 {
     /// <summary>
     /// Exposes Lumina GlobalVariables via a discoverable GameObject.
-    /// Automatically creates itself if missing.
+    /// Automatically creates itself on load to be accessible at runtime.
     /// </summary>
+    [DefaultExecutionOrder(-1000)] // Ensures this runs early
     public class LuminaAPI : MonoBehaviour
     {
         public const string API_OBJECT_NAME = "LuminaAPI";
@@ -13,59 +14,69 @@ namespace LuminaMod.API
         /// <summary>
         /// Public reference to GlobalVariables for external mods.
         /// </summary>
-        public LuminaMod.XML.GlobalVariables Data;
+        public LuminaMod.XML.GlobalVariables Data { get; private set; }
+
+        // Singleton instance
+        private static LuminaAPI instance;
+
+        /// <summary>
+        /// Ensure the object exists automatically when the mod loads.
+        /// </summary>
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void EnsureExists()
+        {
+            if (instance != null) return;
+
+            // Try to find existing GameObject first
+            var existingGO = GameObject.Find(API_OBJECT_NAME);
+            if (existingGO != null)
+            {
+                instance = existingGO.GetComponent<LuminaAPI>();
+                if (instance == null)
+                {
+                    instance = existingGO.AddComponent<LuminaAPI>();
+                }
+                return;
+            }
+
+            // Create the GameObject and attach this component
+            var go = new GameObject(API_OBJECT_NAME);
+            instance = go.AddComponent<LuminaAPI>();
+            DontDestroyOnLoad(go);
+        }
 
         private void Awake()
         {
-            // Singleton pattern: prevent duplicates
-            var existing = GameObject.Find(API_OBJECT_NAME);
-            if (existing != null && existing != gameObject)
+            // Prevent duplicates
+            if (instance != null && instance != this)
             {
                 Destroy(gameObject);
                 return;
             }
 
-            gameObject.name = API_OBJECT_NAME;
-            DontDestroyOnLoad(gameObject);
-
-            // Set runtime reference
+            instance = this;
             Data = LuminaMod.XML.GlobalVariables.Instance;
+            DontDestroyOnLoad(gameObject);
         }
 
         /// <summary>
-        /// Ensures the LuminaAPI GameObject exists in the scene and returns its component.
-        /// </summary>
-        public static LuminaAPI EnsureExists()
-        {
-            var go = GameObject.Find(API_OBJECT_NAME);
-            if (go != null)
-            {
-                var api = go.GetComponent<LuminaAPI>();
-                if (api != null) return api;
-                return go.AddComponent<LuminaAPI>();
-            }
-
-            // Create new GameObject if missing
-            var newGO = new GameObject(API_OBJECT_NAME);
-            var newAPI = newGO.AddComponent<LuminaAPI>();
-            DontDestroyOnLoad(newGO);
-            return newAPI;
-        }
-
-        /// <summary>
-        /// Example consumer read method.
+        /// Example method showing how a consumer could read the data at runtime.
         /// </summary>
         public static void ExampleConsumerRead()
         {
-            var api = EnsureExists();
-            if (api.Data != null)
+            var luminaGO = GameObject.Find(API_OBJECT_NAME);
+            if (luminaGO != null)
             {
-                Lumina.Mod.Log.Info("API Test: Current LUT: " + api.Data.LUTName);
-                Lumina.Mod.Log.Info("API Test: " + api.Data.PostExposure);
+                var api = luminaGO.GetComponent<LuminaAPI>();
+                if (api != null && api.Data != null)
+                {
+                    Debug.Log("Current LUT: " + api.Data.LUTName);
+                    Debug.Log("Post Exposure: " + api.Data.PostExposure);
+                }
             }
             else
             {
-                Lumina.Mod.Log.Info("Lumina GlobalVariables not available.");
+                Debug.LogWarning("LuminaAPI GameObject not found.");
             }
         }
     }
