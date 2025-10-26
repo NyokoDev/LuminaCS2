@@ -21,6 +21,7 @@ namespace Lumina
     using Lumina.Patches;
     using Lumina.Systems;
     using Lumina.XML;
+    using LuminaMod.API;
     using LuminaMod.XML;
     using MetroFramework.Forms;
     using RoadWearAdjuster.Systems;
@@ -124,10 +125,14 @@ namespace Lumina
             updateSystem.UpdateAfter<CustomSunManager>(SystemUpdatePhase.GameSimulation);
 
 
-
+            EnsureAPI();
             SendNotification();
         }
 
+        private void EnsureAPI()
+        {
+            LuminaAPI.EnsureExists();
+        }
 
         public static void RunTranspilerPatch()
         {
