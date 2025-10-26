@@ -15,13 +15,13 @@ namespace Lumina
     using Game.UI;
     using Game.UI.Localization;
     using HarmonyLib;
+    using Lumina.API;
     using Lumina.Locale;
     using Lumina.ManagerSystems;
     using Lumina.Metro;
     using Lumina.Patches;
     using Lumina.Systems;
     using Lumina.XML;
-    using LuminaMod.API;
     using LuminaMod.XML;
     using MetroFramework.Forms;
     using RoadWearAdjuster.Systems;
@@ -51,6 +51,7 @@ namespace Lumina
         private Setting setting;
 #pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
         public static Harmony? harmony;
+
 
         public static string ModPath { get; set; }
 #pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
@@ -107,7 +108,6 @@ namespace Lumina
             updateSystem.UpdateAfter<PreSystem>(SystemUpdatePhase.UIUpdate);
 
 
-
             // Update system after RenderEffectsSystem but before culling
             updateSystem.UpdateAfter<RenderEffectsSystem>(SystemUpdatePhase.PreCulling);
 
@@ -125,14 +125,9 @@ namespace Lumina
             updateSystem.UpdateAfter<CustomSunManager>(SystemUpdatePhase.GameSimulation);
 
 
-            EnsureAPI();
             SendNotification();
         }
 
-        private void EnsureAPI()
-        {
-            LuminaAPI.EnsureExists();
-        }
 
         public static void RunTranspilerPatch()
         {
