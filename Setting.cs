@@ -18,7 +18,6 @@ namespace Lumina
     using Game.UI.InGame;
     using Game.UI.Localization;
     using Game.UI.Widgets;
-    using Lumina.Metro;
     using Lumina.Roads;
     using Lumina.Systems;
     using Lumina.Systems.SimulationRefresh;
@@ -548,7 +547,7 @@ namespace Lumina
             {
                 if (GlobalVariables.Instance.MetroEnabled)
                 {
-                    ToastNotification.ShowToast("An error occurred: " + v);
+            
                 }
                 else
                 {
