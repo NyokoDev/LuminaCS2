@@ -122,7 +122,7 @@ namespace Lumina.XML
         }
 
         /// <summary>
-        /// SupportedGameVersion, returns the supported game version.
+        /// SupportedGameVersion, returns the supported game version..
         /// </summary>
         public static string SupportedGameVersion = "1.5.3f1 (1434.37436) [6030.4046]";
 
