@@ -81,7 +81,7 @@
 	<!--Dependency for the mod, can be set multiple times-->
 	<Dependency Id="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
-	<ChangeLog Value="- New patch compatibility 1.5.2f1" />
+	<ChangeLog Value="- New patch compatibility 1.5.2f1 (PC)" />
 " />
 	<!--ChangeLog>
 	</ChangeLog-->
