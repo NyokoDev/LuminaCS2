@@ -4,14 +4,16 @@ import { getModule } from "cs2/modding";
 import mod from "../../mod.json";
 import { Dropdown, DropdownItem, DropdownToggle, FOCUS_AUTO } from "cs2/ui";
 
+// Bind the LUTArray to a variable and initialize it with an empty array
 export const LUTSArray = bindValue<string[]>(mod.id, "LUTArray", []);
-const selectedLut$ = bindValue<string>(mod.id, "LUTName", "");
+const SelectedLUT$ = bindValue<string>(mod.id, "LUTName", "");
 
 const DropdownStyle: Theme | any = getModule("game-ui/menu/themes/dropdown.module.scss", "classes");
 
 const handleSelect = (selectedLUT: string) => {
   trigger(mod.id, "UpdateLUTName", selectedLUT);
 };
+
 
 export const LUTSDropdown = () => {
   const LUTS = useValue(LUTSArray);
@@ -20,10 +22,9 @@ export const LUTSDropdown = () => {
   // Find the label for the selected LUT
   const selectedLUTLabel = selectedLUT ? selectedLUT : "Select LUT";
 
-  const dropDownItems = luts.map((mode) => (
+  const dropDownItems = LUTS.map((mode) => (
     <DropdownItem<string>
       theme={DropdownStyle}
-      className="dropdownItem"
       focusKey={FOCUS_AUTO}
       value={mode}
       closeOnSelect={true}
@@ -36,7 +37,7 @@ export const LUTSDropdown = () => {
   ));
 
   return (
-    <div className="luminaDropdownShell">
+    <div style={{ padding: "5rem" }}>
       <Dropdown focusKey={FOCUS_AUTO} theme={DropdownStyle} content={dropDownItems}>
         <DropdownToggle>{selectedLUTLabel}</DropdownToggle>
       </Dropdown>

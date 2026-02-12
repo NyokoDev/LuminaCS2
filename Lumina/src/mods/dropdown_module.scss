@@ -1,31 +1,16 @@
-.luminaDropdownShell {
-  display: flex;
-  width: 100%;
-  max-width: 820rem;
-  padding: 6rem;
-  border-radius: 12rem;
-  background: linear-gradient(135deg, rgba(18, 22, 34, 0.78), rgba(35, 42, 62, 0.62));
-  border: 1rem solid rgba(108, 128, 255, 0.32);
-  box-shadow: 0 10rem 28rem rgba(0, 0, 0, 0.3), inset 0 1rem 0 rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(6rem);
-}
-
 .dropdownItem {
-  text-align: left;
-  padding: 3rem 3.5rem;
-  color: rgba(241, 245, 255, 0.92);
-  border-radius: 6rem;
-  transition: background-color 130ms ease, color 130ms ease, transform 130ms ease;
-}
+    text-align: left;
+    padding: 3rem 2rem;
+    color: rgba(255, 255, 255, 0.8);
+    overflow-y: auto;
+  }
+  
+  .dropdownItem:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
 
-.dropdownItem:hover {
-  background-color: rgba(120, 144, 255, 0.22);
-  color: #ffffff;
-  transform: translateX(1rem);
-}
+  .CubemapDropdown{
+    overflow-y: auto;
+  }
 
-.CubemapsDropdownScroll {
-  overflow-y: auto;
-  max-height: 300rem;
-}
-
+  
