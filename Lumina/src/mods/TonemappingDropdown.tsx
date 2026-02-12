@@ -6,7 +6,6 @@ import { Dropdown, DropdownItem, DropdownToggle, FOCUS_AUTO } from "cs2/ui";
 
 const TonemappingModes = ["None", "External", "Custom", "Neutral", "ACES"];
 
-// This functions trigger an event on C# side and C# designates the method to implement.
 const TonemappingMode$ = bindValue<number>(mod.id, "TonemappingMode", 0);
 const TonemappingModeValue = bindValue<string>(mod.id, "TonemappingMode", "");
 
@@ -21,8 +20,9 @@ export const TonemappingDropdown = () => {
   const TonemappingMode = useValue(TonemappingModeValue);
   const tonemappingModeLabel = TonemappingMode || "TonemappingMode";
   const dropDownItems = TonemappingModes.map((mode, index) => (
-    <DropdownItem<Number>
+    <DropdownItem<number>
       theme={DropdownStyle}
+      className="dropdownItem"
       focusKey={FOCUS_AUTO}
       value={index}
       closeOnSelect={true}
@@ -35,7 +35,7 @@ export const TonemappingDropdown = () => {
   ));
 
   return (
-    <div style={{ padding: "5rem" }}>
+    <div className="luminaDropdownShell">
       <Dropdown focusKey={FOCUS_AUTO} theme={DropdownStyle} content={dropDownItems}>
         <DropdownToggle>{tonemappingModeLabel}</DropdownToggle>
       </Dropdown>
