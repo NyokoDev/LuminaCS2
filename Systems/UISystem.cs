@@ -73,6 +73,7 @@
             UseLuminaVolume();
             Checkboxes();
             ColorAdjustments();
+            DynamicHdrpBindings();
 
             WhiteBalance();
             WhiteBalanceCheckboxes();
@@ -213,6 +214,57 @@
             AddSupportBindings();
          
 
+        }
+
+        private void DynamicHdrpBindings()
+        {
+            AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "DynamicHdrpMetadata", GetDynamicHdrpMetadata));
+            AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "DynamicHdrpState", GetDynamicHdrpState));
+            AddBinding(new TriggerBinding<string>(Mod.MODUI, "SetDynamicHdrpComponentEnabled", SetDynamicHdrpComponentEnabled));
+            AddBinding(new TriggerBinding<string>(Mod.MODUI, "SetDynamicHdrpComponentValue", SetDynamicHdrpComponentValue));
+        }
+
+        private static string GetDynamicHdrpMetadata()
+        {
+            return RenderEffectsSystem.Instance?.GetDynamicHdrpMetadataJson() ?? "[]";
+        }
+
+        private static string GetDynamicHdrpState()
+        {
+            return RenderEffectsSystem.Instance?.GetDynamicHdrpStateJson() ?? "[]";
+        }
+
+        private static void SetDynamicHdrpComponentEnabled(string payload)
+        {
+            if (string.IsNullOrWhiteSpace(payload))
+            {
+                return;
+            }
+
+            string[] parts = payload.Split('|');
+            if (parts.Length != 2)
+            {
+                return;
+            }
+
+            bool enabled = parts[1] == "1" || string.Equals(parts[1], "true", StringComparison.OrdinalIgnoreCase);
+            RenderEffectsSystem.Instance?.SetDynamicHdrpComponentEnabled(parts[0], enabled);
+        }
+
+        private static void SetDynamicHdrpComponentValue(string payload)
+        {
+            if (string.IsNullOrWhiteSpace(payload))
+            {
+                return;
+            }
+
+            string[] parts = payload.Split('|');
+            if (parts.Length != 3)
+            {
+                return;
+            }
+
+            RenderEffectsSystem.Instance?.SetDynamicHdrpComponentValue(parts[0], parts[1], parts[2]);
         }
 
         private void AddSupportBindings()

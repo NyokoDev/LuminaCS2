@@ -24,6 +24,16 @@ namespace LuminaMod.XML
     /// GlobalVariables class.
     /// </summary>
     [Serializable]
+    public class DynamicComponentState
+    {
+        [XmlAttribute]
+        public string Id { get; set; }
+
+        [XmlAttribute]
+        public bool Enabled { get; set; }
+    }
+
+    [Serializable]
     public class GlobalVariables
     {
         /// <summary>
@@ -266,6 +276,51 @@ namespace LuminaMod.XML
         [XmlElement]
         public bool PerformanceMode { get; set; } = false;
 
+        [XmlArray("DynamicHdrpComponentStates")]
+        [XmlArrayItem("Component")]
+        public DynamicComponentState[] DynamicComponentStates { get; set; } = Array.Empty<DynamicComponentState>();
+
+        public bool? GetDynamicComponentState(string componentId)
+        {
+            if (DynamicComponentStates == null)
+            {
+                return null;
+            }
+
+            foreach (DynamicComponentState state in DynamicComponentStates)
+            {
+                if (state != null && string.Equals(state.Id, componentId, StringComparison.OrdinalIgnoreCase))
+                {
+                    return state.Enabled;
+                }
+            }
+
+            return null;
+        }
+
+        public void SetDynamicComponentState(string componentId, bool enabled)
+        {
+            if (string.IsNullOrWhiteSpace(componentId))
+            {
+                return;
+            }
+
+            DynamicComponentState[] states = DynamicComponentStates ?? Array.Empty<DynamicComponentState>();
+            for (int i = 0; i < states.Length; i++)
+            {
+                if (states[i] != null && string.Equals(states[i].Id, componentId, StringComparison.OrdinalIgnoreCase))
+                {
+                    states[i].Enabled = enabled;
+                    DynamicComponentStates = states;
+                    return;
+                }
+            }
+
+            DynamicComponentState[] updatedStates = new DynamicComponentState[states.Length + 1];
+            Array.Copy(states, updatedStates, states.Length);
+            updatedStates[states.Length] = new DynamicComponentState { Id = componentId, Enabled = enabled };
+            DynamicComponentStates = updatedStates;
+        }
 
         public static void EnsureSettingsFileExists(string filePath)
         {
@@ -447,10 +502,7 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.EnableDebugLogs = loadedVariables?.EnableDebugLogs ?? false;
                     GlobalVariables.Instance.SafeMode = loadedVariables?.SafeMode ?? false;
                     GlobalVariables.Instance.PerformanceMode = loadedVariables?.PerformanceMode ?? false;
-
-
-
-
+                    GlobalVariables.Instance.DynamicComponentStates = loadedVariables?.DynamicComponentStates ?? Array.Empty<DynamicComponentState>();
 
                     Mod.Log.Info("Settings loaded successfully.");
                     return loadedVariables;
