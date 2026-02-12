@@ -3,7 +3,6 @@ import { Theme } from "cs2/bindings";
 import { getModule } from "cs2/modding";
 import mod from "../../mod.json";
 import { Dropdown, DropdownItem, DropdownToggle, FOCUS_AUTO } from "cs2/ui";
-import "./dropdown_module.scss";
 
 export const LUTSArray = bindValue<string[]>(mod.id, "LUTArray", []);
 const selectedLut$ = bindValue<string>(mod.id, "LUTName", "");
@@ -15,9 +14,11 @@ const handleSelect = (selectedLUT: string) => {
 };
 
 export const LUTSDropdown = () => {
-  const luts = useValue(LUTSArray);
-  const selectedLUT = useValue(selectedLut$);
-  const selectedLUTLabel = selectedLUT || "Select LUT";
+  const LUTS = useValue(LUTSArray);
+  const selectedLUT = useValue(SelectedLUT$);
+  
+  // Find the label for the selected LUT
+  const selectedLUTLabel = selectedLUT ? selectedLUT : "Select LUT";
 
   const dropDownItems = luts.map((mode) => (
     <DropdownItem<string>

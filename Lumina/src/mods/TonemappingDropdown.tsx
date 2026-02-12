@@ -3,7 +3,6 @@ import { Theme } from "cs2/bindings";
 import { getModule } from "cs2/modding";
 import mod from "../../mod.json";
 import { Dropdown, DropdownItem, DropdownToggle, FOCUS_AUTO } from "cs2/ui";
-import "./dropdown_module.scss";
 
 const TonemappingModes = ["None", "External", "Custom", "Neutral", "ACES"];
 
@@ -17,10 +16,9 @@ const handleToggleSelected = (index: number) => {
 };
 
 export const TonemappingDropdown = () => {
-  const colorMode = useValue(TonemappingMode$);
-  const tonemappingMode = useValue(TonemappingModeValue);
-  const tonemappingModeLabel = tonemappingMode || "Tonemapping";
-
+  const ColorMode = useValue(TonemappingMode$);
+  const TonemappingMode = useValue(TonemappingModeValue);
+  const tonemappingModeLabel = TonemappingMode || "TonemappingMode";
   const dropDownItems = TonemappingModes.map((mode, index) => (
     <DropdownItem<number>
       theme={DropdownStyle}
@@ -29,7 +27,7 @@ export const TonemappingDropdown = () => {
       value={index}
       closeOnSelect={true}
       onToggleSelected={() => handleToggleSelected(index)}
-      selected={colorMode === index}
+      selected={ColorMode === index}
       sounds={{ select: "select-item" }}
     >
       {mode}

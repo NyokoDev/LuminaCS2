@@ -3,22 +3,24 @@ import { Theme } from "cs2/bindings";
 import { getModule } from "cs2/modding";
 import mod from "../../../mod.json";
 import { Dropdown, DropdownItem, DropdownToggle, FOCUS_AUTO } from "cs2/ui";
-import "../dropdown_module.scss";
-import "./Cubemaps.scss";
+import '../dropdown_module.scss'
+import '../Cubemaps/Cubemaps.scss'
 
 export const CubemapArray = bindValue<string[]>(mod.id, "CubemapArrayExtended", []);
 const selectedCubemap$ = bindValue<string>(mod.id, "CubemapName", "None");
 
 const DropdownStyle: Theme | any = getModule("game-ui/menu/themes/dropdown.module.scss", "classes");
 
+
 const handleSelect = (selectedCubemap: string) => {
   trigger(mod.id, "UpdateCubemapName", selectedCubemap);
 };
 
 export const CubemapsDropdown = () => {
-  const cubemaps = useValue(CubemapArray);
-  const selectedCubemap = useValue(selectedCubemap$);
-  const selectedCubemapLabel = selectedCubemap || "Select Cubemap";
+  const Cubemaps = useValue(CubemapArray);
+  const selectedCubemap = useValue(SelectedCubemap$);
+
+  const selectedCubemapLabel = selectedCubemap;
 
   const dropDownItems = cubemaps.map((mode) => (
     <DropdownItem<string>
