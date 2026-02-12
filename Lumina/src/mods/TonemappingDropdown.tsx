@@ -2,38 +2,34 @@ import { useValue, bindValue, trigger } from "cs2/api";
 import { Theme } from "cs2/bindings";
 import { getModule } from "cs2/modding";
 import mod from "../../mod.json";
-import { Dropdown, DropdownItem, DropdownToggle, UISound, FOCUS_AUTO } from "cs2/ui";
+import { Dropdown, DropdownItem, DropdownToggle, FOCUS_AUTO } from "cs2/ui";
+import "./dropdown_module.scss";
 
 const TonemappingModes = ["None", "External", "Custom", "Neutral", "ACES"];
 
-// This functions trigger an event on C# side and C# designates the method to implement.
 const TonemappingMode$ = bindValue<number>(mod.id, "TonemappingMode", 0);
-const TonemappingModeValue = bindValue<string>(mod.id, "TonemappingMode","");
-
+const TonemappingModeValue = bindValue<string>(mod.id, "TonemappingMode", "");
 
 const DropdownStyle: Theme | any = getModule("game-ui/menu/themes/dropdown.module.scss", "classes");
 
-
-console.log(UISound);
-
 const handleToggleSelected = (index: number) => {
-    console.log(`[LUMINA] Selected mode index: ${index}`);
-    console.log(`[LUMINA] Selected mode value: ${TonemappingModes[index]}`);
-    trigger(mod.id, "SetTonemappingMode", index); 
-  };
+  trigger(mod.id, "SetTonemappingMode", index);
+};
 
 export const TonemappingDropdown = () => {
-  const ColorMode = useValue(TonemappingMode$);
-  const TonemappingMode = useValue(TonemappingModeValue);
-  const TonemmapingModeValueLabel = TonemappingMode ? TonemappingMode : "TonemappingMode";
+  const colorMode = useValue(TonemappingMode$);
+  const tonemappingMode = useValue(TonemappingModeValue);
+  const tonemappingModeLabel = tonemappingMode || "Tonemapping";
+
   const dropDownItems = TonemappingModes.map((mode, index) => (
-    <DropdownItem<Number>
+    <DropdownItem<number>
       theme={DropdownStyle}
+      className="dropdownItem"
       focusKey={FOCUS_AUTO}
       value={index}
       closeOnSelect={true}
       onToggleSelected={() => handleToggleSelected(index)}
-      selected={true}
+      selected={colorMode === index}
       sounds={{ select: "select-item" }}
     >
       {mode}
@@ -41,9 +37,9 @@ export const TonemappingDropdown = () => {
   ));
 
   return (
-    <div style={{ padding: "5rem" }}>
+    <div className="luminaDropdownShell">
       <Dropdown focusKey={FOCUS_AUTO} theme={DropdownStyle} content={dropDownItems}>
-        <DropdownToggle>{TonemmapingModeValueLabel}</DropdownToggle>
+        <DropdownToggle>{tonemappingModeLabel}</DropdownToggle>
       </Dropdown>
     </div>
   );
