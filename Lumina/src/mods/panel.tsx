@@ -67,6 +67,8 @@ export const HighlightsActive$ =  bindValue<boolean>(mod.id, 'GetHighlightsCheck
 
 const TonemappingMode$ = bindValue<string>(mod.id, "TonemappingMode");
 const TextureFormatMode$ = bindValue<string>(mod.id, "TextureFormat");
+const DynamicHdrpMetadata$ = bindValue<string>(mod.id, "DynamicHdrpMetadata");
+const DynamicHdrpState$ = bindValue<string>(mod.id, "DynamicHdrpState");
 const ExternalModeActivated$ = bindValue<boolean>(mod.id, "IsExternal");
 const CustomModeActivated$ = bindValue<boolean>(mod.id, "IsCustom");
 
@@ -105,6 +107,115 @@ let tab1 = false;
 let tab2 = false;
 
 
+
+
+type DynamicHdrpProperty = {
+  id: string;
+  displayName: string;
+  type: "float" | "bool";
+  min: number;
+  max: number;
+  step: number;
+};
+
+type DynamicHdrpComponentDescriptor = {
+  id: string;
+  displayName: string;
+  category: string;
+  defaultEnabled: boolean;
+  properties: DynamicHdrpProperty[];
+};
+
+type DynamicHdrpRuntimeState = {
+  componentId: string;
+  enabled: boolean;
+  values: Record<string, number | boolean>;
+};
+
+const DynamicHdrpPanel: React.FC = () => {
+  const metadataJson = useValue(DynamicHdrpMetadata$);
+  const stateJson = useValue(DynamicHdrpState$);
+
+  const metadata: DynamicHdrpComponentDescriptor[] = React.useMemo(() => {
+    try {
+      return JSON.parse(metadataJson || "[]");
+    } catch {
+      return [];
+    }
+  }, [metadataJson]);
+
+  const runtimeState: DynamicHdrpRuntimeState[] = React.useMemo(() => {
+    try {
+      return JSON.parse(stateJson || "[]");
+    } catch {
+      return [];
+    }
+  }, [stateJson]);
+
+  const stateLookup = React.useMemo(() => {
+    const lookup = new Map<string, DynamicHdrpRuntimeState>();
+    runtimeState.forEach((entry) => lookup.set(entry.componentId, entry));
+    return lookup;
+  }, [runtimeState]);
+
+  return (
+    <div style={{ marginTop: 8, marginBottom: 12, border: "1px solid rgba(255,255,255,0.15)", padding: 8, borderRadius: 6 }}>
+      <label className="title_SVH title_zQN" style={{ fontWeight: 700 }}>Dynamic HDRP Components</label>
+      {metadata.map((component) => {
+        const componentState = stateLookup.get(component.id);
+        const isEnabled = componentState?.enabled ?? component.defaultEnabled;
+
+        return (
+          <div key={component.id} style={{ marginTop: 8, paddingTop: 8, borderTop: "1px solid rgba(255,255,255,0.1)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
+              <strong>{component.displayName}</strong>
+              <button
+                className="button_WI3 button_Ori"
+                onClick={() => trigger(mod.id, "SetDynamicHdrpComponentEnabled", `${component.id}|${!isEnabled}`)}>
+                {isEnabled ? "Disable" : "Enable"}
+              </button>
+            </div>
+
+            {isEnabled && component.properties.map((property) => {
+              const rawValue = componentState?.values?.[property.id];
+
+              if (property.type === "bool") {
+                const boolValue = Boolean(rawValue);
+                return (
+                  <div key={property.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 6 }}>
+                    <span>{property.displayName}</span>
+                    <button
+                      className="button_WI3 button_Ori"
+                      onClick={() => trigger(mod.id, "SetDynamicHdrpComponentValue", `${component.id}|${property.id}|${!boolValue}`)}>
+                      {boolValue ? "On" : "Off"}
+                    </button>
+                  </div>
+                );
+              }
+
+              const numericValue = typeof rawValue === "number" ? rawValue : property.min;
+              return (
+                <div key={property.id} style={{ marginTop: 8 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span>{property.displayName}</span>
+                    <span>{numericValue.toFixed(3)}</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={property.min}
+                    max={property.max}
+                    step={property.step}
+                    value={numericValue}
+                    onChange={(event) => trigger(mod.id, "SetDynamicHdrpComponentValue", `${component.id}|${property.id}|${event.target.value}`)} />
+                </div>
+              );
+            })}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
 
 export const YourPanelComponent: React.FC<any> = () => {
   // Values
@@ -668,11 +779,7 @@ id="Global"
    
   <div  className="Panel">
 
-
-
-
-
-
+<DynamicHdrpPanel />
 
     {ColorAdjustmentsEnabled$ && (
     <div className="ColorAdjustments">

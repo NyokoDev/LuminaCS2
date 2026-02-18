@@ -9,6 +9,7 @@
     using Game.UI;
     using Game.UI.Menu;
     using JetBrains.Annotations;
+    using Lumina.Systems.DynamicHdrp;
     using Lumina.Systems.TextureHelper;
     using Lumina.UI;
     using Lumina.XML;
@@ -42,6 +43,7 @@ using dialog = Game.UI.MessageDialog;
     internal partial class RenderEffectsSystem : GameSystemBase
     {
         public static string lutFilePath = Path.Combine(GlobalPaths.LuminaLUTSDirectory, GlobalVariables.Instance.LUTName + ".cube");
+        public static RenderEffectsSystem Instance { get; private set; }
         public static string[] LutFiles;
         public static string[] CubemapFiles;
         bool m_SetupDone = false;
@@ -70,6 +72,7 @@ using dialog = Game.UI.MessageDialog;
         public bool LUTloaded = false;
         private VisualEnvironment m_Sky;
         private HDRISky hdriSky;
+        private DynamicHdrpRegistry m_DynamicHdrpRegistry;
 
 
         /// <summary>
@@ -98,6 +101,7 @@ using dialog = Game.UI.MessageDialog;
         protected override void OnCreate()
         {
             base.OnCreate();
+            Instance = this;
 
             CheckVersion();
 
@@ -360,9 +364,10 @@ using dialog = Game.UI.MessageDialog;
                 LUTloaded = true;
             }
 
-            ColorAdjustments();
-            WhiteBalance();
-            ShadowsMidTonesHighlights();
+            if (m_DynamicHdrpRegistry != null)
+            {
+                m_DynamicHdrpRegistry.Apply(GlobalVariables.Instance);
+            }
         }
 
         /// <summary>
@@ -874,19 +879,30 @@ using dialog = Game.UI.MessageDialog;
 #endif
 
                 // Add Tonemapping
-                m_ColorAdjustments = m_Profile.Add<ColorAdjustments>();
-                m_ShadowsMidtonesHighlights = m_Profile.Add<ShadowsMidtonesHighlights>(); // Shadows, midtones, highlights
                 m_Tonemapping = m_Profile.Add<Tonemapping>();
-                m_WhiteBalance = m_Profile.Add<WhiteBalance>();
 
-                m_WhiteBalance.temperature.Override(GlobalVariables.Instance.Temperature);
-                m_WhiteBalance.tint.Override(GlobalVariables.Instance.Tint);
+                m_DynamicHdrpRegistry = new DynamicHdrpRegistry(new IDynamicHdrpComponentModule[]
+                {
+                    new ColorAdjustmentsModule(),
+                    new WhiteBalanceModule(),
+                    new ShadowsMidtonesHighlightsModule(),
+                });
+                m_DynamicHdrpRegistry.Initialize(m_Profile);
 
-                m_ShadowsMidtonesHighlights.shadows.Override(new Vector4(GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows));
-                m_ShadowsMidtonesHighlights.midtones.Override(new Vector4(GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones));
+                if (m_Profile.TryGet(out ColorAdjustments colorAdjustmentsComponent))
+                {
+                    m_ColorAdjustments = colorAdjustmentsComponent;
+                }
 
-           
+                if (m_Profile.TryGet(out WhiteBalance whiteBalanceComponent))
+                {
+                    m_WhiteBalance = whiteBalanceComponent;
+                }
 
+                if (m_Profile.TryGet(out ShadowsMidtonesHighlights smhComponent))
+                {
+                    m_ShadowsMidtonesHighlights = smhComponent;
+                }
 
                 // Log active/inactive status of components
                 foreach (var component in m_Profile.components)
@@ -900,6 +916,27 @@ using dialog = Game.UI.MessageDialog;
                 Mod.Log.Info("[LUMINA] Successfully added HDRP volume.");
 
             }
+        }
+
+
+        public string GetDynamicHdrpMetadataJson()
+        {
+            return m_DynamicHdrpRegistry?.GetMetadataJson() ?? "[]";
+        }
+
+        public string GetDynamicHdrpStateJson()
+        {
+            return m_DynamicHdrpRegistry?.GetStateJson(GlobalVariables.Instance) ?? "[]";
+        }
+
+        public void SetDynamicHdrpComponentEnabled(string componentId, bool enabled)
+        {
+            m_DynamicHdrpRegistry?.SetComponentEnabled(componentId, enabled);
+        }
+
+        public void SetDynamicHdrpComponentValue(string componentId, string propertyId, string value)
+        {
+            m_DynamicHdrpRegistry?.SetPropertyValue(componentId, propertyId, value);
         }
 
         private void CheckForOtherVolumes()
