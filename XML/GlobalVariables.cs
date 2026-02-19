@@ -269,6 +269,19 @@ namespace LuminaMod.XML
         [XmlElement]
         public bool IsSSGIInterventionEnabled { get; set; } = true;
 
+        [XmlElement]
+        public bool IsContactShadows { get; set; } = false;
+
+        // Contact Shadows
+        [XmlElement] public float ContactShadowsLength { get; set; } = 1f;
+        [XmlElement] public float ContactShadowsMaxDistance { get; set; } = 50f;
+        [XmlElement] public float ContactShadowsMinDistance { get; set; } = 0.5f;
+        [XmlElement] public float ContactShadowsThicknessScale { get; set; } = 1f;
+        [XmlElement] public float ContactShadowsDistanceScaleFactor { get; set; } = 1f;
+        [XmlElement] public float ContactShadowsOpacity { get; set; } = 1f;
+        [XmlElement] public float ContactShadowsRayBias { get; set; } = 0.01f;
+        [XmlElement] public float ContactShadowsFadeDistance { get; set; } = 20f;
+        [XmlElement] public float ContactShadowsFadeInDistance { get; set; } = 0f;
 
         public static void EnsureSettingsFileExists(string filePath)
         {
@@ -451,7 +464,9 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.SafeMode = loadedVariables?.SafeMode ?? false;
                     GlobalVariables.Instance.PerformanceMode = loadedVariables?.PerformanceMode ?? false;
                     GlobalVariables.Instance.IsSSGIInterventionEnabled = loadedVariables?.IsSSGIInterventionEnabled ?? true;
+                    GlobalVariables.Instance.IsContactShadows = loadedVariables?.IsContactShadows ?? false;
 
+                    // Contact Shadows
 
 
 

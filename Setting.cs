@@ -279,6 +279,22 @@ namespace Lumina
             }
         }
 
+        [SettingsUISection(KSection, KSliderGroup)]
+        public bool IsContactShadows
+        {
+            get => GlobalVariables.Instance.IsContactShadows;
+            set
+            {
+                GlobalVariables.Instance.IsContactShadows = value;
+                // Ensure the system exists in the ECS world
+                var world = World.DefaultGameObjectInjectionWorld; // or World.DefaultGameObjectInjectionWorld
+                var system = world.GetOrCreateSystemManaged<RenderEffectsSystem>();
+                // Toggle contact shadows immediately
+                system.m_ContactShadows.enable.Override(GlobalVariables.Instance.IsContactShadows);
+                system.m_ContactShadows.active = GlobalVariables.Instance.IsContactShadows;
+            }
+        }
+
 
 
 

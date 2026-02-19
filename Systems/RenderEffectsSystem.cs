@@ -50,6 +50,7 @@
 
         public RenderEffectsSystem PPS;
         public ColorAdjustments m_ColorAdjustments;
+        public ContactShadows m_ContactShadows;
         public static Tonemapping m_Tonemapping;
         private WhiteBalance m_WhiteBalance;
         private ShadowsMidtonesHighlights m_ShadowsMidtonesHighlights;
@@ -892,6 +893,23 @@
                 m_GlobalIllumination = m_Profile.Add<GlobalIllumination>();
                 m_GlobalIllumination.active = GlobalVariables.Instance.IsSSGIInterventionEnabled;
                 m_GlobalIllumination.enable.Override(GlobalVariables.Instance.IsSSGIInterventionEnabled);
+
+
+                // Contact Shadows
+
+                m_ContactShadows = m_Profile.Add<ContactShadows>();
+                m_ContactShadows.active = GlobalVariables.Instance.IsContactShadows;
+                m_ContactShadows.length.Override(GlobalVariables.Instance.ContactShadowsLength);
+                m_ContactShadows.maxDistance.Override(GlobalVariables.Instance.ContactShadowsMaxDistance);
+                m_ContactShadows.minDistance.Override(GlobalVariables.Instance.ContactShadowsMinDistance);
+                m_ContactShadows.thicknessScale.Override(GlobalVariables.Instance.ContactShadowsThicknessScale);
+                m_ContactShadows.distanceScaleFactor.Override(GlobalVariables.Instance.ContactShadowsDistanceScaleFactor);
+                m_ContactShadows.enable.Override(GlobalVariables.Instance.IsContactShadows);
+                m_ContactShadows.opacity.Override(GlobalVariables.Instance.ContactShadowsOpacity);
+                m_ContactShadows.rayBias.Override(GlobalVariables.Instance.ContactShadowsRayBias);
+                m_ContactShadows.fadeDistance.Override(GlobalVariables.Instance.ContactShadowsFadeDistance);
+                m_ContactShadows.fadeInDistance.Override(GlobalVariables.Instance.ContactShadowsFadeInDistance);
+           
 
 
                 foreach (var component in m_Profile.components)
