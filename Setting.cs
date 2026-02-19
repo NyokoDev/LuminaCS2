@@ -262,6 +262,26 @@ namespace Lumina
             }
         }
 
+        [SettingsUISection(KSection, KSliderGroup)]
+        public bool isSCGIInterventionEnabled
+        {
+            get => GlobalVariables.Instance.IsSSGIInterventionEnabled;
+            set
+            {
+                GlobalVariables.Instance.IsSSGIInterventionEnabled = value;
+
+                // Ensure the system exists in the ECS world
+                var world = World.DefaultGameObjectInjectionWorld; // or World.DefaultGameObjectInjectionWorld
+                var system = world.GetOrCreateSystemManaged<GraphicSettingsInterventionSystem>();
+
+                // Toggle SSGI immediately
+                system.ToggleGlobalIllumination();
+            }
+        }
+
+
+
+
         private void CheckForMods()
         {
 

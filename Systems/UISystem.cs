@@ -482,7 +482,7 @@
 
         private void CheckVersion()
         {
-            string url = "https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/XML/version.txt";
+            string url = "https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/main/XML/version.txt";
             string unityversion = UnityEngine.Application.unityVersion;
             string currentVersion = GlobalPaths.Version;
             string gameVersion = Version.current.fullVersion;

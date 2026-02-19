@@ -33,7 +33,7 @@
     using static UnityEngine.Rendering.HighDefinition.CameraSettings;
     using static UnityEngine.Rendering.HighDefinition.VolumetricClouds;
     using static UnityEngine.Rendering.HighDefinition.WindParameter;
-using dialog = Game.UI.MessageDialog;
+    using dialog = Game.UI.MessageDialog;
     using Version = Game.Version;
 
     /// <summary>
@@ -91,6 +91,7 @@ using dialog = Game.UI.MessageDialog;
         /// Gets or sets a value indicating whether Tonemapping mode is Custom.
         /// </summary>
         public static bool IsCustomMode { get; set; }
+        public GlobalIllumination m_GlobalIllumination { get; private set; }
 
         /// <summary>
         /// Called when the system is created.
@@ -115,7 +116,7 @@ using dialog = Game.UI.MessageDialog;
 
         private void CheckVersion()
         {
-            string url = "https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/master/XML/version.txt";
+            string url = "https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/main/XML/version.txt";
             string unityversion = UnityEngine.Application.unityVersion;
             string currentVersion = GlobalPaths.Version;
             string gameVersion = Version.current.fullVersion;
@@ -279,8 +280,8 @@ using dialog = Game.UI.MessageDialog;
     GlobalVariables.Instance.CubemapName == "Select Cubemap")
             {
                 Mod.Log.Info("Cubemap name is invalid. Skipping cubemap loading.");
-                
-                GlobalCubemap = null; 
+
+                GlobalCubemap = null;
             }
             else
             {
@@ -312,11 +313,11 @@ using dialog = Game.UI.MessageDialog;
             if (currentAsset != null)
             {
                 int lutSize = currentAsset.currentPlatformRenderPipelineSettings.postProcessSettings.lutSize;
-                 Mod.Log.Info($"Current LUT size: {lutSize}");
+                Mod.Log.Info($"Current LUT size: {lutSize}");
             }
             else
             {
-                 Mod.Log.Info("Failed to retrieve the current HDRenderPipelineAsset.");
+                Mod.Log.Info("Failed to retrieve the current HDRenderPipelineAsset.");
             }
 
             // Check and set Tonemapping mode
@@ -749,23 +750,23 @@ using dialog = Game.UI.MessageDialog;
         private void ColorAdjustments()
         {
             // Use reflection to get the private ColorAdjustments field from LightingSystem
-            colorAdjustments = m_ColorAdjustments; 
-                    // Set the exposure value to 0 using Override method
-                    colorAdjustments.postExposure.Override(GlobalVariables.Instance.PostExposure);
-                    colorAdjustments.postExposure.overrideState = GlobalVariables.Instance.PostExposureActive;
+            colorAdjustments = m_ColorAdjustments;
+            // Set the exposure value to 0 using Override method
+            colorAdjustments.postExposure.Override(GlobalVariables.Instance.PostExposure);
+            colorAdjustments.postExposure.overrideState = GlobalVariables.Instance.PostExposureActive;
 
 
-                    colorAdjustments.contrast.Override(GlobalVariables.Instance.Contrast);
-                    colorAdjustments.contrast.overrideState = GlobalVariables.Instance.ContrastActive;
+            colorAdjustments.contrast.Override(GlobalVariables.Instance.Contrast);
+            colorAdjustments.contrast.overrideState = GlobalVariables.Instance.ContrastActive;
 
-                    colorAdjustments.hueShift.Override(GlobalVariables.Instance.HueShift);
-                    colorAdjustments.hueShift.overrideState = GlobalVariables.Instance.HueShiftActive;
+            colorAdjustments.hueShift.Override(GlobalVariables.Instance.HueShift);
+            colorAdjustments.hueShift.overrideState = GlobalVariables.Instance.HueShiftActive;
 
-                    colorAdjustments.saturation.Override(GlobalVariables.Instance.Saturation);
-                    colorAdjustments.saturation.overrideState = GlobalVariables.Instance.SaturationActive;
-                
-            }
-        
+            colorAdjustments.saturation.Override(GlobalVariables.Instance.Saturation);
+            colorAdjustments.saturation.overrideState = GlobalVariables.Instance.SaturationActive;
+
+        }
+
 
         private void GetPrivateFieldm_PhysicallyBasedSky()
         {
@@ -791,24 +792,24 @@ using dialog = Game.UI.MessageDialog;
                         }
                         else
                         {
-                             Mod.Log.Info("HDRI Sky disabled. Space emission texture not applied.");
+                            Mod.Log.Info("HDRI Sky disabled. Space emission texture not applied.");
                         }
 
-                         Mod.Log.Info("Successfully retrieved and assigned m_PhysicallyBasedSky.");
+                        Mod.Log.Info("Successfully retrieved and assigned m_PhysicallyBasedSky.");
                     }
                     else
                     {
-                         Mod.Log.Info("m_PhysicallyBasedSky field is null.");
+                        Mod.Log.Info("m_PhysicallyBasedSky field is null.");
                     }
                 }
                 else
                 {
-                     Mod.Log.Info("LightingSystem instance is null.");
+                    Mod.Log.Info("LightingSystem instance is null.");
                 }
             }
             else
             {
-                 Mod.Log.Info("Field m_PhysicallyBasedSky not found.");
+                Mod.Log.Info("Field m_PhysicallyBasedSky not found.");
             }
         }
 
@@ -862,7 +863,7 @@ using dialog = Game.UI.MessageDialog;
                 {
                     LuminaVolume.enabled = false;
                 }
-           
+
                 LuminaVolume.name = "Lumina";
 
                 // Access the Volume Profile
@@ -879,19 +880,29 @@ using dialog = Game.UI.MessageDialog;
                 m_Tonemapping = m_Profile.Add<Tonemapping>();
                 m_WhiteBalance = m_Profile.Add<WhiteBalance>();
 
+
                 m_WhiteBalance.temperature.Override(GlobalVariables.Instance.Temperature);
                 m_WhiteBalance.tint.Override(GlobalVariables.Instance.Tint);
 
                 m_ShadowsMidtonesHighlights.shadows.Override(new Vector4(GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows));
                 m_ShadowsMidtonesHighlights.midtones.Override(new Vector4(GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones));
 
-           
+
+                // GlobalIllumination
+                m_GlobalIllumination = m_Profile.Add<GlobalIllumination>();
+                m_GlobalIllumination.active = GlobalVariables.Instance.IsSSGIInterventionEnabled;
+                m_GlobalIllumination.enable.Override(GlobalVariables.Instance.IsSSGIInterventionEnabled);
 
 
-                // Log active/inactive status of components
                 foreach (var component in m_Profile.components)
                 {
-                    Mod.Log.Info($"[LUMINA] Component: {component.GetType().Name}, Active: {component.active}");
+                    if (component == null)
+                        continue;
+
+                    Mod.Log.Info($"[LUMINA] ================================");
+                    Mod.Log.Info($"[LUMINA] Component: {component.GetType().FullName}");
+                    Mod.Log.Info($"[LUMINA] Active: {component.active}");
+
                 }
 
 
@@ -901,6 +912,9 @@ using dialog = Game.UI.MessageDialog;
 
             }
         }
+        
+    
+
 
         private void CheckForOtherVolumes()
         {

@@ -66,6 +66,10 @@ public class LocaleEN : IDictionarySource
         {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "Performance Mode" },
         {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.EnablePerformanceMode)), "When enabled, Lumina will postpone the loading of terrain, lighting and water systems until the game is fully loaded. This can help reduce lag in the main menu, providing a smoother experience when starting the game. However, it may cause a slight frame drop during the loading process. If you experience crashes or instability, consider disabling this option." },
 
+         {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.isSCGIInterventionEnabled)), "Global Illumination" },
+        {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.isSCGIInterventionEnabled)), "Global Illumination Intervention" },
+
+
     };
 
 

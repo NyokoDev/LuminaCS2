@@ -266,6 +266,9 @@ namespace LuminaMod.XML
         [XmlElement]
         public bool PerformanceMode { get; set; } = false;
 
+        [XmlElement]
+        public bool IsSSGIInterventionEnabled { get; set; } = true;
+
 
         public static void EnsureSettingsFileExists(string filePath)
         {
@@ -447,6 +450,7 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.EnableDebugLogs = loadedVariables?.EnableDebugLogs ?? false;
                     GlobalVariables.Instance.SafeMode = loadedVariables?.SafeMode ?? false;
                     GlobalVariables.Instance.PerformanceMode = loadedVariables?.PerformanceMode ?? false;
+                    GlobalVariables.Instance.IsSSGIInterventionEnabled = loadedVariables?.IsSSGIInterventionEnabled ?? true;
 
 
 
@@ -491,6 +495,6 @@ namespace LuminaMod.XML
             }
         }
 
-
+        
     }
 }

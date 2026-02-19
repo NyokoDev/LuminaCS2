@@ -122,6 +122,8 @@ namespace Lumina
 
             updateSystem.UpdateAfter<CustomSunManager>(SystemUpdatePhase.GameSimulation);
 
+            
+
 
             SendNotification();
         }
