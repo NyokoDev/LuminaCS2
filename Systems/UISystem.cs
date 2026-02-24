@@ -262,6 +262,71 @@
                 "AmbientOcclusionDirectLightingStrength",
                 () => GlobalVariables.Instance.AmbientOcclusionDirectLightingStrength));
 
+            AddUpdateBinding(new GetterValueBinding<bool>(
+                Mod.MODUI,
+                "AmbientOcclusionTemporalAccumulation",
+                () => GlobalVariables.Instance.AmbientOcclusionTemporalAccumulation));
+
+            AddUpdateBinding(new GetterValueBinding<float>(
+                Mod.MODUI,
+                "AmbientOcclusionBlurSharpness",
+                () => GlobalVariables.Instance.AmbientOcclusionBlurSharpness));
+
+            AddUpdateBinding(new GetterValueBinding<bool>(
+                Mod.MODUI,
+                "AmbientOcclusionFullResolution",
+                () => GlobalVariables.Instance.AmbientOcclusionFullResolution));
+
+            AddUpdateBinding(new GetterValueBinding<bool>(
+                Mod.MODUI,
+                "AmbientOcclusionBilateralUpsample",
+                () => GlobalVariables.Instance.AmbientOcclusionBilateralUpsample));
+
+            AddUpdateBinding(new GetterValueBinding<int>(
+                Mod.MODUI,
+                "AmbientOcclusionDirectionCount",
+                () => (int)GlobalVariables.Instance.AmbientOcclusionDirectionCount));
+
+            AddUpdateBinding(new GetterValueBinding<float>(
+                Mod.MODUI,
+                "AmbientOcclusionSpecularOcclusion",
+                () => GlobalVariables.Instance.AmbientOcclusionSpecularOcclusion));
+
+            AddUpdateBinding(new GetterValueBinding<bool>(
+                Mod.MODUI,
+                "AmbientOcclusionOccluderMotionRejection",
+                () => GlobalVariables.Instance.AmbientOcclusionOccluderMotionRejection));
+
+            AddUpdateBinding(new GetterValueBinding<bool>(
+                Mod.MODUI,
+                "AmbientOcclusionReceiverMotionRejection",
+                () => GlobalVariables.Instance.AmbientOcclusionReceiverMotionRejection));
+
+            AddUpdateBinding(new GetterValueBinding<bool>(
+                Mod.MODUI,
+                "AmbientOcclusionRayTracing",
+                () => GlobalVariables.Instance.AmbientOcclusionRayTracing));
+
+            AddUpdateBinding(new GetterValueBinding<float>(
+                Mod.MODUI,
+                "AmbientOcclusionRayLength",
+                () => GlobalVariables.Instance.AmbientOcclusionRayLength));
+
+            AddUpdateBinding(new GetterValueBinding<int>(
+                Mod.MODUI,
+                "AmbientOcclusionSampleCount",
+                () => GlobalVariables.Instance.AmbientOcclusionSampleCount));
+
+            AddUpdateBinding(new GetterValueBinding<bool>(
+                Mod.MODUI,
+                "AmbientOcclusionDenoise",
+                () => GlobalVariables.Instance.AmbientOcclusionDenoise));
+
+            AddUpdateBinding(new GetterValueBinding<float>(
+                Mod.MODUI,
+                "AmbientOcclusionDenoiserRadius",
+                () => GlobalVariables.Instance.AmbientOcclusionDenoiserRadius));
+
 
             // =========================
             // TRIGGER BINDINGS (UI writes)
@@ -306,6 +371,71 @@
                 Mod.MODUI,
                 "HandleSSAODirectLighting",
                 value => GlobalVariables.Instance.AmbientOcclusionDirectLightingStrength = value));
+
+            AddBinding(new TriggerBinding<bool>(
+                Mod.MODUI,
+                "HandleSSAOTemporalAccumulation",
+                value => GlobalVariables.Instance.AmbientOcclusionTemporalAccumulation = value));
+
+            AddBinding(new TriggerBinding<float>(
+                Mod.MODUI,
+                "HandleSSAOBLurSharpness",
+                value => GlobalVariables.Instance.AmbientOcclusionBlurSharpness = value));
+
+            AddBinding(new TriggerBinding<bool>(
+                Mod.MODUI,
+                "HandleSSAOFullResolution",
+                value => GlobalVariables.Instance.AmbientOcclusionFullResolution = value));
+
+            AddBinding(new TriggerBinding<bool>(
+                Mod.MODUI,
+                "HandleSSAOBilateralUpsample",
+                value => GlobalVariables.Instance.AmbientOcclusionBilateralUpsample = value));
+
+            AddBinding(new TriggerBinding<int>(
+                Mod.MODUI,
+                "HandleSSAODirectionCount",
+                value => GlobalVariables.Instance.AmbientOcclusionDirectionCount = value));
+
+            AddBinding(new TriggerBinding<float>(
+                Mod.MODUI,
+                "HandleSSAOSpecularOcclusion",
+                value => GlobalVariables.Instance.AmbientOcclusionSpecularOcclusion = value));
+
+            AddBinding(new TriggerBinding<bool>(
+                Mod.MODUI,
+                "HandleSSAOOccluderMotionRejection",
+                value => GlobalVariables.Instance.AmbientOcclusionOccluderMotionRejection = value));
+
+            AddBinding(new TriggerBinding<bool>(
+                Mod.MODUI,
+                "HandleSSAOReceiverMotionRejection",
+                value => GlobalVariables.Instance.AmbientOcclusionReceiverMotionRejection = value));
+
+            AddBinding(new TriggerBinding<bool>(
+                Mod.MODUI,
+                "HandleSSAORayTracing",
+                value => GlobalVariables.Instance.AmbientOcclusionRayTracing = value));
+
+            AddBinding(new TriggerBinding<float>(
+                Mod.MODUI,
+                "HandleSSAORayLength",
+                value => GlobalVariables.Instance.AmbientOcclusionRayLength = value));
+
+            AddBinding(new TriggerBinding<int>(
+                Mod.MODUI,
+                "HandleSSAOSampleCount",
+                value => GlobalVariables.Instance.AmbientOcclusionSampleCount = value));
+
+            AddBinding(new TriggerBinding<bool>(
+                Mod.MODUI,
+                "HandleSSAODenoise",
+                value => GlobalVariables.Instance.AmbientOcclusionDenoise = value));
+
+            AddBinding(new TriggerBinding<float>(
+                Mod.MODUI,
+                "HandleSSAODenoiserRadius",
+                value => GlobalVariables.Instance.AmbientOcclusionDenoiserRadius = value));
         }
 
         private void AddSupportBindings()

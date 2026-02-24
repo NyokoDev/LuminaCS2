@@ -302,6 +302,47 @@ namespace LuminaMod.XML
         [XmlElement]
         public float AmbientOcclusionIntensity { get; set; }
 
+        [XmlElement]
+        public float AmbientOcclusionBlurSharpness { get; set; }
+
+        [XmlElement]
+        public bool AmbientOcclusionBilateralUpsample { get; set; }
+
+        [XmlElement]
+        public object AmbientOcclusionDirectionCount { get;  set; }
+
+        [XmlElement]
+        public float AmbientOcclusionSpecularOcclusion { get;  set; }
+
+        [XmlElement]
+        public bool AmbientOcclusionOccluderMotionRejection { get;  set; }
+
+        [XmlElement]
+        public bool AmbientOcclusionReceiverMotionRejection { get;  set; }
+
+        [XmlElement]
+        public LayerMask AmbientOcclusionLayerMask { get;  set; }
+
+        [XmlElement]
+        public bool AmbientOcclusionRayTracing { get;  set; }
+
+        [XmlElement]
+        public float AmbientOcclusionRayLength { get;  set; }
+
+        [XmlElement]
+        public int AmbientOcclusionSampleCount { get;  set; }
+
+        [XmlElement]
+        public bool AmbientOcclusionDenoise { get; set; }
+
+        [XmlElement]
+        public float AmbientOcclusionDenoiserRadius { get;  set; }
+
+
+
+
+
+
         // Contact Shadows
         [XmlElement] public float ContactShadowsLength { get; set; } = 1f;
         [XmlElement] public float ContactShadowsMaxDistance { get; set; } = 50f;
@@ -392,151 +433,50 @@ namespace LuminaMod.XML
             }
         }
 
+
         /// <summary>
-        /// Loads from file.
+        /// Load From File.
         /// </summary>
-        /// <param name="filePath">File path parameter.</param>
-        /// <returns>Loaded variables.</returns>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
         public static GlobalVariables LoadFromFile(string filePath)
         {
             try
             {
-                // Ensure directory exists
-                if (!Directory.Exists(GlobalPaths.AssemblyDirectory))
+                Directory.CreateDirectory(GlobalPaths.AssemblyDirectory);
+
+                if (!File.Exists(filePath))
                 {
-                    Directory.CreateDirectory(GlobalPaths.AssemblyDirectory);
+                    Mod.Log.Info("Settings file not found. Returning default instance.");
+                    return Instance; // Nothing to load
                 }
 
-                // Create an XmlSerializer for the GlobalVariables type.
-                XmlSerializer serializer = new XmlSerializer(typeof(GlobalVariables));
+                var serializer = new XmlSerializer(typeof(GlobalVariables));
+                using var reader = new StreamReader(filePath);
+                var loadedVariables = (GlobalVariables)serializer.Deserialize(reader);
 
-                // Open the file for reading.
-                using (TextReader reader = new StreamReader(filePath))
+                if (loadedVariables == null)
                 {
-                    // Deserialize the object from the file.
-                    GlobalVariables loadedVariables = (GlobalVariables)serializer.Deserialize(reader);
-
-                    GlobalVariables.Instance.LuminaVolumeEnabled = loadedVariables?.LuminaVolumeEnabled ?? true;
-
-                    // Set the loaded values to the corresponding properties, with default values if missing.
-                    GlobalVariables.Instance.PostExposure = loadedVariables?.PostExposure ?? 0f;
-                    GlobalVariables.Instance.PostExposureActive = loadedVariables?.PostExposureActive ?? false;
-                    GlobalVariables.Instance.Contrast = loadedVariables?.Contrast ?? 0f;
-                    GlobalVariables.Instance.ContrastActive = loadedVariables?.ContrastActive ?? false;
-                    GlobalVariables.Instance.HueShift = loadedVariables?.HueShift ?? 0f;
-                    GlobalVariables.Instance.HueShiftActive = loadedVariables?.HueShiftActive ?? false;
-                    GlobalVariables.Instance.Saturation = loadedVariables?.Saturation ?? 0f;
-                    GlobalVariables.Instance.SaturationActive = loadedVariables?.SaturationActive ?? false;
-
-                    GlobalVariables.Instance.Latitude = loadedVariables?.Latitude ?? 0f;
-                    GlobalVariables.Instance.Longitude = loadedVariables?.Longitude ?? 0f;
-
-                    GlobalVariables.Instance.Temperature = loadedVariables?.Temperature ?? 0f;
-                    GlobalVariables.Instance.TemperatureActive = loadedVariables?.TemperatureActive ?? false;
-                    GlobalVariables.Instance.Tint = loadedVariables?.Tint ?? 0f;
-                    GlobalVariables.Instance.TintActive = loadedVariables?.TintActive ?? false;
-
-                    GlobalVariables.Instance.Shadows = loadedVariables?.Shadows ?? 0f;
-                    GlobalVariables.Instance.ShadowsActive = loadedVariables?.ShadowsActive ?? false;
-                    GlobalVariables.Instance.Midtones = loadedVariables?.Midtones ?? 0f;
-                    GlobalVariables.Instance.MidtonesActive = loadedVariables?.MidtonesActive ?? false;
-                    GlobalVariables.Instance.Highlights = loadedVariables?.Highlights ?? 0f;
-                    GlobalVariables.Instance.HighlightsActive = loadedVariables?.HighlightsActive ?? false;
-
-                    // Tonemapping
-                    GlobalVariables.Instance.TonemappingMode = loadedVariables?.TonemappingMode ?? TonemappingMode.None;
-                    GlobalVariables.Instance.LUTContribution = loadedVariables?.LUTContribution ?? 1f;
-                    GlobalVariables.Instance.LUTName = loadedVariables?.LUTName ?? "None";
-                    GlobalVariables.Instance.SceneFlowCheckerEnabled = loadedVariables?.SceneFlowCheckerEnabled ?? false;
-
-                    GlobalVariables.Instance.ToeStrengthActive = loadedVariables?.ToeStrengthActive ?? false;
-                    GlobalVariables.Instance.ToeStrengthValue = loadedVariables?.ToeStrengthValue ?? 0f;
-                    GlobalVariables.Instance.ToeLengthActive = loadedVariables?.ToeLengthActive ?? false;
-                    GlobalVariables.Instance.ToeLengthValue = loadedVariables?.ToeLengthValue ?? 0f;
-
-                    GlobalVariables.Instance.shoulderStrengthActive = loadedVariables?.shoulderStrengthActive ?? false;
-                    GlobalVariables.Instance.shoulderStrengthValue = loadedVariables?.shoulderStrengthValue ?? 0f;
-                    GlobalVariables.Instance.shoulderLengthActive = loadedVariables?.shoulderLengthActive ?? false;
-                    GlobalVariables.Instance.shoulderAngleActive = loadedVariables?.shoulderAngleActive ?? false;
-                    GlobalVariables.Instance.shoulderAngleValue = loadedVariables?.shoulderAngleValue ?? 0f;
-
-                    GlobalVariables.Instance.TonemappingGammaActive = loadedVariables?.TonemappingGammaActive ?? false;
-                    GlobalVariables.Instance.TonemappingGammaValue = loadedVariables?.TonemappingGammaValue ?? 0f;
-                    GlobalVariables.Instance.SaveAutomatically = loadedVariables?.SaveAutomatically ?? true;
-                    GlobalVariables.Instance.CubemapName = loadedVariables?.CubemapName ?? "None";
-                    GlobalVariables.Instance.spaceEmissionMultiplier = loadedVariables?.spaceEmissionMultiplier ?? 20000f;
-                    GlobalVariables.Instance.HDRISkyEnabled = loadedVariables?.HDRISkyEnabled ?? false;
-
-                    GlobalVariables.Instance.CustomSunEnabled = loadedVariables?.CustomSunEnabled ?? false;
-                    GlobalVariables.Instance.AngularDiameter = loadedVariables?.AngularDiameter ?? 0f;
-                    GlobalVariables.Instance.SunIntensity = loadedVariables?.SunIntensity ?? 0f;
-                    GlobalVariables.Instance.SunFlareSize = loadedVariables?.SunFlareSize ?? 0f;
-                    GlobalVariables.Instance.ReloadAllPackagesOnRestart = loadedVariables?.ReloadAllPackagesOnRestart ?? false;
-                    GlobalVariables.Instance.LatLongEnabled = loadedVariables?.LatLongEnabled ?? false;
-
-                    GlobalVariables.Instance.ViewTimeOfDaySlider = loadedVariables?.ViewTimeOfDaySlider ?? false;
-
-                    // Metro Framework
-                    GlobalVariables.Instance.MetroEnabled = loadedVariables?.MetroEnabled ?? false;
-
-                    // Road Texture Smoothness
-                    GlobalVariables.Instance.RoadTextureSmoothness = loadedVariables?.RoadTextureSmoothness ?? -0.09171251f;
-                    GlobalVariables.Instance.TextureBrightness = loadedVariables?.TextureBrightness ?? 0.6878377f;
-                    GlobalVariables.Instance.TextureOpacity = loadedVariables?.TextureOpacity ?? 1.22928f;
-
-                    GlobalVariables.Instance.UseRoadTextures = loadedVariables?.UseRoadTextures ?? false;
-
-                    // Road Colors (default: RGB 172, 169, 169)
-                    GlobalVariables.Instance.PrimaryRoadColor = loadedVariables?.PrimaryRoadColor ?? (Color.grey);
-                    GlobalVariables.Instance.SecondaryRoadColor = loadedVariables?.SecondaryRoadColor ?? (Color.grey);
-
-                    GlobalVariables.Instance.EnableDebugLogs = loadedVariables?.EnableDebugLogs ?? false;
-                    GlobalVariables.Instance.SafeMode = loadedVariables?.SafeMode ?? false;
-                    GlobalVariables.Instance.PerformanceMode = loadedVariables?.PerformanceMode ?? false;
-                    GlobalVariables.Instance.IsSSGIInterventionEnabled = loadedVariables?.IsSSGIInterventionEnabled ?? true;
-                    GlobalVariables.Instance.IsContactShadows = loadedVariables?.IsContactShadows ?? false;
-
-                    // Contact Shadows
-                    GlobalVariables.Instance.ContactShadowsLength = loadedVariables?.ContactShadowsLength ?? 1f;
-                    GlobalVariables.Instance.ContactShadowsMaxDistance = loadedVariables?.ContactShadowsMaxDistance ?? 50f;
-                    GlobalVariables.Instance.ContactShadowsMinDistance = loadedVariables?.ContactShadowsMinDistance ?? 0.5f;
-                    GlobalVariables.Instance.ContactShadowsThicknessScale = loadedVariables?.ContactShadowsThicknessScale ?? 1f;
-                    GlobalVariables.Instance.ContactShadowsDistanceScaleFactor = loadedVariables?.ContactShadowsDistanceScaleFactor ?? 1f;
-                    GlobalVariables.Instance.IsContactShadows = loadedVariables?.IsContactShadows ?? true;
-                    GlobalVariables.Instance.ContactShadowsOpacity = loadedVariables?.ContactShadowsOpacity ?? 1f;
-                    GlobalVariables.Instance.ContactShadowsRayBias = loadedVariables?.ContactShadowsRayBias ?? 0.01f;
-                    GlobalVariables.Instance.ContactShadowsFadeDistance = loadedVariables?.ContactShadowsFadeDistance ?? 20f;
-                    GlobalVariables.Instance.ContactShadowsFadeInDistance = loadedVariables?.ContactShadowsFadeInDistance ?? 0f;
-
-
-                    // Screen Space Ambient Occlusion
-                    GlobalVariables.Instance.IsScreenSpaceAmbientOcclusion = loadedVariables?.IsScreenSpaceAmbientOcclusion ?? true;
-
-                    GlobalVariables.Instance.AmbientOcclusionIntensity = loadedVariables?.AmbientOcclusionIntensity ?? 0f;
-
-                    GlobalVariables.Instance.AmbientOcclusionMaxRadiusInPixels = loadedVariables?.AmbientOcclusionMaxRadiusInPixels ?? 32;
-
-                    GlobalVariables.Instance.AmbientOcclusionRadius = loadedVariables?.AmbientOcclusionRadius ?? 2f;
-
-                    GlobalVariables.Instance.AmbientOcclusionStepCount = loadedVariables?.AmbientOcclusionStepCount ?? 6;
-
-                    GlobalVariables.Instance.AmbientOcclusionTemporalAccumulation = loadedVariables?.AmbientOcclusionTemporalAccumulation ?? true;
-
-                    GlobalVariables.Instance.AmbientOcclusionBilateralAggressiveness = loadedVariables?.AmbientOcclusionBilateralAggressiveness ?? 0.15f;
-
-                    GlobalVariables.Instance.AmbientOcclusionGhostingReduction = loadedVariables?.AmbientOcclusionGhostingReduction ?? 0.5f;
-
-                    GlobalVariables.Instance.AmbientOcclusionFullResolution = loadedVariables?.AmbientOcclusionFullResolution ?? false;
-
-                    GlobalVariables.Instance.AmbientOcclusionDirectLightingStrength = loadedVariables?.AmbientOcclusionDirectLightingStrength ?? 0f;
-
-
-
-                    Mod.Log.Info("Settings loaded successfully.");
-                    return loadedVariables;
-
+                    Mod.Log.Info("Loaded settings were null. Using defaults.");
+                    return Instance;
                 }
-         
+
+                // Automatically copy all simple properties from loadedVariables to Instance
+                // Reflection ensures maintainability: adding new XmlElements won't break this
+                var properties = typeof(GlobalVariables).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                foreach (var prop in properties)
+                {
+                    if (!prop.CanWrite) continue;
+
+                    var value = prop.GetValue(loadedVariables);
+                    if (value != null)
+                    {
+                        prop.SetValue(Instance, value);
+                    }
+                }
+
+                Mod.Log.Info("Settings loaded successfully.");
+                return loadedVariables;
             }
             catch (Exception ex)
             {
@@ -545,7 +485,6 @@ namespace LuminaMod.XML
                     Mod.Log.Info($"Inner: {ex.InnerException.Message}");
 
                 GlobalPaths.SendMessage("Error loading settings. Please check the log for more details.");
-
                 return null;
             }
         }
@@ -571,6 +510,6 @@ namespace LuminaMod.XML
             }
         }
 
-       
+    
     }
 }

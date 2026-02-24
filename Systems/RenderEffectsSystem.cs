@@ -410,47 +410,107 @@
             AmbientOcclusionUpdate();
         }
 
+
         private void AmbientOcclusionUpdate()
         {
-            if (m_AmbientOcclusion == null)
+            var gv = GlobalVariables.Instance;
+            if (gv == null)
                 return;
 
-            // Enable / Disable
-            m_AmbientOcclusion.active = GlobalVariables.Instance.IsScreenSpaceAmbientOcclusion;
-
-            // Only update parameters if enabled (optional but cleaner)
-            if (!m_AmbientOcclusion.active)
+            if (LuminaVolume == null || LuminaVolume.profile == null)
                 return;
 
-            // Always use Override for VolumeParameters
-            m_AmbientOcclusion.intensity.Override(
-                GlobalVariables.Instance.AmbientOcclusionIntensity);
+            if (!LuminaVolume.profile.TryGet(out ScreenSpaceAmbientOcclusion ao) || ao == null)
+                return;
 
-            m_AmbientOcclusion.maximumRadiusInPixels =
-                GlobalVariables.Instance.AmbientOcclusionMaxRadiusInPixels;
+            try
+            {
+                // Enable/disable
+                ao.active = gv.IsScreenSpaceAmbientOcclusion;
+            }
+            catch
+            {
+                Lumina.Mod.Log.Info("ao.active = gv.IsScreenSpaceAmbientOcclusion;");
+            }
 
-            m_AmbientOcclusion.radius.Override(
-                GlobalVariables.Instance.AmbientOcclusionRadius);
+            if (!ao.active)
+                return;
 
-            m_AmbientOcclusion.stepCount =
-                GlobalVariables.Instance.AmbientOcclusionStepCount;
+            // ===== Fields with Override =====
+            try { ao.intensity.Override(gv.AmbientOcclusionIntensity); }
+            catch { Lumina.Mod.Log.Info("ao.intensity.Override(gv.AmbientOcclusionIntensity);"); }
 
-            m_AmbientOcclusion.temporalAccumulation.Override(
-                GlobalVariables.Instance.AmbientOcclusionTemporalAccumulation);
+            try { ao.directLightingStrength.Override(gv.AmbientOcclusionDirectLightingStrength); }
+            catch { Lumina.Mod.Log.Info("ao.directLightingStrength.Override(gv.AmbientOcclusionDirectLightingStrength);"); }
 
-            m_AmbientOcclusion.spatialBilateralAggressiveness.Override(
-                GlobalVariables.Instance.AmbientOcclusionBilateralAggressiveness);
+            try { ao.radius.Override(gv.AmbientOcclusionRadius); }
+            catch { Lumina.Mod.Log.Info("ao.radius.Override(gv.AmbientOcclusionRadius);"); }
 
-            m_AmbientOcclusion.ghostingReduction.Override(
-                GlobalVariables.Instance.AmbientOcclusionGhostingReduction);
+            try { ao.temporalAccumulation.Override(gv.AmbientOcclusionTemporalAccumulation); }
+            catch { Lumina.Mod.Log.Info("ao.temporalAccumulation.Override(gv.AmbientOcclusionTemporalAccumulation);"); }
 
-            m_AmbientOcclusion.fullResolution =
-                GlobalVariables.Instance.AmbientOcclusionFullResolution;
+            try { ao.ghostingReduction.Override(gv.AmbientOcclusionGhostingReduction); }
+            catch { Lumina.Mod.Log.Info("ao.ghostingReduction.Override(gv.AmbientOcclusionGhostingReduction);"); }
 
-            m_AmbientOcclusion.directLightingStrength.Override(
-                GlobalVariables.Instance.AmbientOcclusionDirectLightingStrength);
+            try { ao.blurSharpness.Override(gv.AmbientOcclusionBlurSharpness); }
+            catch { Lumina.Mod.Log.Info("ao.blurSharpness.Override(gv.AmbientOcclusionBlurSharpness);"); }
+
+            try { ao.spatialBilateralAggressiveness.Override(gv.AmbientOcclusionBilateralAggressiveness); }
+            catch { Lumina.Mod.Log.Info("ao.spatialBilateralAggressiveness.Override(gv.AmbientOcclusionBilateralAggressiveness);"); }
+
+            try { ao.specularOcclusion.Override(gv.AmbientOcclusionSpecularOcclusion); }
+            catch { Lumina.Mod.Log.Info("ao.specularOcclusion.Override(gv.AmbientOcclusionSpecularOcclusion);"); }
+
+            try
+            {
+                ao.occluderMotionRejection.Override(gv.AmbientOcclusionOccluderMotionRejection);
+            }
+            catch { Lumina.Mod.Log.Info("ao.occluderMotionRejection.Override(gv.AmbientOcclusionOccluderMotionRejection);"); }
+
+            try
+            {
+                ao.receiverMotionRejection.Override(gv.AmbientOcclusionReceiverMotionRejection);
+            }
+            catch { Lumina.Mod.Log.Info("ao.receiverMotionRejection.Override(gv.AmbientOcclusionReceiverMotionRejection);"); }
+
+            // Ray tracing parameters
+            if (SystemInfo.supportsRayTracing)
+            {
+                try { ao.rayTracing.Override(gv.AmbientOcclusionRayTracing); }
+                catch { Lumina.Mod.Log.Info("ao.rayTracing.Override(gv.AmbientOcclusionRayTracing);"); }
+
+                if (gv.AmbientOcclusionRayTracing)
+                {
+                    try { ao.rayLength = gv.AmbientOcclusionRayLength; }
+                    catch { Lumina.Mod.Log.Info("ao.rayLength = gv.AmbientOcclusionRayLength;"); }
+
+                    try { ao.sampleCount = gv.AmbientOcclusionSampleCount; }
+                    catch { Lumina.Mod.Log.Info("ao.sampleCount = gv.AmbientOcclusionSampleCount;"); }
+
+                    try { ao.denoise = gv.AmbientOcclusionDenoise; }
+                    catch { Lumina.Mod.Log.Info("ao.denoise = gv.AmbientOcclusionDenoise;"); }
+
+                    try { ao.denoiserRadius = gv.AmbientOcclusionDenoiserRadius; }
+                    catch { Lumina.Mod.Log.Info("ao.denoiserRadius = gv.AmbientOcclusionDenoiserRadius;"); }
+                }
+            }
+
+            // ===== Plain Primitive Fields (no Override) =====
+            try { ao.stepCount = gv.AmbientOcclusionStepCount; }
+            catch { Lumina.Mod.Log.Info("ao.stepCount = gv.AmbientOcclusionStepCount;"); }
+
+            try { ao.fullResolution = gv.AmbientOcclusionFullResolution; }
+            catch { Lumina.Mod.Log.Info("ao.fullResolution = gv.AmbientOcclusionFullResolution;"); }
+
+            try { ao.maximumRadiusInPixels = gv.AmbientOcclusionMaxRadiusInPixels; }
+            catch { Lumina.Mod.Log.Info("ao.maximumRadiusInPixels = gv.AmbientOcclusionMaxRadiusInPixels;"); }
+
+            try { ao.directionCount = (int)gv.AmbientOcclusionDirectionCount; }
+            catch { Lumina.Mod.Log.Info("ao.directionCount = (int)gv.AmbientOcclusionDirectionCount;"); }
+
+            try { ao.bilateralUpsample = gv.AmbientOcclusionBilateralUpsample; }
+            catch { Lumina.Mod.Log.Info("ao.bilateralUpsample = gv.AmbientOcclusionBilateralUpsample;"); }
         }
-
         private void OriginalShadows()
         {
       
