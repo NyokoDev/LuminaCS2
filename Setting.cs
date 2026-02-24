@@ -322,10 +322,34 @@ namespace Lumina
                 OpenUnityGUI();
             }
         }
+        /// <summary>
+        /// Screen Space Ambient Occlusion (UNITY HDRP).
+        /// </summary>
+        [SettingsUISection(KSection, KSliderGroup)]
+        public bool ScreenSpaceAmbientOcclusion
+        {
+            get => GlobalVariables.Instance.IsScreenSpaceAmbientOcclusion;
+            set
+            {
+                GlobalVariables.Instance.IsScreenSpaceAmbientOcclusion = value;
 
+                if (RenderEffectsSystem.LuminaVolume != null &&
+                    RenderEffectsSystem.LuminaVolume.profile != null)
+                {
+                    var profile = RenderEffectsSystem.LuminaVolume.profile;
+
+                    if (!profile.TryGet(out RenderEffectsSystem.m_AmbientOcclusion))
+                    {
+                        RenderEffectsSystem.m_AmbientOcclusion =
+                            profile.Add<ScreenSpaceAmbientOcclusion>();
+                    }
+
+                    RenderEffectsSystem.m_AmbientOcclusion.active = value;
+                }
+            }
+        }
         private void OpenUnityGUI()
         {
-           
         }
 
         private void CheckForMods()

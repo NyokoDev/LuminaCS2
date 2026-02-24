@@ -27,6 +27,7 @@
     using Unity.Entities;
     using UnityEngine;
     using UnityEngine.Experimental.Rendering;
+    using UnityEngine.Profiling;
     using UnityEngine.Rendering;
     using UnityEngine.Rendering.HighDefinition;
     using static UnityEngine.Rendering.DebugUI;
@@ -83,7 +84,7 @@
         /// Cubemap.
         /// </summary>
         public static Cubemap GlobalCubemap;
-        private ScreenSpaceAmbientOcclusion m_AmbientOcclusion;
+        public static ScreenSpaceAmbientOcclusion m_AmbientOcclusion;
 
         /// <summary>
         /// Gets or sets a value indicating whether Tonemapping mode is External.
@@ -120,7 +121,9 @@
 
         private void InitializeAmbientOcclusion()
         {
-            m_AmbientOcclusion = m_Profile.Add<ScreenSpaceAmbientOcclusion>();
+            // Add only if missing
+            if (!LuminaVolume.profile.TryGet(out m_AmbientOcclusion))
+                m_AmbientOcclusion = LuminaVolume.profile.Add<ScreenSpaceAmbientOcclusion>();
 
             // Enable / disable component
             m_AmbientOcclusion.active = GlobalVariables.Instance.IsScreenSpaceAmbientOcclusion;
