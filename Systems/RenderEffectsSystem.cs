@@ -121,9 +121,22 @@
         private void InitializeAmbientOcclusion()
         {
             m_AmbientOcclusion = m_Profile.Add<ScreenSpaceAmbientOcclusion>();
+
+            // Enable / disable component
             m_AmbientOcclusion.active = GlobalVariables.Instance.IsScreenSpaceAmbientOcclusion;
-            m_AmbientOcclusion.maximumRadiusInPixels = (GlobalVariables.Instance.AmbientOcclusionMaxRadiusInPixels);
+
+            // Proper HDRP overrides
             m_AmbientOcclusion.intensity.Override(GlobalVariables.Instance.AmbientOcclusionIntensity);
+            m_AmbientOcclusion.maximumRadiusInPixels = GlobalVariables.Instance.AmbientOcclusionMaxRadiusInPixels;
+
+            // Optional but recommended to match your screenshot defaults
+            m_AmbientOcclusion.radius.Override((float)GlobalVariables.Instance.AmbientOcclusionRadius);
+            m_AmbientOcclusion.stepCount = (int)GlobalVariables.Instance.AmbientOcclusionStepCount;
+            m_AmbientOcclusion.temporalAccumulation.Override((bool)GlobalVariables.Instance.AmbientOcclusionTemporalAccumulation);
+            m_AmbientOcclusion.spatialBilateralAggressiveness.Override((float)GlobalVariables.Instance.AmbientOcclusionBilateralAggressiveness);
+            m_AmbientOcclusion.ghostingReduction.Override((float)GlobalVariables.Instance.AmbientOcclusionGhostingReduction);
+            m_AmbientOcclusion.fullResolution = (bool)GlobalVariables.Instance.AmbientOcclusionFullResolution;
+            m_AmbientOcclusion.directLightingStrength.Override((float)GlobalVariables.Instance.AmbientOcclusionDirectLightingStrength);
         }
 
         private void CheckVersion()
