@@ -267,10 +267,40 @@ namespace LuminaMod.XML
         public bool PerformanceMode { get; set; } = false;
 
         [XmlElement]
-        public bool IsSSGIInterventionEnabled { get; set; } = true;
+        public bool IsSSGIInterventionEnabled { get; set; } = false;
 
         [XmlElement]
         public bool IsContactShadows { get; set; } = false;
+
+        [XmlElement]
+        public bool IsScreenSpaceAmbientOcclusion { get; set; } = false;
+
+        [XmlElement]
+        public int AmbientOcclusionMaxRadiusInPixels { get; set; }
+
+        [XmlElement]
+        public float? AmbientOcclusionRadius { get;set; }
+
+        [XmlElement]
+        public int? AmbientOcclusionStepCount { get;  set; }
+
+        [XmlElement]
+        public bool? AmbientOcclusionTemporalAccumulation { get;set; }
+
+        [XmlElement]
+        public float? AmbientOcclusionBilateralAggressiveness { get;  set; }
+
+        [XmlElement]
+        public float? AmbientOcclusionGhostingReduction { get;  set; }
+
+        [XmlElement]
+        public bool? AmbientOcclusionFullResolution { get; set; }
+
+        [XmlElement]
+        public float? AmbientOcclusionDirectLightingStrength { get; set; }
+
+        [XmlElement]
+        public float AmbientOcclusionIntensity { get; set; }
 
         // Contact Shadows
         [XmlElement] public float ContactShadowsLength { get; set; } = 1f;
@@ -467,7 +497,38 @@ namespace LuminaMod.XML
                     GlobalVariables.Instance.IsContactShadows = loadedVariables?.IsContactShadows ?? false;
 
                     // Contact Shadows
+                    GlobalVariables.Instance.ContactShadowsLength = loadedVariables?.ContactShadowsLength ?? 1f;
+                    GlobalVariables.Instance.ContactShadowsMaxDistance = loadedVariables?.ContactShadowsMaxDistance ?? 50f;
+                    GlobalVariables.Instance.ContactShadowsMinDistance = loadedVariables?.ContactShadowsMinDistance ?? 0.5f;
+                    GlobalVariables.Instance.ContactShadowsThicknessScale = loadedVariables?.ContactShadowsThicknessScale ?? 1f;
+                    GlobalVariables.Instance.ContactShadowsDistanceScaleFactor = loadedVariables?.ContactShadowsDistanceScaleFactor ?? 1f;
+                    GlobalVariables.Instance.IsContactShadows = loadedVariables?.IsContactShadows ?? true;
+                    GlobalVariables.Instance.ContactShadowsOpacity = loadedVariables?.ContactShadowsOpacity ?? 1f;
+                    GlobalVariables.Instance.ContactShadowsRayBias = loadedVariables?.ContactShadowsRayBias ?? 0.01f;
+                    GlobalVariables.Instance.ContactShadowsFadeDistance = loadedVariables?.ContactShadowsFadeDistance ?? 20f;
+                    GlobalVariables.Instance.ContactShadowsFadeInDistance = loadedVariables?.ContactShadowsFadeInDistance ?? 0f;
 
+
+                    // Screen Space Ambient Occlusion
+                    GlobalVariables.Instance.IsScreenSpaceAmbientOcclusion = loadedVariables?.IsScreenSpaceAmbientOcclusion ?? true;
+
+                    GlobalVariables.Instance.AmbientOcclusionIntensity = loadedVariables?.AmbientOcclusionIntensity ?? 0f;
+
+                    GlobalVariables.Instance.AmbientOcclusionMaxRadiusInPixels = loadedVariables?.AmbientOcclusionMaxRadiusInPixels ?? 32;
+
+                    GlobalVariables.Instance.AmbientOcclusionRadius = loadedVariables?.AmbientOcclusionRadius ?? 2f;
+
+                    GlobalVariables.Instance.AmbientOcclusionStepCount = loadedVariables?.AmbientOcclusionStepCount ?? 6;
+
+                    GlobalVariables.Instance.AmbientOcclusionTemporalAccumulation = loadedVariables?.AmbientOcclusionTemporalAccumulation ?? true;
+
+                    GlobalVariables.Instance.AmbientOcclusionBilateralAggressiveness = loadedVariables?.AmbientOcclusionBilateralAggressiveness ?? 0.15f;
+
+                    GlobalVariables.Instance.AmbientOcclusionGhostingReduction = loadedVariables?.AmbientOcclusionGhostingReduction ?? 0.5f;
+
+                    GlobalVariables.Instance.AmbientOcclusionFullResolution = loadedVariables?.AmbientOcclusionFullResolution ?? false;
+
+                    GlobalVariables.Instance.AmbientOcclusionDirectLightingStrength = loadedVariables?.AmbientOcclusionDirectLightingStrength ?? 0f;
 
 
 
@@ -510,6 +571,6 @@ namespace LuminaMod.XML
             }
         }
 
-        
+       
     }
 }

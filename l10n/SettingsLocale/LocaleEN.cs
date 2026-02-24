@@ -68,7 +68,8 @@ public class LocaleEN : IDictionarySource
 
          {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.isSCGIInterventionEnabled)), "Global Illumination" },
         {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.isSCGIInterventionEnabled)), "Global Illumination Intervention" },
-
+         {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.IsContactShadows)), "Contact Shadows" },
+        {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.IsContactShadows)), "Enable Contact Shadows" },
 
     };
 

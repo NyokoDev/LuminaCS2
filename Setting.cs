@@ -36,6 +36,7 @@ namespace Lumina
     using System.Windows.Forms;
     using Unity.Entities;
     using UnityEngine;
+    using UnityEngine.Rendering.HighDefinition;
     using static UnityEngine.Rendering.DebugUI;
     using Version = Game.Version;
 
@@ -286,17 +287,46 @@ namespace Lumina
             set
             {
                 GlobalVariables.Instance.IsContactShadows = value;
-                // Ensure the system exists in the ECS world
-                var world = World.DefaultGameObjectInjectionWorld; // or World.DefaultGameObjectInjectionWorld
+
+                // Ensure the ECS system exists
+                var world = World.DefaultGameObjectInjectionWorld;
                 var system = world.GetOrCreateSystemManaged<RenderEffectsSystem>();
-                // Toggle contact shadows immediately
+
+                // Access the static LuminaVolume on the type
+                var volume = RenderEffectsSystem.LuminaVolume;
+                if (volume == null)
+                {
+                    Lumina.Mod.Log.Info("[ContactShadows] LuminaVolume not found!");
+                    return;
+                }
+
+                var profile = volume.profile ?? volume.sharedProfile;
+                if (profile == null)
+                {
+                    Lumina.Mod.Log.Info("[ContactShadows] VolumeProfile not found!");
+                    return;
+                }
+
+                // Ensure the component exists
+                if (!profile.TryGet(out system.m_ContactShadows) || system.m_ContactShadows == null)
+                {
+                    system.m_ContactShadows = profile.Add<ContactShadows>();
+                    Lumina.Mod.Log.Info("[ContactShadows] Component added to profile.");
+                }
+
+                // Apply the toggle immediately
                 system.m_ContactShadows.enable.Override(GlobalVariables.Instance.IsContactShadows);
                 system.m_ContactShadows.active = GlobalVariables.Instance.IsContactShadows;
+
+                Lumina.Mod.Log.Info($"[ContactShadows] Enabled → {GlobalVariables.Instance.IsContactShadows}");
+                OpenUnityGUI();
             }
         }
 
-
-
+        private void OpenUnityGUI()
+        {
+           
+        }
 
         private void CheckForMods()
         {

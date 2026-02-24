@@ -50,6 +50,7 @@
 
         public RenderEffectsSystem PPS;
         public ColorAdjustments m_ColorAdjustments;
+        
         public ContactShadows m_ContactShadows;
         public static Tonemapping m_Tonemapping;
         private WhiteBalance m_WhiteBalance;
@@ -82,6 +83,7 @@
         /// Cubemap.
         /// </summary>
         public static Cubemap GlobalCubemap;
+        private ScreenSpaceAmbientOcclusion m_AmbientOcclusion;
 
         /// <summary>
         /// Gets or sets a value indicating whether Tonemapping mode is External.
@@ -112,7 +114,16 @@
             ConvertToHDRP();
             InitializeCubemap();
             GetPrivateFieldm_PhysicallyBasedSky();
+            InitializeAmbientOcclusion();
 
+        }
+
+        private void InitializeAmbientOcclusion()
+        {
+            m_AmbientOcclusion = m_Profile.Add<ScreenSpaceAmbientOcclusion>();
+            m_AmbientOcclusion.active = GlobalVariables.Instance.IsScreenSpaceAmbientOcclusion;
+            m_AmbientOcclusion.maximumRadiusInPixels = (GlobalVariables.Instance.AmbientOcclusionMaxRadiusInPixels);
+            m_AmbientOcclusion.intensity.Override(GlobalVariables.Instance.AmbientOcclusionIntensity);
         }
 
         private void CheckVersion()
@@ -365,6 +376,28 @@
             ColorAdjustments();
             WhiteBalance();
             ShadowsMidTonesHighlights();
+            ContactShadowsUpdate();
+            OriginalShadows();
+        }
+
+        private void OriginalShadows()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ContactShadowsUpdate()
+        {
+            m_ContactShadows.active = GlobalVariables.Instance.IsContactShadows;
+            m_ContactShadows.length.Override(GlobalVariables.Instance.ContactShadowsLength);
+            m_ContactShadows.maxDistance.Override(GlobalVariables.Instance.ContactShadowsMaxDistance);
+            m_ContactShadows.minDistance.Override(GlobalVariables.Instance.ContactShadowsMinDistance);
+            m_ContactShadows.thicknessScale.Override(GlobalVariables.Instance.ContactShadowsThicknessScale);
+            m_ContactShadows.distanceScaleFactor.Override(GlobalVariables.Instance.ContactShadowsDistanceScaleFactor);
+            m_ContactShadows.enable.Override(GlobalVariables.Instance.IsContactShadows);
+            m_ContactShadows.opacity.Override(GlobalVariables.Instance.ContactShadowsOpacity);
+            m_ContactShadows.rayBias.Override(GlobalVariables.Instance.ContactShadowsRayBias);
+            m_ContactShadows.fadeDistance.Override(GlobalVariables.Instance.ContactShadowsFadeDistance);
+            m_ContactShadows.fadeInDistance.Override(GlobalVariables.Instance.ContactShadowsFadeInDistance);
         }
 
         /// <summary>
@@ -911,6 +944,7 @@
                 m_ContactShadows.fadeInDistance.Override(GlobalVariables.Instance.ContactShadowsFadeInDistance);
            
 
+              
 
                 foreach (var component in m_Profile.components)
                 {
