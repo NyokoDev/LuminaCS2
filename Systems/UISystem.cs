@@ -211,8 +211,101 @@
             AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "SecondaryRoadColor", GetSecondaryRoadHex));
 
             AddSupportBindings();
+            AddScreenSpaceAmbientOcclusionBindings();
          
 
+        }
+
+        private void AddScreenSpaceAmbientOcclusionBindings()
+        {
+            // =========================
+            // VALUE BINDINGS (UI reads)
+            // =========================
+
+            AddUpdateBinding(new GetterValueBinding<bool>(
+                Mod.MODUI,
+                "IsScreenSpaceAmbientOcclusion",
+                () => GlobalVariables.Instance.IsScreenSpaceAmbientOcclusion));
+
+            AddUpdateBinding(new GetterValueBinding<float>(
+                Mod.MODUI,
+                "AmbientOcclusionIntensity",
+                () => GlobalVariables.Instance.AmbientOcclusionIntensity));
+
+            AddUpdateBinding(new GetterValueBinding<float>(
+                Mod.MODUI,
+                "AmbientOcclusionMaxRadiusInPixels",
+                () => GlobalVariables.Instance.AmbientOcclusionMaxRadiusInPixels));
+
+            AddUpdateBinding(new GetterValueBinding<float>(
+                Mod.MODUI,
+                "AmbientOcclusionRadius",
+                () => GlobalVariables.Instance.AmbientOcclusionRadius));
+
+            AddUpdateBinding(new GetterValueBinding<int>(
+                Mod.MODUI,
+                "AmbientOcclusionStepCount",
+                () => GlobalVariables.Instance.AmbientOcclusionStepCount));
+
+            AddUpdateBinding(new GetterValueBinding<float>(
+                Mod.MODUI,
+                "AmbientOcclusionBilateralAggressiveness",
+                () => GlobalVariables.Instance.AmbientOcclusionBilateralAggressiveness));
+
+            AddUpdateBinding(new GetterValueBinding<float>(
+                Mod.MODUI,
+                "AmbientOcclusionGhostingReduction",
+                () => GlobalVariables.Instance.AmbientOcclusionGhostingReduction));
+
+            AddUpdateBinding(new GetterValueBinding<float>(
+                Mod.MODUI,
+                "AmbientOcclusionDirectLightingStrength",
+                () => GlobalVariables.Instance.AmbientOcclusionDirectLightingStrength));
+
+
+            // =========================
+            // TRIGGER BINDINGS (UI writes)
+            // =========================
+
+            AddBinding(new TriggerBinding<bool>(
+                Mod.MODUI,
+                "HandleSSAOEnabled",
+                value => GlobalVariables.Instance.IsScreenSpaceAmbientOcclusion = value));
+
+            AddBinding(new TriggerBinding<float>(
+                Mod.MODUI,
+                "HandleSSAOIntensity",
+                value => GlobalVariables.Instance.AmbientOcclusionIntensity = value));
+
+            AddBinding(new TriggerBinding<float>(
+                Mod.MODUI,
+                "HandleSSAOMaxRadius",
+                value => GlobalVariables.Instance.AmbientOcclusionMaxRadiusInPixels = (int)value));
+
+            AddBinding(new TriggerBinding<float>(
+                Mod.MODUI,
+                "HandleSSAORadius",
+                value => GlobalVariables.Instance.AmbientOcclusionRadius = value));
+
+            AddBinding(new TriggerBinding<int>(
+                Mod.MODUI,
+                "HandleSSAOStepCount",
+                value => GlobalVariables.Instance.AmbientOcclusionStepCount = value));
+
+            AddBinding(new TriggerBinding<float>(
+                Mod.MODUI,
+                "HandleSSAOBilateral",
+                value => GlobalVariables.Instance.AmbientOcclusionBilateralAggressiveness = value));
+
+            AddBinding(new TriggerBinding<float>(
+                Mod.MODUI,
+                "HandleSSAOGhosting",
+                value => GlobalVariables.Instance.AmbientOcclusionGhostingReduction = value));
+
+            AddBinding(new TriggerBinding<float>(
+                Mod.MODUI,
+                "HandleSSAODirectLighting",
+                value => GlobalVariables.Instance.AmbientOcclusionDirectLightingStrength = value));
         }
 
         private void AddSupportBindings()

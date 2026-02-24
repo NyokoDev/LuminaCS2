@@ -121,25 +121,38 @@
 
         private void InitializeAmbientOcclusion()
         {
+            // Null safety
+            if (LuminaVolume == null)
+                return;
+
+            if (LuminaVolume.profile == null)
+                return;
+
+            var profile = LuminaVolume.profile;
+
             // Add only if missing
-            if (!LuminaVolume.profile.TryGet(out m_AmbientOcclusion))
-                m_AmbientOcclusion = LuminaVolume.profile.Add<ScreenSpaceAmbientOcclusion>();
+            if (!profile.TryGet(out m_AmbientOcclusion))
+                m_AmbientOcclusion = profile.Add<ScreenSpaceAmbientOcclusion>();
+
+            if (m_AmbientOcclusion == null)
+                return;
 
             // Enable / disable component
             m_AmbientOcclusion.active = GlobalVariables.Instance.IsScreenSpaceAmbientOcclusion;
 
-            // Proper HDRP overrides
+            // Proper HDRP overrides (ALWAYS use Override)
             m_AmbientOcclusion.intensity.Override(GlobalVariables.Instance.AmbientOcclusionIntensity);
-            m_AmbientOcclusion.maximumRadiusInPixels = GlobalVariables.Instance.AmbientOcclusionMaxRadiusInPixels;
+            m_AmbientOcclusion.maximumRadiusInPixels = (GlobalVariables.Instance.AmbientOcclusionMaxRadiusInPixels);
 
-            // Optional but recommended to match your screenshot defaults
-            m_AmbientOcclusion.radius.Override((float)GlobalVariables.Instance.AmbientOcclusionRadius);
-            m_AmbientOcclusion.stepCount = (int)GlobalVariables.Instance.AmbientOcclusionStepCount;
-            m_AmbientOcclusion.temporalAccumulation.Override((bool)GlobalVariables.Instance.AmbientOcclusionTemporalAccumulation);
-            m_AmbientOcclusion.spatialBilateralAggressiveness.Override((float)GlobalVariables.Instance.AmbientOcclusionBilateralAggressiveness);
-            m_AmbientOcclusion.ghostingReduction.Override((float)GlobalVariables.Instance.AmbientOcclusionGhostingReduction);
-            m_AmbientOcclusion.fullResolution = (bool)GlobalVariables.Instance.AmbientOcclusionFullResolution;
-            m_AmbientOcclusion.directLightingStrength.Override((float)GlobalVariables.Instance.AmbientOcclusionDirectLightingStrength);
+            m_AmbientOcclusion.radius.Override(GlobalVariables.Instance.AmbientOcclusionRadius);
+            m_AmbientOcclusion.stepCount = (GlobalVariables.Instance.AmbientOcclusionStepCount);
+
+            m_AmbientOcclusion.temporalAccumulation.Override(GlobalVariables.Instance.AmbientOcclusionTemporalAccumulation);
+            m_AmbientOcclusion.spatialBilateralAggressiveness.Override(GlobalVariables.Instance.AmbientOcclusionBilateralAggressiveness);
+            m_AmbientOcclusion.ghostingReduction.Override(GlobalVariables.Instance.AmbientOcclusionGhostingReduction);
+
+            m_AmbientOcclusion.fullResolution = (GlobalVariables.Instance.AmbientOcclusionFullResolution);
+            m_AmbientOcclusion.directLightingStrength.Override(GlobalVariables.Instance.AmbientOcclusionDirectLightingStrength);
         }
 
         private void CheckVersion()
@@ -394,11 +407,53 @@
             ShadowsMidTonesHighlights();
             ContactShadowsUpdate();
             OriginalShadows();
+            AmbientOcclusionUpdate();
+        }
+
+        private void AmbientOcclusionUpdate()
+        {
+            if (m_AmbientOcclusion == null)
+                return;
+
+            // Enable / Disable
+            m_AmbientOcclusion.active = GlobalVariables.Instance.IsScreenSpaceAmbientOcclusion;
+
+            // Only update parameters if enabled (optional but cleaner)
+            if (!m_AmbientOcclusion.active)
+                return;
+
+            // Always use Override for VolumeParameters
+            m_AmbientOcclusion.intensity.Override(
+                GlobalVariables.Instance.AmbientOcclusionIntensity);
+
+            m_AmbientOcclusion.maximumRadiusInPixels =
+                GlobalVariables.Instance.AmbientOcclusionMaxRadiusInPixels;
+
+            m_AmbientOcclusion.radius.Override(
+                GlobalVariables.Instance.AmbientOcclusionRadius);
+
+            m_AmbientOcclusion.stepCount =
+                GlobalVariables.Instance.AmbientOcclusionStepCount;
+
+            m_AmbientOcclusion.temporalAccumulation.Override(
+                GlobalVariables.Instance.AmbientOcclusionTemporalAccumulation);
+
+            m_AmbientOcclusion.spatialBilateralAggressiveness.Override(
+                GlobalVariables.Instance.AmbientOcclusionBilateralAggressiveness);
+
+            m_AmbientOcclusion.ghostingReduction.Override(
+                GlobalVariables.Instance.AmbientOcclusionGhostingReduction);
+
+            m_AmbientOcclusion.fullResolution =
+                GlobalVariables.Instance.AmbientOcclusionFullResolution;
+
+            m_AmbientOcclusion.directLightingStrength.Override(
+                GlobalVariables.Instance.AmbientOcclusionDirectLightingStrength);
         }
 
         private void OriginalShadows()
         {
-            throw new NotImplementedException();
+      
         }
 
         private void ContactShadowsUpdate()

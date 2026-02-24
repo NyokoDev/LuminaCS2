@@ -279,25 +279,25 @@ namespace LuminaMod.XML
         public int AmbientOcclusionMaxRadiusInPixels { get; set; }
 
         [XmlElement]
-        public float? AmbientOcclusionRadius { get;set; }
+        public float AmbientOcclusionRadius { get;set; }
 
         [XmlElement]
-        public int? AmbientOcclusionStepCount { get;  set; }
+        public int AmbientOcclusionStepCount { get;  set; }
 
         [XmlElement]
-        public bool? AmbientOcclusionTemporalAccumulation { get;set; }
+        public bool AmbientOcclusionTemporalAccumulation { get;set; }
 
         [XmlElement]
-        public float? AmbientOcclusionBilateralAggressiveness { get;  set; }
+        public float AmbientOcclusionBilateralAggressiveness { get;  set; }
 
         [XmlElement]
-        public float? AmbientOcclusionGhostingReduction { get;  set; }
+        public float AmbientOcclusionGhostingReduction { get;  set; }
 
         [XmlElement]
-        public bool? AmbientOcclusionFullResolution { get; set; }
+        public bool AmbientOcclusionFullResolution { get; set; }
 
         [XmlElement]
-        public float? AmbientOcclusionDirectLightingStrength { get; set; }
+        public float AmbientOcclusionDirectLightingStrength { get; set; }
 
         [XmlElement]
         public float AmbientOcclusionIntensity { get; set; }

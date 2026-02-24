@@ -12,7 +12,7 @@
 }
 
 .LuminaIcon:hover {
-  color: #00c8ff; /* new color on hover */
+  color: #00c8f3; /* new color on hover */
 }
 
 
@@ -21,7 +21,6 @@
   width: var(--size);
   height: var(--size);
   border-radius: 50%;
-  overflow: hidden;
   position: relative;
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);

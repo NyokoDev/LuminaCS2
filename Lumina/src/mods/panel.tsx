@@ -10,6 +10,7 @@ import { Slider, PropsSlider, SliderValueTransformer } from "./slider";
 import { useLocalization } from "cs2/l10n";
 import mod from "../../mod.json";
 import "../luminapanel.scss"; 
+import "./SSAOPanel/SSAOPanel.scss";
 import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import React, { Fragment } from 'react';
@@ -31,6 +32,7 @@ import './Cubemaps/Cubemaps.scss'
 import DragButton from "./DraggableButton/DragButton";
 import './RoadPanel/roadpanel.scss';
 import { RoadPanelBase } from "./RoadPanel/RoadPanelBase";
+import { SSAOPanelBase } from "./SSAOPanel/SSAOPanel";
 
 export let isInstalled$ = false;
 export let ColorAdjustmentsEnabled = true;
@@ -172,6 +174,7 @@ const [ToneMappingEnabled$, setTonemapping] = useState(false);
 const [PlanetaryEnabled$, setPlanetaryTab] = useState(false);
 const [OnImport, OnImportChange] = useState(false);
 const [RoadPanel, setRoadPanel] = useState(false);
+const [SSAOPanel, setSSAOPanel] = useState(false);
 
 const [IsClicked, setIsClicked] = useState(false);
 
@@ -541,6 +544,7 @@ id="Global"
     setTonemapping(false)
     setSkyAndFog(false)
     setRoadPanel(false)
+        setSSAOPanel(false)
    }}>
 </button>
 
@@ -563,8 +567,12 @@ id="Global"
     setTonemapping(false)
     setSkyAndFog(false)
     setRoadPanel(false)
+        setSSAOPanel(false)
  ;}}>
 </button>
+
+
+
 
 
 
@@ -589,6 +597,7 @@ id="Global"
     setTonemapping(false)
     setSkyAndFog(false)
     setRoadPanel(false)
+        setSSAOPanel(false)
  ;}}>
 </button>
 </Tooltip>
@@ -610,6 +619,7 @@ id="Global"
     setTonemapping(true)
     setSkyAndFog(false)
     setRoadPanel(false)
+        setSSAOPanel(false)
  ;}}>
 </button>
 </Tooltip>
@@ -631,6 +641,7 @@ id="Global"
     setTonemapping(false)
     setSkyAndFog(true)
     setRoadPanel(false)
+        setSSAOPanel(false)
  ;}}>
 </button>
 </Tooltip>
@@ -654,10 +665,38 @@ id="Global"
     setTonemapping(false)
     setSkyAndFog(false)
     setRoadPanel(true)
+        setSSAOPanel(false)
    }}>
 </button>
 
 </Tooltip>
+
+  <Tooltip
+  tooltip={translate("LUMINA.ssaobuttontooltip")} // Specify the content of the tooltip
+  disabled={false} // Specify whether the tooltip is disabled (default: false)
+  alignment="center" // Specify the alignment of the tooltip (e.g., "start", "center", "end")
+  className="custom-tooltip" // Specify additional class names for styling purposes
+>
+<button 
+  className={tab1 ? 'SSAOButtonSelect' : 'SSAOButtonSelect'} 
+  onSelect={() => {
+    setRoadPanel(true);
+    console.log("[LUMINA] Toggled ssao panel.");
+  }}
+  onClick={() => { setCA(false)
+    setSettings(false)
+    setPlanetaryTab(false)
+    setTonemapping(false)
+    setSkyAndFog(false)
+    setRoadPanel(false)
+    setSSAOPanel(true)
+   }}>
+</button>
+
+</Tooltip>
+
+
+
 
 
     </div>
@@ -1426,7 +1465,15 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
   </div>
   }
   
+{SSAOPanel && <div className="SSAOPanelBase"> 
+
+<SSAOPanelBase />
+  </div>
+  }
+
 </div>
+
+
 
 
 

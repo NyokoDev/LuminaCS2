@@ -71,6 +71,9 @@ public class LocaleEN : IDictionarySource
          {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.IsContactShadows)), "Contact Shadows" },
         {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.IsContactShadows)), "Enable Contact Shadows" },
 
+            {setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.ScreenSpaceAmbientOcclusion)), "Screen Space Ambient Occlusion" },
+            {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.ScreenSpaceAmbientOcclusion)), "Screen Space Ambient Occlusion" },
+
     };
 
 
