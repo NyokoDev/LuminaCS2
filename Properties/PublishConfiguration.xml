@@ -75,13 +75,13 @@
 	<!--Link to the forum post where the mod can be discussed-->
 	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/lumina.1645623/" />
 	<!--Version of the mod-->
-	<ModVersion Value="v2.7" />
+	<ModVersion Value="v2.8" />
 	<!--Recommended version of the base game to use the mod-->
 	<GameVersion Value="1.*" />
 	<!--Dependency for the mod, can be set multiple times-->
 	<Dependency Id="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
-	<ChangeLog Value="- New patch compatibility 1.5.4f1 - Reenable Global Illumination feature." />
+	<ChangeLog Value="- Screen Space Ambient Occlusion. Refactor Settings File. Other improvements. Global Illumination off as default." />
 " />
 	<!--ChangeLog>
 	</ChangeLog-->

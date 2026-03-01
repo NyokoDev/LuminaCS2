@@ -505,9 +505,6 @@
             try { ao.maximumRadiusInPixels = gv.AmbientOcclusionMaxRadiusInPixels; }
             catch { Lumina.Mod.Log.Info("ao.maximumRadiusInPixels = gv.AmbientOcclusionMaxRadiusInPixels;"); }
 
-            try { ao.directionCount = (int)gv.AmbientOcclusionDirectionCount; }
-            catch { Lumina.Mod.Log.Info("ao.directionCount = (int)gv.AmbientOcclusionDirectionCount;"); }
-
             try { ao.bilateralUpsample = gv.AmbientOcclusionBilateralUpsample; }
             catch { Lumina.Mod.Log.Info("ao.bilateralUpsample = gv.AmbientOcclusionBilateralUpsample;"); }
         }
