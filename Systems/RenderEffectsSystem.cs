@@ -108,6 +108,7 @@
 
             GlobalVariables.LoadFromFile(GlobalPaths.GlobalModSavingPath);
             CheckForMods();
+            CheckifRayTracing();
 
 
 
@@ -117,6 +118,16 @@
             GetPrivateFieldm_PhysicallyBasedSky();
             InitializeAmbientOcclusion();
 
+        }
+
+        private void CheckifRayTracing()
+        {
+            if (!SystemInfo.supportsRayTracing)
+            {
+                Lumina.Mod.Log.Info(
+                    "[LUMINA] RAY TRACING IS NOT SUPPORTED. FEATURES THAT REQUIRE RAY TRACING WILL NOT FUNCTION AS EXPECTED."
+                );
+            }
         }
 
         private void InitializeAmbientOcclusion()
