@@ -86,7 +86,7 @@ namespace Lumina.XML
             /// </summary>
             public static readonly string Version = GetVersion();
 
-            private static string GetVersion()
+            public static string GetVersion()
             {
                 bool isExperimental = false;
 

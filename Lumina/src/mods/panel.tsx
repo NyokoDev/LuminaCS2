@@ -11,7 +11,7 @@ import { useLocalization } from "cs2/l10n";
 import mod from "../../mod.json";
 import "../luminapanel.scss"; 
 import "./SSAOPanel/SSAOPanel.scss";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import React, { Fragment } from 'react';
 import {SketchPicker} from 'react-color';
@@ -33,6 +33,9 @@ import DragButton from "./DraggableButton/DragButton";
 import './RoadPanel/roadpanel.scss';
 import { RoadPanelBase } from "./RoadPanel/RoadPanelBase";
 import { SSAOPanelBase } from "./SSAOPanel/SSAOPanel";
+import {  SSAOPopup } from "./UpdateNotifications/Update";
+
+
 
 export let isInstalled$ = false;
 export let ColorAdjustmentsEnabled = true;
@@ -89,6 +92,9 @@ export const SunDiameter$ = bindValue<number>(mod.id, "SunDiameter");
 export const SunIntensity$ = bindValue<number>(mod.id, "SunIntensity");
 export const SunFlareSize$ = bindValue<number>(mod.id, "SunFlareSize");
 
+// Update
+
+export const UpdateNotification = bindValue<boolean>(mod.id, 'UpdateNotification');
 
 
 
@@ -345,6 +351,14 @@ const handleHighlights = (value: number) => {
         trigger(mod.id, 'OpenLegacyUI');
     }
 
+const updateNotification = useValue(UpdateNotification);
+const [showUpdate, setShowUpdate] = useState(false);
+
+useEffect(() => {
+  if (updateNotification) {
+    setShowUpdate(true);
+  }
+}, [updateNotification]);
 
     const handlePostExposureCheckbox = () => {
       trigger(mod.id, 'SetPostExposureCheckbox'); // Assuming mod is declared somewhere outside this function
@@ -1471,14 +1485,36 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
   </div>
   }
 
+
+
+          </div>
+<div>
+  {/* Update Notification */}
+  {showUpdate && (
+    <SSAOPopup
+      onClose={() => {
+        setShowUpdate(false);
+        trigger(mod.id, "StopUpdateNotification");
+      }}
+    />
+  )}
 </div>
 
 
+          </div>
+          
+    
+      
 
 
 
 
-</div>
+
+
+
+
+
+
+
 
 )}
-

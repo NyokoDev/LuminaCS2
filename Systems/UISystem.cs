@@ -80,6 +80,7 @@
             StartShadowsMidtonesHighlights();
             ShadowsMidtonesHighlightsCheckboxes();
             PlanetarySettings();
+            UpdateNotification();
 
 
 
@@ -214,6 +215,52 @@
             AddScreenSpaceAmbientOcclusionBindings();
          
 
+        }
+
+        private void UpdateNotification()
+        {
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "UpdateNotification", UpdateNotificationBool));
+            AddBinding(new TriggerBinding(Mod.MODUI, "StopUpdateNotification", StopUpdateNotification));
+        }
+
+        private bool UpdateNotificationBool()
+        {
+            string url = "https://raw.githubusercontent.com/NyokoDev/LuminaCS2/main/XML/version.txt";
+            string currentVersion = GlobalPaths.Version;
+
+            try
+            {
+                using (WebClient client = new WebClient())
+                {
+                    string latestVersion = client.DownloadString(url).Trim();
+
+                    // If versions mismatch, reset notification
+                    if (currentVersion != latestVersion)
+                    {
+                        Mod.Log.Info($"Lumina version mismatch. Current: {currentVersion} | Latest: {latestVersion}");
+                        GlobalVariables.Instance.UpdateNotification = true;
+                    }
+
+                    // Respect user setting
+                    if (!GlobalVariables.Instance.UpdateNotification)
+                    {
+                        return false;
+                    }
+
+                    Mod.Log.Info($"Lumina version confirmed: {currentVersion}");
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Mod.Log.Info("Error checking version: " + ex.Message);
+                return false;
+            }
+        }
+
+        private void StopUpdateNotification()
+        {
+            GlobalVariables.Instance.UpdateNotification = false;
         }
 
         private void AddScreenSpaceAmbientOcclusionBindings()
