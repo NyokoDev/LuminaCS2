@@ -1254,7 +1254,7 @@ $hueshift-top: 80rem;
     position: absolute;
     color: white;
     width: 300rem;
-    top: 5rem;
+    top: 0rem;
     left: 650rem;
     pointer-events: auto;
     z-index: 4000;
@@ -1275,7 +1275,7 @@ $hueshift-top: 80rem;
     position: absolute;
     color: white;
     width: 500rem;
-    top: 60rem;
+    top: 80rem;
     left: 15rem;
 }
 
@@ -1322,13 +1322,16 @@ $hueshift-top: 80rem;
 .LoadLUTButton
 {
     left: 20rem;
+    overflow: auto;
 }
 
 .OpenLUTButton
 {
     left: 20rem;
+    width: 280rem;
     top: 240rem !important;
     z-index: 200;
+    overflow: auto;
 }
 
 

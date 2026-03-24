@@ -1,0 +1,112 @@
+.LuminaButtonWrapper {
+  display: flex;
+  align-items: center;
+  padding: 4rem;
+  perspective: 800rem;
+}
+
+.LuminaIcon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.IconInner {
+  width: 44rem;
+  height: 44rem;
+  display: block;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  transition:
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: luminaFlip 3s ease-in-out infinite;
+}
+
+@keyframes luminaFlip {
+  0% {
+    transform: rotateX(0deg) scale(1);
+  }
+  50% {
+    transform: rotateX(180deg) scale(1.05);
+  }
+  100% {
+    transform: rotateX(360deg) scale(1);
+  }
+}
+
+.LuminaIcon:hover .IconInner {
+  animation-play-state: paused;
+  transform: rotateX(180deg) rotateY(-6deg) translateY(-3rem) scale(1.05);
+  box-shadow:
+    0 18rem 40rem rgba(0, 0, 0, 0.5),
+    0 2rem 6rem rgba(0, 0, 0, 0.25);
+}
+
+.LuminaIcon:active .IconInner {
+  transform: rotateX(180deg) rotateY(-2deg) translateY(0rem) scale(0.94);
+  box-shadow:
+    0 6rem 14rem rgba(0, 0, 0, 0.4);
+}
+
+.LuminaIcon.active .IconInner {
+  animation: luminaBreath 2.6s ease-in-out infinite;
+  transform: rotateX(180deg);
+}
+
+@keyframes luminaBreath {
+  0%   { transform: rotateX(180deg) translateY(-1rem) scale(1); }
+  50%  { transform: rotateX(180deg) translateY(-1.8rem) scale(1.035); }
+  100% { transform: rotateX(180deg) translateY(-1rem) scale(1); }
+}
+
+.LuminaIcon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12rem;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255, 255, 255, 0.18),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.LuminaIcon:hover::before {
+  opacity: 1;
+}
+
+.LuminaIcon::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent 30%
+  );
+  opacity: 0;
+}
+
+.LuminaIcon:hover::after {
+  animation: luminaSpin 1.2s linear forwards;
+  opacity: 0.4;
+}
+
+@keyframes luminaSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.LuminaDivider {
+  opacity: 0.25;
+  margin: 0 6rem;
+}

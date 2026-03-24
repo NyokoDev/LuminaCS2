@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import './DraggableButton.scss';
 
 const DragButton: React.FC = () => {
   const dragging = useRef(false);
@@ -63,29 +64,12 @@ const DragButton: React.FC = () => {
   };
 
   return (
-    <div
-      onMouseDown={handleMouseDown}
-      style={{
-        position: 'absolute',
-        top: '-650rem', // original rem position
-        left: '200rem', // original rem position
-        width: '56rem',
-        height: '56rem',
-        borderRadius: '14px',
-        backgroundColor: 'rgba(255, 255, 255, 0.15)', // transparent white almost gray
-        backdropFilter: 'blur(10px)',
-        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.1)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        cursor: isDragging ? 'grabbing' : 'grab',
-        userSelect: 'none',
-        transition: 'box-shadow 0.01s ease, background-color 2s ease',
-        zIndex: 1000,
-      }}
-      onMouseLeave={handleMouseUp}
-      onMouseUp={handleMouseUp}
-    >
+  <div
+  className={`DraggableButton ${isDragging ? 'dragging' : ''}`}
+  onMouseDown={handleMouseDown}
+  onMouseLeave={handleMouseUp}
+  onMouseUp={handleMouseUp}
+>
 <svg
   xmlns="http://www.w3.org/2000/svg"
   viewBox="0 0 40 24"

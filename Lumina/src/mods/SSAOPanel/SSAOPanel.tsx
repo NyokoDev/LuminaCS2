@@ -2,6 +2,7 @@ import React from "react";
 import { bindValue, trigger, useValue } from "cs2/api";
 import { Slider } from "mods/slider";
 import mod from "./../../../mod.json";
+import { Tooltip } from "cs2/ui";
 
 export interface SSAOPanelBaseProps {
   title?: string;
@@ -110,13 +111,14 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
       {title && <div className="ssaoconfiglabel">{title}</div>}
       {children}
 
-
+<Tooltip tooltip={"Screen Space Ambient Occlusion"} >
       <button
         className={`SSAOToggleButton ${ssaoEnabled ? "enabled" : "disabled"}`}
         onClick={() => handleSSAOEnabled(!ssaoEnabled)}
       >
         {ssaoEnabled ? "SSAO Enabled" : "SSAO Disabled"}
       </button>
+</Tooltip>
 
       {/* EXISTING SLIDERS REMAIN HERE (unchanged) */}
 {/* ===== EXISTING SSAO SLIDERS ===== */}
@@ -133,7 +135,7 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
 <label className="title_SVH title_zQN">Radius</label>
 <Slider
     value={radius}
-    start={0}
+    start={1}
     end={5}
     step={0.25}
     onChange={handleSSAORadius}
@@ -142,8 +144,8 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
 <label className="title_SVH title_zQN">Step Count</label>
 <Slider
     value={stepCount}
-    start={1}
-    end={16}
+    start={6}
+    end={32}
     step={1}
     onChange={handleSSAOStepCount}
     disabled={!ssaoEnabled} gamepadStep={0} noFill={false} />
@@ -151,8 +153,8 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
 <label className="title_SVH title_zQN">Bilateral Aggressiveness</label>
 <Slider
     value={bilateral}
-    start={0}
-    end={5}
+    start={0.15}
+    end={1}
     step={0.01}
     onChange={handleSSAOBilateral}
     disabled={!ssaoEnabled} gamepadStep={0} noFill={false} />
@@ -162,7 +164,7 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
     value={ghosting}
     start={0.5}
     end={1}
-    step={0}
+    step={0.01}
     onChange={handleSSAOGhosting}
     disabled={!ssaoEnabled} gamepadStep={0} noFill={false} />
 
@@ -191,7 +193,7 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
               value={blurSharpness}
               start={0.1}
               end={1}
-              step={0.01}
+              step={0.1}
               onChange={handleSSAOBlurSharpness}
               disabled={!ssaoEnabled} gamepadStep={0} noFill={false}      />
 
@@ -214,11 +216,11 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
       <label className="title_SVH title_zQN">Specular Occlusion</label>
       <Slider
               value={specular}
-              start={0}
+              start={0.5}
               end={1}
               step={0.01}
               onChange={handleSSAOSpecular}
-              disabled={!ssaoEnabled} gamepadStep={0} noFill={false}      />
+              disabled={!ssaoEnabled} gamepadStep={0.01} noFill={false}      />
 
       <button
         className={`SSAOToggleButton ${occluderMotion ? "enabled" : "disabled"}`}
@@ -277,9 +279,9 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
               value={denoiserRadius}
               start={0.1}
               end={1}
-              step={0.01}
+              step={0.001}
               onChange={handleSSAODenoiserRadius}
-              disabled={!ssaoEnabled || !rayTracing} gamepadStep={0} noFill={false}      />
+              disabled={!ssaoEnabled || !rayTracing} gamepadStep={0.001} noFill={false}      />
     </div>
   );
 };

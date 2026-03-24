@@ -686,11 +686,13 @@ id="Global"
 </Tooltip>
 
   <Tooltip
-  tooltip={translate("LUMINA.ssaobuttontooltip")} // Specify the content of the tooltip
+  tooltip={("Screen Space Ambient Occlusion")} // Specify the content of the tooltip
   disabled={false} // Specify whether the tooltip is disabled (default: false)
   alignment="center" // Specify the alignment of the tooltip (e.g., "start", "center", "end")
   className="custom-tooltip" // Specify additional class names for styling purposes
 >
+
+  
 <button 
   className={tab1 ? 'SSAOButtonSelect' : 'SSAOButtonSelect'} 
   onSelect={() => {
