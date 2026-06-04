@@ -1,6 +1,29 @@
+@font-face
+{
+    font-family: "Nexa";
+    src: url("./mods/fonts/Nexa-ExtraLight.ttf");
+}
+
+@font-face
+{
+    font-family: "Helvetica-Light";
+    src: url("./mods/fonts/Helvetica-Light.ttf");
+}
+
+@font-face
+{
+    font-family: "Helvetica-Neue-Medium";
+    src: url("./mods/fonts/HelveticaNeueMedium.otf");
+}
 
 
 .Panel {
+    font-family:
+        "Helvetica-Light",
+        "Segoe UI",
+        "Noto Sans",
+        sans-serif;
+
     position: absolute;
 
     width: 800rem;
@@ -18,7 +41,11 @@
     overflow-x: auto;
 
     box-shadow:
-        0 8rem 24rem rgba(0,0,0,.35);
+        0 2rem 8rem rgba(0, 0, 0, 0.18),
+        0 12rem 32rem rgba(0, 0, 0, 0.28),
+        0 24rem 64rem rgba(0, 0, 0, 0.20);
+
+    border: 1rem solid rgba(255, 255, 255, 0.06);
 
     color: #e0e0e0;
 
@@ -74,7 +101,6 @@
     top: -900rem;
     left: 80rem;
 
-    gap: 8rem;
     padding: 8rem;
 
     border-radius: 12rem;
@@ -1161,7 +1187,6 @@ $hueshift-top: 80rem;
   z-index: 100;
   justify-content: space-evenly;
   width: 100%;
-  gap: 1.5rem;
 }
 
 /* Base button styling */

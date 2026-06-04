@@ -16,7 +16,7 @@ console.log(UISound);
 
 const handleSelect = (selectedCubemap: string) => {
   const modeName = selectedCubemap; // Name the selected mode
-  console.log(`[LUMINA] Selected Cubemap value: ${modeName}`);
+  
 
   // Debug before triggering
   console.log(`[LUMINA] About to trigger UpdateCubemapName with modeName: ${modeName}`);
@@ -35,11 +35,9 @@ const handleSelect = (selectedCubemap: string) => {
 export const CubemapsDropdown = () => {
   const Cubemaps = useValue(CubemapArray); // Get the array of Cubemaps
   const selectedCubemap = useValue(SelectedCubemap$); // Get the currently selected Cubemap
-  console.log("Cubemaps:", Cubemaps); // Debug log
-  console.log("Selected Cubemap:", selectedCubemap); // Debug log
   
   // Find the label for the selected Cubemap
-  const selectedCubemapLabel = selectedCubemap;
+const selectedCubemapLabel = selectedCubemap ?? "None";
 
   const dropDownItems = Cubemaps.map((mode) => (
     <DropdownItem<string>

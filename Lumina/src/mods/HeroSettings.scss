@@ -11,7 +11,7 @@
     flex-direction: column;
 
     padding: 24rem;
-    gap: 20rem;
+   
 
     overflow-y: auto;
     overflow-x: hidden;
@@ -320,7 +320,6 @@
     display: flex;
     flex-direction: column;
 
-    gap: 10rem;
 
     margin-top: 20rem;
 }
@@ -344,7 +343,7 @@
     align-items: center;
     justify-content: flex-start;
 
-    gap: 12rem;
+
 
     padding: 8rem 0;
     color: white;
@@ -435,7 +434,8 @@
 
     display: flex;
 
-    gap: 10rem;
+
+
 }
 
 .PayPalButton,
@@ -510,7 +510,7 @@
     display: flex;
     flex-direction: column;
 
-    gap: 12rem;
+
 }
 
 .ImportPresetHeader
@@ -542,7 +542,7 @@
     display: flex;
     justify-content: flex-end;
 
-    gap: 10rem;
+
 }
 
 .ImportPresetCancel,

@@ -284,7 +284,7 @@ function SaveSettings() {
 }
 
 function ResetToDefault() {
-  console.log("Reset settings clicked");
+
   return (
     <div>
       <p>{translate("LUMINA.resettodefault")}</p>
@@ -303,7 +303,7 @@ function ResetToDefault() {
 const [importPresetActive, setImportPresetActive] = useState(false);
 
 function ImportPreset() {
-    console.log("Import lumina preset button clicked.");
+  
 
     setImportPresetActive(true);
 
@@ -311,7 +311,7 @@ function ImportPreset() {
 }
 
 function ExportPreset() {
-  console.log("Export lumina preset button clicked.");
+
   trigger(mod.id, 'ExportLuminaPreset');
 }
 
@@ -652,7 +652,7 @@ id="Global"
   className={tab1 ? 'ColorAdjustmentsButtonDeselected' : 'ColorAdjustmentsButton'} 
   onSelect={() => {
     setTab1(!tab1);
-    console.log("[LUMINA] Toggled Color panel.");
+
   }}
   onClick={() => { setCA(true)
     setSettings(false)

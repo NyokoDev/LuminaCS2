@@ -15,15 +15,11 @@ console.log(UISound);
 
 const handleSelect = (selectedLUT: string) => {
   const modeName = selectedLUT; // Name the selected mode
-  console.log(`[LUMINA] Selected LUT value: ${modeName}`);
-
-  // Debug before triggering
-  console.log(`[LUMINA] About to trigger UpdateLUTName with modeName: ${modeName}`);
 
   try {
     // Call the trigger function
     trigger(mod.id, "UpdateLUTName", modeName);
-    console.log(`[LUMINA] Successfully triggered UpdateLUTName with modeName: ${modeName}`);
+
   } catch (error) {
     // Log any errors that occur during triggering
     console.error(`[LUMINA] Error triggering UpdateLUTName:`, error);
@@ -34,8 +30,7 @@ const handleSelect = (selectedLUT: string) => {
 export const LUTSDropdown = () => {
   const LUTS = useValue(LUTSArray); // Get the array of LUTs
   const selectedLUT = useValue(SelectedLUT$); // Get the currently selected LUT
-  console.log("LUTS:", LUTS); // Debug log
-  console.log("Selected LUT:", selectedLUT); // Debug log
+
   
   // Find the label for the selected LUT
   const selectedLUTLabel = selectedLUT ? selectedLUT : "Select LUT";
