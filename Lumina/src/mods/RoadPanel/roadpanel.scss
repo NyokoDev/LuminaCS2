@@ -5,11 +5,18 @@
   background-size: cover;
   width: 45rem;
   height: 45rem;
-  left: 700rem;
+    top: 240rem;
+    
+  left: 3rem;
   border-radius: 50%;
+
+  
+  
   cursor: pointer;
   will-change: transform;
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+    filter: invert(100%)
 }
 
 .RoadButtonSelect:hover {
@@ -19,7 +26,7 @@
 .road-panel-base {
   position: absolute;
   left: 20rem;
-  width: 500rem;
+  width: auto;
   height: auto;
   background-color: rgb(243, 0, 0); /* no alpha here */
  
@@ -78,13 +85,13 @@
 .OpenRoadTexturesButton{
     position: absolute;
     top: 200rem;
-    width:150%
+    width:auto;
     
 }
 
 .roadconfiglabel{
   position: absolute;
-  left:700rem;
+  left:600rem;
   font-size: 20rem;
 
 }
@@ -92,21 +99,21 @@
 .ApplyTexturesButton {
       position: absolute;
     top: 250rem;
-    width:150%
+    width:auto;
 }
 
 
 .color-container {
     position: absolute;
   top: 50rem;   /* Stacked below brightness */
-    left: 700rem;
+    left: 400rem;
           width:200rem;
 }
 
 .color-label-1 {
   position: absolute;
   top:20rem;
-  right:1rem;
+  right:-15rem;
 }
 
 .hex-input {
@@ -198,7 +205,7 @@
 .color-container-2 {
     position: absolute;
   top: 80rem;   /* Stacked below brightness */
-    left: 700rem;
+    left: 400rem;
           width:200rem;
 }
 

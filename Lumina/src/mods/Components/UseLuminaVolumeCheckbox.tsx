@@ -1,4 +1,4 @@
-import './LuminaCheckbox.scss'
+import "../HeroSettings.scss"
 import mod from "mod.json";
 import { bindValue, trigger, useValue } from 'cs2/api';
 

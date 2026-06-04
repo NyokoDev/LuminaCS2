@@ -75,13 +75,13 @@
 	<!--Link to the forum post where the mod can be discussed-->
 	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/lumina.1645623/" />
 	<!--Version of the mod-->
-	<ModVersion Value="v2.8.1R1" />
+	<ModVersion Value="v2.9" />
 	<!--Recommended version of the base game to use the mod-->
 	<GameVersion Value="1.*" />
 	<!--Dependency for the mod, can be set multiple times-->
 	<Dependency Id="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
-	<ChangeLog Value="- Add Update Notification." />
+	<ChangeLog Value="- UI improvements, bug fixes, and refinements - Fixed tonemapping panel dropdown and button text visibility, improved SSAO panel and aligned values with Unity HDRP, redesigned drag button" />
 " />
 	<!--ChangeLog>
 	</ChangeLog-->

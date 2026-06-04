@@ -34,6 +34,7 @@ import './RoadPanel/roadpanel.scss';
 import { RoadPanelBase } from "./RoadPanel/RoadPanelBase";
 import { SSAOPanelBase } from "./SSAOPanel/SSAOPanel";
 import {  SSAOPopup } from "./UpdateNotifications/Update";
+import "./HeroSettings.scss";
 
 
 
@@ -74,6 +75,9 @@ const TonemappingMode$ = bindValue<string>(mod.id, "TonemappingMode");
 const TextureFormatMode$ = bindValue<string>(mod.id, "TextureFormat");
 const ExternalModeActivated$ = bindValue<boolean>(mod.id, "IsExternal");
 const CustomModeActivated$ = bindValue<boolean>(mod.id, "IsCustom");
+
+//Presets
+
 
 // Planetary Settings
 
@@ -296,10 +300,14 @@ function ResetToDefault() {
 }
 
 
-function ImportPreset() {
-  console.log("Import lumina preset button clicked.");
+const [importPresetActive, setImportPresetActive] = useState(false);
 
-  trigger(mod.id, 'ImportLuminaPreset');
+function ImportPreset() {
+    console.log("Import lumina preset button clicked.");
+
+    setImportPresetActive(true);
+
+    trigger(mod.id, 'ImportLuminaPreset');
 }
 
 function ExportPreset() {
@@ -514,9 +522,19 @@ const openUrl = (url: string): void => {
   }
 };
 
+const [presetName, setPresetName] = useState("");
+const [exportPresetActive, setExportPresetActive] = useState(false);
+
 return (
 
+  
+
   <div className="Global"
+
+  
+
+
+
 id="Global"
   
 
@@ -533,6 +551,90 @@ id="Global"
 <DragButton />
 
 
+
+{importPresetActive && (
+    <div className="ImportPresetOverlay">
+        <div className="ImportPresetDialog">
+
+            <div className="ImportPresetHeader">
+                Import Preset
+            </div>
+
+<input
+    className="ImportPresetInput"
+    type="text"
+    placeholder="Enter preset name..."
+    value={presetName}
+    onChange={(e) => setPresetName(e.target.value)}
+/>
+            <div className="ImportPresetButtons">
+
+                <button
+                    className="ImportPresetCancel"
+                    onClick={() => setImportPresetActive(false)}
+                >
+                    Cancel
+                </button>
+
+  <button
+    className="ImportPresetConfirm"
+    onClick={() => {
+        trigger(mod.id, "UpdatePresetName", presetName);
+        trigger(mod.id, "ImportLuminaPreset");
+        setImportPresetActive(false);
+    }}
+>
+    Import
+</button>
+
+            </div>
+
+        </div>
+    </div>
+)}
+
+
+{exportPresetActive && (
+    <div className="ImportPresetOverlay">
+        <div className="ImportPresetDialog">
+
+            <div className="ImportPresetHeader">
+                Export Preset
+            </div>
+
+            <input
+                className="ImportPresetInput"
+                type="text"
+                placeholder="Enter preset name..."
+                value={presetName}
+                onChange={(e) => setPresetName(e.target.value)}
+            />
+
+            <div className="ImportPresetButtons">
+
+                <button
+                    className="ImportPresetCancel"
+                    onClick={() => setExportPresetActive(false)}
+                >
+                    Cancel
+                </button>
+
+                <button
+                    className="ImportPresetConfirm"
+                    onClick={() => {
+                        trigger(mod.id, "UpdatePresetName", presetName);
+                        trigger(mod.id, "ExportLuminaPreset");
+                        setExportPresetActive(false);
+                    }}
+                >
+                    Export
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+)}
 
 
 
@@ -1066,101 +1168,202 @@ id="Global"
 )}
 
 {SettingsEnabled$ && (
-    <div className="SettingsPanel">
-      <label className="TextUseLumina">{translate("LUMINA.enableluminavolume")}</label>
-  <LuminaVolumeCheckbox />
-    <button 
-  
-    onClick={SaveSettings}
-    className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LuminaSaveButton">{translate("LUMINA.save")}</button>
+<div className="SettingsPanel">
 
-{IsClicked && (
-  <div className="ResetConfirmationDialog">
-  <p>{translate("LUMINA.resettodefaultconfirmation")}</p>
-  <ConfirmationDialog
-    message={translate("LUMINA.resettodefaultconfirmation")}
-    onCancel={() => {
-      console.log("Dialog canceled.");
-      setIsClicked(false); // Reset state when dialog is canceled
-    }}
-    onConfirm={(dismiss: boolean): void => {
-      trigger(mod.id, 'ResetLuminaSettings');
-      setIsClicked(false); // Reset state after confirming
-    }}
-  />
+    <div className="AboutHero">
+
+        <div className="AboutHeroLeft">
+
+            <div className="LuminaLogo" />
+
+            <div className="LuminaTitle">
+                LUMINA
+            </div>
+
+            <div className="LuminaSubtitle">
+                Advanced Visual Enhancement Suite
+            </div>
+
+            <div className="VersionBadge">
+                VERSION 3.0
+            </div>
+
+        </div>
+
+        <div className="AboutHeroRight">
+
+            <div className="AboutDescription">
+                Lumina is a powerful post-processing and visual enhancement toolkit
+                for Cities Skylines II.
+                <br />
+                <br />
+                Fine tune lighting, colors and atmosphere to create the city you imagine.
+            </div>
+
+   <div className="VolumeToggleCard">
+
+    <div className="VolumeToggleInfo">
+
+        <div className="VolumeToggleTitle">
+            {translate("LUMINA.enableluminavolume")}
+        </div>
+
+        <div className="VolumeToggleSubtitle">
+            Enable or disable the Lumina post-processing volume.
+        </div>
+
+    </div>
+
+    <div className="VolumeToggleContainer">
+        <LuminaVolumeCheckbox />
+    </div>
+
 </div>
+
+        </div>
+
+    </div>
+
+    <div className="FeatureGrid">
+
+        <div className="FeatureCard">
+            <div className="FeatureTitle">HDRP</div>
+            <div className="FeatureSubtitle">Color Grading</div>
+        </div>
+
+        <div className="FeatureCard">
+            <div className="FeatureTitle">Exposure</div>
+            <div className="FeatureSubtitle">Control</div>
+        </div>
+
+        <div className="FeatureCard">
+            <div className="FeatureTitle">LUT</div>
+            <div className="FeatureSubtitle">Management</div>
+        </div>
+
+        <div className="FeatureCard">
+            <div className="FeatureTitle">White</div>
+            <div className="FeatureSubtitle">Balance</div>
+        </div>
+
+        <div className="FeatureCard">
+            <div className="FeatureTitle">Environment</div>
+            <div className="FeatureSubtitle">Tweaks</div>
+        </div>
+
+    </div>
+
+    <div className="PresetSection">
+
+        <div className="PresetHeader">
+            PRESET MANAGEMENT
+        </div>
+
+        <div className="PresetButtons">
+
+            <button
+                onClick={SaveSettings}
+                className="PresetButton">
+                Save
+            </button>
+
+            <button
+                onClick={() => setIsClicked(true)}
+                className="PresetButton">
+                Reset To Default
+            </button>
+
+  <button
+    className="PresetButton"
+    onClick={() => setExportPresetActive(true)}
+>
+    Export Preset
+</button>
+
+      <button
+    className="PresetButton"
+    onClick={ImportPreset}
+>
+    Import Preset
+</button>
+        </div>
+
+    </div>
+
+    <div className="SupportCard">
+
+        <div className="SupportInfo">
+
+            <div className="SupportTitle">
+                Support the development of Lumina
+            </div>
+
+            <div className="SupportSubtitle">
+                Your support helps keep Lumina free and improved for everyone.
+            </div>
+
+        </div>
+
+ <div className="SupportButtons">
+
+<button
+    className="PayPalButton"
+    onClick={() => trigger(mod.id, "paypallink")}
+>
+    PayPal
+</button>
+
+<button
+    className="KofiButton"
+    onClick={() => trigger(mod.id, 'kofilink')}
+>
+    Ko-fi
+</button>
+
+</div>
+
+        <div className="DeveloperSection">
+
+            <div className="DeveloperLabel">
+                Developed by
+            </div>
+
+            <div className="DeveloperName">
+                Nyoko
+            </div>
+
+        </div>
+
+    </div>
+
+    {IsClicked && (
+        <div className="ResetConfirmationDialog">
+
+            <ConfirmationDialog
+                message={translate("LUMINA.resettodefaultconfirmation")}
+                onCancel={() => {
+                    setIsClicked(false);
+                }}
+                onConfirm={() => {
+                    trigger(mod.id, "ResetLuminaSettings");
+                    setIsClicked(false);
+                }}
+            />
+
+        </div>
 
 )}
     
-    <button 
-
-    onClick={() => setIsClicked(true)}
-    className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LuminaResetSettingsButton">
-
-      
-      {translate("LUMINA.resettodefault")}</button>
-
-<h1 className="title_SVH title_zQN PresetManagementLabel">{translate("LUMINA.presetmanagement")}</h1>
-
-<button
-onClick={() => OnImportChange(true)}
-className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LuminaImportPresetButton">{translate("LUMINA.importpreset")}
-  
-  
-   </button>
-
-   <button
-onClick={ExportPreset}
-className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LuminaExportPresetButton">{translate("LUMINA.exportpresetlabel")}
-   </button>
-
-   {OnImport && (
-  <div className="PresetConfirmation">
-    <ConfirmationDialog
-      onConfirm={() => {
-        ImportPreset();
-        OnImportChange(false);
-      }}
-      onCancel={() => OnImportChange(false)}
-      message={translate("LUMINA.confirmationonpreset")}
-    />
-  </div>
-)}
-
-
-
-<input
-  type="text"
-  onChange={(event) => UpdatePresetName(String(event.target.value))}
-  className="toggle_cca item-mouse-states_Fmi toggle_th_ PresetInputText"
-/>
-
-<button
-onClick={OpenPresetFolder}
-className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LuminaOpenFolder">{translate("LUMINA.openfolderlabel")}
-   </button>
 
 
 
       
 
 
-<div className="LuminaVersion_Image">
-  <div className="Version_Text"
-  ><h1></h1> 
-  
-
-
-<div className="Version_Buttons">
-  <button className="discord" onClick={() => trigger(mod.id, 'discordlink')} />
-  <button className="paypal"  onClick={() => trigger(mod.id, 'paypallink')} />
-  <button className="kofi"    onClick={() => trigger(mod.id, 'kofilink')} />
-</div>
 
 
 
-  </div>
-</div>
+
 
 
 
@@ -1501,6 +1704,10 @@ className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-tran
     />
   )}
 </div>
+
+
+
+
 
 
           </div>

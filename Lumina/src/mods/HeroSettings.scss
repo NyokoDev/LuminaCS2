@@ -1,0 +1,578 @@
+.SettingsPanel
+{
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 24rem;
+    gap: 20rem;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    box-sizing: border-box;
+}
+
+/* ========================================================= */
+/* HERO */
+/* ========================================================= */
+
+.AboutHero
+{
+    position: relative;
+
+    width: 100%;
+    min-height: 300rem;
+
+    display: flex;
+    flex-direction: row;
+
+    padding: 30rem;
+
+    border-radius: 15rem;
+
+    background: rgba(0,0,0,.55);
+
+    box-sizing: border-box;
+
+    flex-shrink: 0;
+}
+
+.AboutHeroLeft
+{
+    position: relative;
+
+    width: 400rem;
+    min-width: 400rem;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+}
+
+.AboutHeroRight
+{
+    position: relative;
+
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+
+    padding-left: 40rem;
+
+    border-left: 1rem solid rgba(255,255,255,.1);
+
+    box-sizing: border-box;
+}
+
+.LuminaLogo
+{
+    position: relative;
+
+    width: 180rem;
+    height: 180rem;
+
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    background-image: url("coui://ui-mods/Icons/Lumina.svg");
+    z-index: 2;
+}
+
+.LuminaTitle
+{
+    position: relative;
+
+    margin-top: 15rem;
+
+    font-size: 42rem;
+    font-weight: 700;
+
+    letter-spacing: 8rem;
+
+    text-align: center;
+}
+
+.LuminaSubtitle
+{
+    position: relative;
+
+    margin-top: 10rem;
+
+    font-size: 18rem;
+
+    text-align: center;
+
+    color: #58b6ff;
+}
+
+.VersionBadge
+{
+    position: relative;
+
+    margin-top: 20rem;
+
+    padding: 10rem 25rem;
+
+    border-radius: 10rem;
+
+    background: rgba(50,100,255,.2);
+
+    text-align: center;
+
+    font-size: 18rem;
+    font-weight: 600;
+}
+
+.AboutDescription
+{
+    position: relative;
+
+    width: 100%;
+
+    font-size: 20rem;
+
+    line-height: 1.5;
+}
+
+/* ========================================================= */
+/* LUMINA TOGGLE */
+/* ========================================================= */
+
+.VolumeToggleCard
+{
+    position: relative;
+
+    width: 100%;
+    min-height: 100rem;
+
+    display: flex;
+    align-items: center;
+
+    margin-top: 25rem;
+
+    padding: 24rem;
+
+    border-radius: 16rem;
+
+    background: rgba(255,255,255,.04);
+
+    border: 1rem solid rgba(255,255,255,.06);
+
+    box-sizing: border-box;
+
+    transition:
+        background .15s ease,
+        border-color .15s ease;
+}
+
+.VolumeToggleCard:hover
+{
+    background: rgba(88,182,255,.08);
+
+    border-color: rgba(88,182,255,.20);
+}
+
+.VolumeToggleInfo
+{
+    display: flex;
+    flex-direction: column;
+
+    flex: 1;
+}
+
+.VolumeToggleTitle
+{
+    font-size: 20rem;
+    font-weight: 600;
+}
+
+.VolumeToggleSubtitle
+{
+    margin-top: 6rem;
+
+    font-size: 14rem;
+
+    opacity: .75;
+}
+
+.VolumeToggleContainer
+{
+    margin-left: auto;
+
+    width: 140rem;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.lumina-volume-container
+{
+    position: relative;
+
+    width: 120rem;
+    height: 60rem;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-left: auto;
+}
+
+.lumina-volume-toggle
+.lumina-volume-image
+{
+    position: relative;
+
+    transform: scale(1.15);
+    z-index: 3;
+}
+
+
+
+/* ========================================================= */
+/* FEATURES */
+/* ========================================================= */
+
+.FeatureGrid
+{
+    position: relative;
+
+    width: 100%;
+    height: 150rem;
+
+    display: flex;
+    flex-direction: row;
+
+    margin-top: 20rem;
+
+    border-radius: 15rem;
+
+    background: rgba(0,0,0,.45);
+
+    overflow: hidden;
+
+    flex-shrink: 0;
+}
+
+.FeatureCard
+{
+    position: relative;
+
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    border-right: 1rem solid rgba(255,255,255,.08);
+
+    text-align: center;
+}
+
+.FeatureCard:last-child
+{
+    border-right: none;
+}
+
+.FeatureTitle
+{
+    font-size: 20rem;
+    font-weight: 600;
+}
+
+.FeatureSubtitle
+{
+    margin-top: 6rem;
+
+    opacity: .7;
+
+    font-size: 14rem;
+}
+
+/* ========================================================= */
+/* PRESETS */
+/* ========================================================= */
+
+.PresetSection
+{
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 10rem;
+
+    margin-top: 20rem;
+}
+
+.PresetHeader
+{
+    font-size: 18rem;
+    font-weight: 600;
+}
+
+.PresetButtons
+{
+    position: relative;
+
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    align-items: center;
+    justify-content: flex-start;
+
+    gap: 12rem;
+
+    padding: 8rem 0;
+    color: white;
+}
+
+.PresetButton
+{
+    flex: 1;
+    color: white;
+
+    min-height: 60rem;
+
+    position: relative;
+
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    border-radius: 8rem;
+
+    transition: all 0.2s ease;
+
+    cursor: pointer;
+}
+
+.PresetButton:hover
+{
+    background: rgba(255, 255, 255, 0.07);
+
+    box-shadow:
+        0 0 10rem rgba(120, 200, 255, 0.25),
+        0 0 25rem rgba(120, 200, 255, 0.15);
+
+    border-color: rgba(120, 200, 255, 0.35);
+
+    transform: translateY(-1rem) scale(1.01);
+}
+
+/* ========================================================= */
+/* SUPPORT */
+/* ========================================================= */
+
+.SupportCard
+{
+    position: relative;
+
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;
+
+    margin-top: 20rem;
+
+    padding: 20rem;
+
+    border-radius: 15rem;
+
+    background: rgba(0,0,0,.45);
+
+    box-sizing: border-box;
+}
+
+.SupportInfo
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.SupportTitle
+{
+    font-size: 22rem;
+    font-weight: 600;
+}
+
+.SupportSubtitle
+{
+    margin-top: 6rem;
+
+    opacity: .75;
+
+    font-size: 16rem;
+}
+
+.SupportButtons
+{
+    margin-left: auto;
+
+    display: flex;
+
+    gap: 10rem;
+}
+
+.PayPalButton,
+.KofiButton
+{
+    width: 50rem;
+    height: 60rem;
+
+    flex-shrink: 0;
+    color: white;
+}
+
+.DeveloperSection
+{
+    margin-left: 30rem;
+
+    padding-left: 30rem;
+
+    border-left: 1rem solid rgba(255,255,255,.1);
+
+    display: flex;
+    flex-direction: column;
+}
+
+.DeveloperLabel
+{
+    opacity: .7;
+
+    font-size: 14rem;
+}
+
+.DeveloperName
+{
+    margin-top: 4rem;
+
+    font-size: 24rem;
+    font-weight: 700;
+
+    color: #58b6ff;
+}
+
+
+/////// PRESET
+
+.ImportPresetOverlay
+{
+    position:absolute; /* IMPORTANT CHANGE */
+
+    top: -600rem;
+    right: -500rem;
+
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(6rem);
+
+    z-index: 9999;
+}
+
+.ImportPresetDialog
+{
+    width: 420rem;
+
+    background: rgba(20, 20, 20, 0.92);
+    border: 1rem solid rgba(255, 255, 255, 0.08);
+
+    border-radius: 10rem;
+
+    padding: 20rem;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 12rem;
+}
+
+.ImportPresetHeader
+{
+    font-size: 18rem;
+    font-weight: 600;
+    color: white;
+}
+
+.ImportPresetInput
+{
+    width: 100%;
+    height: 40rem;
+
+    border-radius: 6rem;
+
+    background: rgba(255, 255, 255, 0.05);
+    border: 1rem solid rgba(255, 255, 255, 0.08);
+
+    color: black; /* CHANGED */
+
+    padding: 0 12rem;
+
+    outline: none;
+}
+
+.ImportPresetButtons
+{
+    display: flex;
+    justify-content: flex-end;
+
+    gap: 10rem;
+}
+
+.ImportPresetCancel,
+.ImportPresetConfirm
+{
+    min-width: 100rem;
+    height: 38rem;
+
+    border-radius: 6rem;
+
+    border: none;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.ImportPresetCancel
+{
+    background: rgba(255, 255, 255, 0.06);
+    color: white;
+}
+
+.ImportPresetConfirm
+{
+    background: rgba(120, 200, 255, 0.15);
+    color: white;
+}
+
+.ImportPresetConfirm:hover
+{
+    background: rgba(120, 200, 255, 0.25);
+}

@@ -96,7 +96,7 @@ namespace Lumina.XML
                 }
                 else
                 {
-                    return "v2.9";
+                    return "v3.0";
                 }
             }
 
@@ -124,7 +124,7 @@ namespace Lumina.XML
         /// <summary>
         /// SupportedGameVersion, returns the supported game version..
         /// </summary>
-        public static string SupportedGameVersion = "1.5.6f1 (234.38189) [6118.21505]";
+        public static string SupportedGameVersion = "1.5.10f1 (330.05c1) [6202.16258]";
 
         /// <summary>
         /// Returns icon path for toast notifications.

@@ -1,26 +1,28 @@
-html, body {
-  overflow: visible !important;
-}
 
 
-.Panel
-{
-    z-index: -1;
+.Panel {
     position: absolute;
-    width: 950rem;
-    height: 500rem;
-    top: -600rem;
-    left:140rem;
-    background-color: rgba(50, 50, 50, 0.8); /* Dark grey background with transparency */
-    backdrop-filter: blur(10px); /* Apply blur to the background behind the panel */
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6); /* Blurred black inner shadow */
-    overflow-y: auto; /* Enable vertical scrolling */
-    max-height: 400rem;
+
+    width: 800rem;
+    height: 750rem;
+
+    top: -900rem;
+    left: 140rem;
+
+    background: rgba(35, 35, 35, 0.92);
+    backdrop-filter: blur(16px);
+
+    border-radius: 12rem;
+
+    overflow-y: auto;
+    overflow-x: auto;
+
+    box-shadow:
+        0 8rem 24rem rgba(0,0,0,.35);
+
+    color: #e0e0e0;
+
     pointer-events: auto;
-    cursor: pointer;
-    border-radius: 20rem; /* Rounded corners */
-    color: #e0e0e0; /* Light grey text color for contrast */
-    font-family: Overpass,"Noto Sans","Noto Sans KR","Noto Sans JP","Noto Sans SC","Noto Sans TC","Noto Sans Thai","Noto Sans Hebrew","Noto Sans Arabic","Noto Sans Bengali","Noto Sans Devanagari", sans-serif; /* Clean and modern font */
 }
 
 @media (min-width: 3840px) {
@@ -62,41 +64,56 @@ html, body {
 .TabsRow
 {
     position: absolute;
+
     display: flex;
-    width: 950rem;
-    height: 50rem;
-    top: -650rem;
-    left:140rem;
-    border-radius: 20rem; /* Rounded corners */
-    background-color: rgba(50, 50, 50, 0.8); /* Dark grey background with transparency */
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6); /* Blurred black inner shadow */
-    color: #e0e0e0; /* Light grey text color for contrast */
-    font-family: Overpass,"Noto Sans","Noto Sans KR","Noto Sans JP","Noto Sans SC","Noto Sans TC","Noto Sans Thai","Noto Sans Hebrew","Noto Sans Arabic","Noto Sans Bengali","Noto Sans Devanagari", sans-serif; /* Clean and modern font */
+    flex-direction: column;
+
+    width: 50rem;
+    height: 400rem;
+
+    top: -900rem;
+    left: 80rem;
+
+    gap: 8rem;
+    padding: 8rem;
+
+    border-radius: 12rem;
+
+    background-color: rgba(50, 50, 50, 0.8);
+    backdrop-filter: blur(16px);
+
+    color: #e0e0e0;
+
     pointer-events: auto;
 }
 
 
-    .TabsRow > *
-    {
-        filter: invert(100%);
-        width: 50rem; /* Adjust the width of each child element */
-        height: 50rem; /* Adjust the height of each child element to match the width for perfect circles */
-        display: flex; /* Ensure that child elements use flexbox layout */
-        align-items: center; /* Center contents vertically */
-        justify-content: center; /* Center contents horizontally */
-    }
+.TabsRow > *
+{
+    width: 40rem;
+    height: 40rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+}
+
+
 
 .ColorAdjustmentsButton,
 .ColorAdjustmentsButtonDeselected {
   position: absolute;
-  display: flex;
   background-image: url('coui://ui-mods/Icons/ColorAdjustments.svg');
-  background-size: cover;
-  width: 45rem;
-  height: 45rem;
-  left: 900rem;
+  background-size: contain;
 
-  border-radius: 50%;  /* Circular shape */
+  top:55rem;
+  width: 35rem;
+  height: 35rem;
+  left:4rem;
+
+/* Circular shape */
   transition: 
     transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
     filter 0.4s ease;
@@ -115,13 +132,13 @@ html, body {
 .SettingsButton,
 .SettingsButtonDeselected {
   position: absolute;
+  top:8rem;
   background-image: url('coui://ui-mods/Icons/SettingsGear.svg');
   background-size: cover;
-  width: 45rem;
-  height: 45rem;
-  left: 0rem;
+  width: 35rem;
+  height: 35rem;
+  left: 7rem;
 
-  border-radius: 50%;
   filter: invert(100%);
   transition: 
     transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
@@ -140,14 +157,18 @@ html, body {
 .PlanetaryButtonDeselected {
   position: absolute;
   background-image: url('coui://ui-mods/Icons/Planet.svg');
-  background-size: cover;
-  width: 43rem;
-  height: 43rem;
-  left: 850rem;
+  background-size: contain;
+  width: 40rem;
+  height: 40rem;
+
+  top: 100rem;
+  left: 3rem;
   border-radius: 50%;
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   will-change: transform;
+  filter: invert(100%)
+
 }
 
 .PlanetaryButton:hover,
@@ -167,11 +188,15 @@ html, body {
   background-size: cover;
   width: 43rem;
   height: 43rem;
-  left: 800rem;
-  border-radius: 50%;
+    top: 150rem;
+  left: 3rem;
+
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   will-change: transform;
+
+    filter: invert(100%)
+
 }
 
 .TonemappingButton:hover,
@@ -187,11 +212,15 @@ html, body {
   background-size: cover;
   width: 43rem;
   height: 43rem;
-  left: 750rem;
+    top: 195rem;
+  left: 3rem;
   border-radius: 50%;
   cursor: pointer;
   will-change: transform;
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+  filter: invert(100%)
+
 }
 
 .SkyAndFogButton:hover,
@@ -213,11 +242,13 @@ html, body {
 .LUTContributionSlider
 {
     position: absolute;
-    height: 30rem;
     top: 250rem;
-    right: -120rem;
-    left: 250rem;
-    width: 500rem;
+
+    width: calc(100% - 40rem);
+    left: 20rem;
+
+    height: 30rem;
+
     background-color: rgba(0, 0, 0, 0.5);
 }
 
@@ -228,7 +259,9 @@ html, body {
     font-size: 20rem;
     top: 250rem;
     left: 155rem;
-    width: 50rem;
+
+
+
 }
 
 
@@ -922,61 +955,7 @@ $hueshift-top: 80rem;
 }
 
 
-.SettingsPanel
-{
-    position: absolute;
-    top: 0rem;
-    left: 0rem;
-    width: inherit;
-    height: inherit;
-    overflow-y: auto;
-}
 
-.LuminaSaveButton
-{
-    position: absolute;
-    display: flex;
-    width: 300rem;
-    top: 20rem;
-    left: 40rem;
-}
-
-.LuminaResetSettingsButton
-{
-    position: absolute;
-    display: flex;
-    width: 300rem;
-    top: 80rem;
-    left: 40rem;
-}
-
-// Save image
-.SaveButtonLuminaImage
-{
-    position: absolute;
-    left: 125rem;
-    top: 30rem;
-    mask-image: url('coui://ui-mods/Icons/save.svg')
-}
-
-// Save image
-.ResetButtonLuminaImage
-{
-    position: absolute;
-    left: 125rem;
-    top: 30rem;
-    mask-image: url('coui://ui-mods/Icons/reset.svg')
-}
-
-.VersionCheckLabel
-{
-    position: absolute;
-    bottom: 0rem;
-    width: 100rem;
-    height: 30rem;
-    background-color: rgba(0, 0, 0, 0.5); /* Black with 70% opacity */
-    color: rgba($color: #6b6b6b, $alpha: 1.0) /* Set text color to white */
-}
 
 .UnityLegacyUIButton
 {
@@ -1153,9 +1132,9 @@ $hueshift-top: 80rem;
     display: flex;
     position: absolute;
     top: 50rem;
-    left: 400rem;
+    left: 350rem;
     height: 200rem;
-    width: 500rem;
+    width: 450rem;
     background-size: cover;
     background-repeat: no-repeat;
     background-image: url('../../Icons/version.png');
@@ -1248,14 +1227,13 @@ $hueshift-top: 80rem;
 
 
 
-
 .TonemappingDropdown
 {
     position: absolute;
     color: white;
     width: 300rem;
     top: 0rem;
-    left: 650rem;
+    left: 500rem;
     pointer-events: auto;
     z-index: 4000;
 }
@@ -1266,7 +1244,7 @@ $hueshift-top: 80rem;
     color: rgb(211, 211, 211);
     font-size: 15rem;
     top: 45rem;
-    left: 23rem;
+    left: 50rem;
 }
 
 
@@ -1340,7 +1318,7 @@ $hueshift-top: 80rem;
     color: rgb(255, 255, 255);
     position: absolute;
     top: 15rem;
-    left: -390rem;
+    left: -300rem;
     width: 100%;
     font-size: 18rem;
 }

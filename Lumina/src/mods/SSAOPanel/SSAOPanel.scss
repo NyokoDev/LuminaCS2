@@ -8,11 +8,14 @@ BUTTON
   background-size: cover;
   width: 45rem;
   height: 45rem;
-  left: 650rem;
+    top: 280rem;
+  left: 3rem;
   border-radius: 50%;
+
   cursor: pointer;
   will-change: transform;
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: invert(100%)
 }
 
 .SSAOButtonSelect:hover {
@@ -28,7 +31,7 @@ BUTTON
 .ssao-panel-base {
   position: absolute;
   left: 20rem;
-  width: 930rem;
+  width: 750rem;
   padding: 25rem;
 
   display: flex;
