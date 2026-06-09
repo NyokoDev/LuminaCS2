@@ -1,26 +1,101 @@
-:root {
-    --size: 42rem;
-}
+.LuminaButtonWrapper
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-.EditorIcon {
+    height: 100%;
+    padding: 0rem 4rem;
+
+    z-index: 1000;
     pointer-events: auto;
-    width: var(--size);
-    height: var(--size);
 }
 
-.EditorIcon img{
-        pointer-events: all;
-    width: 45rem;
-    height: 45rem;
+.LuminaToolbarButton
+{
+    width: 42rem;
+    height: 42rem;
 
+    border-radius: 10rem;
+
+    z-index: 1000;
+    pointer-events: auto;
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
+        filter 0.15s ease;
+
+    overflow: hidden;
+
+    &:hover
+    {
+        transform: translateY(-1rem);
+
+        box-shadow:
+            0rem 4rem 12rem rgba(0, 0, 0, 0.35);
+    }
+
+    &:active
+    {
+        transform: scale(0.96);
+    }
 }
 
-.EditorIcon {
-    pointer-events: all;
+.LuminaToolbarButtonActive
+{
+    z-index: 1000;
+    pointer-events: auto;
+
+    box-shadow:
+        0rem 0rem 16rem rgba(130, 190, 255, 0.85);
+
+    filter: brightness(1.15);
+}
+
+.LuminaToolbarIcon
+{
+    width: 28rem;
+    height: 28rem;
+
+    object-fit: contain;
+
+    pointer-events: auto;
+}
+
+.LuminaDivider
+{
+    margin-left: 4rem;
+    margin-right: 4rem;
+
+    opacity: 0.5;
+
+    pointer-events: auto;
+}
+
+
+.LuminaOverlay {
     position: absolute;
-    width: 56.000000rem;
-    height: 56.000000rem;
-    top:900rem;
-    right: 0rem;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
 }
 
+.LuminaPanelRoot {
+    width: 900rem;
+    height: 700rem;
+
+    background: rgba(20, 20, 20, 0.92);
+    backdrop-filter: blur(20rem);
+
+    border-radius: 12rem;
+    pointer-events: all;
+
+    box-shadow: 0 20rem 60rem rgba(0, 0, 0, 0.5);
+}

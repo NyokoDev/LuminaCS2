@@ -1,73 +1,93 @@
 import { useState } from "react";
-import { ButtonTheme, Button, ConfirmationDialog, Panel, Portal, FloatingButton, PanelSection, PanelSectionRow, FormattedParagraphs } from "cs2/ui";
-import { bindValue, trigger, useValue } from "cs2/api";
-import { game, tool, Theme } from "cs2/bindings";
+import { Button } from "cs2/ui";
+import { trigger } from "cs2/api";
 import { getModule, ModuleRegistryExtend } from "cs2/modding";
 import { VanillaComponentResolver } from "classes/VanillaComponentResolver";
-//import { LocalizedString, useLocalization } from "cs2/l10n";
+
 import mod from "../../mod.json";
-import { isInstalled$ as originalIsInstalled$ } from './panel';
 import { YourPanelComponent } from "./panel";
-import "editor_lumina.scss";
 
-let showModeRow$: boolean; // Assuming this is initialized somewhere
+import "../editor_lumina.scss";
 
-// Getting the vanilla theme css for compatibility
-const ToolBarButtonTheme: Theme | any = getModule(
+const ToolBarButtonTheme: any = getModule(
     "game-ui/game/components/toolbar/components/feature-button/toolbar-feature-button.module.scss",
     "classes"
 );
-const ToolBarTheme: Theme | any = getModule(
+
+const ToolBarTheme: any = getModule(
     "game-ui/game/components/toolbar/toolbar.module.scss",
     "classes"
 );
 
-import iconOff from "../img/Lumina.svg";
-import iconActive from "../img/Lumina.svg";
-import styles from "../lumina.module.scss";
+let PanelVisible = false;
 
-
-let isInstalled$ = originalIsInstalled$; 
-export let EditorPanel$ = originalIsInstalled$; 
-
-export const Editor_Button: ModuleRegistryExtend = (Component) => {
-    return (props) => {
+export const EditorButton: ModuleRegistryExtend = (Component) =>
+{
+    return (props) =>
+    {
         const { children, ...otherProps } = props || {};
-        const MIT_ToolEnabled = isInstalled$
-        const moveItIconSrc = MIT_ToolEnabled ? "coui://ui-mods/images/Lumina.svg" : "coui://ui-mods/images/Lumina.svg";
-        const [isInstalled, setIsInstalled] = useState(true); // assuming you meant to use useState to manage isInstalled state
 
-        let a = iconOff;
-        a = iconActive;
+        const [, forceUpdate] = useState(0);
+
+        const TogglePanel = () =>
+        {
+            PanelVisible = !PanelVisible;
+
+            forceUpdate(v => v + 1);
+
+            console.log(
+                `[LUMINA] Editor Panel ${PanelVisible ? "opened" : "closed"}`
+            );
+        };
 
         return (
-            <>    
-            
-                <Button
-                    src={moveItIconSrc}
-                    className={"button_iZC button_iZC button_i0V EditorIcon"}
-                    variant="icon"
-                    focusKey={VanillaComponentResolver.instance.FOCUS_DISABLED}
-                    onClick={() => {
-                        setIsInstalled(!isInstalled); // update isInstalled state
-                        trigger(mod.id, 'SaveAutomatically');
-                    }}
-                      
-                    onSelect={() => {
-          
-                        console.log("[LUMINA] Toggled editor panel");
-                    }}
-                  
+            <>
+                <div className="LuminaButtonWrapper">
+              <Button
+    className={
+        ToolBarButtonTheme.button +
+        " LuminaToolbarButton" +
+        (PanelVisible
+            ? " LuminaToolbarButtonActive"
+            : "")
+    }
+    variant="icon"
+    focusKey={
+        VanillaComponentResolver.instance.FOCUS_DISABLED
+    }
+    onClick={TogglePanel}
+>
+    <img
+        src="coui://ui-mods/images/Lumina.svg"
+        className="LuminaToolbarIcon"
+    />
+</Button>
+                </div>
 
+                <div
+                    className={
+                        ToolBarTheme.divider +
+                        " LuminaDivider"
+                    }
                 />
-                <div className={ToolBarTheme.divider}></div>
 
-                <Component {...otherProps}></Component>
-                {isInstalled && <YourPanelComponent />}
+                <Component {...otherProps}>
+                    {children}
+                </Component>
 
+{PanelVisible && (
+    <div
+        style={{
+            position: "absolute",
+            top: "1000rem",
+            left: "200rem",
+   
+        }}
+    >
+        <YourPanelComponent />
+    </div>
+)}
             </>
         );
     };
-
-}
-
+};

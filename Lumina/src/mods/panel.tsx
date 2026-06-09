@@ -35,6 +35,7 @@ import { RoadPanelBase } from "./RoadPanel/RoadPanelBase";
 import { SSAOPanelBase } from "./SSAOPanel/SSAOPanel";
 import {  SSAOPopup } from "./UpdateNotifications/Update";
 import "./HeroSettings.scss";
+import "././Cubemaps/Cubemaps.scss";
 
 
 
@@ -525,6 +526,11 @@ const openUrl = (url: string): void => {
 const [presetName, setPresetName] = useState("");
 const [exportPresetActive, setExportPresetActive] = useState(false);
 
+const reloadCubemaps = () =>
+{
+    trigger(mod.id, "ReloadCubemaps");
+};
+
 return (
 
   
@@ -556,10 +562,6 @@ id="Global"
 {SkyAndFogEnabled$ &&
 <div className="SkyAndFogPanel"> 
 <h1 className="CubemapName">{translate("LUMINA.cubemapname")}</h1>
-<div className="CubemapsDropdown">
-
-      <CubemapsDropdown />
-    </div>
     
   <label className="space-emission-texture-label">{translate("LUMINA.environmenthdrisky")}</label>
   <SpaceEmissionCheckbox
@@ -613,6 +615,29 @@ id="Global"
     noFill={false}
     onChange={(number) => handleSunFlareSize(number)} // Callback for value change
   />
+
+
+<div className="CubemapHeader">
+    <div className="CubemapsDropdown">
+        <CubemapsDropdown />
+    </div>
+
+<button
+    className="ReloadCubemapsButton"
+    onClick={() => reloadCubemaps()}
+>
+    <img
+        className="ReloadCubemapsIcon"
+        src="coui://ui-mods/Icons/Refresh.svg"
+    />
+
+    <span className="ReloadCubemapsText">
+        Reload Cubemaps
+    </span>
+</button>
+</div>
+
+
 
   </div>
 
@@ -1252,7 +1277,7 @@ id="Global"
             </div>
 
             <div className="VersionBadge">
-                VERSION 3.2
+                VERSION 3.3
             </div>
 
         </div>

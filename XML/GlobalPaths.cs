@@ -96,7 +96,7 @@ namespace Lumina.XML
                 }
                 else
                 {
-                    return "v3.2";
+                    return "v3.3";
                 }
             }
 

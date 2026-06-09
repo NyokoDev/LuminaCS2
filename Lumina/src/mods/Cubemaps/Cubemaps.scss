@@ -17,7 +17,7 @@ font-family:
     "Noto Sans",
     sans-serif;
 
-    
+
     background:
         linear-gradient(
             180deg,
@@ -343,4 +343,119 @@ font-family:
 .SkyAndFogPanel::-webkit-scrollbar-thumb:hover
 {
     background: rgba(255,255,255,0.30);
+}
+
+
+
+.CubemapHeader
+{
+    position: absolute;
+
+    top: 20rem;
+    left: 20rem;
+
+    width: 410rem;
+    height: 42rem;
+}
+
+.CubemapsDropdown
+{
+    position: absolute;
+
+    top: 0rem;
+    left: 0rem;
+
+    width: 360rem;
+    height: 42rem;
+}
+
+/* ========================================================= */
+/* RELOAD CUBEMAPS */
+/* ========================================================= */
+
+.ReloadCubemapsButton
+{
+    position: absolute;
+
+    left: 20rem;
+    top:600rem;
+
+    width: 410rem;
+    height: 70rem;
+
+    display: flex;
+    align-items: center;
+
+    padding-left: 24rem;
+    gap: 20rem;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(35,45,60,0.95),
+            rgba(18,24,35,0.98)
+        );
+
+    border: 1rem solid rgba(100,180,255,0.20);
+
+    border-radius: 12rem;
+
+    box-shadow:
+        0 0 0 1rem rgba(255,255,255,0.02) inset,
+        0 8rem 25rem rgba(0,0,0,0.35);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.ReloadCubemapsButton:hover
+{
+    transform: translateY(-2rem);
+
+    border-color: rgba(100,180,255,0.50);
+
+    box-shadow:
+        0 0 20rem rgba(0,180,255,0.20),
+        0 10rem 30rem rgba(0,0,0,0.40);
+}
+
+.ReloadCubemapsButton:active
+{
+    transform: translateY(1rem);
+}
+.ReloadCubemapsIcon
+{
+    width: 26rem;
+    height: 26rem;
+
+    background-image: url(./../../img/Refresh.svg);
+    flex-shrink: 0;
+
+    filter:
+        brightness(1.2)
+        invert(100%)
+        drop-shadow(0 0 8rem rgba(0,180,255,0.75));
+}
+
+.ReloadCubemapsText
+{
+    flex: 1;
+
+    text-align: center;
+
+    margin-right: 40rem;
+
+    color: rgba(255,255,255,0.95);
+
+    font-size: 14rem;
+
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1rem;
 }
