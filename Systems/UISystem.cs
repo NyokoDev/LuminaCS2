@@ -1042,13 +1042,13 @@
 
         private string ReturnCubemapName()
         {
-            // Ensure CubemapName is set, use "Select Cubemap" if not
             CubemapName = GlobalVariables.Instance.CubemapName;
 
-            // Always return the current CubemapName
+            if (string.IsNullOrWhiteSpace(CubemapName))
+                return "None";
+
             return CubemapName;
         }
-
 
 
         public static string[] CubemapArrayExtendedReturn()
