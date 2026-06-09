@@ -2,6 +2,7 @@ import mod from "mod.json";
 import { bindValue, trigger, useValue } from 'cs2/api';
 import { useRef } from 'react';
 import './CheckboxesStyle.scss'
+import '../Cubemaps/Cubemaps.scss'
 
 export const Active$ = bindValue<boolean>(mod.id, "IsHDRISkyEnabled");
 

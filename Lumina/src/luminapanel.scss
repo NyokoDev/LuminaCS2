@@ -1,3 +1,4 @@
+
 @font-face
 {
     font-family: "Nexa";
@@ -16,13 +17,15 @@
     src: url("./mods/fonts/HelveticaNeueMedium.otf");
 }
 
+.PanelHidden {
+    display: none;
+}
 
 .Panel {
-    font-family:
-        "Helvetica-Light",
-        "Segoe UI",
-        "Noto Sans",
-        sans-serif;
+font-family:
+    "Helvetica-Light",
+    "Noto Sans",
+    sans-serif;
 
     position: absolute;
 
@@ -209,28 +212,7 @@
 }
 
 
-.SkyAndFogButton,
-.SkyAndFogButtonDeselected {
-  position: absolute;
-  background-image: url('coui://ui-mods/Icons/suuIDOT.png');
-  background-size: cover;
-  width: 43rem;
-  height: 43rem;
-    top: 195rem;
-  left: 3rem;
-  border-radius: 50%;
-  cursor: pointer;
-  will-change: transform;
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 
-  filter: invert(100%)
-
-}
-
-.SkyAndFogButton:hover,
-.SkyAndFogButtonDeselected:hover {
-  transform: translateY(-15%) scale(1.05);
-}
 
 
 
@@ -1337,97 +1319,7 @@ $hueshift-top: 80rem;
 }
 
 
-.cubemap-intensity-slider
-{
-    position: absolute;
-    top: 85rem;
-    width: 670rem;
-    left: 250rem;
-}
 
-.space-emission-label
-{
-    color: white;
-    position: absolute;
-    left: 13rem;
-    text-transform: uppercase;
-    top: 80rem;
-}
-
-.space-emission-texture-label
-{
-    color: white;
-    position: absolute;
-    left: 35rem;
-    text-transform: uppercase;
-    top: 58rem;
-}
-
-.custom-sun-label
-{
-    color: rgb(142, 139, 139);
-    position: absolute;
-    left: 35rem;
-    text-transform: uppercase;
-    top: 110rem;
-}
-
-.sun-diameter-label
-{
-    color: wheat;
-    position: absolute;
-    left: 13rem;
-    text-transform: uppercase;
-    top: 143rem;
-    pointer-events: auto;
-}
-
-.sun-adjust-diameter-slider
-{
-    position: absolute;
-    top: 150rem;
-    width: 350rem;
-    left: 150rem;
-    pointer-events: auto;
-}
-
-.sun-intensity-label
-{
-    color: wheat;
-    position: absolute;
-    left: 13rem;
-    text-transform: uppercase;
-    top: 173rem;
-    pointer-events: auto;
-}
-
-.sun-adjust-intensity-slider
-{
-    position: absolute;
-    top: 180rem;
-    width: 350rem;
-    left: 150rem;
-    pointer-events: auto;
-}
-
-.sun-flare-size-label
-{
-    color: wheat;
-    position: absolute;
-    left: 13rem;
-    text-transform: uppercase;
-    top: 203rem;
-    pointer-events: auto;
-}
-
-.sun-adjust-flare-size-slider
-{
-    position: absolute;
-    top: 210rem;
-    width: 350rem;
-    left: 150rem;
-    pointer-events: auto;
-}
 
 .ResetConfirmationDialog
 {

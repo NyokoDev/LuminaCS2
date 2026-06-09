@@ -532,6 +532,9 @@ return (
   <div className="Global"
 
   
+  
+
+
 
 
 
@@ -550,6 +553,70 @@ id="Global"
 
 <DragButton />
 
+{SkyAndFogEnabled$ &&
+<div className="SkyAndFogPanel"> 
+<h1 className="CubemapName">{translate("LUMINA.cubemapname")}</h1>
+<div className="CubemapsDropdown">
+
+      <CubemapsDropdown />
+    </div>
+    
+  <label className="space-emission-texture-label">{translate("LUMINA.environmenthdrisky")}</label>
+  <SpaceEmissionCheckbox
+  />
+
+<CustomSunCheckbox
+
+/>
+
+<label className="custom-sun-label">{translate("LUMINA.usecustomsunproperties")}</label>
+<label className="sun-diameter-label">{translate("LUMINA.sundiameter")}</label>
+<Slider
+    value={SunDiameter}
+    start={0}       // Minimum value of the slider
+    end={100}         // Maximum value of the slider
+    step={0.000001}   // Step size for precision
+    className="sun-adjust-diameter-slider"
+    gamepadStep={stepSize} // Step size for gamepad interaction
+    valueTransformer={SliderValueTransformer.floatTransformer} // Value transformation logic
+    disabled={false}
+    noFill={false}
+    onChange={(number) => handleAngularDiameter(number)} // Callback for value change
+  />
+
+
+
+<label className="sun-intensity-label">{translate("LUMINA.sunintensity")}</label>
+<Slider
+    value={SunIntensity}
+    start={0}       // Minimum value of the slider
+    end={100}         // Maximum value of the slider
+    step={0.000001}   // Step size for precision
+    className="sun-adjust-intensity-slider"
+    gamepadStep={stepSize} // Step size for gamepad interaction
+    valueTransformer={SliderValueTransformer.floatTransformer} // Value transformation logic
+    disabled={false}
+    noFill={false}
+    onChange={(number) => handleSunIntensity(number)} // Callback for value change
+  />
+
+<label className="sun-flare-size-label">{translate("LUMINA.sunflaresize")}</label>
+<Slider
+    value={SunFlareSize}
+    start={0}       // Minimum value of the slider
+    end={100}         // Maximum value of the slider
+    step={0.000001}  
+    className="sun-adjust-flare-size-slider"
+    gamepadStep={stepSize} // Step size for gamepad interaction
+    valueTransformer={SliderValueTransformer.floatTransformer} // Value transformation logic
+    disabled={false}
+    noFill={false}
+    onChange={(number) => handleSunFlareSize(number)} // Callback for value change
+  />
+
+  </div>
+
+}
 
 
 {importPresetActive && (
@@ -823,7 +890,7 @@ id="Global"
 
 
    
-  <div  className="Panel">
+<div className={`Panel ${SkyAndFogEnabled$ ? "PanelHidden" : ""}`}>
 
 
 
@@ -1185,7 +1252,7 @@ id="Global"
             </div>
 
             <div className="VersionBadge">
-                VERSION 3.1
+                VERSION 3.2
             </div>
 
         </div>
@@ -1614,70 +1681,7 @@ id="Global"
 
 }
 
-{SkyAndFogEnabled$ &&
-<div className="SkyAndFogPanel"> 
-<h1 className="CubemapName">{translate("LUMINA.cubemapname")}</h1>
-<div className="CubemapsDropdown">
 
-      <CubemapsDropdown />
-    </div>
-    
-  <label className="space-emission-texture-label">{translate("LUMINA.environmenthdrisky")}</label>
-  <SpaceEmissionCheckbox
-  />
-
-<CustomSunCheckbox
-
-/>
-
-<label className="custom-sun-label">{translate("LUMINA.usecustomsunproperties")}</label>
-<label className="sun-diameter-label">{translate("LUMINA.sundiameter")}</label>
-<Slider
-    value={SunDiameter}
-    start={0}       // Minimum value of the slider
-    end={100}         // Maximum value of the slider
-    step={0.000001}   // Step size for precision
-    className="sun-adjust-diameter-slider"
-    gamepadStep={stepSize} // Step size for gamepad interaction
-    valueTransformer={SliderValueTransformer.floatTransformer} // Value transformation logic
-    disabled={false}
-    noFill={false}
-    onChange={(number) => handleAngularDiameter(number)} // Callback for value change
-  />
-
-
-
-<label className="sun-intensity-label">{translate("LUMINA.sunintensity")}</label>
-<Slider
-    value={SunIntensity}
-    start={0}       // Minimum value of the slider
-    end={100}         // Maximum value of the slider
-    step={0.000001}   // Step size for precision
-    className="sun-adjust-intensity-slider"
-    gamepadStep={stepSize} // Step size for gamepad interaction
-    valueTransformer={SliderValueTransformer.floatTransformer} // Value transformation logic
-    disabled={false}
-    noFill={false}
-    onChange={(number) => handleSunIntensity(number)} // Callback for value change
-  />
-
-<label className="sun-flare-size-label">{translate("LUMINA.sunflaresize")}</label>
-<Slider
-    value={SunFlareSize}
-    start={0}       // Minimum value of the slider
-    end={100}         // Maximum value of the slider
-    step={0.000001}  
-    className="sun-adjust-flare-size-slider"
-    gamepadStep={stepSize} // Step size for gamepad interaction
-    valueTransformer={SliderValueTransformer.floatTransformer} // Value transformation logic
-    disabled={false}
-    noFill={false}
-    onChange={(number) => handleSunFlareSize(number)} // Callback for value change
-  />
-
-  </div>
-
-}
 {RoadPanel && <div className="RoadPanelBase"> 
 
 <RoadPanelBase />
@@ -1689,6 +1693,7 @@ id="Global"
 <SSAOPanelBase />
   </div>
   }
+
 
 
 

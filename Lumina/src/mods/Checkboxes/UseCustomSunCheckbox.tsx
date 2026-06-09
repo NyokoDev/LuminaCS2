@@ -1,5 +1,6 @@
 import './Checkboxes.scss';
 import './CheckboxesStyle.scss';
+import '../Cubemaps/Cubemaps.scss'
 import mod from "mod.json";
 import { bindValue, trigger, useValue } from 'cs2/api';
 import { useState } from 'react';
