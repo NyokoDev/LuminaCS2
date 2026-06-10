@@ -3,7 +3,7 @@ import { bindValue, trigger, useValue } from "cs2/api";
 import { Slider } from "mods/slider";
 import mod from "./../../../mod.json";
 import { Tooltip } from "cs2/ui";
-import "./SSRPanel.scss";
+import "./SSRPanel.scss"
 
 export interface SSRPanelBaseProps {
     title?: string;
