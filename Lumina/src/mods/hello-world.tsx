@@ -11,6 +11,8 @@ import { isInstalled$ as originalIsInstalled$ } from './panel';
 import { YourPanelComponent } from "./panel";
 import './luminaButton.scss';
 
+
+
 let showModeRow$: boolean; // Assuming this is initialized somewhere
 
 // Getting the vanilla theme css for compatibility
@@ -27,7 +29,9 @@ import iconOff from "../img/Lumina.svg";
 import iconActive from "../img/Lumina.svg";
 import styles from "../lumina.module.scss";
 
-let isInstalled$ = originalIsInstalled$; 
+export let isInstalled$ = originalIsInstalled$; 
+
+
 
 export const LuminaButton: ModuleRegistryExtend = (Component) => {
     return (props) => {

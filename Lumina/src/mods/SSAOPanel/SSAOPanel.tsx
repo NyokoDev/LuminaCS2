@@ -127,16 +127,28 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
 <Slider
     value={intensity}
     start={0}
-    end={5}
+    end={10}
     step={0.01}
     onChange={handleSSAOIntensity}
     disabled={!ssaoEnabled} gamepadStep={0} noFill={false} />
+
+<label className="title_SVH title_zQN">Maximum Radius In Pixels</label>
+<Slider
+    value={maxRadius}
+    start={16}
+    end={256}
+    step={1}
+    onChange={handleSSAOMaxRadius}
+    disabled={!ssaoEnabled}
+    gamepadStep={1}
+    noFill={false}
+/>
 
 <label className="title_SVH title_zQN">Radius</label>
 <Slider
     value={radius}
     start={1}
-    end={5}
+    end={256}
     step={0.25}
     onChange={handleSSAORadius}
     disabled={!ssaoEnabled} gamepadStep={0} noFill={false} />
@@ -144,7 +156,7 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
 <label className="title_SVH title_zQN">Step Count</label>
 <Slider
     value={stepCount}
-    start={6}
+    start={0}
     end={32}
     step={1}
     onChange={handleSSAOStepCount}
@@ -153,17 +165,17 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
 <label className="title_SVH title_zQN">Bilateral Aggressiveness</label>
 <Slider
     value={bilateral}
-    start={0.15}
-    end={1}
-    step={0.01}
+    start={0}
+    end={100}
+    step={0.25}
     onChange={handleSSAOBilateral}
     disabled={!ssaoEnabled} gamepadStep={0} noFill={false} />
 
 <label className="title_SVH title_zQN">Ghosting Reduction</label>
 <Slider
     value={ghosting}
-    start={0.5}
-    end={1}
+    start={0}
+    end={10}
     step={0.01}
     onChange={handleSSAOGhosting}
     disabled={!ssaoEnabled} gamepadStep={0} noFill={false} />
@@ -172,8 +184,8 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
 <Slider
     value={directLighting}
     start={0}
-    end={1}
-    step={0.01}
+    end={10}
+    step={0.50}
     onChange={handleSSAODirectLighting}
     disabled={!ssaoEnabled} gamepadStep={0} noFill={false} />
 
@@ -217,7 +229,7 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
       <Slider
               value={specular}
               start={0.5}
-              end={1}
+              end={100}
               step={0.01}
               onChange={handleSSAOSpecular}
               disabled={!ssaoEnabled} gamepadStep={0.01} noFill={false}      />

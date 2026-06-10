@@ -213,8 +213,36 @@
 
             AddSupportBindings();
             AddScreenSpaceAmbientOcclusionBindings();
+            AddScreenSpaceRefractionBindings();
          
 
+        }
+
+        private void AddScreenSpaceRefractionBindings()
+        {
+            AddUpdateBinding(
+                new GetterValueBinding<bool>(
+                    Mod.MODUI,
+                    "IsScreenSpaceRefraction",
+                    () => GlobalVariables.Instance.IsScreenSpaceRefraction));
+
+            AddUpdateBinding(
+                new GetterValueBinding<float>(
+                    Mod.MODUI,
+                    "ScreenSpaceRefractionScreenFadeDistance",
+                    () => GlobalVariables.Instance.ScreenSpaceRefractionScreenFadeDistance));
+
+            AddBinding(
+                new TriggerBinding<bool>(
+                    Mod.MODUI,
+                    "HandleScreenSpaceRefraction",
+                    value => GlobalVariables.Instance.IsScreenSpaceRefraction = value));
+
+            AddBinding(
+                new TriggerBinding<float>(
+                    Mod.MODUI,
+                    "HandleScreenSpaceRefractionScreenFadeDistance",
+                    value => GlobalVariables.Instance.ScreenSpaceRefractionScreenFadeDistance = value));
         }
 
         private void UpdateNotification()
@@ -383,6 +411,7 @@
                 Mod.MODUI,
                 "HandleSSAOEnabled",
                 value => GlobalVariables.Instance.IsScreenSpaceAmbientOcclusion = value));
+             
 
             AddBinding(new TriggerBinding<float>(
                 Mod.MODUI,

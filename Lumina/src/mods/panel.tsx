@@ -36,6 +36,9 @@ import { SSAOPanelBase } from "./SSAOPanel/SSAOPanel";
 import {  SSAOPopup } from "./UpdateNotifications/Update";
 import "./HeroSettings.scss";
 import "././Cubemaps/Cubemaps.scss";
+import { TonemappingPanel } from "./TonemappingPanel/TonemappingPanel";
+import "././TonemappingPanel/TonemappingPanelNew.scss";
+import { SSRPanelBase } from "./ScreenSpaceRefraction/SSRPanel";
 
 
 
@@ -70,12 +73,6 @@ export const MidtonesActive$ = bindValue<boolean>(mod.id, 'GetMidtonesCheckbox')
 export const Highlights$ =  bindValue<number>(mod.id, 'GetHighlights');
 export const HighlightsActive$ =  bindValue<boolean>(mod.id, 'GetHighlightsCheckbox');
 
-// Tonemapping
-
-const TonemappingMode$ = bindValue<string>(mod.id, "TonemappingMode");
-const TextureFormatMode$ = bindValue<string>(mod.id, "TextureFormat");
-const ExternalModeActivated$ = bindValue<boolean>(mod.id, "IsExternal");
-const CustomModeActivated$ = bindValue<boolean>(mod.id, "IsCustom");
 
 //Presets
 
@@ -85,12 +82,7 @@ const CustomModeActivated$ = bindValue<boolean>(mod.id, "IsCustom");
 export const LatitudeValue$ = bindValue<number>(mod.id, 'LatitudeValue');
 export const LongitudeValue$ = bindValue<number>(mod.id, 'LongitudeValue');
 
-//Tonemapping
-export const LUTName$ = bindValue<string>(mod.id, 'LUTName');
-export const ToeStrengthValue$ = bindValue<number>(mod.id, "ToeStrengthValue")
-export const ToeLengthValue$ = bindValue<number>(mod.id, "ToeLengthValue");
 
-export const ShoulderStrengthValue$ = bindValue<number>(mod.id, "ShoulderStrengthValue");
 
 export const EmissionMultiplier$ = bindValue<number>(mod.id, "EmissionMultiplier");
 export const SunDiameter$ = bindValue<number>(mod.id, "SunDiameter");
@@ -160,16 +152,9 @@ const LatitudeValue = useValue(LatitudeValue$);
 const LongitudeValue = useValue(LongitudeValue$);
 
 
-//Tonemapping
-const LUTName = useValue(LUTName$);
-const TonemappingMode = useValue(TonemappingMode$);
-const ExternalModeActivated = useValue(ExternalModeActivated$);
-const CustomModeActivated = useValue(CustomModeActivated$);
-const TextureFormatMode = useValue(TextureFormatMode$);
-const ToeStrengthValue = useValue(ToeStrengthValue$);
-const ToeLengthValue = useValue(ToeLengthValue$);
 
-const ShoulderStrengthValue = useValue(ShoulderStrengthValue$);
+
+
 
 const EmissionMultiplier = useValue(EmissionMultiplier$);
 const SunDiameter = useValue(SunDiameter$);
@@ -186,7 +171,7 @@ const [PlanetaryEnabled$, setPlanetaryTab] = useState(false);
 const [OnImport, OnImportChange] = useState(false);
 const [RoadPanel, setRoadPanel] = useState(false);
 const [SSAOPanel, setSSAOPanel] = useState(false);
-
+const [SSRPanel, setSSROPanel] = useState(false);
 const [IsClicked, setIsClicked] = useState(false);
 
 
@@ -320,9 +305,7 @@ function UpdatePresetName(value: string) {
   trigger(mod.id, 'UpdatePresetName', value);
 }
 
-function UpdateLUTName(value: string) {
-  trigger(mod.id, 'UpdateLUTName', value);
-}
+
 
   
   
@@ -409,14 +392,6 @@ useEffect(() => {
       trigger(mod.id, 'OpenPresetFolder'); 
     }
 
-    const UpdateLUT = () => {
-      trigger(mod.id, 'UpdateLUT'); 
-    }
-
-    const OpenLUTFolder= () => {
-      trigger(mod.id, 'OpenLUTFolder'); 
-    }
-
 
 
 
@@ -441,27 +416,7 @@ const handleLongitude = (raw: any) => {
 };
 
 
-    const handleLUTContribution = (value: number) => {
-      const id = planetstart + (value * planetstepSize);
-      trigger(mod.id, 'HandleLUTContribution', id);
-    };
 
-    
-    const handleToeStrength = (value: number) => {
-      trigger(mod.id, 'HandleToeStrengthActive', value);
-    };
-
-    const handleEmissionMultiplier = (value: number) => {
-      trigger(mod.id, 'handleEmissionMultiplier', value);
-    };
-
-    const handleToeLength = (value: number) => {
-      trigger(mod.id, 'HandleToeLengthActive', value);
-    };
-    
-    const handleShoulderStrength = (value: number) => {
-      trigger(mod.id, 'handleShoulderStrength', value);
-    };
 
     
     const handleAngularDiameter = (value: number) => {
@@ -558,6 +513,29 @@ id="Global"
     >
 
 <DragButton />
+
+
+{/* SSR Panel */}
+{SSRPanel && (
+    <div className="SSRPanel1">
+        <SSRPanelBase />
+    </div>
+)}
+
+
+
+{/* TONEMAPPING PANEL */}
+{ToneMappingEnabled$ && (
+    <div className="TonemappingPanelNew">
+        <TonemappingPanel />
+    </div>
+)}
+
+
+
+
+
+
 
 {SkyAndFogEnabled$ &&
 <div className="SkyAndFogPanel"> 
@@ -753,6 +731,7 @@ id="Global"
     setSkyAndFog(false)
     setRoadPanel(false)
         setSSAOPanel(false)
+        setSSROPanel(false);
    }}>
 </button>
 
@@ -776,6 +755,7 @@ id="Global"
     setSkyAndFog(false)
     setRoadPanel(false)
         setSSAOPanel(false)
+        setSSROPanel(false);
  ;}}>
 </button>
 
@@ -806,6 +786,7 @@ id="Global"
     setSkyAndFog(false)
     setRoadPanel(false)
         setSSAOPanel(false)
+        setSSROPanel(false);
  ;}}>
 </button>
 </Tooltip>
@@ -828,6 +809,7 @@ id="Global"
     setSkyAndFog(false)
     setRoadPanel(false)
         setSSAOPanel(false)
+        setSSROPanel(false);
  ;}}>
 </button>
 </Tooltip>
@@ -850,6 +832,7 @@ id="Global"
     setSkyAndFog(true)
     setRoadPanel(false)
         setSSAOPanel(false)
+        setSSROPanel(false);
  ;}}>
 </button>
 </Tooltip>
@@ -874,35 +857,52 @@ id="Global"
     setSkyAndFog(false)
     setRoadPanel(true)
         setSSAOPanel(false)
+        setSSROPanel(false);
    }}>
 </button>
 
 </Tooltip>
 
   <Tooltip
-  tooltip={("Screen Space Ambient Occlusion")} // Specify the content of the tooltip
-  disabled={false} // Specify whether the tooltip is disabled (default: false)
-  alignment="center" // Specify the alignment of the tooltip (e.g., "start", "center", "end")
-  className="custom-tooltip" // Specify additional class names for styling purposes
+  tooltip="Screen Space Ambient Occlusion"
+  disabled={false}
+  alignment="center"
+  className="custom-tooltip"
 >
+  <button
+    className="SSAOButtonSelect"
+    onClick={() => {
+      setCA(false);
+      setSettings(false);
+      setPlanetaryTab(false);
+      setTonemapping(false);
+      setSkyAndFog(false);
+      setRoadPanel(false);
+      setSSROPanel(false)
+      setSSAOPanel(true);
+    }}
+  />
+</Tooltip>
 
-  
-<button 
-  className={tab1 ? 'SSAOButtonSelect' : 'SSAOButtonSelect'} 
-  onSelect={() => {
-    setRoadPanel(true);
-    console.log("[LUMINA] Toggled ssao panel.");
-  }}
-  onClick={() => { setCA(false)
-    setSettings(false)
-    setPlanetaryTab(false)
-    setTonemapping(false)
-    setSkyAndFog(false)
-    setRoadPanel(false)
-    setSSAOPanel(true)
-   }}>
-</button>
-
+<Tooltip
+  tooltip="Screen Space Refraction"
+  disabled={false}
+  alignment="center"
+  className="custom-tooltip"
+>
+  <button
+    className="SSRButton"
+    onClick={() => {
+      setCA(false);
+      setSettings(false);
+      setPlanetaryTab(false);
+      setTonemapping(false);
+      setSkyAndFog(false);
+      setRoadPanel(false);
+      setSSAOPanel(false);
+      setSSROPanel(true);
+    }}
+  />
 </Tooltip>
 
 
@@ -914,8 +914,11 @@ id="Global"
 
 
 
-   
-<div className={`Panel ${SkyAndFogEnabled$ ? "PanelHidden" : ""}`}>
+ <SimpleBar>   
+
+  
+ </SimpleBar>
+  <div className={`Panel ${SkyAndFogEnabled$|| ToneMappingEnabled$ || SSRPanel ? "PanelHidden" : ""}`}>
 
 
 
@@ -1277,7 +1280,7 @@ id="Global"
             </div>
 
             <div className="VersionBadge">
-                VERSION 3.3
+                VERSION 3.4
             </div>
 
         </div>
@@ -1544,167 +1547,6 @@ id="Global"
 
 
 
-{ToneMappingEnabled$ && 
-  <div className="TonemappingPanel">
-
-
-
-
-<Tooltip tooltip={translate("LUMINA.tonemappingmodedropdowntooltip")}>
-<div className="TonemappingDropdown">
-<TonemappingDropdown />
-</div>
-</Tooltip>
-
-<label className="title_SVH title_zQN ModeLabel" style={{ whiteSpace: 'nowrap' }}>
-        {translate("LUMINA.tonemappingmodedropdowntooltip")}
-      </label>
-
-      <label className="title_SVH title_zQN LutLabel" style={{ whiteSpace: 'nowrap' }}>
-        {translate("LUMINA.tonemappingtitle")}
-      </label>
-
-{ExternalModeActivated && (
-  <div>
-    <div>
-      <button
-        onClick={UpdateLUT}
-        className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS LoadLUTButton">
-        {translate("LUMINA.loadlutbutton")}
-      </button>
-
-      <button
-        onClick={OpenLUTFolder}
-        className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS OpenLUTButton">
-        {translate("LUMINA.openlutbutton")}
-      </button>
-
-
-
-
-      <label className="title_SVH title_zQN LutLabelInUse" style={{ whiteSpace: 'nowrap' }}>
-      {translate("LUMINA.luttexture")}
-      </label>
-    </div>
-
-    <div className="LUTSDropdown">
-
-                <LUTSDropdown />
-                
-                <LUTContributionSlider />
-            <label className="title_SVH title_zQN lut-contribution-label">{translate("LUMINA.lutcontribution")}</label>
-
-                <Tooltip tooltip={translate("LUMINA.uploadlutbutton")}>
-    <OpenFileDialogButton />
-</Tooltip>
-
-    </div>
-  </div>
-)}
-
-{CustomModeActivated && (
-  <div>
-
-
-<div className="toe-strength-container">
-  <input
-    value={ToeStrengthValue}
-    type="range"
-    className="toggle_cca item-mouse-states_Fmi toggle_th_ toe-strength-input"
-    onChange={(event) => handleToeStrength(Number(event.target.value))}
-  />
-  <label className="title_SVH title_zQN toe-strength-label" style={{ whiteSpace: 'nowrap' }}>
-    {translate("LUMINA.ToeStrength")}
-  </label>
-
-
-  <Slider
-  value={ToeStrengthValue}
-  start={0}       // Minimum value of the slider
-  end={1}          // Maximum value of the slider
-  step={0.0001}    // Step size for precision
-  className="toe-strength-slider"
-  gamepadStep={stepSize} // Step size for gamepad interaction
-  valueTransformer={SliderValueTransformer.floatTransformer} // Value transformation logic
-  disabled={false}
-  noFill={false}
-  onChange={(number) => handleToeStrength(number)} // Callback for value change
-/>
-
-  
-  <ToeStrengthCheckbox
-  />
-</div>
-
-<div className="toe-length-container">
-  <input
-    value={ToeLengthValue}
-    type="range"
-    className="toggle_cca item-mouse-states_Fmi toggle_th_ toe-length-input"
-    onChange={(event) => handleToeLength(Number(event.target.value))}
-  />
-  <label className="title_SVH title_zQN toe-length-label" style={{ whiteSpace: 'nowrap' }}>
-    {translate("LUMINA.ToeLength")}
-  </label>
-
-  <Slider
-    value={ToeLengthValue}
-    start={0}       // Minimum value of the slider
-    end={1}          // Maximum value of the slider
-    step={0.0001}    // Step size for precision
-    className="toe-length-slider"
-    gamepadStep={stepSize} // Step size for gamepad interaction
-    valueTransformer={SliderValueTransformer.floatTransformer} // Value transformation logic
-    disabled={false}
-    noFill={false}
-    onChange={(number) => handleToeLength(number)} // Callback for value change
-  />
-
-  <ToeLengthCheckbox
-  />
-</div>
-
-<div className="shoulder-strength-container-box">
-  <input
-    value={ShoulderStrengthValue}
-    type="range"
-    className="toggle_cca item-mouse-states_Fmi toggle_th_ shoulder-strength-input"
-    onChange={(event) => handleShoulderStrength(Number(event.target.value))}
-  />
-  <label className="title_SVH title_zQN shoulder-strength-label" style={{ whiteSpace: 'nowrap' }}>
-    {translate("LUMINA.ShoulderStrength")}
-  </label>
-
-  <Slider
-    value={ShoulderStrengthValue}
-    start={0}       // Minimum value of the slider
-    end={1}         // Maximum value of the slider
-    step={0.0001}   // Step size for precision
-    className="shoulder-strength-slider"
-    gamepadStep={stepSize} // Step size for gamepad interaction
-    valueTransformer={SliderValueTransformer.floatTransformer} // Value transformation logic
-    disabled={false}
-    noFill={false}
-    onChange={(number) => handleShoulderStrength(number)} // Callback for value change
-  />
-
-  <ShoulderStrengthCheckbox
-  />
-</div>
-
-
-
-
-
-
-    </div>
-)}
-
-
-
-</div>
-
-}
 
 
 {RoadPanel && <div className="RoadPanelBase"> 

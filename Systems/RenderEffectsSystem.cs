@@ -97,6 +97,7 @@
         public static bool IsCustomMode { get; set; }
         public GlobalIllumination m_GlobalIllumination { get; private set; }
 
+
         /// <summary>
         /// Called when the system is created.
         /// </summary>
@@ -117,8 +118,32 @@
             InitializeCubemap();
             GetPrivateFieldm_PhysicallyBasedSky();
             InitializeAmbientOcclusion();
+            InitializeScreenSpaceRefraction();
 
         }
+
+        private ScreenSpaceRefraction m_ScreenSpaceRefraction;
+
+        private void InitializeScreenSpaceRefraction()
+        {
+            if (LuminaVolume == null || LuminaVolume.profile == null)
+                return;
+
+            var profile = LuminaVolume.profile;
+
+            if (!profile.TryGet(out ScreenSpaceRefraction ssr))
+                ssr = profile.Add<ScreenSpaceRefraction>();
+
+            m_ScreenSpaceRefraction = ssr;
+
+            if (m_ScreenSpaceRefraction == null)
+                return;
+
+            m_ScreenSpaceRefraction.active = GlobalVariables.Instance.IsScreenSpaceRefraction;
+            m_ScreenSpaceRefraction.screenFadeDistance.Override(GlobalVariables.Instance.ScreenSpaceRefractionScreenFadeDistance);
+        }
+
+       
 
         private void CheckifRayTracing()
         {
@@ -153,17 +178,31 @@
 
             // Proper HDRP overrides (ALWAYS use Override)
             m_AmbientOcclusion.intensity.Override(GlobalVariables.Instance.AmbientOcclusionIntensity);
-            m_AmbientOcclusion.maximumRadiusInPixels = (GlobalVariables.Instance.AmbientOcclusionMaxRadiusInPixels);
+        m_AmbientOcclusion.maximumRadiusInPixels = (GlobalVariables.Instance.AmbientOcclusionMaxRadiusInPixels);
 
-            m_AmbientOcclusion.radius.Override(GlobalVariables.Instance.AmbientOcclusionRadius);
-            m_AmbientOcclusion.stepCount = (GlobalVariables.Instance.AmbientOcclusionStepCount);
+        m_AmbientOcclusion.radius.Override(GlobalVariables.Instance.AmbientOcclusionRadius);
+        m_AmbientOcclusion.stepCount = (GlobalVariables.Instance.AmbientOcclusionStepCount);
 
-            m_AmbientOcclusion.temporalAccumulation.Override(GlobalVariables.Instance.AmbientOcclusionTemporalAccumulation);
-            m_AmbientOcclusion.spatialBilateralAggressiveness.Override(GlobalVariables.Instance.AmbientOcclusionBilateralAggressiveness);
-            m_AmbientOcclusion.ghostingReduction.Override(GlobalVariables.Instance.AmbientOcclusionGhostingReduction);
+        m_AmbientOcclusion.temporalAccumulation.Override(GlobalVariables.Instance.AmbientOcclusionTemporalAccumulation);
+        m_AmbientOcclusion.spatialBilateralAggressiveness.Override(GlobalVariables.Instance.AmbientOcclusionBilateralAggressiveness);
+        m_AmbientOcclusion.ghostingReduction.Override(GlobalVariables.Instance.AmbientOcclusionGhostingReduction);
 
-            m_AmbientOcclusion.fullResolution = (GlobalVariables.Instance.AmbientOcclusionFullResolution);
-            m_AmbientOcclusion.directLightingStrength.Override(GlobalVariables.Instance.AmbientOcclusionDirectLightingStrength);
+        m_AmbientOcclusion.fullResolution = (GlobalVariables.Instance.AmbientOcclusionFullResolution);
+        m_AmbientOcclusion.directLightingStrength.Override(GlobalVariables.Instance.AmbientOcclusionDirectLightingStrength);
+
+
+            // anything below this dont seem to have a change in game
+        m_AmbientOcclusion.specularOcclusion.Override(GlobalVariables.Instance.AmbientOcclusionSpecularOcclusion);
+        m_AmbientOcclusion.occluderMotionRejection.Override(GlobalVariables.Instance.AmbientOcclusionOccluderMotionRejection);
+        m_AmbientOcclusion.receiverMotionRejection.Override(GlobalVariables.Instance.AmbientOcclusionReceiverMotionRejection);
+
+        m_AmbientOcclusion.rayTracing.Override(GlobalVariables.Instance.AmbientOcclusionRayTracing);
+        m_AmbientOcclusion.rayLength = (GlobalVariables.Instance.AmbientOcclusionRayLength);
+        m_AmbientOcclusion.sampleCount = GlobalVariables.Instance.AmbientOcclusionSampleCount;
+        m_AmbientOcclusion.denoiserRadius = (GlobalVariables.Instance.AmbientOcclusionDenoiserRadius);
+        m_AmbientOcclusion.denoise = GlobalVariables.Instance.AmbientOcclusionDenoise;
+        m_AmbientOcclusion.denoiserRadius = (GlobalVariables.Instance.AmbientOcclusionDenoiserRadius);
+
         }
 
         private void CheckVersion()
@@ -419,8 +458,22 @@
             ContactShadowsUpdate();
             OriginalShadows();
             AmbientOcclusionUpdate();
+            UpdateSSR();
         }
 
+        private void UpdateSSR()
+        {
+            if (LuminaVolume == null || LuminaVolume.profile == null)
+                return;
+
+            if (!LuminaVolume.profile.TryGet(out ScreenSpaceRefraction ssr))
+                return;
+
+            m_ScreenSpaceRefraction.active = GlobalVariables.Instance.IsScreenSpaceRefraction;
+
+            // Update settings here
+            m_ScreenSpaceRefraction.screenFadeDistance.Override(GlobalVariables.Instance.ScreenSpaceRefractionScreenFadeDistance);
+        }
 
         private void AmbientOcclusionUpdate()
         {

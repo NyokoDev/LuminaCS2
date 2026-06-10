@@ -37,7 +37,7 @@ export const CubemapsDropdown = () => {
   const selectedCubemap = useValue(SelectedCubemap$); // Get the currently selected Cubemap
   
   // Find the label for the selected Cubemap
-const selectedCubemapLabel = selectedCubemap ?? "None";
+  const selectedCubemapLabel = selectedCubemap ?? "None";
 
   const dropDownItems = Cubemaps.map((mode) => (
     <DropdownItem<string>

@@ -215,41 +215,43 @@ font-family:
 
 
 
-
-.LUTInputText
-{
+.SSRButton {
     position: absolute;
-    color: transparent;
-    width: 500rem;
-    top: 50rem;
-    left: 20rem;
+    width: 43rem;
+  height: 43rem;
+
+
+    width: 43rem;
+  height: 43rem;
+    top: 320rem;
+  left: 3rem;
+  filter:invert(100%);
+
+    border: none;
+    outline: none;
+
+    background-image: url("../src/img/ssr.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    background-color: transparent;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        opacity 0.15s ease;
 }
 
-.LUTContributionSlider
-{
-    position: absolute;
-    top: 250rem;
-
-    width: calc(100% - 40rem);
-    left: 20rem;
-
-    height: 30rem;
-
-    background-color: rgba(0, 0, 0, 0.5);
+.SSRButton:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
 }
 
-.LUTContributionInput
-{
-    position: absolute;
-    color: rgb(118, 118, 118);
-    font-size: 20rem;
-    top: 250rem;
-    left: 155rem;
-
-
-
+.SSRButton:active {
+    transform: scale(0.95);
 }
-
 
 
 
@@ -1212,35 +1214,6 @@ $hueshift-top: 80rem;
 
 
 
-.TonemappingDropdown
-{
-    position: absolute;
-    color: white;
-    width: 300rem;
-    top: 0rem;
-    left: 500rem;
-    pointer-events: auto;
-    z-index: 4000;
-}
-
-.LutLabelInUse
-{
-    position: absolute;
-    color: rgb(211, 211, 211);
-    font-size: 15rem;
-    top: 45rem;
-    left: 50rem;
-}
-
-
-.LUTSDropdown
-{
-    position: absolute;
-    color: white;
-    width: 500rem;
-    top: 80rem;
-    left: 15rem;
-}
 
 .PublicServiceAnnouncement
 {
@@ -1273,50 +1246,6 @@ $hueshift-top: 80rem;
         left: 130rem;
     }
 
-.LoadLUTButton, .OpenLUTButton
-{
-    position: absolute;
-    height: 30rem;
-    width: 208rem;
-    top: 218rem;
-    box-sizing: border-box; /* Ensure consistent box-sizing */
-}
-
-.LoadLUTButton
-{
-    left: 20rem;
-    overflow: auto;
-}
-
-.OpenLUTButton
-{
-    left: 20rem;
-    width: 280rem;
-    top: 240rem !important;
-    z-index: 200;
-    overflow: auto;
-}
-
-
-.LutLabel
-{
-    color: rgb(255, 255, 255);
-    position: absolute;
-    top: 15rem;
-    left: -300rem;
-    width: 100%;
-    font-size: 18rem;
-}
-
-.ModeLabel
-{
-    position: absolute;
-    display: flex;
-    top: 15rem;
-    left: 460rem;
-    width: 100%;
-    font-size: 18rem;
-}
 
 
 

@@ -3,7 +3,7 @@ import { Theme } from "cs2/bindings";
 import { getModule } from "cs2/modding";
 import mod from "../../mod.json";
 import { Dropdown, DropdownItem, DropdownToggle, UISound, FOCUS_AUTO } from "cs2/ui";
-import { LUTName$ } from "./panel";
+import { LUTName$ } from "./TonemappingPanel/TonemappingPanel";
 
 // Bind the LUTArray to a variable and initialize it with an empty array
 export const LUTSArray = bindValue<string[]>(mod.id, "LUTArray", []);

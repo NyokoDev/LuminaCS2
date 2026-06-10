@@ -357,6 +357,14 @@ namespace LuminaMod.XML
         [XmlElement] public float ContactShadowsFadeDistance { get; set; } = 20f;
         [XmlElement] public float ContactShadowsFadeInDistance { get; set; } = 0f;
 
+        // Screen Space Refraction
+
+        [XmlElement]
+        public float ScreenSpaceRefractionScreenFadeDistance { get; set; } = 1f;
+
+        [XmlElement]
+        public bool IsScreenSpaceRefraction { get; set; } = false;
+
         public static void EnsureSettingsFileExists(string filePath)
         {
             // Ensure directory exists
@@ -492,7 +500,7 @@ namespace LuminaMod.XML
             }
         }
 
-
+      
 
         private static GlobalVariables instance;
 
@@ -513,6 +521,6 @@ namespace LuminaMod.XML
             }
         }
 
-
+       
     }
 }
