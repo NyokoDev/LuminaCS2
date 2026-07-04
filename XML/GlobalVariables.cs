@@ -446,6 +446,54 @@ namespace LuminaMod.XML
 
 
         /// <summary>
+        /// Loads from XML.
+        /// </summary>
+        /// <param name="xml"></param>
+        /// <returns></returns>
+        public static GlobalVariables LoadFromXml(string xml)
+        {
+            try
+            {
+                var serializer = new XmlSerializer(typeof(GlobalVariables));
+
+                using var reader = new StringReader(xml);
+
+                var loadedVariables = (GlobalVariables)serializer.Deserialize(reader);
+
+                if (loadedVariables == null)
+                {
+                    Mod.Log.Info("Loaded settings were null.");
+                    return Instance;
+                }
+
+                var properties = typeof(GlobalVariables)
+                    .GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+                foreach (var prop in properties)
+                {
+                    if (!prop.CanWrite)
+                        continue;
+
+                    var value = prop.GetValue(loadedVariables);
+
+                    if (value != null)
+                        prop.SetValue(Instance, value);
+                }
+
+                Mod.Log.Info("Settings loaded successfully from XML.");
+
+                return Instance;
+            }
+            catch (Exception ex)
+            {
+                Mod.Log.Info($"Error loading XML: {ex}");
+
+                return null;
+            }
+        }
+
+
+        /// <summary>
         /// Load From File.
         /// </summary>
         /// <param name="filePath"></param>

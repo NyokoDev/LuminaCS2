@@ -182,6 +182,8 @@
 
             AddBinding(new TriggerBinding(Mod.MODUI, "UploadLUTFileDialog", OpenLUTFileDialog));
 
+            AddBinding(new TriggerBinding(Mod.MODUI, "OpenPresetFileDialog", OpenPresetFileDialog));
+
             AddBinding(new TriggerBinding(Mod.MODUI, "LockTime", HandleTimeLocked));
 
 
@@ -214,8 +216,40 @@
             AddSupportBindings();
             AddScreenSpaceAmbientOcclusionBindings();
             AddScreenSpaceRefractionBindings();
-         
 
+
+            ImportLuminaPresetXML();
+            AddBinding(new TriggerBinding<string>(Mod.MODUI, "ImportLuminaPresetByName", ImportLuminaPresetByName));
+
+
+        }
+
+        private void ImportLuminaPresetByName(string presetName)
+        {
+            if (!presetName.EndsWith(".xml", StringComparison.OrdinalIgnoreCase))
+            {
+                presetName += ".xml";
+            }
+
+            GlobalPaths.CurrentPresetPath =
+                Path.Combine(GlobalPaths.LuminaPresetsDirectory, presetName);
+
+            GlobalVariables.LoadFromFile(GlobalPaths.CurrentPresetPath);
+        }
+
+        private void ImportLuminaPresetXML()
+        {
+            AddBinding(new TriggerBinding<string>(
+                Mod.MODUI,
+                "ImportLuminaPresetXML",
+                ImportLuminaPresetXMLHandler
+            ));
+        }
+
+        private void ImportLuminaPresetXMLHandler(string xml)
+        {
+
+            GlobalVariables.LoadFromXml(xml);
         }
 
         private void AddScreenSpaceRefractionBindings()
@@ -896,10 +930,43 @@
             }
         }
 
+        public void OpenPresetFileDialog()
+        {
+            string filePath = XMLFileDialog.ShowPresetDialog(
+           
+            );
+
+            using var dialog = new OpenFileDialog();
+
+            if (string.IsNullOrEmpty(filePath))
+            {
+                Lumina.Mod.Log.Info("User cancelled XML preset selection.");
+                return;
+            }
+
+            try
+            {
+                var preset = GlobalVariables.LoadFromXml(filePath);
+
+                if (preset == null)
+                {
+                    Lumina.Mod.Log.Info("Failed to load XML preset.");
+                    return;
+                }
+
+                string presetName = System.IO.Path.GetFileNameWithoutExtension(filePath);
+
+                Lumina.Mod.Log.Info($"XML preset loaded successfully: {presetName}");
+            }
+            catch (Exception ex)
+            {
+                Lumina.Mod.Log.Error($"XML preset load failed: {ex}");
+            }
+        }
 
         public void OpenLUTFileDialog()
         {
-            string filePath = ModernFileDialog.ShowDialog("Select a .cube LUT File", "LUT Cube Files", "*.cube");
+            string filePath = ModernFileDialog.ShowDialog();
             if (!string.IsNullOrEmpty(filePath))
             {
                 Lumina.Mod.Log.Info($"Selected LUT path: {filePath}");

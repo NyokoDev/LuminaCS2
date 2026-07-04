@@ -1,12 +1,11 @@
 ﻿using Lumina.XML;
 using System;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
 
-public static class ModernFileDialog
+public static class XMLFileDialog
 {
     [ComImport]
-    [Guid("d57c7288-d4ad-4768-be02-9d969532d960")]
+    [Guid("d57c7288-d4ad-4768-be02-9d969532d960")] // Correct IID_IFileOpenDialog
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     private interface IFileOpenDialog
     {
@@ -51,14 +50,15 @@ public static class ModernFileDialog
     }
 
     [ComImport]
-    [Guid("43826D1E-E718-42EE-BC55-A1E261C37BFE")]
+    [Guid("43826D1E-E718-42EE-BC55-A1E261C37BFE")] // Correct IShellItem GUID
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     private interface IShellItem
     {
         void BindToHandler(IntPtr pbc, ref Guid bhid, ref Guid riid, out IntPtr ppv);
         void GetParent(out IShellItem ppsi);
 
-        void GetDisplayName(SIGDN sigdnName,
+        void GetDisplayName(
+            SIGDN sigdnName,
             [MarshalAs(UnmanagedType.LPWStr)] out string ppszName);
 
         void GetAttributes(uint sfgaoMask, out uint psfgaoAttribs);
@@ -97,13 +97,12 @@ public static class ModernFileDialog
 
     private const uint CLSCTX_INPROC_SERVER = 1;
 
-
-
-    public static string ShowDialog(
-     string title = "Select a LUT File",
-     string filterName = "Lumina LUT Files",
-     string filterSpec = "*.cube")
+    public static string ShowPresetDialog(
+        string title = "Select a Lumina Preset File",
+        string filterName = "Lumina Preset Files",
+        string filterSpec = "*.xml")
     {
+        // Correct CLSID/IID
         Guid clsid = new Guid("DC1C5A9C-E88A-4DDE-A5A1-60F82A20AEF7");
         Guid iid = new Guid("d57c7288-d4ad-4768-be02-9d969532d960");
 
@@ -115,27 +114,27 @@ public static class ModernFileDialog
 
         var dialog = (IFileOpenDialog)Marshal.GetObjectForIUnknown(ppv);
 
-        // Give the LUT dialog its own persistent state
-        Guid clientGuid = new Guid("F72C0E1C-7A49-4D0E-8B18-2AA9B3E9B8D5");
+        // Give this dialog its own persistent state
+        Guid clientGuid = new Guid("A8C4D1E2-5A5A-4D1F-9C60-8E6D8C2A9B11");
         dialog.SetClientGuid(ref clientGuid);
 
         var filters = new[]
         {
-        new COMDLG_FILTERSPEC
-        {
-            pszName = filterName,
-            pszSpec = filterSpec
-        }
-    };
+            new COMDLG_FILTERSPEC
+            {
+                pszName = filterName,
+                pszSpec = filterSpec
+            }
+        };
 
         dialog.SetFileTypes((uint)filters.Length, filters);
         dialog.SetFileTypeIndex(1);
         dialog.SetTitle(title);
-        dialog.SetDefaultExtension("cube");
+        dialog.SetDefaultExtension("xml");
 
         try
         {
-            string defaultPath = GlobalPaths.LuminaLUTSDirectory;
+            string defaultPath = GlobalPaths.LuminaPresetsDirectory;
 
             Guid shellItemGuid = typeof(IShellItem).GUID;
 
@@ -145,7 +144,7 @@ public static class ModernFileDialog
                 ref shellItemGuid,
                 out IShellItem folder);
 
-            // Force the LUT folder every time
+            // Force this folder every time
             dialog.SetFolder(folder);
             dialog.SetDefaultFolder(folder);
 

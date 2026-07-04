@@ -111,11 +111,12 @@ let tab2 = false;
 
 
 
+
 export const YourPanelComponent: React.FC<any> = () => {
   // Values
   const [position, setPosition] = useState({ x: 0, y: 0 });
   
-  const isDragging = useRef(false);
+
   const velocity = useRef({ x: 0, y: 0 });
 
 
@@ -173,6 +174,8 @@ const [RoadPanel, setRoadPanel] = useState(false);
 const [SSAOPanel, setSSAOPanel] = useState(false);
 const [SSRPanel, setSSROPanel] = useState(false);
 const [IsClicked, setIsClicked] = useState(false);
+
+
 
 
 
@@ -243,6 +246,7 @@ const handleSaturation = (value: number) => {
 };
 
 
+
 // WhiteBalance
 
 const handleTemperature = (value: number) => {
@@ -286,14 +290,17 @@ function ResetToDefault() {
 }
 
 
+const [isDragging, setIsDragging] = useState(false);
+const fileInputRef = useRef<HTMLInputElement | null>(null);
+
 const [importPresetActive, setImportPresetActive] = useState(false);
+const [importMode, setImportMode] = useState<"paste" | "file" | null>(null);
+
+
 
 function ImportPreset() {
-  
-
-    setImportPresetActive(true);
-
-    trigger(mod.id, 'ImportLuminaPreset');
+  setImportPresetActive(true);
+  setImportMode(null); // show chooser first
 }
 
 function ExportPreset() {
@@ -478,8 +485,12 @@ const openUrl = (url: string): void => {
   }
 };
 
+const [fileDialogOpen, setFileDialogOpen] = useState(false);
+const [selectedPath, setSelectedPath] = useState<string>("");
+
 const [presetName, setPresetName] = useState("");
 const [exportPresetActive, setExportPresetActive] = useState(false);
+const [presetXML, setPresetXML] = useState("");
 
 const reloadCubemaps = () =>
 {
@@ -622,82 +633,203 @@ id="Global"
 }
 
 
-{importPresetActive && (
-    <div className="ImportPresetOverlay">
-        <div className="ImportPresetDialog">
+{importPresetActive && !importMode && (
+  <div className="ImportPresetOverlay">
+    <div className="ImportPresetDialog">
 
-            <div className="ImportPresetHeader">
-                Import Preset
-            </div>
+      <div className="ImportPresetHeader">
+        Import Preset
+      </div>
 
-<input
-    className="ImportPresetInput"
-    type="text"
-    placeholder="Enter preset name..."
-    value={presetName}
-    onChange={(e) => setPresetName(e.target.value)}
-/>
-            <div className="ImportPresetButtons">
+      <div className="ImportModeGrid">
 
-                <button
-                    className="ImportPresetCancel"
-                    onClick={() => setImportPresetActive(false)}
-                >
-                    Cancel
-                </button>
+        <button
+          className="ImportModeCard"
+          onClick={() => setImportMode("paste")}
+        >
+          <div className="ImportModeTitle">Paste XML</div>
+          <div className="ImportModeDesc">
+            Paste a preset directly from clipboard or text
+          </div>
+        </button>
 
-  <button
-    className="ImportPresetConfirm"
-    onClick={() => {
-        trigger(mod.id, "UpdatePresetName", presetName);
-        trigger(mod.id, "ImportLuminaPreset");
-        setImportPresetActive(false);
-    }}
->
-    Import
-</button>
+        <button
+          className="ImportModeCard"
+          onClick={() => setImportMode("file")}
+        >
+          <div className="ImportModeTitle">Import File</div>
+          <div className="ImportModeDesc">
+            Load a .xml preset from your device
+          </div>
+        </button>
 
-            </div>
+      </div>
 
-        </div>
+      <div className="ImportPresetButtons">
+        <button
+          className="ImportPresetCancel"
+          onClick={() => setImportPresetActive(false)}
+        >
+          Close
+        </button>
+      </div>
+
     </div>
+  </div>
 )}
 
 
-{exportPresetActive && (
+
+
+{importPresetActive && importMode === "file" && (
+  <div className="ImportPresetOverlay">
+    <div className="ImportPresetDialog">
+
+      <div className="ImportPresetHeader">
+        Import Preset File
+      </div>
+
+      <div className="ImportPresetInfo">
+        Enter the <b>preset file name</b>.
+        <br />
+        <span className="ImportPresetWarning">
+          ⚠ File must exist inside the <b>LuminaPresets</b> folder.
+        </span>
+      </div>
+
+ <input
+  className="ImportPresetTextField"
+  type="text"
+  placeholder="Example: myPreset"
+  value={presetName}
+  onChange={(e) => setPresetName(e.target.value)}
+/>
+
+      <div className="ImportPresetButtons">
+        <button
+          className="ImportPresetConfirm"
+          onClick={() => {
+            if (!presetName) return;
+
+            trigger(mod.id, "ImportLuminaPresetByName", presetName);
+          }}
+        >
+          Import
+        </button>
+
+        <button
+          className="ImportPresetCancel"
+          onClick={() => setImportMode(null)}
+        >
+          Back
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+
+{importPresetActive && importMode === "paste" && (
     <div className="ImportPresetOverlay">
         <div className="ImportPresetDialog">
 
             <div className="ImportPresetHeader">
-                Export Preset
+                <span>Paste Preset XML</span>
+
+                <div
+                    className="ImportPresetClose"
+                    onClick={() => {
+                        setPresetXML("");
+                        setImportPresetActive(false);
+                    }}
+                >
+                    ×
+                </div>
             </div>
 
-            <input
-                className="ImportPresetInput"
-                type="text"
-                placeholder="Enter preset name..."
-                value={presetName}
-                onChange={(e) => setPresetName(e.target.value)}
-            />
+            <div className="ImportPresetBody">
+
+                <div className="ImportPresetDescription">
+                    Paste a Lumina preset below. The preset will be validated before being imported.
+                </div>
+
+                <textarea
+                    className="ImportPresetTextarea"
+                    placeholder={`<?xml version="1.0" encoding="UTF-8"?>
+
+<LuminaPreset Version="3.5">
+    ...
+</LuminaPreset>`}
+                    value={presetXML}
+                    onChange={(e) => setPresetXML(e.target.value)}
+                    spellCheck={false}
+                />
+
+                <div className="ImportPresetFooter">
+
+                    <div className="ImportPresetStatus">
+                        <div>
+                            {presetXML.trim()
+                                ? "✓ XML Ready"
+                                : "○ Waiting for XML"}
+
+                            <small>
+                                {presetXML.trim()
+                                    ? "Ready to import."
+                                    : "Paste a Lumina preset to begin."}
+                            </small>
+                        </div>
+                    </div>
+
+                    
+                    <button
+                        className="ImportPresetClipboard"
+                        onClick={async () => {
+    try {
+        if (!navigator.clipboard) {
+            console.error("Clipboard API unavailable");
+            return;
+        }
+
+        const text = await navigator.clipboard.readText();
+        console.log(text);
+
+        setPresetXML(text);
+    } catch (err) {
+        console.error(err);
+    }
+}}
+                    >
+                        Paste from Clipboard
+                    </button>
+                    
+
+                </div>
+
+            </div>
 
             <div className="ImportPresetButtons">
 
                 <button
                     className="ImportPresetCancel"
-                    onClick={() => setExportPresetActive(false)}
+                    onClick={() => {
+                        setPresetXML("");
+                        setImportPresetActive(false);
+                    }}
                 >
                     Cancel
                 </button>
 
                 <button
                     className="ImportPresetConfirm"
+                    disabled={!presetXML.trim()}
                     onClick={() => {
-                        trigger(mod.id, "UpdatePresetName", presetName);
-                        trigger(mod.id, "ExportLuminaPreset");
-                        setExportPresetActive(false);
+                        trigger(mod.id, "ImportLuminaPresetXML", presetXML);
+                        setPresetXML("");
+                        setImportPresetActive(false);
                     }}
                 >
-                    Export
+                    Import
                 </button>
 
             </div>
@@ -706,6 +838,49 @@ id="Global"
     </div>
 )}
 
+{exportPresetActive && (
+  <div className="importPresetOverlay">
+    <div className="importPresetDialog">
+
+      <div className="importPresetHeader">
+        Export Preset
+      </div>
+
+      <input
+        className="importPresetInput"
+        type="text"
+        placeholder="Enter preset name..."
+        value={presetName}
+        onChange={(e) => setPresetName(e.target.value)}
+      />
+
+      <div className="importPresetButtons">
+
+        <button
+          className="importPresetCancel"
+          onClick={() => setExportPresetActive(false)}
+        >
+          Cancel
+        </button>
+
+        <button
+          className="importPresetConfirm"
+          onClick={() => {
+            if (!presetName.trim()) return;
+
+            trigger(mod.id, "UpdatePresetName", presetName);
+            trigger(mod.id, "ExportLuminaPreset");
+            setExportPresetActive(false);
+          }}
+        >
+          Export
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+)}
 
 
 <div className="TabsRow">

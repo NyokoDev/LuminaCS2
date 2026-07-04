@@ -126,6 +126,8 @@ namespace Lumina.XML
         /// </summary>
         public static string SupportedGameVersion = "1.6.0f1 (419.d6c6) [6216.19404]";
 
+        public static string CurrentPresetPath { get; set; }
+
         /// <summary>
         /// Returns icon path for toast notifications.
         /// </summary>

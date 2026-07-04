@@ -478,101 +478,562 @@
 }
 
 
-/////// PRESET
 
-.ImportPresetOverlay
-{
-    position:absolute; /* IMPORTANT CHANGE */
+/////// IMPORT PRESET
 
-    top: -600rem;
-    right: -500rem;
+.ImportPresetOverlay {
+    position: absolute;
 
-    align-items: center;
+    top: -900rem;
+    left: -500rem;
+
+    width: 1920rem;
+    height: 1080rem;
+
+    display: flex;
     justify-content: center;
+    align-items: center;
 
-    background: rgba(0, 0, 0, 0.55);
-    backdrop-filter: blur(6rem);
 
-    z-index: 9999;
+    z-index: 99999;
 }
 
-.ImportPresetDialog
-{
-    width: 420rem;
+.ImportPresetDialog {
 
-    background: rgba(20, 20, 20, 0.92);
-    border: 1rem solid rgba(255, 255, 255, 0.08);
-
-    border-radius: 10rem;
-
-    padding: 20rem;
+    width: 760rem;
 
     display: flex;
     flex-direction: column;
 
+    background: #16181D;
 
+    border-radius: 18rem;
+
+    border: 1rem solid rgba(255,255,255,.06);
+
+    box-shadow:
+        0 40rem 120rem rgba(0,0,0,.55);
+
+    overflow: hidden;
 }
 
-.ImportPresetHeader
-{
-    font-size: 18rem;
-    font-weight: 600;
-    color: white;
+///////////////////////////////////////////////////////////
+
+.ImportPresetHeader{
+
+    height:72rem;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 28rem;
+
+    font-size:24rem;
+    font-weight:700;
+
+    color:white;
+
+    border-bottom:1rem solid rgba(255,255,255,.05);
 }
 
-.ImportPresetInput
-{
-    width: 100%;
-    height: 40rem;
+.ImportPresetClose{
 
-    border-radius: 6rem;
+    font-size:34rem;
 
-    background: rgba(255, 255, 255, 0.05);
-    border: 1rem solid rgba(255, 255, 255, 0.08);
+    color:rgba(255,255,255,.55);
 
-    color: black; /* CHANGED */
+    cursor:pointer;
 
-    padding: 0 12rem;
-
-    outline: none;
+    transition:.15s;
 }
 
-.ImportPresetButtons
-{
-    display: flex;
-    justify-content: flex-end;
+.ImportPresetClose:hover{
 
+    color:white;
+}
 
+///////////////////////////////////////////////////////////
+
+.ImportPresetBody{
+
+    display:flex;
+    flex-direction:column;
+
+    gap:18rem;
+
+    padding:24rem 28rem;
+}
+
+.ImportPresetDescription{
+
+    font-size:14rem;
+
+    line-height:1.55;
+
+    color:rgb(255, 255, 255);
+}
+
+///////////////////////////////////////////////////////////
+
+.ImportPresetTextarea{
+
+    width:100%;
+    height:350rem;
+
+    resize:none;
+
+    padding:22rem;
+
+    background:#101217;
+
+    border-radius:14rem;
+
+    border:2rem solid rgba(69,125,255,.35);
+
+    color:#ECECEC;
+
+    font-size:14rem;
+
+    font-family:
+        "JetBrains Mono",
+        Consolas,
+        monospace;
+
+    line-height:1.7;
+
+    outline:none;
+
+    transition:.2s;
+}
+
+.ImportPresetTextarea:focus{
+
+    border-color:#4E8DFF;
+
+    box-shadow:
+        0 0 0 2rem rgba(78,141,255,.12),
+        0 0 30rem rgba(78,141,255,.18);
+}
+
+.ImportPresetTextarea::placeholder{
+
+    color:rgba(255,255,255,.28);
+}
+
+///////////////////////////////////////////////////////////
+
+.ImportPresetFooter{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-top:6rem;
+}
+
+///////////////////////////////////////////////////////////
+
+.ImportPresetStatus{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14rem;
+
+    padding:14rem 18rem;
+
+    border-radius:12rem;
+
+    background:#1B2120;
+
+    border:1rem solid rgba(63,219,115,.18);
+
+    color:#57D97A;
+
+    font-size:14rem;
+
+    font-weight:600;
+}
+
+.ImportPresetStatus small{
+
+    display:block;
+
+    color:rgba(255,255,255,.55);
+
+    font-weight:400;
+}
+
+///////////////////////////////////////////////////////////
+
+.ImportPresetButtons{
+
+    display:flex;
+
+    gap:14rem;
+
+    justify-content:flex-end;
+
+    padding:22rem 28rem;
+
+    border-top:1rem solid rgba(255,255,255,.05);
 }
 
 .ImportPresetCancel,
-.ImportPresetConfirm
-{
-    min-width: 100rem;
-    height: 38rem;
+.ImportPresetConfirm{
 
-    border-radius: 6rem;
+    width:180rem;
 
-    border: none;
+    height:54rem;
+
+    border:none;
+
+    border-radius:12rem;
+
+    font-size:15rem;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.18s;
+}
+
+.ImportPresetCancel{
+
+    background:#262A30;
+
+    color:white;
+}
+
+.ImportPresetCancel:hover{
+
+    background:#30343A;
+}
+
+.ImportPresetConfirm{
+
+    color:white;
+
+    background:linear-gradient(
+        180deg,
+        #4D93FF,
+        #2D72EA
+    );
+
+    box-shadow:
+        0 8rem 24rem rgba(59,130,246,.35);
+}
+
+.ImportPresetConfirm:hover{
+
+    transform:translateY(-1rem);
+
+    box-shadow:
+        0 12rem 30rem rgba(59,130,246,.45);
+}
+
+.ImportPresetConfirm:disabled{
+
+    opacity:.45;
+
+    cursor:not-allowed;
+
+    box-shadow:none;
+}
+
+// IMPORT PRESET CLIPBOARD
+
+.ImportPresetClipboard {
+
+    height: 42rem;
+
+    padding: 0 18rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8rem;
+
+    border: 1rem solid rgba(77, 142, 255, .35);
+    border-radius: 10rem;
+
+    background: rgba(77, 142, 255, .08);
+
+    color: #6FA8FF;
+
+    font-size: 13rem;
+    font-weight: 600;
 
     cursor: pointer;
 
-    transition: 0.2s ease;
+    transition: .18s ease;
 }
 
-.ImportPresetCancel
-{
-    background: rgba(255, 255, 255, 0.06);
+.ImportPresetClipboard:hover {
+
+    background: rgba(77, 142, 255, .18);
+
+    border-color: rgba(77, 142, 255, .75);
+
     color: white;
+
+    transform: translateY(-1rem);
 }
 
-.ImportPresetConfirm
-{
-    background: rgba(120, 200, 255, 0.15);
+.ImportPresetClipboard:active {
+
+    transform: translateY(0);
+
+    background: rgba(77, 142, 255, .28);
+}
+
+.ImportPresetClipboard:disabled {
+
+    opacity: .45;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+//EXPORT PRESET
+
+.importPresetOverlay {
+position: absolute;
+
+    top: -500rem;
+    left: 200rem;
+  
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+
+  animation: fadeIn 0.15s ease-out;
+}
+
+.importPresetDialog {
+  width: 420px;
+  background: rgba(20, 20, 24, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+
+  transform: translateY(0);
+  animation: popIn 0.18s ease-out;
+}
+
+.importPresetHeader {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 12px;
+  letter-spacing: 0.2px;
+}
+
+.importPresetInput {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  outline: none;
+
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #000000;
+
+  font-size: 14px;
+  margin-bottom: 14px;
+
+  transition: all 0.15s ease;
+
+  &:focus {
+    border-color: rgba(120, 160, 255, 0.6);
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.importPresetButtons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.importPresetCancel,
+.importPresetConfirm {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.importPresetCancel {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ddd;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+}
+
+.importPresetConfirm {
+  background: linear-gradient(135deg, #4c7dff, #6a5cff);
+  color: white;
+  font-weight: 500;
+
+  &:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+  }
+
+  &:active {
+    transform: translateY(0px);
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.96);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+
+// PRESET CARDS
+
+.ImportModeGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.ImportModeCard {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 14px;
+  color: white;
+  cursor: pointer;
+  transition: 0.15s ease;
+
+  text-align: left;
+
+  &:hover {
+    transform: translateY(-2px);
+    background: rgba(120, 160, 255, 0.12);
+    border-color: rgba(120, 160, 255, 0.35);
+  }
+}
+
+.ImportModeTitle {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.ImportModeDesc {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+.ImportFileButton {
+    padding: 12rem 18rem;
+    background: rgba(77, 142, 255, .15);
+    border: 1rem solid rgba(77, 142, 255, .3);
+    border-radius: 10rem;
     color: white;
+    cursor: pointer;
+    transition: 0.15s ease;
 }
 
-.ImportPresetConfirm:hover
-{
-    background: rgba(120, 200, 255, 0.25);
+.ImportFileButton:hover {
+    background: rgba(77, 142, 255, .25);
+    transform: translateY(-1rem);
+}
+
+
+.ImportPresetInfo {
+     display: inline-block;
+  font-size: 13px;
+  color: rgb(255, 255, 255);
+}
+
+.ImportPresetWarning {
+  display: inline-block;
+  margin-top: 6px;
+  color: #ffcc66;
+  font-size: 12px;
+}
+
+.ImportPresetTextField {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(20, 20, 24, 0.65);
+  backdrop-filter: blur(10px);
+
+  color: yellow;
+
+
+
+   font-size:14rem;
+
+    font-family:
+        "JetBrains Mono",
+        Consolas,
+        monospace;
+
+
+  outline: none;
+  transition: all 0.18s ease;
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+
+  caret-color: rgba(255, 255, 255, 0.9);
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.14);
+    background: rgba(25, 25, 30, 0.75);
+  }
+
+  &:focus {
+    border-color: rgba(90, 150, 255, 0.7);
+    box-shadow:
+      0 0 0 3px rgba(90, 150, 255, 0.15),
+      0 10px 25px rgba(0, 0, 0, 0.35);
+    background: rgba(25, 25, 30, 0.85);
+  }
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  &::selection {
+    background: rgba(90, 150, 255, 0.35);
+  }
 }
