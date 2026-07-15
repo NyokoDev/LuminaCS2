@@ -26,6 +26,13 @@ namespace LuminaMod.XML
     [Serializable]
     public class GlobalVariables
     {
+
+        /// <summary>
+        /// NGX Mode is enabled or disabled.
+        /// </summary>
+        [XmlElement]
+        public bool NGXMode { get; set; } = false;
+
         /// <summary>
         /// Gets or sets postExposure.
         /// </summary>

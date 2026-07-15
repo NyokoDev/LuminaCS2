@@ -96,6 +96,7 @@
         /// </summary>
         public static bool IsCustomMode { get; set; }
         public GlobalIllumination m_GlobalIllumination { get; private set; }
+        public static float CurrentFPS { get; set; }
 
 
         /// <summary>
@@ -439,6 +440,8 @@
         protected override void OnUpdate()
         {
 
+            FPSSetup();
+
             if (GlobalVariables.Instance.SceneFlowCheckerEnabled)
             {
                 SceneFlowChecker.CheckForErrors();
@@ -459,6 +462,17 @@
             OriginalShadows();
             AmbientOcclusionUpdate();
             UpdateSSR();
+        }
+
+        private void FPSSetup()
+        {
+            if (UnityEngine.Time.deltaTime <= 0f)
+            {
+                RenderEffectsSystem.CurrentFPS = 0f;
+                return;
+            }
+
+            RenderEffectsSystem.CurrentFPS = 1f / UnityEngine.Time.deltaTime;
         }
 
         private void UpdateSSR()

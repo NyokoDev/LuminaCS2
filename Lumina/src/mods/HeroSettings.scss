@@ -372,9 +372,7 @@
 {
     background: rgba(255, 255, 255, 0.07);
 
-    box-shadow:
-        0 0 10rem rgba(120, 200, 255, 0.25),
-        0 0 25rem rgba(120, 200, 255, 0.15);
+
 
     border-color: rgba(120, 200, 255, 0.35);
 
@@ -511,8 +509,7 @@
 
     border: 1rem solid rgba(255,255,255,.06);
 
-    box-shadow:
-        0 40rem 120rem rgba(0,0,0,.55);
+
 
     overflow: hidden;
 }
@@ -611,9 +608,7 @@
 
     border-color:#4E8DFF;
 
-    box-shadow:
-        0 0 0 2rem rgba(78,141,255,.12),
-        0 0 30rem rgba(78,141,255,.18);
+   
 }
 
 .ImportPresetTextarea::placeholder{
@@ -725,16 +720,14 @@
         #2D72EA
     );
 
-    box-shadow:
-        0 8rem 24rem rgba(59,130,246,.35);
+    
 }
 
 .ImportPresetConfirm:hover{
 
     transform:translateY(-1rem);
 
-    box-shadow:
-        0 12rem 30rem rgba(59,130,246,.45);
+ 
 }
 
 .ImportPresetConfirm:disabled{
@@ -743,7 +736,7 @@
 
     cursor:not-allowed;
 
-    box-shadow:none;
+
 }
 
 // IMPORT PRESET CLIPBOARD
@@ -822,10 +815,10 @@ position: absolute;
   width: 420px;
   background: rgba(20, 20, 24, 0.92);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
+  
   border-radius: 14px;
   padding: 18px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+
 
   transform: translateY(0);
   animation: popIn 0.18s ease-out;
@@ -992,7 +985,7 @@ position: absolute;
 
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(20, 20, 24, 0.65);
-  backdrop-filter: blur(10px);
+  
 
   color: yellow;
 
@@ -1009,7 +1002,7 @@ position: absolute;
   outline: none;
   transition: all 0.18s ease;
 
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+
 
   caret-color: rgba(255, 255, 255, 0.9);
 
@@ -1023,9 +1016,7 @@ position: absolute;
 
   &:focus {
     border-color: rgba(90, 150, 255, 0.7);
-    box-shadow:
-      0 0 0 3px rgba(90, 150, 255, 0.15),
-      0 10px 25px rgba(0, 0, 0, 0.35);
+
     background: rgba(25, 25, 30, 0.85);
   }
 

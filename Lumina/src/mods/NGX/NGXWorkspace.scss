@@ -1,0 +1,602 @@
+.NGXWorkspace {
+
+    box-sizing: border-box;
+
+    pointer-events: auto !important;
+    user-select: auto !important;
+
+    position: absolute;
+
+    /*
+    Controlled externally by CS2/UI logic
+    */
+    top: -1000rem;
+
+
+
+
+
+    width: 420px;
+
+    max-height: 700px;
+
+
+    padding: 16px;
+
+
+    overflow-y: auto;
+
+
+    font-family: "Nexa", sans-serif;
+
+    color: white;
+
+
+    background:
+        rgba(20,20,24,0.96);
+
+
+    border-radius: 12px;
+
+
+    backdrop-filter: blur(8px);
+
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,0.45),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+
+
+    animation:
+        NGXOpen .35s cubic-bezier(.2,.8,.2,1);
+}
+
+
+@keyframes NGXOpen {
+
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+
+
+.NGXHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 15px;
+
+
+    h2 {
+        margin: 0;
+
+        font-size: 18px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+
+        animation: FadeSlide 0.4s ease;
+    }
+}
+
+
+@keyframes FadeSlide {
+
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
+
+
+.NGXPanel {
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-bottom: 14px;
+    padding: 12px;
+
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,0.08),
+            rgba(255,255,255,0.03)
+        );
+
+
+    border-radius: 10px;
+
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+
+
+    &:hover {
+
+        transform: translateY(-2px);
+
+        background:
+            rgba(255,255,255,0.08);
+    }
+
+
+
+    h3 {
+
+        margin: 0;
+
+        font-size: 15px;
+        font-weight: 600;
+    }
+
+
+
+    h4 {
+
+        margin: 8px 0 2px;
+
+        font-size: 13px;
+        font-weight: 500;
+
+        opacity: 0.8;
+    }
+
+
+
+    p {
+
+        margin: 5px 0;
+
+        font-size: 12px;
+
+        opacity: 0.6;
+    }
+}
+
+
+
+
+
+
+// SEARCH BOXES
+
+.NGXPanel input {
+
+    height: 32px;
+
+    padding: 0 10px;
+
+
+    border: none;
+    outline: none;
+
+
+    border-radius: 8px;
+
+
+    background:
+        rgba(255,255,255,0.08);
+
+
+    color: white;
+
+
+    font-size: 13px;
+
+
+    transition:
+
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+
+
+
+    &:hover {
+
+        background:
+            rgba(255,255,255,0.12);
+    }
+
+
+
+    &:focus {
+
+        background:
+            rgba(255,255,255,0.16);
+
+
+        transform:
+            scale(1.02);
+
+
+        box-shadow:
+            0 0 0 2px rgba(255,255,255,0.12);
+    }
+
+
+
+    &::placeholder {
+
+        color:
+            rgba(255,255,255,0.45);
+    }
+}
+
+
+
+
+
+
+
+// BUTTON LISTS
+
+.VolumeList,
+.ComponentList {
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 6px;
+
+
+    max-height: 220px;
+
+    overflow-y: auto;
+}
+
+
+
+
+
+
+.VolumeList button,
+.ComponentList button {
+
+    width: 100%;
+
+
+    padding: 8px 10px;
+
+
+    text-align: left;
+
+
+    border: none;
+
+    border-radius: 8px;
+
+
+    cursor: pointer;
+
+
+    color: white;
+
+
+    background:
+        rgba(255,255,255,0.06);
+
+
+
+    transition:
+
+        transform 0.15s ease,
+        background 0.15s ease,
+        box-shadow 0.15s ease;
+
+
+
+    animation:
+        ButtonAppear 0.25s ease backwards;
+
+
+
+    &:hover {
+
+        background:
+            rgba(255,255,255,0.15);
+
+
+        transform:
+            translateX(4px);
+
+
+        box-shadow:
+            0 5px 15px rgba(0,0,0,0.25);
+    }
+
+
+
+    &:active {
+
+        transform:
+            scale(0.97);
+
+
+        background:
+            rgba(255,255,255,0.22);
+    }
+}
+
+
+
+@keyframes ButtonAppear {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(8px);
+    }
+
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+
+
+
+
+
+// EXISTING COMPONENTS
+
+.Component {
+
+    padding: 8px 10px;
+
+
+    border-radius: 8px;
+
+
+    background:
+        rgba(0,0,0,0.25);
+
+
+    font-size: 13px;
+
+
+    border-left:
+        3px solid rgba(255,255,255,0.35);
+
+
+
+    animation:
+        ComponentFade 0.25s ease;
+
+
+    transition:
+        transform 0.2s ease;
+
+
+
+    &:hover {
+
+        transform:
+            translateX(4px);
+    }
+}
+
+
+
+@keyframes ComponentFade {
+
+    from {
+
+        opacity:0;
+
+        transform:
+            translateY(10px);
+    }
+
+
+    to {
+
+        opacity:1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+
+
+
+
+
+
+// SCROLLBAR
+
+.NGXWorkspace,
+.VolumeList,
+.ComponentList {
+
+
+    scrollbar-width:
+        thin;
+
+
+    scrollbar-color:
+        rgba(255,255,255,0.25)
+        transparent;
+
+
+
+    &::-webkit-scrollbar {
+
+        width:
+            6px;
+    }
+
+
+
+    &::-webkit-scrollbar-thumb {
+
+        background:
+            rgba(255,255,255,0.25);
+
+
+        border-radius:
+            10px;
+
+
+        transition:
+            background 0.2s ease;
+    }
+
+
+
+    &::-webkit-scrollbar-thumb:hover {
+
+        background:
+            rgba(255,255,255,0.45);
+    }
+}
+
+
+// SEARCH BOXES
+
+.SearchBox {
+
+    display: flex;
+    align-items: center;
+
+    height: 34px;
+
+    gap: 8px;
+
+    padding: 0 12px;
+
+    border-radius: 10px;
+
+
+    background:
+        rgba(255,255,255,0.06);
+
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+
+    transition:
+        background 0.2s ease,
+        border 0.2s ease,
+        box-shadow 0.2s ease;
+
+
+
+    &:hover {
+
+        background:
+            rgba(255,255,255,0.09);
+    }
+
+
+
+    &:focus-within {
+
+        background:
+            rgba(255,255,255,0.12);
+
+
+        border:
+            1px solid rgba(255,255,255,0.25);
+
+
+        box-shadow:
+            0 0 12px rgba(255,255,255,0.08);
+    }
+}
+
+
+
+.SearchIcon {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 18px;
+
+    color:
+        rgba(255,255,255,0.55);
+
+
+    font-size: 18px;
+
+    pointer-events: none;
+}
+
+.SearchIcon svg {
+    width: 16px;
+    height: 16px;
+}
+
+.SearchBox input {
+
+    flex: 1;
+
+    height: 100%;
+
+    padding: 0;
+
+
+    border: none;
+    outline: none;
+
+
+    background: transparent;
+
+
+    color:
+        rgba(255,255,255,0.95);
+
+
+    font-size: 13px;
+
+
+
+    &::placeholder {
+
+        color:
+            rgba(255,255,255,0.4);
+    }
+
+
+
+    &:focus {
+
+        background: transparent;
+
+        transform: none;
+
+        box-shadow: none;
+    }
+}

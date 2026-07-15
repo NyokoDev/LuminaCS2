@@ -25,16 +25,13 @@ font-family:
             rgba(15, 18, 25, 0.99) 100%
         );
 
-    backdrop-filter: blur(40px);
+    
 
     border-radius: 22rem;
 
     border: 1rem solid rgba(110, 180, 255, 0.15);
 
-    box-shadow:
-        0 0 0 1rem rgba(255,255,255,0.03) inset,
-        0 20rem 80rem rgba(0,0,0,0.45),
-        0 0 50rem rgba(0,120,255,0.08);
+
 
     overflow-y: auto;
     overflow-x: hidden;
@@ -153,9 +150,7 @@ font-family:
 
     border: 2rem solid rgba(120,180,255,0.40);
 
-    box-shadow:
-        0 0 0 1rem rgba(255,255,255,0.03) inset,
-        0 4rem 12rem rgba(0,0,0,0.35);
+   
 
     pointer-events: auto;
 }
@@ -185,7 +180,7 @@ font-family:
 
     filter:
         invert(100%)
-        drop-shadow(0 0 8rem rgba(0,180,255,0.7));
+
 }
 
 .hdri-checkbox-image

@@ -18,6 +18,7 @@ namespace Lumina
     using Lumina.API;
     using Lumina.Locale;
     using Lumina.ManagerSystems;
+    using Lumina.NGX;
     using Lumina.Patches;
     using Lumina.Systems;
     using Lumina.XML;
@@ -113,6 +114,10 @@ namespace Lumina
             updateSystem.UpdateAfter<DisableWaterSystem>(SystemUpdatePhase.MainLoop);
 
             updateSystem.UpdateAt<UISystem>(SystemUpdatePhase.UIUpdate);
+
+            // NGX System
+            updateSystem.UpdateAt<NGXUISystem>(SystemUpdatePhase.UIUpdate);
+            updateSystem.UpdateAt<NGXWorkspace>(SystemUpdatePhase.GameSimulation);
 
             updateSystem.UpdateAt<TimeOfDayProcessor>(SystemUpdatePhase.GameSimulation);
 

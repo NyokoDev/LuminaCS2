@@ -53,11 +53,13 @@
         private float SunDiameterValue { get; set; }
         public float SunIntensityValue { get; set; }
         public float SunFlareSizeValue { get; set; }
+       
 
         /// <inheritdoc/>
         protected override void OnCreate()
         {
             base.OnCreate();
+            CheckVersionOnce();
             InitializeLutName();
             CreateBindings();
             m_PlanetarySystem = World.GetExistingSystemManaged<PlanetarySystem>();
@@ -220,8 +222,14 @@
 
             ImportLuminaPresetXML();
             AddBinding(new TriggerBinding<string>(Mod.MODUI, "ImportLuminaPresetByName", ImportLuminaPresetByName));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetFPS", () => SendFPS()));
 
 
+        }
+
+        private float SendFPS()
+        {
+            return RenderEffectsSystem.CurrentFPS;
         }
 
         private void ImportLuminaPresetByName(string presetName)
@@ -285,7 +293,7 @@
             AddBinding(new TriggerBinding(Mod.MODUI, "StopUpdateNotification", StopUpdateNotification));
         }
 
-        private bool UpdateNotificationBool()
+        private bool CheckVersionOnce()
         {
             string url = "https://raw.githubusercontent.com/NyokoDev/LuminaCS2/main/XML/version.txt";
             string currentVersion = GlobalPaths.Version;
@@ -300,6 +308,34 @@
                     if (currentVersion != latestVersion)
                     {
                         Mod.Log.Info($"Lumina version mismatch. Current: {currentVersion} | Latest: {latestVersion}");
+                    }
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Mod.Log.Info("Error checking version: " + ex.Message);
+                return false;
+            }
+        }
+        
+
+        private bool UpdateNotificationBool()
+        {
+            string url = "https://raw.githubusercontent.com/NyokoDev/LuminaCS2/main/XML/version.txt";
+            string currentVersion = GlobalPaths.Version;
+
+            try
+            {
+                using (WebClient client = new WebClient())
+                {
+                    string latestVersion = client.DownloadString(url).Trim();
+
+                    // If versions mismatch, reset notification
+                    if (currentVersion != latestVersion)
+                    {
+                      
                         GlobalVariables.Instance.UpdateNotification = true;
                     }
 
@@ -309,7 +345,7 @@
                         return false;
                     }
 
-                    Mod.Log.Info($"Lumina version confirmed: {currentVersion}");
+   
                     return true;
                 }
             }

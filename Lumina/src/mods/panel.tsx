@@ -39,6 +39,7 @@ import "././Cubemaps/Cubemaps.scss";
 import { TonemappingPanel } from "./TonemappingPanel/TonemappingPanel";
 import "././TonemappingPanel/TonemappingPanelNew.scss";
 import { SSRPanelBase } from "./ScreenSpaceRefraction/SSRPanel";
+import NGXWorkspace from "./NGX/NGXWorkspace";
 
 
 
@@ -56,7 +57,11 @@ export const HueShift$ = bindValue<number>(mod.id, 'GetHueShift');
 export const hueshiftActive$ = bindValue<boolean>(mod.id, 'GethueshiftCheckbox');
 export const Saturation$ = bindValue<number>(mod.id, 'GetSaturation');
 export const saturationActive$ = bindValue<boolean>(mod.id, 'GetsaturationCheckbox');
-
+export const fps = bindValue<number>("Lumina", "GetFPS");
+export const $ngxMode = bindValue<boolean>(
+    mod.id,
+    "NGXMode"
+);
 
 
 // White Balance
@@ -491,6 +496,9 @@ const [selectedPath, setSelectedPath] = useState<string>("");
 const [presetName, setPresetName] = useState("");
 const [exportPresetActive, setExportPresetActive] = useState(false);
 const [presetXML, setPresetXML] = useState("");
+const ngxMode = useValue($ngxMode);
+
+
 
 const reloadCubemaps = () =>
 {
@@ -498,10 +506,11 @@ const reloadCubemaps = () =>
 };
 
 return (
-
-  
-
-  <div className="Global"
+    <>
+        {ngxMode ? (
+            <NGXWorkspace />
+        ) : (
+             <div className="Global"
 
   
   
@@ -1758,9 +1767,12 @@ id="Global"
 
 
           </div>
-          
-    
-      
+        )}
+    </>
+);
+
+
+}
 
 
 
@@ -1769,8 +1781,3 @@ id="Global"
 
 
 
-
-
-
-
-)}

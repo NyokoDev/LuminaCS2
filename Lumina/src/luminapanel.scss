@@ -43,10 +43,6 @@ font-family:
     overflow-y: auto;
     overflow-x: auto;
 
-    box-shadow:
-        0 2rem 8rem rgba(0, 0, 0, 0.18),
-        0 12rem 32rem rgba(0, 0, 0, 0.28),
-        0 24rem 64rem rgba(0, 0, 0, 0.20);
 
     border: 1rem solid rgba(255, 255, 255, 0.06);
 
@@ -181,8 +177,7 @@ font-family:
 .PlanetaryButton:hover,
 .PlanetaryButtonDeselected:hover {
   transform: translateY(-15%) scale(1.05);
-  /* Optional: add a subtle shadow or glow */
-  /* box-shadow: 0 0 15px rgba(0, 150, 255, 0.5); */
+
 }
 
 
@@ -1104,7 +1099,7 @@ $hueshift-top: 80rem;
     display: flex;
     top: 20rem;
     width: 300rem;
-    box-shadow: #000;
+
 }
 
 .TimeOfDaySlider
@@ -1112,7 +1107,7 @@ $hueshift-top: 80rem;
     font-size: 20rem;
     left: 250rem;
     color: white;
-    box-shadow: #000;
+   
 }
 
 .LuminaVersion_Image
@@ -1127,7 +1122,7 @@ $hueshift-top: 80rem;
     background-repeat: no-repeat;
     background-image: url('../../Icons/version.png');
     border: 5px solid #000; /* Example border: 5px solid black */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Example box shadow: offset-x, offset-y, blur-radius, color */
+    
 }
 
 .Version_Text
@@ -1167,14 +1162,13 @@ $hueshift-top: 80rem;
   background-size: 40rem 40rem; /* icon size */
   width: 40rem;
   height: 40rem;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2); /* subtle base shadow */
+  
 }
 
 /* Hover animation */
 .Version_Buttons button:hover {
   transform: scale(1.1); /* slightly enlarge */
-  box-shadow: 0 0 20px 5px rgba(255,255,255,0.7), 
-              0 0 40px 10px rgba(255,255,255,0.3); /* glowing effect */
+  
 }
 
 /* Discord */
@@ -1185,7 +1179,7 @@ $hueshift-top: 80rem;
 
 .Version_Buttons button.discord:hover {
   background-color: #4752c4;
-  box-shadow: 0 0 20px 5px #5865f2, 0 0 40px 10px #5865f2;
+
 }
 
 /* PayPal */
@@ -1196,7 +1190,7 @@ $hueshift-top: 80rem;
 
 .Version_Buttons button.paypal:hover {
   background-color: #00457c;
-  box-shadow: 0 0 20px 5px #0070ba, 0 0 40px 10px #0070ba;
+
 }
 
 /* Ko-fi */
@@ -1207,7 +1201,7 @@ $hueshift-top: 80rem;
 
 .Version_Buttons button.kofi:hover {
   background-color: #e14b48;
-  box-shadow: 0 0 20px 5px #ff5e5b, 0 0 40px 10px #ff5e5b;
+
 }
 
 

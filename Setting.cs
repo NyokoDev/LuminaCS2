@@ -50,9 +50,8 @@ namespace Lumina
     public class Setting : ModSetting
     {
 
-       
-    
-        
+
+
 
         /// <summary>
         /// Main section.
@@ -110,6 +109,23 @@ namespace Lumina
             }
         }
 
+
+        /// <summary>
+        /// NGX Mode toggle is enabled or disabled.
+        /// </summary>
+        [SettingsUISection(KSection, KToggleGroup)]
+        public bool NGXMode
+        {
+            get => GlobalVariables.Instance.NGXMode;
+            set
+            {
+                GlobalVariables.Instance.NGXMode = value;
+            }
+        }
+
+        /// <summary>
+        /// Enable debug logging toggle is enabled or disabled.
+        /// </summary>
         [SettingsUIAdvanced]
         [SettingsUISection(KSection, KToggleGroup)]
         public bool EnableDebugLogging
@@ -122,6 +138,9 @@ namespace Lumina
             }
         }
 
+        /// <summary>
+        /// Performance mode is enabled or disabled.
+        /// </summary>
         [SettingsUIAdvanced]
         [SettingsUISection(KSection, KToggleGroup)]
         public bool EnablePerformanceMode
@@ -661,7 +680,6 @@ namespace Lumina
             }
         }
 
-        
 
 
 

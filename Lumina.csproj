@@ -60,6 +60,7 @@
 		<None Remove="LUTS\Purple.cube" />
 		<None Remove="LUTS\Reds.cube" />
 		<None Remove="LUTS\Reds_Oranges_Yellows.cube" />
+		<None Remove="NGX\NGXUISystem.cs~RF22dbef5.TMP" />
 		<None Remove="stylecop.json" />
 		<None Remove="Textures\RoadWearTexture_colour.png" />
 		<None Remove="Textures\RoadWearTexture_normal.png" />

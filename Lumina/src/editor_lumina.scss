@@ -23,7 +23,7 @@
 
     transition:
         transform 0.15s ease,
-        box-shadow 0.15s ease,
+       
         filter 0.15s ease;
 
     overflow: hidden;
@@ -32,8 +32,7 @@
     {
         transform: translateY(-1rem);
 
-        box-shadow:
-            0rem 4rem 12rem rgba(0, 0, 0, 0.35);
+      
     }
 
     &:active
@@ -47,8 +46,6 @@
     z-index: 1000;
     pointer-events: auto;
 
-    box-shadow:
-        0rem 0rem 16rem rgba(130, 190, 255, 0.85);
 
     filter: brightness(1.15);
 }
@@ -92,10 +89,10 @@
     height: 700rem;
 
     background: rgba(20, 20, 20, 0.92);
-    backdrop-filter: blur(20rem);
+    
 
     border-radius: 12rem;
     pointer-events: all;
 
-    box-shadow: 0 20rem 60rem rgba(0, 0, 0, 0.5);
+    
 }
