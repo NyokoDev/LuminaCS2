@@ -2,301 +2,442 @@ import React, { useState } from "react";
 import { bindValue, trigger, useValue } from "cs2/api";
 import "./NGXWorkspace.scss";
 
-
-// ==============================
-// UNITY VALUES (READ)
-// ==============================
-
-export const volumes = bindValue<string[]>(
-    "Lumina",
-    "GetVolumes"
-);
-
-export const selectedVolume = bindValue<string>(
-    "Lumina",
-    "SelectedVolume"
-);
-
-export const volumeComponents = bindValue<string[]>(
-    "Lumina",
-    "GetVolumeComponents"
-);
-
-export const availableComponents = bindValue<string[]>(
-    "Lumina",
-    "GetAvailableComponents"
-);
+import NGXInspector from "./NGXInspector";
 
 
-// ==============================
-// UNITY ACTIONS (WRITE)
-// ==============================
+// ======================================================
+// UNITY DATA TYPES
+// ======================================================
+
+export interface ComponentProperty {
+    name: string;
+    type: string;
+    value: any;
+
+    min?: number;
+    max?: number;
+
+    readOnly?: boolean;
+
+    group?: string;
+
+    // Enum values
+    options?: string[];
+}
+
+
+export interface ComponentMetadata {
+
+    component: string;
+
+    properties: ComponentProperty[];
+
+}
+
+
+// ======================================================
+// UNITY BINDINGS
+// ======================================================
+
+export const volumes =
+    bindValue<string[]>(
+        "Lumina",
+        "GetVolumes"
+    );
+
+
+export const selectedVolume =
+    bindValue<string>(
+        "Lumina",
+        "SelectedVolume"
+    );
+
+
+export const volumeComponents =
+    bindValue<string[]>(
+        "Lumina",
+        "GetVolumeComponents"
+    );
+
+
+export const availableComponents =
+    bindValue<string[]>(
+        "Lumina",
+        "GetAvailableComponents"
+    );
+
+
+export const selectedComponent =
+    bindValue<string>(
+        "Lumina",
+        "SelectedComponent"
+    );
+
+
+export const componentProperties =
+    bindValue<ComponentMetadata>(
+        "Lumina",
+        "GetComponentProperties"
+    );
+
+
+
+// ======================================================
+// ACTIONS
+// ======================================================
 
 const SelectVolume = "SelectVolume";
+
+const SelectComponent = "SelectComponent";
 
 const AddComponent = "AddComponent";
 
 
 
-// ==============================
+// ======================================================
 // NGX WORKSPACE
-// ==============================
+// ======================================================
 
 export default function NGXWorkspace() {
 
-    const [volumeSearch, setVolumeSearch] = useState("");
-    const [componentSearch, setComponentSearch] = useState("");
 
-    const volumeList = useValue(volumes) ?? [];
-    const currentVolume = useValue(selectedVolume) ?? "";
-    const components = useValue(volumeComponents) ?? [];
-    const available = useValue(availableComponents) ?? [];
+    const [volumeSearch,setVolumeSearch]
+        = useState("");
 
-    const filteredVolumes = volumeList.filter(volume =>
-        volume
-            .toLowerCase()
-            .includes(volumeSearch.toLowerCase())
-    );
+    const [componentSearch,setComponentSearch]
+        = useState("");
 
 
-    const filteredComponents = available.filter(component =>
-        component
-            .toLowerCase()
-            .includes(componentSearch.toLowerCase())
-    );
+    const volumeList =
+        useValue(volumes) ?? [];
+
+
+    const currentVolume =
+        useValue(selectedVolume) ?? "";
+
+
+    const components =
+        useValue(volumeComponents) ?? [];
+
+
+    const available =
+        useValue(availableComponents) ?? [];
+
+
+    const currentComponent =
+        useValue(selectedComponent) ?? "";
+
+
+    const metadata =
+        useValue(componentProperties);
+
+
+
+    const filteredVolumes =
+        volumeList.filter(v =>
+            v.toLowerCase()
+             .includes(
+                volumeSearch.toLowerCase()
+             )
+        );
+
+
+
+    const filteredComponents =
+        available.filter(c =>
+            c.toLowerCase()
+             .includes(
+                componentSearch.toLowerCase()
+             )
+        );
+
 
 
 
     return (
-        <div className="NGXWorkspace">
+
+<div className="NGXWorkspace">
 
 
-            <div className="NGXHeader">
-                <h2>
-                   Lumina NGX - Workspace
-                </h2>
-            </div>
+{/* =====================================================
+    LEFT PANEL
+===================================================== */}
 
-{/* VOLUME SELECTION */}
-
-<section className="NGXPanel">
-
-    <h3>
-        Select Volume
-    </h3>
+<section className="NGXPanel NGXVolumes">
 
 
-    {
-        currentVolume && (
-
-            <button
-                className="ChangeVolume"
-                onClick={() =>
-                    trigger(
-                        "Lumina",
-                        SelectVolume,
-                        ""
-                    )
-                }
-            >
-                Change Volume
-            </button>
-
-        )
-    }
+<h2>
+Volumes
+</h2>
 
 
-    {
-        !currentVolume && (
+<div className="SearchBox">
 
-            <>
-                <div className="SearchBox">
+<input
 
-                    <span className="SearchIcon">
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                        >
-                            <circle
-                                cx="11"
-                                cy="11"
-                                r="7"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                            />
+placeholder="Search volumes..."
 
-                            <path
-                                d="M20 20L16.5 16.5"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                            />
+value={volumeSearch}
 
-                        </svg>
-                    </span>
+onChange={(e)=>
+    setVolumeSearch(
+        e.target.value
+    )
+}
+
+/>
+
+</div>
 
 
-                    <input
-                        placeholder="Search volumes..."
-                        value={volumeSearch}
-                        onChange={(e) =>
-                            setVolumeSearch(e.target.value)
-                        }
-                    />
 
-                </div>
+<div className="VolumeList">
 
 
-                <div className="VolumeList">
+{
+filteredVolumes.map(volume =>
 
-                    {
-                        filteredVolumes.map(volume => (
+<button
 
-                            <button
-                                key={volume}
-                                onClick={() =>
-                                    trigger(
-                                        "Lumina",
-                                        SelectVolume,
-                                        volume
-                                    )
-                                }
-                            >
-                                {volume}
-                            </button>
+key={volume}
 
-                        ))
-                    }
+className={
+currentVolume === volume
+?
+"active"
+:
+""
+}
 
-                </div>
-            </>
+onClick={()=>
 
-        )
-    }
+trigger(
+    "Lumina",
+    SelectVolume,
+    volume
+)
+
+}
+
+>
+
+{volume}
+
+</button>
+
+)
+
+}
+
+
+</div>
+
 
 </section>
 
 
-            {/* SELECTED VOLUME */}
-
-            {
-                currentVolume && (
-
-                    <section className="NGXPanel">
 
 
-                        <h3>
-    Editing: {currentVolume}
+
+
+{/* =====================================================
+    CENTER PANEL
+===================================================== */}
+
+<section className="NGXPanel NGXComponents">
+
+
+<h2>
+
+{
+currentVolume
+?
+currentVolume
+:
+"No Volume Selected"
+}
+
+</h2>
+
+
+
+<h3>
+Components
 </h3>
 
 
 
-
-                        <h4>
-                            Current Components
-                        </h4>
+<div className="ComponentList">
 
 
+{
 
-                        {
-                            components.length === 0 ? (
-
-                                <p>
-                                    No components attached
-                                </p>
-
-                            ) : (
-
-                                components.map(component => (
-
-                                    <div
-                                        className="Component"
-                                        key={component}
-                                    >
-                                        {component}
-                                    </div>
-
-                                ))
-
-                            )
-                        }
+components.map(component =>
 
 
+<button
+
+key={component}
 
 
+className={
+currentComponent === component
+?
+"active"
+:
+""
+}
 
 
-                        <h4>
-                            Add Component
-                        </h4>
+onClick={()=>
+
+trigger(
+    "Lumina",
+    SelectComponent,
+    component
+)
+
+}
 
 
+>
 
-                        <div className="SearchBox">
-<span className="SearchIcon">
-    <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-    >
-        <circle
-            cx="11"
-            cy="11"
-            r="7"
-            stroke="currentColor"
-            strokeWidth="2"
-        />
+{component}
 
-        <path
-            d="M20 20L16.5 16.5"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-        />
-    </svg>
-</span>
+</button>
 
-    <input
-        placeholder="Search components..."
-        value={componentSearch}
-        onChange={(e) =>
-            setComponentSearch(e.target.value)
-        }
-    />
+
+)
+
+
+}
+
+
 </div>
 
 
-                        <div className="ComponentList">
 
-                            {
-                                filteredComponents.map(component => (
 
-                                    <button
-                                        key={component}
-                                        onClick={() =>
-                                            trigger(
-                                                "Lumina",
-                                                AddComponent,
-                                                component
-                                            )
-                                        }
-                                    >
-                                        + {component}
-                                    </button>
-
-                                ))
-                            }
-
-                        </div>
+<h3>
+Add Component
+</h3>
 
 
 
-                    </section>
-
-                )
-            }
+<div className="SearchBox">
 
 
-        </div>
+<input
+
+placeholder="Search components..."
+
+value={componentSearch}
+
+onChange={(e)=>
+
+setComponentSearch(
+    e.target.value
+)
+
+}
+
+/>
+
+
+</div>
+
+
+
+
+<div className="AddComponentList">
+
+
+{
+
+filteredComponents.map(component =>
+
+
+<button
+
+key={component}
+
+onClick={()=>
+
+trigger(
+    "Lumina",
+    AddComponent,
+    component
+)
+
+}
+
+
+>
+
++ {component}
+
+</button>
+
+
+)
+
+
+}
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+{/* =====================================================
+    RIGHT PANEL
+===================================================== */}
+
+
+
+<section className="NGXPanel NGXInspectorPanel">
+
+
+{
+
+currentComponent && metadata ?
+
+
+<NGXInspector
+
+component={currentComponent}
+
+metadata={metadata}
+
+
+/>
+
+
+:
+
+<div className="EmptyInspector">
+
+Select a component
+
+</div>
+
+
+}
+
+
+</section>
+
+
+
+</div>
+
+
     );
+
 }
