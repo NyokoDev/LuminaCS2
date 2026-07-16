@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { bindValue, trigger, useValue } from "cs2/api";
 import "./NGXWorkspace.scss";
 import "./NGXNotice.scss";
+import "./NGXConfirmation.scss";
 import LuminaLogo from "../../img/Lumina.svg"
 
 
@@ -42,7 +43,7 @@ export const componentProperties = bindValue<any[]>(
 const SelectVolume = "SelectVolume";
 const SelectComponent = "SelectComponent";
 const AddComponent = "AddComponent";
-
+const RemoveComponent = "RemoveComponent";
 
 
 // ==============================
@@ -104,7 +105,7 @@ const beginDrag = (e: React.MouseEvent) => {
     const [volumeSearch, setVolumeSearch] = useState("");
     const [componentSearch, setComponentSearch] = useState("");
     const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
-    
+    const [removeTarget, setRemoveTarget] = useState<string | null>(null);
 
     const volumeList = useValue(volumes) ?? [];
     const currentVolume = useValue(selectedVolume) ?? "";
@@ -308,17 +309,36 @@ const beginDrag = (e: React.MouseEvent) => {
         className={`Component ${
             selectedComponent === component ? "Selected" : ""
         }`}
-        onClick={() => {
-    setSelectedComponent(component);
-
-    trigger(
-        "Lumina",
-        "SelectComponent",
-        component
-    );
-}}
     >
-        {component}
+
+        <div
+            className="ComponentName"
+            onClick={() => {
+
+                setSelectedComponent(component);
+
+                trigger(
+                    "Lumina",
+                    SelectComponent,
+                    component
+                );
+
+            }}
+        >
+            {component}
+        </div>
+
+
+        <button
+            className="RemoveComponent"
+            onClick={() =>
+                setRemoveTarget(component)
+            }
+        >
+            ×
+        </button>
+
+
     </div>
 
 ))
@@ -441,6 +461,64 @@ const beginDrag = (e: React.MouseEvent) => {
     )
 }
 
+{
+removeTarget && (
+
+<div className="NGXConfirmOverlay">
+
+    <div className="NGXConfirm">
+
+        <h3>
+            Remove Component?
+        </h3>
+
+        <p>
+            Are you sure you want to remove the component? 
+            
+            This action cannot be undone.
+            This will remove the component from the selected volume.
+
+            To restore the component if unsaved, restart the game.
+        </p>
+
+
+        <div className="NGXConfirmButtons">
+
+            <button
+                className="Cancel"
+                onClick={() =>
+                    setRemoveTarget(null)
+                }
+            >
+                Cancel
+            </button>
+
+
+            <button
+                className="Danger"
+                onClick={() => {
+
+                    trigger(
+                        "Lumina",
+                        RemoveComponent,
+                        removeTarget
+                    );
+
+                    setRemoveTarget(null);
+
+                }}
+            >
+                Remove
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+)
+}
 
         </div>
     );

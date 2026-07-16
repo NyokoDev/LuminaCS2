@@ -84,6 +84,15 @@ namespace Lumina.NGX
         {
             base.OnCreate();
 
+            AddBinding(
+             new TriggerBinding<string>(
+                 Mod.MODUI,
+                 "RemoveComponent",
+                 RemoveComponent
+             )
+         );
+
+
             AddUpdateBinding(
     new GetterValueBinding<string[]>(
         Mod.MODUI,
@@ -160,6 +169,35 @@ namespace Lumina.NGX
             );
         }
 
+        // REMOVE COMPONENT
+        // REMOVE COMPONENT
+        private void RemoveComponent(string componentName)
+        {
+            if (string.IsNullOrEmpty(componentName))
+                return;
+
+
+            if (selectedVolume == null)
+                return;
+
+
+            if (selectedVolume.profile == null)
+                return;
+
+
+            var component = selectedVolume.profile.components
+                .FirstOrDefault(x => x.GetType().Name == componentName);
+
+
+            if (component == null)
+                return;
+
+
+            selectedVolume.profile.components.Remove(component);
+
+
+            selectedComponent = null;
+        }
 
         // SELECT COMPONENT
         private void SelectComponent(string name)

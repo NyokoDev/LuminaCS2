@@ -1,0 +1,144 @@
+.Component {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 8px;
+
+    min-width: 0;
+
+}
+
+
+.ComponentName {
+
+    flex: 1;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    cursor: pointer;
+
+}
+
+.RemoveComponent {
+
+    width:24px;
+    height:24px;
+
+    flex-shrink:0;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:rgba(255,80,80,.15);
+
+    color:white;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+
+    &:hover {
+
+        background:rgba(255,80,80,.45);
+
+    }
+
+}
+
+
+.NGXConfirmOverlay {
+
+    position:absolute;
+    top: 200rem;
+
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(0,0,0,.55);
+
+    z-index:999;
+
+}
+
+
+
+.NGXConfirm {
+
+    width:320px;
+
+    padding:20px;
+
+    border-radius:14px;
+
+    background:#16181d;
+
+    border:1px solid rgba(255,255,255,.1);
+
+
+    h3 {
+        margin:0 0 10px;
+    }
+
+
+    p {
+
+        color:rgba(255,255,255,.7);
+
+        font-size:13px;
+
+    }
+
+}
+
+
+
+.NGXConfirmButtons {
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:10px;
+
+    margin-top:20px;
+
+    .Cancel {
+        color: green;
+        background-color: greenyellow;
+    }
+
+    button {
+
+        padding:8px 14px;
+
+        border-radius:8px;
+
+        border:none;
+
+        cursor:pointer;
+
+    }
+
+
+    .Danger {
+
+        background:#d94b4b;
+
+        color:white;
+
+    }
+
+}
