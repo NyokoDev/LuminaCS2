@@ -389,7 +389,8 @@ namespace Lumina.NGX
 
 
             selectedComponent = added;
-
+            added.active = true;
+            
 
             Mod.Log.Info(
                 "NGX Added: " + componentName
