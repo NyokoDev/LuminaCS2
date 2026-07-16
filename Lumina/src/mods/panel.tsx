@@ -48,6 +48,8 @@ export let ColorAdjustmentsEnabled = true;
 export let ToneMappingEnabled = false;
 
 
+
+
 // ColorAdjustments
 export const PostExposure$ = bindValue<number>(mod.id, 'PostExposure');
 export const PostExposureActive$ = bindValue<boolean>(mod.id, 'GetPostExposureCheckbox');
@@ -1458,6 +1460,10 @@ id="Global"
             <div className="LuminaTitle">
                 LUMINA
             </div>
+
+<div className="LuminaTitleNGX">
+    If you want to use Lumina NGX, activate it via settings.
+</div>
 
             <div className="LuminaSubtitle">
                 Advanced Visual Enhancement Suite
