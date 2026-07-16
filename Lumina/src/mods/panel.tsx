@@ -1470,7 +1470,7 @@ id="Global"
             </div>
 
             <div className="VersionBadge">
-                VERSION 3.6.2
+                VERSION 3.6.3
             </div>
 
         </div>

@@ -361,21 +361,46 @@ namespace Lumina.NGX
         }
 
         // TOGGLE COMPONENT ACTIVE OR INACTIVE
+        // TOGGLE COMPONENT ACTIVE AND INTERNAL ENABLE PARAMETER
         private void ToggleComponent(string componentName)
         {
             if (selectedVolume == null || selectedVolume.profile == null)
                 return;
 
+
             var component = selectedVolume.profile.components
                 .FirstOrDefault(x => x.GetType().Name == componentName);
+
 
             if (component == null)
                 return;
 
-            component.active = !component.active;
+
+            // Toggle component active state
+            bool newState = !component.active;
+
+            component.active = newState;
+
+
+            // Toggle internal "enable" BoolParameter if it exists
+            var enableField = component.GetType().GetField(
+                "enable",
+                System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.Public |
+                System.Reflection.BindingFlags.NonPublic
+            );
+
+
+            if (enableField != null)
+            {
+                var parameter = enableField.GetValue(component);
+
+                if (parameter is BoolParameter boolParameter)
+                {
+                    boolParameter.value = newState;
+                }
+            }
         }
-
-
 
 
 
@@ -434,15 +459,37 @@ namespace Lumina.NGX
 
 
             var added =
-                selectedVolume.profile.Add(
-                    componentType,
-                    true
-                );
+    selectedVolume.profile.Add(
+        componentType,
+        true
+    );
+
+
+            // Enable VolumeComponent
+            added.active = true;
+
+
+            // Enable internal enable parameter if available
+            var enableField = componentType.GetField(
+                "enable",
+                System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.Public |
+                System.Reflection.BindingFlags.NonPublic
+            );
+
+            if (enableField != null)
+            {
+                var parameter = enableField.GetValue(added);
+
+                if (parameter is BoolParameter boolParameter)
+                {
+                    boolParameter.value = true;
+                }
+            }
 
 
             selectedComponent = added;
-            added.active = true;
-            
+
 
             Mod.Log.Info(
                 "NGX Added: " + componentName
