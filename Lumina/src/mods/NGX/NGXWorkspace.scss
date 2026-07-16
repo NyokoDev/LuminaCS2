@@ -6,7 +6,7 @@
     user-select: auto !important;
 
     position: absolute;
-will-change: transform;
+    /* removed will-change to avoid unnecessary compositing layers */
     /*
     Controlled externally by CS2/UI logic
     */
@@ -39,12 +39,10 @@ will-change: transform;
     border-radius: 12px;
 
 
-    backdrop-filter: blur(8px);
+    
 
 
-    box-shadow:
-        0 20px 60px rgba(0,0,0,0.45),
-        inset 0 1px 0 rgba(255,255,255,0.08);
+    
 
 
     animation:
@@ -70,7 +68,6 @@ will-change: transform;
 
 .NGXHeader {
     cursor: grab;
-user-select: none;
 
 
     &:active {
@@ -109,21 +106,13 @@ user-select: none;
 
     flex-shrink: 0;
 
-    filter:
-    invert(100%)
-        drop-shadow(0 0 8px rgba(0,180,255,.35));
-
-    transition:
-        transform .2s ease,
-        filter .2s ease;
+    /* avoid CSS filters (expensive); keep simple transform animation */
+    transition: transform .2s ease;
 }
 
 .NGXHeader:hover .NGXLogo {
 
     transform: rotate(-8deg) scale(1.08);
-
-    filter:
-        drop-shadow(0 0 12px rgba(0,180,255,.6));
 }
 
 
@@ -357,8 +346,8 @@ user-select: none;
             translateX(4px);
 
 
-        box-shadow:
-            0 5px 15px rgba(0,0,0,0.25);
+        /* reduced shadow to lower paint cost */
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     }
 
 
@@ -541,36 +530,7 @@ user-select: none;
 
 
 
-    &::-webkit-scrollbar {
 
-        width:
-            6px;
-    }
-
-
-
-    &::-webkit-scrollbar-thumb {
-
-        background:
-            rgba(255,255,255,0.25);
-
-
-        border-radius:
-            10px;
-
-
-        transition:
-            background 0.2s ease;
-    }
-
-
-
-    &::-webkit-scrollbar-thumb:hover {
-
-        background:
-            rgba(255,255,255,0.45);
-    }
-}
 
 
 // SEARCH BOXES
@@ -831,4 +791,5 @@ user-select: none;
 
     
     text-align: right;
+}
 }

@@ -10,7 +10,6 @@
 
 }
 
-
 .ComponentName {
 
     flex: 1;
@@ -18,9 +17,7 @@
     min-width: 0;
 
     overflow: hidden;
-
     text-overflow: ellipsis;
-
     white-space: nowrap;
 
     cursor: pointer;
@@ -29,117 +26,106 @@
 
 .RemoveComponent {
 
-    width:24px;
-    height:24px;
+    width: 24px;
+    height: 24px;
 
-    flex-shrink:0;
+    flex-shrink: 0;
 
-    border:none;
+    border: none;
+    border-radius: 50%;
 
-    border-radius:50%;
+    background: rgba(255,80,80,.15);
 
-    background:rgba(255,80,80,.15);
+    color: white;
 
-    color:white;
+    font-size: 16px;
 
-    font-size:16px;
+    cursor: pointer;
 
-    cursor:pointer;
-
+    transition: background .15s ease;
 
     &:hover {
 
-        background:rgba(255,80,80,.45);
+        background: rgba(255,80,80,.35);
 
     }
 
 }
-
 
 .NGXConfirmOverlay {
 
-    position:absolute;
+    position: absolute;
+
     top: 200rem;
-    right:300rem;
+    right: 300rem;
 
+    align-items: center;
+    justify-content: center;
 
-    
+    background: rgba(0,0,0,.55);
 
-    align-items:center;
-    justify-content:center;
-
-    background:rgba(0,0,0,.55);
-
-    z-index:999;
+    z-index: 999;
 
 }
-
-
 
 .NGXConfirm {
 
-    width:320px;
+    width: 320px;
 
-    padding:20px;
+    padding: 20px;
 
-    border-radius:14px;
+    border-radius: 14px;
 
-    background:#16181d;
+    background: #16181d;
 
-    border:1px solid rgba(255,255,255,.1);
-
+    border: 1px solid rgba(255,255,255,.1);
 
     h3 {
-        margin:0 0 10px;
+        margin: 0 0 10px;
         color: white;
     }
 
-
     p {
-color: white;
-        
-
-        font-size:13px;
-
+        color: white;
+        font-size: 13px;
     }
 
 }
 
-
-
 .NGXConfirmButtons {
 
-    display:flex;
+    display: flex;
 
-    justify-content:flex-end;
+    justify-content: flex-end;
 
-    gap:10px;
+    gap: 10px;
 
-    margin-top:20px;
-
-    .Cancel {
-        color: green;
-        background-color: greenyellow;
-    }
+    margin-top: 20px;
 
     button {
 
-        padding:8px 14px;
+        padding: 8px 14px;
 
-        border-radius:8px;
+        border: none;
+        border-radius: 8px;
 
-        border:none;
+        cursor: pointer;
 
-        cursor:pointer;
+        transition: background .15s ease;
 
     }
 
+    .Cancel {
+
+        background: greenyellow;
+        color: green;
+
+    }
 
     .Danger {
 
-        background:#d94b4b;
-
-        color:white;
+        background: #d94b4b;
+        color: white;
 
     }
 

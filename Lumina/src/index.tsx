@@ -1,6 +1,6 @@
 import { ModRegistrar } from "cs2/modding";
 import { EditorButton} from "mods/editor_button";
-import { LuminaButton } from "mods/hello-world";
+import { LuminaButton } from "mods/MainLuminaButton";
 import { YourPanelComponent } from "mods/panel";
 import { LuminaButton2 } from "mods/set-to-lumina-button";
 import { TimeOfDaySliderModuleRegistryExtend } from "mods/time_of_day_slider";
