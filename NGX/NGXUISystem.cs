@@ -202,6 +202,9 @@ namespace Lumina.NGX
         // SELECT COMPONENT
         private void SelectComponent(string name)
         {
+            if (selectedVolume == null)
+                return;
+
             if (selectedVolume.profile == null)
                 return;
 
@@ -209,7 +212,6 @@ namespace Lumina.NGX
                 selectedVolume.profile.components
                 .FirstOrDefault(x => x.GetType().Name == name);
         }
-
 
         // ===============================
         // DYNAMIC VOLUME DISCOVERY
@@ -262,6 +264,8 @@ namespace Lumina.NGX
 
 
 
+        // Cached Available Components (SAVE RAM)
+        private string[] cachedAvailableComponents;
 
         // ===============================
         // FIND ALL AVAILABLE COMPONENTS
@@ -269,22 +273,37 @@ namespace Lumina.NGX
 
         private string[] GetAvailableComponents()
         {
+            if (cachedAvailableComponents != null)
+                return cachedAvailableComponents;
 
-            return typeof(VolumeComponent)
-                .Assembly
-                .GetTypes()
+
+            cachedAvailableComponents =
+                AppDomain.CurrentDomain
+                .GetAssemblies()
+                .SelectMany(assembly =>
+                {
+                    try
+                    {
+                        return assembly.GetTypes();
+                    }
+                    catch
+                    {
+                        return Array.Empty<Type>();
+                    }
+                })
                 .Where(type =>
-                    type.IsSubclassOf(typeof(VolumeComponent))
+                    typeof(VolumeComponent).IsAssignableFrom(type)
                     &&
                     !type.IsAbstract
                 )
                 .Select(type => type.Name)
+                .Distinct()
                 .OrderBy(x => x)
                 .ToArray();
 
+
+            return cachedAvailableComponents;
         }
-
-
 
 
 
@@ -314,7 +333,6 @@ namespace Lumina.NGX
 
         private void AddComponent(string componentName)
         {
-
             if (selectedVolume == null)
                 return;
 
@@ -325,29 +343,57 @@ namespace Lumina.NGX
 
 
             Type componentType =
-                typeof(VolumeComponent)
-                .Assembly
-                .GetTypes()
+                AppDomain.CurrentDomain
+                .GetAssemblies()
+                .SelectMany(assembly =>
+                {
+                    try
+                    {
+                        return assembly.GetTypes();
+                    }
+                    catch
+                    {
+                        return Array.Empty<Type>();
+                    }
+                })
                 .FirstOrDefault(type =>
-                    type.Name == componentName
+                    type.Name == componentName &&
+                    typeof(VolumeComponent).IsAssignableFrom(type)
                 );
 
 
             if (componentType == null)
+            {
+                Mod.Log.Info(
+                    "NGX: Could not find component " + componentName
+                );
                 return;
+            }
 
 
-
-            if (!typeof(VolumeComponent)
-                .IsAssignableFrom(componentType))
+            if (selectedVolume.profile.components
+                .Any(x => x.GetType() == componentType))
+            {
+                Mod.Log.Info(
+                    "NGX: Component already exists"
+                );
                 return;
+            }
 
 
+            var added =
+                selectedVolume.profile.Add(
+                    componentType,
+                    true
+                );
 
-            selectedVolume.profile
-                .Add(componentType, true);
 
+            selectedComponent = added;
+
+
+            Mod.Log.Info(
+                "NGX Added: " + componentName
+            );
         }
-
     }
 }

@@ -3,7 +3,9 @@ import { bindValue, trigger, useValue } from "cs2/api";
 import "./NGXWorkspace.scss";
 import "./NGXNotice.scss";
 import "./NGXConfirmation.scss";
+import "./AddComponent.scss";
 import LuminaLogo from "../../img/Lumina.svg"
+import { createPortal } from "react-dom";
 
 
 // ==============================
@@ -106,6 +108,7 @@ const beginDrag = (e: React.MouseEvent) => {
     const [componentSearch, setComponentSearch] = useState("");
     const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
     const [removeTarget, setRemoveTarget] = useState<string | null>(null);
+    const [showAddComponents, setShowAddComponents] = useState(false);
 
     const volumeList = useValue(volumes) ?? [];
     const currentVolume = useValue(selectedVolume) ?? "";
@@ -125,6 +128,10 @@ const beginDrag = (e: React.MouseEvent) => {
             .toLowerCase()
             .includes(componentSearch.toLowerCase())
     );
+
+    const addableComponents = filteredComponents.filter(component =>
+    !components.includes(component)
+);
 
 
 
@@ -165,7 +172,7 @@ const beginDrag = (e: React.MouseEvent) => {
 
         <p>
             Lumina NGX is currently running in inspector mode. You can explore
-            volumes and component properties, but editing is not available yet.
+            volumes and add/remove component properties, but editing is not available yet.
         </p>
 
 
@@ -351,68 +358,93 @@ const beginDrag = (e: React.MouseEvent) => {
 
 
 
-                        <h4>
-                            Add Component
-                        </h4>
+                        <h4
+    className="AddComponentHeader"
+    onClick={() =>
+        setShowAddComponents(!showAddComponents)
+    }
+>
+    Add Component {showAddComponents ? "" : ""}
+</h4>
 
 
 
-                        <div className="SearchBox">
-<span className="SearchIcon">
-    <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-    >
-        <circle
-            cx="11"
-            cy="11"
-            r="7"
-            stroke="currentColor"
-            strokeWidth="2"
-        />
+{
+showAddComponents && (
 
-        <path
-            d="M20 20L16.5 16.5"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-        />
-    </svg>
-</span>
+    <>
+        <div className="SearchBox">
 
-    <input
-        placeholder="Search components..."
-        value={componentSearch}
-        onChange={(e) =>
-            setComponentSearch(e.target.value)
+            <span className="SearchIcon">
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                >
+                    <circle
+                        cx="11"
+                        cy="11"
+                        r="7"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                    />
+
+                    <path
+                        d="M20 20L16.5 16.5"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                    />
+                </svg>
+            </span>
+
+            <input
+                placeholder="Search components..."
+                value={componentSearch}
+                onChange={(e) =>
+                    setComponentSearch(e.target.value)
+                }
+            />
+
+        </div>
+
+
+        <div className="ComponentList">
+
+        {
+            addableComponents.length === 0 ? (
+
+                <p>
+                    No additional components available.
+                </p>
+
+            ) : (
+
+                addableComponents.map(component => (
+
+                    <button
+                        key={component}
+                        onClick={() =>
+                            trigger(
+                                "Lumina",
+                                AddComponent,
+                                component
+                            )
+                        }
+                    >
+                        + {component}
+                    </button>
+
+                ))
+
+            )
         }
-    />
-</div>
 
+        </div>
 
-                        <div className="ComponentList">
+    </>
 
-                            {
-                                filteredComponents.map(component => (
-
-                                    <button
-                                        key={component}
-                                        onClick={() =>
-                                            trigger(
-                                                "Lumina",
-                                                AddComponent,
-                                                component
-                                            )
-                                        }
-                                    >
-                                        + {component}
-                                    </button>
-
-                                ))
-                            }
-
-                        </div>
+)
+}
 
 
 
@@ -461,65 +493,78 @@ const beginDrag = (e: React.MouseEvent) => {
     )
 }
 
+<div>
 {
-removeTarget && (
+    removeTarget &&
+    createPortal(
 
-<div className="NGXConfirmOverlay">
+        <div className="NGXConfirmOverlay">
 
-    <div className="NGXConfirm">
+            <div className="NGXConfirm">
 
-        <h3>
-            Remove Component?
-        </h3>
+                <h3>
+                    Remove Component?
+                </h3>
 
-        <p>
-            Are you sure you want to remove the component? 
-            
-            This action cannot be undone.
-            This will remove the component from the selected volume.
+                <p>
+                    Are you sure you want to remove the component?
 
-            To restore the component if unsaved, restart the game.
-        </p>
+                    This action cannot be undone.
+                    This will remove the component from the selected volume.
 
-
-        <div className="NGXConfirmButtons">
-
-            <button
-                className="Cancel"
-                onClick={() =>
-                    setRemoveTarget(null)
-                }
-            >
-                Cancel
-            </button>
+                    To restore the component if unsaved, restart the game.
+                    Save your game beforehand.
+                </p>
 
 
-            <button
-                className="Danger"
-                onClick={() => {
+                <div className="NGXConfirmButtons">
 
-                    trigger(
-                        "Lumina",
-                        RemoveComponent,
-                        removeTarget
-                    );
+                    <button
+                        className="Cancel"
+                        onClick={() =>
+                            setRemoveTarget(null)
+                        }
+                    >
+                        Cancel
+                    </button>
 
-                    setRemoveTarget(null);
 
-                }}
-            >
-                Remove
-            </button>
+                    <button
+                        className="Danger"
+                        onClick={() => {
 
-        </div>
+                            trigger(
+                                "Lumina",
+                                RemoveComponent,
+                                removeTarget
+                            );
 
-    </div>
+                            setRemoveTarget(null);
 
+                        }}
+                    >
+                        Remove
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>,
+
+        document.body
+    )
+}
 </div>
 
-)
-}
+
+
 
         </div>
+        
+
+        
+
+        
     );
 }

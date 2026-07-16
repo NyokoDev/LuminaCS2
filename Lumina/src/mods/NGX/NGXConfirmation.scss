@@ -60,9 +60,10 @@
 
     position:absolute;
     top: 200rem;
+    right:300rem;
 
 
-    display:flex;
+    
 
     align-items:center;
     justify-content:center;
@@ -90,12 +91,13 @@
 
     h3 {
         margin:0 0 10px;
+        color: white;
     }
 
 
     p {
-
-        color:rgba(255,255,255,.7);
+color: white;
+        
 
         font-size:13px;
 
