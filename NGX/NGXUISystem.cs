@@ -17,6 +17,7 @@ namespace Lumina.NGX
         private Volume selectedVolume;
         private bool ngxMode;
         private VolumeComponent selectedComponent;
+        private string selectedProperty;
 
         /// <summary>
         /// Gets the properties for the currently selected component.
@@ -84,6 +85,13 @@ namespace Lumina.NGX
         {
             base.OnCreate();
 
+            AddBinding(
+               new TriggerBinding<string>(
+                   Mod.MODUI,
+                   "SetProperty",
+                   SetProperty
+               )
+           );
 
             AddUpdateBinding(
     new GetterValueBinding<string[]>(
@@ -188,6 +196,178 @@ namespace Lumina.NGX
                 )
             );
         }
+
+
+        // ===============================
+        // SET / EDIT PROPERTY FROM CONSOLE
+        // Format:
+        // Volume|Component.Property|Value
+        // ===============================
+
+        private void SetProperty(string data)
+        {
+            if (string.IsNullOrEmpty(data))
+                return;
+
+
+            string[] args = data.Split('|');
+
+
+            if (args.Length != 3)
+            {
+                Mod.Log.Info(
+                    "NGX: Invalid SetProperty format"
+                );
+
+                return;
+            }
+
+
+            string volumeName = args[0];
+            string propertyPath = args[1];
+            string value = args[2];
+
+
+            Volume volume =
+    UnityEngine.Object
+    .FindObjectsOfType<Volume>()
+    .FirstOrDefault(
+        x => x.name.Equals(
+            volumeName,
+            StringComparison.OrdinalIgnoreCase
+        )
+    );
+
+
+            if (volume == null)
+            {
+                Mod.Log.Info(
+                    "NGX: Volume not found " + volumeName
+                );
+
+                return;
+            }
+
+
+            if (volume.profile == null)
+                return;
+
+
+            string[] propertyParts =
+                propertyPath.Split('.');
+
+
+            if (propertyParts.Length != 2)
+            {
+                Mod.Log.Info(
+                    "NGX: Invalid property path"
+                );
+
+                return;
+            }
+
+
+            string componentName = propertyParts[0];
+            string propertyName = propertyParts[1];
+
+
+            VolumeComponent component =
+    volume.profile.components
+    .FirstOrDefault(
+        x => x.GetType().Name.Equals(
+            componentName,
+            StringComparison.OrdinalIgnoreCase
+        )
+    );
+
+            if (component == null)
+            {
+                Mod.Log.Info(
+                    "NGX: Component not found " + componentName
+                );
+                
+                return;
+            }
+
+
+            var field =
+    component.GetType()
+    .GetField(
+        propertyName,
+        System.Reflection.BindingFlags.Instance |
+        System.Reflection.BindingFlags.Public |
+        System.Reflection.BindingFlags.NonPublic |
+        System.Reflection.BindingFlags.IgnoreCase
+    );
+
+
+            if (field == null)
+            {
+                Mod.Log.Info(
+                    "NGX: Property not found " + propertyName
+                );
+
+                return;
+            }
+
+
+            object parameter = field.GetValue(component);
+
+
+
+            // FLOAT SUPPORT
+            if (parameter is FloatParameter floatParameter)
+            {
+                if (float.TryParse(value, out float floatValue))
+                {
+                    floatParameter.value = floatValue;
+
+                    Mod.Log.Info(
+                        $"NGX: {componentName}.{propertyName} = {floatValue}"
+                    );
+                }
+
+                return;
+            }
+
+
+
+            // BOOL SUPPORT
+            if (parameter is BoolParameter boolParameter)
+            {
+                if (bool.TryParse(value, out bool boolValue))
+                {
+                    boolParameter.value = boolValue;
+
+                    Mod.Log.Info(
+                        $"NGX: {componentName}.{propertyName} = {boolValue}"
+                    );
+                }
+
+                return;
+            }
+
+            // INT SUPPORT
+            if (parameter is IntParameter intParameter)
+            {
+                if (int.TryParse(value, out int intValue))
+                {
+                    intParameter.value = intValue;
+
+                    Mod.Log.Info(
+                        $"NGX: {componentName}.{propertyName} = {intValue}"
+                    );
+                }
+
+                return;
+            }
+
+
+            Mod.Log.Info(
+                "NGX: Unsupported parameter type"
+            );
+        }
+
 
         // REMOVE COMPONENT
         // REMOVE COMPONENT

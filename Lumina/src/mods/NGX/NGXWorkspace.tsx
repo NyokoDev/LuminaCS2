@@ -6,6 +6,7 @@ import "./NGXConfirmation.scss";
 import "./AddComponent.scss";
 import LuminaLogo from "../../img/Lumina.svg"
 import { createPortal } from "react-dom";
+import NGXConsole from "./Console/NGXConsole";
 
 
 // ==============================
@@ -115,6 +116,7 @@ const beginDrag = (e: React.MouseEvent) => {
     const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
     const [removeTarget, setRemoveTarget] = useState<string | null>(null);
     const [showAddComponents, setShowAddComponents] = useState(false);
+    const [showConsole, setShowConsole] = useState(false);
 
     const volumeList = useValue(volumes) ?? [];
     const currentVolume = useValue(selectedVolume) ?? "";
@@ -182,6 +184,22 @@ const beginDrag = (e: React.MouseEvent) => {
         </h2>
 
     </div>
+
+ <div
+        className="NGXHeaderButtons"
+        onMouseDown={e => e.stopPropagation()}
+    >
+
+        <button
+            className="ConsoleButton"
+            onClick={() => setShowConsole(true)}
+            title="Open Console"
+        >
+            &gt;_
+        </button>
+
+    </div>
+
 </div>
 
 {/* NGX BETA NOTICE */}
@@ -595,7 +613,13 @@ showAddComponents && (
 </div>
 
 
-
+{
+    showConsole && (
+        <NGXConsole
+            onClose={() => setShowConsole(false)}
+        />
+    )
+}
 
         </div>
         
