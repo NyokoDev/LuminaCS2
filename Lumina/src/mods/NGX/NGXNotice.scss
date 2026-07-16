@@ -1,0 +1,66 @@
+.NGXNotice {
+
+    display: flex;
+    align-items: flex-start;
+
+    gap: 1.5rem;
+
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+
+    width: 100%;
+    box-sizing: border-box;
+
+    border-radius: 1.25rem;
+
+    background: linear-gradient(
+        135deg,
+        rgba(50,120,255,.16),
+        rgba(90,40,255,.10)
+    );
+
+    border: 0.125rem solid rgba(120,170,255,.20);
+
+    box-shadow:
+        inset 0 0.125rem 0 rgba(255,255,255,.05);
+}
+
+
+.NGXNoticeIcon {
+
+    display: none;
+}
+
+
+.NGXNoticeContent {
+
+    flex: 1;
+    min-width: 0;
+}
+
+
+.NGXNotice strong {
+
+    display: block;
+
+    margin-bottom: 0.5rem;
+
+    font-size: 1.25rem;
+
+    color: white;
+}
+
+
+.NGXNotice p {
+
+    margin: 0;
+
+    font-size: 15rem;
+
+    line-height: 1.45;
+
+    color: rgba(255,255,255,.72);
+
+    overflow-wrap: break-word;
+    word-break: break-word;
+}

@@ -6,7 +6,7 @@
     user-select: auto !important;
 
     position: absolute;
-
+will-change: transform;
     /*
     Controlled externally by CS2/UI logic
     */
@@ -27,7 +27,7 @@
     overflow-y: auto;
 
 
-    font-family: "Nexa", sans-serif;
+    font-family: "Arial", sans-serif;
 
     color: white;
 
@@ -69,6 +69,13 @@
 
 
 .NGXHeader {
+    cursor: grab;
+user-select: none;
+
+
+    &:active {
+        cursor: grabbing;
+    }
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -85,6 +92,38 @@
 
         animation: FadeSlide 0.4s ease;
     }
+}
+
+
+.NGXTitle {
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.NGXLogo {
+
+    width: 26px;
+    height: 26px;
+
+    flex-shrink: 0;
+
+    filter:
+    invert(100%)
+        drop-shadow(0 0 8px rgba(0,180,255,.35));
+
+    transition:
+        transform .2s ease,
+        filter .2s ease;
+}
+
+.NGXHeader:hover .NGXLogo {
+
+    transform: rotate(-8deg) scale(1.08);
+
+    filter:
+        drop-shadow(0 0 12px rgba(0,180,255,.6));
 }
 
 
@@ -126,10 +165,7 @@
     border-radius: 10px;
 
 
-    transition:
-        transform 0.2s ease,
-        background 0.2s ease;
-
+  
 
     &:hover {
 
@@ -599,4 +635,89 @@
 
         box-shadow: none;
     }
+}
+
+// SELECTED COMPONENT
+
+.Component {
+
+    cursor: pointer;
+
+    &.Selected {
+
+        background:
+            rgba(255,255,255,0.18);
+
+        border-left:
+            3px solid white;
+
+        transform:
+            translateX(4px);
+    }
+}
+
+
+
+// INSPECTOR PROPERTIES
+// PROPERTIES
+
+.PropertyList {
+
+    display: flex;
+    flex-direction: column;
+
+    margin-top: 8px;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+
+    background: rgba(255,255,255,.04);
+}
+
+.PropertyRow {
+
+    display: grid;
+
+    grid-template-columns:
+        1.5fr
+        1fr
+        1fr;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 8px 12px;
+
+    border-bottom: 1px solid rgba(255,255,255,.06);
+
+    transition: background .15s;
+}
+
+.PropertyRow:last-child {
+    border-bottom: none;
+}
+
+.PropertyRow:hover {
+    background: rgba(255,255,255,.06);
+}
+
+.PropertyName {
+
+    font-weight: 600;
+    color: white;
+}
+
+.PropertyType {
+
+    color: rgba(255,255,255,.55);
+    font-size: 11px;
+    text-transform: uppercase;
+}
+
+.PropertyValue {
+
+    
+    text-align: right;
 }

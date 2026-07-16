@@ -1,12 +1,9 @@
 ﻿using Colossal.UI.Binding;
 using Lumina.Systems;
 using LuminaMod.XML;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -14,145 +11,111 @@ using UnityEngine.Rendering;
 namespace Lumina.NGX
 {
 
-    [Serializable]
-    public class ComponentPropertyData
-    {
-        public string name;
-        public string type;
-
-        public object value;
-
-        public float min;
-        public float max;
-
-        public bool hasRange;
-
-        public bool readOnly;
-
-        public string[] options;
-
-        public string group;
-    }
-
-
-
-    [Serializable]
-    public class ComponentMetadata
-    {
-        public string component;
-
-        public List<ComponentPropertyData> properties =
-            new();
-    }
-
-
-
-    [Serializable]
-    public class PropertyUpdate
-    {
-        public string component;
-        public string property;
-        public string value;
-    }
-
-
-
-
     internal partial class NGXUISystem : ExtendedUISystemBase
     {
 
         private Volume selectedVolume;
-
+        private bool ngxMode;
         private VolumeComponent selectedComponent;
 
+        /// <summary>
+        /// Gets the properties for the currently selected component.
+        /// </summary>
+        /// <returns></returns>
+        private string[] GetComponentProperties()
+        {
+            if (selectedComponent == null)
+                return Array.Empty<string>();
 
+            return selectedComponent
+                .GetType()
+                .GetFields(
+                    System.Reflection.BindingFlags.Instance |
+                    System.Reflection.BindingFlags.Public
+                )
+                .Where(f => typeof(VolumeParameter).IsAssignableFrom(f.FieldType))
+                .Select(f =>
+                {
+                    var parameter = (VolumeParameter)f.GetValue(selectedComponent);
+
+                    string value = "";
+
+                    if (parameter != null)
+                    {
+                        var valueField = parameter.GetType().GetField(
+                            "m_Value",
+                            System.Reflection.BindingFlags.Instance |
+                            System.Reflection.BindingFlags.NonPublic
+                        );
+
+                        if (valueField != null)
+                            value = valueField.GetValue(parameter)?.ToString() ?? "";
+                    }
+
+                    return $"{f.Name}|{parameter?.GetType().Name}|{value}";
+                })
+                .ToArray();
+        }
+        /// <summary>
+        /// Gets the parameter value for a given VolumeParameter using reflection to access the private m_Value field.
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        private string GetParameterValue(VolumeParameter parameter)
+        {
+            var valueField = parameter
+                .GetType()
+                .GetField(
+                    "m_Value",
+                    System.Reflection.BindingFlags.Instance |
+                    System.Reflection.BindingFlags.NonPublic
+                );
+
+            if (valueField != null)
+            {
+                object value = valueField.GetValue(parameter);
+                return value?.ToString() ?? "";
+            }
+
+            return parameter.ToString();
+        }
 
         protected override void OnCreate()
         {
             base.OnCreate();
 
-
-
-            // ===============================
-            // COMPONENT INSPECTOR
-            // ===============================
-
-
             AddUpdateBinding(
-                new GetterValueBinding<string>(
-                    Mod.MODUI,
-                    "SelectedComponent",
-                    GetSelectedComponent
-                )
-            );
-
-
-
-            AddUpdateBinding(
-                new GetterValueBinding<ComponentMetadata>(
-                    Mod.MODUI,
-                    "GetComponentProperties",
-                    GetComponentProperties
-                )
-            );
-
-
-
+    new GetterValueBinding<string[]>(
+        Mod.MODUI,
+        "GetComponentProperties",
+        GetComponentProperties,
+        new ArrayWriter<string>()
+    )
+);
             AddBinding(
-                new TriggerBinding<string>(
-                    Mod.MODUI,
-                    "SelectComponent",
-                    SelectComponent
-                )
-            );
-
-
-
-            AddBinding(
-                new TriggerBinding<string>(
-                    Mod.MODUI,
-                    "SetComponentProperty",
-                    SetComponentProperty
-                )
-            );
-
-
-
-
-
-            // ===============================
-            // MODE
-            // ===============================
-
+    new TriggerBinding<string>(
+        Mod.MODUI,
+        "SelectComponent",
+        SelectComponent
+    )
+);
 
             AddUpdateBinding(
-                new GetterValueBinding<bool>(
-                    Mod.MODUI,
-                    "NGXMode",
-                    () => GlobalVariables.Instance.NGXMode
-                )
-            );
-
-
-
-
-
-
-            // ===============================
-            // VOLUMES
-            // ===============================
-
+            new GetterValueBinding<bool>(
+                Mod.MODUI,
+                "NGXMode",
+                () => GlobalVariables.Instance.NGXMode
+            )
+        );
 
             AddUpdateBinding(
-                new GetterValueBinding<string[]>(
-                    Mod.MODUI,
-                    "GetVolumes",
-                    GetVolumes,
-                    new ArrayWriter<string>()
-                )
-            );
-
-
+      new GetterValueBinding<string[]>(
+          Mod.MODUI,
+          "GetVolumes",
+          GetVolumes,
+          new ArrayWriter<string>()
+      )
+  );
 
             AddUpdateBinding(
                 new GetterValueBinding<string>(
@@ -161,8 +124,6 @@ namespace Lumina.NGX
                     GetSelectedVolume
                 )
             );
-
-
 
             AddUpdateBinding(
                 new GetterValueBinding<string[]>(
@@ -173,8 +134,6 @@ namespace Lumina.NGX
                 )
             );
 
-
-
             AddUpdateBinding(
                 new GetterValueBinding<string[]>(
                     Mod.MODUI,
@@ -184,18 +143,13 @@ namespace Lumina.NGX
                 )
             );
 
-
-
-
             AddBinding(
-                new TriggerBinding<string>(
-                    Mod.MODUI,
-                    "SelectVolume",
-                    SelectVolume
-                )
-            );
-
-
+    new TriggerBinding<string>(
+        Mod.MODUI,
+        "SelectVolume",
+        SelectVolume
+    )
+);
 
             AddBinding(
                 new TriggerBinding<string>(
@@ -204,338 +158,31 @@ namespace Lumina.NGX
                     AddComponent
                 )
             );
-
         }
 
 
-
-
-
-
-
-        // ======================================================
-        // COMPONENT SELECTION
-        // ======================================================
-
-
+        // SELECT COMPONENT
         private void SelectComponent(string name)
         {
-
-            if (selectedVolume == null)
-                return;
-
-
             if (selectedVolume.profile == null)
                 return;
 
-
-
             selectedComponent =
                 selectedVolume.profile.components
-                .FirstOrDefault(
-                    x => x.GetType().Name == name
-                );
-
+                .FirstOrDefault(x => x.GetType().Name == name);
         }
 
 
-
-
-
-        private string GetSelectedComponent()
-        {
-
-            return selectedComponent != null
-                ? selectedComponent.GetType().Name
-                : "";
-
-        }
-
-
-
-
-
-
-
-
-        // ======================================================
-        // COMPONENT METADATA
-        // ======================================================
-
-
-        private ComponentMetadata GetComponentProperties()
-        {
-
-            ComponentMetadata metadata =
-                new();
-
-
-            if (selectedComponent == null)
-                return metadata;
-
-
-
-            metadata.component =
-                selectedComponent.GetType().Name;
-
-
-
-            foreach (PropertyInfo property in
-                selectedComponent.GetType()
-                .GetProperties(
-                    BindingFlags.Public |
-                    BindingFlags.Instance
-                ))
-            {
-
-
-                if (!property.CanRead)
-                    continue;
-
-
-
-                ComponentPropertyData data =
-                    new();
-
-
-
-                data.name =
-                    property.Name;
-
-
-                data.type =
-                    NormalizeType(
-                        property.PropertyType
-                    );
-
-
-                data.readOnly =
-                    !property.CanWrite;
-
-
-
-                try
-                {
-                    data.value =
-                        property.GetValue(
-                            selectedComponent
-                        );
-                }
-                catch
-                {
-                    continue;
-                }
-
-
-
-
-                // ENUM SUPPORT
-
-                if (property.PropertyType.IsEnum)
-                {
-                    data.options =
-                        Enum.GetNames(
-                            property.PropertyType
-                        );
-                }
-
-
-
-                // RANGE ATTRIBUTE
-
-                RangeAttribute range =
-                    property.GetCustomAttribute<RangeAttribute>();
-
-
-                if (range != null)
-                {
-
-                    data.hasRange = true;
-
-                    data.min =
-                        range.min;
-
-                    data.max =
-                        range.max;
-
-                }
-
-
-
-
-                metadata.properties.Add(data);
-
-            }
-
-
-
-            return metadata;
-
-        }
-
-
-
-
-
-
-
-        private string NormalizeType(Type type)
-        {
-
-            if (type == typeof(float))
-                return "float";
-
-
-            if (type == typeof(int))
-                return "int";
-
-
-            if (type == typeof(bool))
-                return "bool";
-
-
-            if (type == typeof(string))
-                return "string";
-
-
-            if (type == typeof(Color))
-                return "Color";
-
-
-            if (type == typeof(Vector2))
-                return "Vector2";
-
-
-            if (type == typeof(Vector3))
-                return "Vector3";
-
-
-            if (type.IsEnum)
-                return "enum";
-
-
-            return type.Name;
-
-        }
-
-
-
-
-
-
-
-
-
-        // ======================================================
-        // UPDATE PROPERTY
-        // ======================================================
-
-
-        private void SetComponentProperty(string json)
-        {
-
-            if (selectedComponent == null)
-                return;
-
-
-
-            PropertyUpdate update =
-    JsonConvert.DeserializeObject<PropertyUpdate>(json);
-
-
-
-            PropertyInfo property =
-                selectedComponent.GetType()
-                .GetProperty(
-                    update.property
-                );
-
-
-
-            if (property == null)
-                return;
-
-
-
-            if (!property.CanWrite)
-                return;
-
-
-
-            object value =
-                ConvertValue(
-                    update.value,
-                    property.PropertyType
-                );
-
-
-
-            property.SetValue(
-                selectedComponent,
-                value
-            );
-
-        }
-
-
-
-
-
-
-        private object ConvertValue(
-            string value,
-            Type type
-        )
-        {
-
-            if (type == typeof(float))
-                return float.Parse(value);
-
-
-            if (type == typeof(int))
-                return int.Parse(value);
-
-
-            if (type == typeof(bool))
-                return bool.Parse(value);
-
-
-            if (type == typeof(string))
-                return value;
-
-
-            if (type.IsEnum)
-                return Enum.Parse(
-                    type,
-                    value
-                );
-
-
-            return value;
-
-        }
-
-
-
-
-
-
-
-
-
-        // ======================================================
-        // VOLUMES
-        // ======================================================
-
+        // ===============================
+        // DYNAMIC VOLUME DISCOVERY
+        // ===============================
 
         private string[] GetVolumes()
         {
-
             return UnityEngine.Object
                 .FindObjectsOfType<Volume>()
                 .Select(x => x.name)
                 .ToArray();
-
         }
 
 
@@ -544,18 +191,18 @@ namespace Lumina.NGX
 
         private string GetSelectedVolume()
         {
-
             return selectedVolume != null
                 ? selectedVolume.name
                 : "";
-
         }
 
 
 
 
 
-
+        // ===============================
+        // READ CURRENT PROFILE
+        // ===============================
 
         private string[] GetVolumeComponents()
         {
@@ -568,11 +215,8 @@ namespace Lumina.NGX
                 return Array.Empty<string>();
 
 
-
             return selectedVolume.profile.components
-                .Select(
-                    x => x.GetType().Name
-                )
+                .Select(x => x.GetType().Name)
                 .ToArray();
 
         }
@@ -581,8 +225,9 @@ namespace Lumina.NGX
 
 
 
-
-
+        // ===============================
+        // FIND ALL AVAILABLE COMPONENTS
+        // ===============================
 
         private string[] GetAvailableComponents()
         {
@@ -590,27 +235,13 @@ namespace Lumina.NGX
             return typeof(VolumeComponent)
                 .Assembly
                 .GetTypes()
-
                 .Where(type =>
-                    type.IsSubclassOf(
-                        typeof(VolumeComponent)
-                    )
-
+                    type.IsSubclassOf(typeof(VolumeComponent))
                     &&
-
                     !type.IsAbstract
                 )
-
-                .Select(
-                    type => type.Name
-                )
-
-                .Distinct()
-
-                .OrderBy(
-                    x => x
-                )
-
+                .Select(type => type.Name)
+                .OrderBy(x => x)
                 .ToArray();
 
         }
@@ -619,8 +250,9 @@ namespace Lumina.NGX
 
 
 
-
-
+        // ===============================
+        // SELECT VOLUME
+        // ===============================
 
         private void SelectVolume(string name)
         {
@@ -628,14 +260,9 @@ namespace Lumina.NGX
             selectedVolume =
                 UnityEngine.Object
                 .FindObjectsOfType<Volume>()
-
                 .FirstOrDefault(
                     x => x.name == name
                 );
-
-
-
-            selectedComponent = null;
 
         }
 
@@ -643,14 +270,9 @@ namespace Lumina.NGX
 
 
 
-
-
-
-
-        // ======================================================
-        // ADD COMPONENT
-        // ======================================================
-
+        // ===============================
+        // ADD COMPONENT DYNAMICALLY
+        // ===============================
 
         private void AddComponent(string componentName)
         {
@@ -659,26 +281,18 @@ namespace Lumina.NGX
                 return;
 
 
-
             if (selectedVolume.profile == null)
-
                 selectedVolume.profile =
-                    ScriptableObject
-                    .CreateInstance<VolumeProfile>();
-
-
+                    ScriptableObject.CreateInstance<VolumeProfile>();
 
 
             Type componentType =
                 typeof(VolumeComponent)
                 .Assembly
                 .GetTypes()
-
-                .FirstOrDefault(
-                    type =>
+                .FirstOrDefault(type =>
                     type.Name == componentName
                 );
-
 
 
             if (componentType == null)
@@ -692,26 +306,10 @@ namespace Lumina.NGX
 
 
 
-            if (selectedVolume.profile.components
-                .Any(
-                    x =>
-                    x.GetType() == componentType
-                ))
-                return;
-
-
-
-
             selectedVolume.profile
-                .Add(
-                    componentType,
-                    true
-                );
-
+                .Add(componentType, true);
 
         }
 
-
     }
-
 }
