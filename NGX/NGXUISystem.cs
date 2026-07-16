@@ -84,6 +84,26 @@ namespace Lumina.NGX
         {
             base.OnCreate();
 
+
+            AddUpdateBinding(
+    new GetterValueBinding<string[]>(
+        Mod.MODUI,
+        "GetComponentStates",
+        GetComponentStates,
+        new ArrayWriter<string>()
+    )
+);
+
+
+            AddBinding(
+    new TriggerBinding<string>(
+        Mod.MODUI,
+        "ToggleComponent",
+        ToggleComponent
+    )
+);
+
+
             AddBinding(
              new TriggerBinding<string>(
                  Mod.MODUI,
@@ -236,6 +256,23 @@ namespace Lumina.NGX
                 : "";
         }
 
+        // COMPONENT STATES
+        private string[] GetComponentStates()
+        {
+            if (selectedVolume == null)
+                return Array.Empty<string>();
+
+            if (selectedVolume.profile == null)
+                return Array.Empty<string>();
+
+
+            return selectedVolume.profile.components
+                .Select(x =>
+                    $"{x.GetType().Name}|{x.active}"
+                )
+                .ToArray();
+        }
+
 
 
 
@@ -321,6 +358,21 @@ namespace Lumina.NGX
                     x => x.name == name
                 );
 
+        }
+
+        // TOGGLE COMPONENT ACTIVE OR INACTIVE
+        private void ToggleComponent(string componentName)
+        {
+            if (selectedVolume == null || selectedVolume.profile == null)
+                return;
+
+            var component = selectedVolume.profile.components
+                .FirstOrDefault(x => x.GetType().Name == componentName);
+
+            if (component == null)
+                return;
+
+            component.active = !component.active;
         }
 
 

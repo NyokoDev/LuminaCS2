@@ -465,7 +465,64 @@ user-select: none;
 
 
 
+.ComponentToggle {
 
+    width: 22px;
+    height: 22px;
+
+    border-radius: 6px;
+
+    border: 1px solid rgba(255,255,255,.25);
+
+    background:
+        rgba(255,255,255,.05);
+
+    color:white;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+
+    transition:
+        background .2s ease,
+        transform .15s ease;
+
+
+    &:hover {
+        transform:scale(1.1);
+    }
+
+
+    &.Enabled {
+
+        background:
+            rgba(80,200,120,.35);
+
+        border-color:
+            rgba(80,255,120,.8);
+
+        box-shadow:
+            0 0 12px rgba(80,255,120,.35);
+    }
+}
+
+
+.Component {
+
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+}
+
+
+.ComponentName {
+
+    flex:1;
+
+}
 
 // SCROLLBAR
 

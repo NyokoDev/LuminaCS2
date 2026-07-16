@@ -73,13 +73,13 @@
 <!--Link to the forum post where the mod can be discussed-->
 <ForumLink Value="https://forum.paradoxplaza.com/forum/threads/lumina.1645623/" />
 <!--Version of the mod-->
-<ModVersion Value="v3.6.1" />
+<ModVersion Value="v3.6.2" />
 <!--Recommended version of the base game to use the mod-->
 <GameVersion Value="1.6.*" />
 <!--Dependency for the mod, can be set multiple times-->
 <Dependency Id="" />
 <!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
-<ChangeLog Value="- NGX: Delete or add components." />
+<ChangeLog Value="- NGX: Enable or disable components." />
 " />
 <!--ChangeLog>
 </ChangeLog-->

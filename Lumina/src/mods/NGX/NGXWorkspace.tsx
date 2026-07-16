@@ -38,6 +38,11 @@ export const componentProperties = bindValue<any[]>(
 );
 
 
+export const componentStates = bindValue<string[]>(
+    "Lumina",
+    "GetComponentStates"
+);
+
 // ==============================
 // UNITY ACTIONS (WRITE)
 // ==============================
@@ -46,6 +51,7 @@ const SelectVolume = "SelectVolume";
 const SelectComponent = "SelectComponent";
 const AddComponent = "AddComponent";
 const RemoveComponent = "RemoveComponent";
+const ToggleComponent = "ToggleComponent";
 
 
 // ==============================
@@ -115,6 +121,17 @@ const beginDrag = (e: React.MouseEvent) => {
     const components = useValue(volumeComponents) ?? [];
     const available = useValue(availableComponents) ?? [];
     const properties = useValue(componentProperties) ?? [];
+    const states = useValue(componentStates) ?? [];
+
+    const isComponentEnabled = (name:string) =>
+{
+    const state = states.find(x => x.startsWith(name));
+
+    if(!state)
+        return false;
+
+    return state.split("|")[1] === "True";
+};
 
     const filteredVolumes = volumeList.filter(volume =>
         volume
@@ -309,44 +326,64 @@ const beginDrag = (e: React.MouseEvent) => {
 
                             ) : (
 
-                                components.map(component => (
+components.map(component => (
+
+<div
+    key={component}
+    className={`Component ${
+        selectedComponent === component ? "Selected" : ""
+    }`}
+>
+
+
+    <button
+        className={`ComponentToggle ${
+            isComponentEnabled(component)
+            ? "Enabled"
+            : ""
+        }`}
+        onClick={() =>
+            trigger(
+                "Lumina",
+                ToggleComponent,
+                component
+            )
+        }
+    >
+        {isComponentEnabled(component) ? "✓" : ""}
+    </button>
+
+
 
     <div
-        key={component}
-        className={`Component ${
-            selectedComponent === component ? "Selected" : ""
-        }`}
+        className="ComponentName"
+        onClick={() => {
+
+            setSelectedComponent(component);
+
+            trigger(
+                "Lumina",
+                SelectComponent,
+                component
+            );
+
+        }}
     >
-
-        <div
-            className="ComponentName"
-            onClick={() => {
-
-                setSelectedComponent(component);
-
-                trigger(
-                    "Lumina",
-                    SelectComponent,
-                    component
-                );
-
-            }}
-        >
-            {component}
-        </div>
-
-
-        <button
-            className="RemoveComponent"
-            onClick={() =>
-                setRemoveTarget(component)
-            }
-        >
-            ×
-        </button>
-
-
+        {component}
     </div>
+
+
+    <button
+        className="RemoveComponent"
+        onClick={() =>
+            setRemoveTarget(component)
+        }
+    >
+        ×
+    </button>
+
+
+</div>
 
 ))
 
