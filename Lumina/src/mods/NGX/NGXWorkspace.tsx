@@ -59,8 +59,6 @@ const ToggleComponent = "ToggleComponent";
 // NGX WORKSPACE
 // ==============================
 
-
-
 export default function NGXWorkspace() {
 
 const [position, setPosition] = useState({
@@ -68,6 +66,7 @@ const [position, setPosition] = useState({
     y: 120
 });
 
+const [consoleCommand, setConsoleCommand] = useState("");
     const panelRef = useRef<HTMLDivElement>(null);
 
 const dragging = useRef(false);
@@ -523,21 +522,36 @@ showAddComponents && (
         const [name, type, value] = property.split("|");
 
         return (
-            <div key={i} className="PropertyRow">
+           <div className="PropertyRow">
 
-                <div className="PropertyName">
-                    {name}
-                </div>
+    <div className="PropertyName">
+        {name}
+    </div>
 
-                <div className="PropertyType">
-                    {type}
-                </div>
+    <div className="PropertyType">
+        {type}
+    </div>
 
-                <div className="PropertyValue">
-                    {value}
-                </div>
+    <div className="PropertyValue">
+        {value}
+    </div>
 
-            </div>
+    <button
+        className="ConsolePropertyButton"
+        onClick={() => {
+
+            setConsoleCommand(
+                `edit "${currentVolume}" ${selectedComponent}.${name} ${value}`
+            );
+
+            setShowConsole(true);
+
+        }}
+    >
+        &gt;_
+    </button>
+
+</div>
         );
     })}
 </div>
@@ -617,10 +631,11 @@ showAddComponents && (
     showConsole && (
         <NGXConsole
             onClose={() => setShowConsole(false)}
+            command={consoleCommand}
+            clearCommand={() => setConsoleCommand("")}
         />
     )
 }
-
         </div>
         
 

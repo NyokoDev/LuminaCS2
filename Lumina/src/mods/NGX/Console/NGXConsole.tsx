@@ -1,10 +1,12 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import "./NGXConsole.scss";
 import { trigger } from "cs2/api";
 
 interface NGXConsoleProps {
     onClose: () => void;
+    command: string;
+    clearCommand: () => void;
 }
 
 type EntryType =
@@ -18,18 +20,35 @@ interface ConsoleEntry {
     text: string;
 }
 
-export default function NGXConsole({ onClose }: NGXConsoleProps) {
+export default function NGXConsole({
+    onClose,
+    command,
+    clearCommand
+}: NGXConsoleProps) {
 
+
+    const [commandHistory, setCommandHistory] = useState<string[]>([]);
+const [historyIndex, setHistoryIndex] = useState(-1);
+    const [input, setInput] = useState("");
     const [position, setPosition] = useState({
         x: 180,
         y: 120
     });
-const SelectVolume = "SelectVolume";
-const SelectComponent = "SelectComponent";
-const FocusProperty = "FocusProperty";
-    const [input, setInput] = useState("");
-    const [commandHistory, setCommandHistory] = useState<string[]>([]);
-const [historyIndex, setHistoryIndex] = useState(-1);
+
+
+    useEffect(() => {
+
+        if (!command)
+            return;
+
+        setInput(command);
+
+        clearCommand();
+
+    }, [command]);
+
+    
+    
 
     const [history, setHistory] = useState<ConsoleEntry[]>([
     {
@@ -116,7 +135,7 @@ const [historyIndex, setHistoryIndex] = useState(-1);
             case "help":
 
                 log("success",
-                    "Commands: help, edit, list, select, set, get, toggle, enable, clear"
+                    "Commands: help, edit"
                 );
 
                 break;

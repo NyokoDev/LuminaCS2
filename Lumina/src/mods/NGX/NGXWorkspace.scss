@@ -739,7 +739,8 @@ user-select: none;
     grid-template-columns:
         1.5fr
         1fr
-        1fr;
+        1fr
+        35px;
 
     align-items: center;
 
@@ -747,9 +748,62 @@ user-select: none;
 
     padding: 8px 12px;
 
-    border-bottom: 1px solid rgba(255,255,255,.06);
+    border-bottom:
+        1px solid rgba(255,255,255,.06);
 
-    transition: background .15s;
+    transition:
+        background .15s;
+}
+
+.ConsolePropertyButton {
+
+    width: 28px;
+    height: 24px;
+
+    border: none;
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    color: white;
+
+    background:
+        rgba(255,255,255,0.08);
+
+    font-size: 12px;
+    font-weight: bold;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition:
+        background .15s ease,
+        transform .15s ease,
+        box-shadow .15s ease;
+
+
+    &:hover {
+
+        background:
+            rgba(0,180,255,0.35);
+
+        transform:
+            scale(1.1);
+
+        box-shadow:
+            0 0 10px rgba(0,180,255,0.35);
+    }
+
+
+    &:active {
+
+        transform:
+            scale(0.95);
+
+        background:
+            rgba(0,180,255,0.5);
+    }
 }
 
 .PropertyRow:last-child {
