@@ -1,8 +1,11 @@
 import { useState, useCallback, useMemo } from "react";
+
 import { Button } from "cs2/ui";
 import { bindValue, useValue } from "cs2/api";
 import { getModule, ModuleRegistryExtend } from "cs2/modding";
+
 import { VanillaComponentResolver } from "classes/VanillaComponentResolver";
+
 import mod from "../../mod.json";
 
 import { YourPanelComponent } from "./panel";
@@ -29,19 +32,18 @@ const ToolBarTheme: any = getModule(
 );
 
 
-
 export const LuminaButton: ModuleRegistryExtend = (Component) => {
-
     return (props) => {
 
-        const { children, ...otherProps } = props || {};
+        const {
+            children,
+            ...otherProps
+        } = props || {};
 
         const ngxMode = useValue($ngxMode);
 
         const [panelOpen, setPanelOpen] = useState(false);
-
         const [useNGXPanel, setUseNGXPanel] = useState(false);
-
 
 
         const handleClick = useCallback(() => {
@@ -60,7 +62,6 @@ export const LuminaButton: ModuleRegistryExtend = (Component) => {
         ]);
 
 
-
         const buttonClassName = useMemo(() => {
 
             return (
@@ -70,13 +71,13 @@ export const LuminaButton: ModuleRegistryExtend = (Component) => {
                 (panelOpen ? " " + styles.active : "")
             );
 
-        }, [panelOpen]);
-
+        }, [
+            panelOpen
+        ]);
 
 
         return (
             <>
-
                 <div className={styles.LuminaButtonWrapper}>
 
                     <Button
@@ -87,10 +88,13 @@ export const LuminaButton: ModuleRegistryExtend = (Component) => {
                         }
                         onClick={handleClick}
                     >
-                        <img
-                            src="coui://ui-mods/images/Lumina.svg"
-                            className={styles.IconInner}
-                        />
+                        <div
+    className={
+        styles.IconInner +
+        " " +
+        (ngxMode ? styles.NGXIcon : styles.ClassicIcon)
+    }
+/>
                     </Button>
 
                 </div>
@@ -105,12 +109,10 @@ export const LuminaButton: ModuleRegistryExtend = (Component) => {
                 />
 
 
-
                 {/* Always keep original toolbar props */}
                 <Component {...otherProps}>
                     {children}
                 </Component>
-
 
 
                 {/* Replace the panel when opened */}
@@ -121,13 +123,11 @@ export const LuminaButton: ModuleRegistryExtend = (Component) => {
                 }
 
 
-
                 {
                     panelOpen &&
                     !useNGXPanel &&
                     <YourPanelComponent />
                 }
-
 
             </>
         );

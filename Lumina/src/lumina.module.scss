@@ -1,112 +1,164 @@
 :root {
   --size: 46rem;
-  --hover-tint: rgba(0, 200, 255, 0.35);
-}
-
-
-.LuminaIcon {
-  width: 200px; /* size */
-  cursor: pointer;
-  color: black; /* default color */
-  transition: color 0.5s ease;
-}
-
-.LuminaIcon:hover {
-  color: #00c8f3; /* new color on hover */
 }
 
 
 /* ==== BASE ICON ==== */
+
 .LuminaIcon {
+
   width: var(--size);
   height: var(--size);
+
+  cursor: pointer;
+
   border-radius: 50%;
+
   position: relative;
+
   background: rgba(255, 255, 255, 0.05);
- 
-  box-shadow: 0 0 2rem rgba(255, 255, 255, 0.05);
-  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1),
-              box-shadow 0.4s ease;
+
+  box-shadow:
+    0 0 2rem rgba(255, 255, 255, 0.05);
+
 }
+
+.IconInner {
+    width: 100%;
+    height: 100%;
+
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+.ClassicIcon {
+    background-image: url("./img/Lumina.svg");
+    filter:(invert(100%));
+}
+
+
+.NGXIcon {
+    background-image: url("./img/LuminaNGX.svg");
+}
+
 
 /* ==== IMAGE ==== */
+
 .LuminaIcon img {
+
   width: 100%;
   height: 100%;
+
   border-radius: 50%;
+
   display: block;
-  transition: filter 0.5s ease;
+  filter:invert(100%)
 }
 
-/* ==== COLOR OVERLAY ==== */
-.LuminaIcon::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--hover-tint);
-  mix-blend-mode: overlay;
-  opacity: 0;
-  border-radius: 50%;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
-}
 
-/* ==== SHIMMER ==== */
-.LuminaIcon::after {
-  content: "";
-  position: absolute;
-  top: -100%;
-  left: -100%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    120deg,
-    rgba(255, 255, 255, 0.05) 0%,
-    rgba(255, 255, 255, 0.2) 50%,
-    rgba(255, 255, 255, 0.05) 100%
-  );
-  transform: rotate(25deg);
-  opacity: 0;
-  border-radius: 50%;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
-}
 
-/* ==== HOVER ==== */
+/* ==== SIMPLE HOVER ==== */
+
 .LuminaIcon:hover {
+
   transform: scale(1.05);
-  box-shadow: 0 0 2rem rgba(0, 200, 255, 0.2),
-              0 0 3rem rgba(0, 200, 255, 0.3);
+
+  animation: luminaFloat 1.5s ease-in-out infinite;
+
 }
 
-.LuminaIcon:hover img {
-  animation: hueShift 3s linear infinite;
-  filter: brightness(1.2) saturate(1.4);
-}
 
-.LuminaIcon:hover::before {
-  opacity: 1;
-}
-
-.LuminaIcon:hover::after {
-  opacity: 1;
-  animation: shimmer 1.5s infinite linear;
-}
 
 /* ==== CLICK ==== */
+
 .LuminaIcon:active {
+
   transform: scale(0.96);
-}
 
-/* ==== ANIMATIONS ==== */
-@keyframes hueShift {
-  0%   { filter: hue-rotate(0deg) brightness(1.2) saturate(1.4); }
-  100% { filter: hue-rotate(360deg) brightness(1.2) saturate(1.4); }
-}
-
-@keyframes shimmer {
-  0%   { transform: translateX(-50%) rotate(25deg); }
-  100% { transform: translateX(50%) rotate(25deg); }
 }
 
 
+
+/* ==== SINGLE ANIMATION ==== */
+
+@keyframes luminaFloat {
+
+  0% {
+    transform: translateY(0rem);
+  }
+
+  50% {
+    transform: translateY(-3rem);
+  }
+
+  100% {
+    transform: translateY(0rem);
+  }
+
+}
+
+.IconContainer {
+
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.LuminaButtonWrapper {
+    position: relative;
+}
+
+
+.LuminaTooltip {
+    position: absolute;
+
+    top: 100%;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    margin-top: 8px;
+
+    display: flex;
+    flex-direction: column;
+
+    min-width: 150px;
+
+    padding: 6px;
+
+    background: rgba(20, 20, 25, 0.95);
+
+    border-radius: 6px;
+
+    z-index: 9999;
+
+    pointer-events: auto;
+}
+
+
+.TooltipOption {
+
+    background: transparent;
+
+    border: none;
+
+    padding: 8px 12px;
+
+    color: white;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+
+    &:hover {
+        background: rgba(255,255,255,0.15);
+    }
+}
