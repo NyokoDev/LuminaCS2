@@ -1,3 +1,8 @@
+@font-face {
+    font-family: "Oswald-Light";
+    src: url("../../NGX/Fonts/Oswald-Light") format("truetype");
+}
+
 .NGXWorkspace {
 
     box-sizing: border-box;
@@ -27,7 +32,7 @@
     overflow-y: auto;
 
 
-    font-family: "Arial", sans-serif;
+    font-family: "Oswald-Light";
 
     color: white;
 
