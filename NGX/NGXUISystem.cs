@@ -1,4 +1,5 @@
 ﻿using Colossal.UI.Binding;
+using Game.Settings;
 using Lumina.Systems;
 using LuminaMod.XML;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.HighDefinition;
 
 
 namespace Lumina.NGX
@@ -86,6 +88,16 @@ namespace Lumina.NGX
             base.OnCreate();
 
             AddBinding(
+    new TriggerBinding<string>(
+        Mod.MODUI,
+        "InspectProperty",
+        InspectProperty
+    )
+);
+
+
+
+            AddBinding(
                new TriggerBinding<string>(
                    Mod.MODUI,
                    "SetProperty",
@@ -119,6 +131,7 @@ namespace Lumina.NGX
                  RemoveComponent
              )
          );
+
 
 
             AddUpdateBinding(
@@ -285,7 +298,7 @@ namespace Lumina.NGX
                 Mod.Log.Info(
                     "NGX: Component not found " + componentName
                 );
-                
+
                 return;
             }
 
@@ -313,61 +326,217 @@ namespace Lumina.NGX
 
             object parameter = field.GetValue(component);
 
-
-
-            // FLOAT SUPPORT
-            if (parameter is FloatParameter floatParameter)
+            if (parameter is VolumeParameter volumeParameter)
             {
-                if (float.TryParse(value, out float floatValue))
+                if (TrySetParameterValue(volumeParameter, value))
                 {
-                    floatParameter.value = floatValue;
-
                     Mod.Log.Info(
-                        $"NGX: {componentName}.{propertyName} = {floatValue}"
+                        $"NGX: {componentName}.{propertyName} = {value}"
+                    );
+                }
+                else
+                {
+                    Mod.Log.Info(
+                        $"NGX: Unsupported parameter type ({parameter.GetType().Name})"
                     );
                 }
 
                 return;
             }
-
-
-
-            // BOOL SUPPORT
-            if (parameter is BoolParameter boolParameter)
-            {
-                if (bool.TryParse(value, out bool boolValue))
-                {
-                    boolParameter.value = boolValue;
-
-                    Mod.Log.Info(
-                        $"NGX: {componentName}.{propertyName} = {boolValue}"
-                    );
-                }
-
-                return;
-            }
-
-            // INT SUPPORT
-            if (parameter is IntParameter intParameter)
-            {
-                if (int.TryParse(value, out int intValue))
-                {
-                    intParameter.value = intValue;
-
-                    Mod.Log.Info(
-                        $"NGX: {componentName}.{propertyName} = {intValue}"
-                    );
-                }
-
-                return;
-            }
-
 
             Mod.Log.Info(
-                "NGX: Unsupported parameter type"
-            );
+                $"NGX: {propertyName} is not a VolumeParameter.");
+
         }
 
+
+
+
+
+        private bool TrySetParameterValue(VolumeParameter parameter, string value)
+        {
+
+
+
+            var culture = System.Globalization.CultureInfo.InvariantCulture;
+
+            var valueProperty = parameter.GetType().GetProperty("value");
+            Mod.Log.Info("Parameter Type: " + parameter.GetType().FullName);
+
+            if (valueProperty == null)
+            {
+                Mod.Log.Info("valueProperty == NULL");
+                return false;
+            }
+
+            Mod.Log.Info("Value Property Type: " + valueProperty.PropertyType.FullName);
+            Mod.Log.Info("Incoming Value: " + value);
+
+            if (valueProperty == null || !valueProperty.CanWrite)
+                return false;
+
+            Type valueType = valueProperty.PropertyType;
+
+            try
+            {
+                if (valueType == typeof(float))
+                {
+                    valueProperty.SetValue(parameter,
+                        float.Parse(value, culture));
+                    return true;
+                }
+
+                if (valueType == typeof(int))
+                {
+                    valueProperty.SetValue(parameter,
+                        int.Parse(value, culture));
+                    return true;
+                }
+
+                if (valueType == typeof(bool))
+                {
+                    valueProperty.SetValue(parameter,
+                        bool.Parse(value));
+                    return true;
+                }
+
+                if (valueType == typeof(Color))
+                {
+                    Mod.Log.Info("Entered Color parser");
+                    string colorValue = value.Trim();
+
+                    // HTML colors (#FF0000)
+                    if (ColorUtility.TryParseHtmlString(colorValue, out Color htmlColor))
+                    {
+                        valueProperty.SetValue(parameter, htmlColor);
+                        return true;
+                    }
+
+                    // Remove wrappers
+                    colorValue = colorValue
+                        .Replace("RGBA(", "", StringComparison.OrdinalIgnoreCase)
+                        .Replace("RGB(", "", StringComparison.OrdinalIgnoreCase)
+                        .Replace("(", "")
+                        .Replace(")", "")
+                        .Trim();
+
+                    string[] split = colorValue
+                        .Split(',')
+                        .Select(x => x.Trim())
+                        .ToArray();
+
+                    if (split.Length == 3 || split.Length == 4)
+                    {
+                        float r = float.Parse(split[0], culture);
+                        float g = float.Parse(split[1], culture);
+                        float b = float.Parse(split[2], culture);
+
+                        float a = split.Length == 4
+                            ? float.Parse(split[3], culture)
+                            : 1f;
+
+                        // Convert 255 colors into 0-1 automatically
+                        if (r > 1f || g > 1f || b > 1f || a > 1f)
+                        {
+                            r /= 255f;
+                            g /= 255f;
+                            b /= 255f;
+                            a /= 255f;
+                        }
+
+                        valueProperty.SetValue(parameter,
+                            new Color(r, g, b, a));
+
+                        Mod.Log.Info("Successfully assigned color");
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                if (valueType == typeof(Vector2))
+                {
+                    string[] split = value.Split(',');
+
+                    if (split.Length == 2)
+                    {
+                        valueProperty.SetValue(parameter,
+                            new Vector2(
+                                float.Parse(split[0].Trim(), culture),
+                                float.Parse(split[1].Trim(), culture)
+                            ));
+
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                if (valueType == typeof(Vector3))
+                {
+                    string[] split = value.Split(',');
+
+                    if (split.Length == 3)
+                    {
+                        Vector3 vector = new Vector3(
+                            float.Parse(split[0].Trim(), culture),
+                            float.Parse(split[1].Trim(), culture),
+                            float.Parse(split[2].Trim(), culture)
+                        );
+
+                        valueProperty.SetValue(parameter, vector);
+
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                if (valueType == typeof(Vector4))
+                {
+                    string[] split = value.Split(',');
+
+                    if (split.Length == 4)
+                    {
+                        valueProperty.SetValue(parameter,
+                            new Vector4(
+                                float.Parse(split[0].Trim(), culture),
+                                float.Parse(split[1].Trim(), culture),
+                                float.Parse(split[2].Trim(), culture),
+                                float.Parse(split[3].Trim(), culture)
+                            ));
+
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                if (valueType == typeof(LayerMask))
+                {
+                    valueProperty.SetValue(parameter,
+                        (LayerMask)int.Parse(value, culture));
+                    return true;
+                }
+
+                if (valueType.IsEnum)
+                {
+                    valueProperty.SetValue(parameter,
+                        Enum.Parse(valueType, value, true));
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Mod.Log.Info(ex.ToString());
+                return false;
+            }
+
+            Mod.Log.Info($"Unsupported value type: {valueType.FullName}");
+
+            return false;
+        }
 
         // REMOVE COMPONENT
         // REMOVE COMPONENT
@@ -582,13 +751,169 @@ namespace Lumina.NGX
             }
         }
 
+        // INSPECT PROPERTY
+        public void InspectProperty(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return;
 
 
-        // ===============================
-        // ADD COMPONENT DYNAMICALLY
-        // ===============================
+            string[] split = path.Split('.');
 
-        private void AddComponent(string componentName)
+
+            if (split.Length != 2)
+            {
+                Mod.Log.Info(
+                    "NGX: Invalid inspect path"
+                );
+
+                return;
+            }
+
+
+            string componentName = split[0];
+            string propertyName = split[1];
+
+
+            Type componentType =
+                AppDomain.CurrentDomain
+                .GetAssemblies()
+                .SelectMany(x =>
+                {
+                    try
+                    {
+                        return x.GetTypes();
+                    }
+                    catch
+                    {
+                        return Array.Empty<Type>();
+                    }
+
+                })
+                .FirstOrDefault(x =>
+                    x.Name == componentName &&
+                    typeof(VolumeComponent)
+                    .IsAssignableFrom(x)
+                );
+
+
+            if (componentType == null)
+            {
+                Mod.Log.Info(
+                    "NGX: Component not found"
+                );
+
+                return;
+            }
+
+
+            var field =
+                componentType.GetField(
+                    propertyName,
+                    System.Reflection.BindingFlags.Instance |
+                    System.Reflection.BindingFlags.Public |
+                    System.Reflection.BindingFlags.NonPublic
+                );
+
+
+            if (field == null)
+            {
+                Mod.Log.Info(
+                    "NGX: Property not found"
+                );
+
+                return;
+            }
+
+
+            Type valueType =
+                field.FieldType
+                .GetProperty("value")
+                .PropertyType;
+
+
+            Mod.Log.Info(
+                $"AVAILABLE ADJUSTMENTS FOR {path}:"
+            );
+
+
+            if (valueType.IsEnum)
+            {
+                foreach (var value in Enum.GetNames(valueType))
+                {
+                    Mod.Log.Info(value);
+                }
+
+                return;
+            }
+
+
+            if (valueType == typeof(bool))
+            {
+                Mod.Log.Info("true");
+                Mod.Log.Info("false");
+
+                return;
+            }
+
+
+            if (valueType == typeof(Color))
+            {
+                Mod.Log.Info(
+                    "Format: RGBA(r,g,b,a)"
+                );
+
+                return;
+            }
+
+
+            if (valueType == typeof(Vector2))
+            {
+                Mod.Log.Info(
+                    "Format: (x,y)"
+                );
+
+                return;
+            }
+
+
+            if (valueType == typeof(Vector3))
+            {
+                Mod.Log.Info(
+                    "Format: (x,y,z)"
+                );
+
+                return;
+            }
+
+
+            if (valueType == typeof(Vector4))
+            {
+                Mod.Log.Info(
+                    "Format: (x,y,z,w)"
+                );
+
+                return;
+            }
+
+
+            Mod.Log.Info(
+                "Numeric value"
+            );
+        }
+    
+
+
+
+
+
+
+
+// ===============================
+// ADD COMPONENT DYNAMICALLY
+// ===============================
+
+private void AddComponent(string componentName)
         {
             if (selectedVolume == null)
                 return;

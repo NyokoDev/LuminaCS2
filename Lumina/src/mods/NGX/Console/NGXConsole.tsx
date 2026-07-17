@@ -82,6 +82,35 @@ const [historyIndex, setHistoryIndex] = useState(-1);
 
     }
 
+    function inspectCommand(args: string[]) {
+
+    if (args.length < 1) {
+
+        log(
+            "error",
+            "Usage: inspect <Component.Property>"
+        );
+
+        return;
+    }
+
+
+    const property = args[0];
+
+
+    trigger(
+        "Lumina",
+        "InspectProperty",
+        property
+    );
+
+
+    log(
+        "info",
+        `Inspecting ${property}`
+    );
+}
+
 
     function editCommand(args: string[]) {
 
@@ -100,7 +129,17 @@ const [historyIndex, setHistoryIndex] = useState(-1);
 
     const property = args[1];
 
-    const value = args[2];
+    // IMPORTANT
+    // recombine all remaining tokens
+    const value = args
+        .slice(2)
+        .join(" ");
+
+
+    console.log(
+        "Sending value:",
+        value
+    );
 
 
     trigger(
@@ -123,10 +162,18 @@ const [historyIndex, setHistoryIndex] = useState(-1);
         if (!trimmed)
             return;
 
-        log("info", `> ${trimmed}`);
+        log("info", `> ${trimmed}`); 
 
-        const args = trimmed.match(/(?:[^\s"]+|"[^"]*")+/g)
-    ?.map(arg => arg.replace(/^"|"$/g, "")) ?? [];
+        const args: string[] = [];
+
+const regex = /"[^"]*"|\S+/g;
+
+let match;
+
+while ((match = regex.exec(trimmed)) !== null)
+{
+    args.push(match[0].replace(/^"|"$/g, ""));
+}
 
         const cmd = args.shift()?.toLowerCase();
 
@@ -199,6 +246,12 @@ const [historyIndex, setHistoryIndex] = useState(-1);
                 );
 
                 break;
+
+                case "inspect":
+
+    inspectCommand(args);
+
+    break;
 
             default:
 

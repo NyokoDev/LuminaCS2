@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "cs2/ui";
-import { bindValue, useValue } from "cs2/api";
+import { bindValue, trigger, useValue } from "cs2/api";
 import { getModule, ModuleRegistryExtend } from "cs2/modding";
 import { VanillaComponentResolver } from "classes/VanillaComponentResolver";
 
@@ -56,11 +56,14 @@ export const EditorButton: ModuleRegistryExtend = (Component) =>
 
             if (PanelVisible)
             {
+
+                trigger("Lumina","SaveAutomatically");
                 // Decide what panel to open when clicked
                 OpenNGX = Boolean(ngxMode);
             }
             else
-            {
+            { 
+                trigger("Lumina","SaveAutomatically");
                 OpenNGX = false;
             }
 

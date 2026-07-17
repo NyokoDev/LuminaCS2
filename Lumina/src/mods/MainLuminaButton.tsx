@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from "react";
 
 import { Button } from "cs2/ui";
-import { bindValue, useValue } from "cs2/api";
+import { bindValue, trigger, useValue } from "cs2/api";
 import { getModule, ModuleRegistryExtend } from "cs2/modding";
 
 import { VanillaComponentResolver } from "classes/VanillaComponentResolver";
@@ -52,6 +52,8 @@ export const LuminaButton: ModuleRegistryExtend = (Component) => {
                 setPanelOpen(false);
                 return;
             }
+
+            trigger("Lumina","SaveAutomatically");
 
             setUseNGXPanel(Boolean(ngxMode));
             setPanelOpen(true);
@@ -107,7 +109,6 @@ export const LuminaButton: ModuleRegistryExtend = (Component) => {
                         styles.LuminaDivider
                     }
                 />
-
 
                 {/* Always keep original toolbar props */}
                 <Component {...otherProps}>
