@@ -75,6 +75,9 @@ public class LocaleEN : IDictionarySource
             {setting.GetOptionDescLocaleID(nameof(Lumina.Setting.ScreenSpaceAmbientOcclusion)), "Screen Space Ambient Occlusion" },
     { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.NGXMode)), "NGX" },
 { setting.GetOptionDescLocaleID(nameof(Lumina.Setting.NGXMode)), "Choose the interface used by Lumina. Classic Workspace provides the traditional Lumina layout with dedicated panels for commonly used rendering settings, making it ideal for everyday use. NGX Workspace is Lumina's next-generation editor, designed for advanced users. Instead of fixed panels, it dynamically discovers Unity Volumes and their available Volume Components, allowing you to browse volumes, inspect existing components, add new rendering effects, and work directly with the game's rendering pipeline. NGX is intended to provide a more flexible, extensible, and future-proof editing experience as new rendering features become available." },
+
+    { setting.GetOptionLabelLocaleID(nameof(Lumina.Setting.HideToolbarButton)), "Hide Toolbar Button" },
+{ setting.GetOptionDescLocaleID(nameof(Lumina.Setting.HideToolbarButton)), "Hides the toolbar Lumina button (triangle.)" },
     };
 
 

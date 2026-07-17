@@ -166,6 +166,18 @@ namespace Lumina
             }
         }
 
+        [SettingsUISection(KSection, KToggleGroup)]
+        public bool HideToolbarButton
+        {
+            get => GlobalVariables.Instance.HideToolbarButton;
+            set
+            {
+                GlobalVariables.Instance.HideToolbarButton = value;
+            }
+        }
+
+
+
 
         [SettingsUISection(KSection, KToggleGroup)]
         public bool ReloadAllPackagesOnRestart

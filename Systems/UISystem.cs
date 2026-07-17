@@ -224,6 +224,14 @@
             AddBinding(new TriggerBinding<string>(Mod.MODUI, "ImportLuminaPresetByName", ImportLuminaPresetByName));
             AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetFPS", () => SendFPS()));
 
+            AddUpdateBinding(
+    new GetterValueBinding<bool>(
+        Mod.MODUI,
+        "HideToolbarButton",
+        () => GlobalVariables.Instance.HideToolbarButton
+    )
+);
+
 
         }
 

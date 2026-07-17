@@ -14,6 +14,11 @@ import NGXWorkspace from "./NGX/NGXWorkspace";
 import "./luminaButton.scss";
 import styles from "../lumina.module.scss";
 
+export const $hideToolbarButton = bindValue<boolean>(
+    mod.id,
+    "HideToolbarButton"
+);
+
 
 export const $ngxMode = bindValue<boolean>(
     mod.id,
@@ -32,6 +37,7 @@ const ToolBarTheme: any = getModule(
 );
 
 
+
 export const LuminaButton: ModuleRegistryExtend = (Component) => {
     return (props) => {
 
@@ -40,6 +46,7 @@ export const LuminaButton: ModuleRegistryExtend = (Component) => {
             ...otherProps
         } = props || {};
 
+        const hideToolbarButton = useValue($hideToolbarButton);
         const ngxMode = useValue($ngxMode);
 
         const [panelOpen, setPanelOpen] = useState(false);
@@ -48,12 +55,14 @@ export const LuminaButton: ModuleRegistryExtend = (Component) => {
 
         const handleClick = useCallback(() => {
 
+            trigger("Lumina","SaveAutomatically");
+
             if (panelOpen) {
                 setPanelOpen(false);
                 return;
             }
 
-            trigger("Lumina","SaveAutomatically");
+            
 
             setUseNGXPanel(Boolean(ngxMode));
             setPanelOpen(true);
@@ -80,26 +89,37 @@ export const LuminaButton: ModuleRegistryExtend = (Component) => {
 
         return (
             <>
-                <div className={styles.LuminaButtonWrapper}>
+                {
 
-                    <Button
-                        className={buttonClassName}
-                        variant="icon"
-                        focusKey={
-                            VanillaComponentResolver.instance.FOCUS_DISABLED
+    !hideToolbarButton && (
+        <>
+            <div className={styles.LuminaButtonWrapper}>
+                <Button
+                    className={buttonClassName}
+                    variant="icon"
+                    focusKey={VanillaComponentResolver.instance.FOCUS_DISABLED}
+                    onClick={handleClick}
+                >
+                    <div
+                        className={
+                            styles.IconInner +
+                            " " +
+                            (ngxMode ? styles.NGXIcon : styles.ClassicIcon)
                         }
-                        onClick={handleClick}
-                    >
-                        <div
-    className={
-        styles.IconInner +
-        " " +
-        (ngxMode ? styles.NGXIcon : styles.ClassicIcon)
-    }
-/>
-                    </Button>
+                    />
+                </Button>
+            </div>
 
-                </div>
+            <div
+                className={
+                    ToolBarTheme.divider +
+                    " " +
+                    styles.LuminaDivider
+                }
+            />
+        </>
+    )
+}
 
 
                 <div

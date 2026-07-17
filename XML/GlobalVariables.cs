@@ -351,7 +351,8 @@ namespace LuminaMod.XML
 
 
 
-
+        [XmlElement]
+        public bool HideToolbarButton { get; set; } = false;
 
         // Contact Shadows
         [XmlElement] public float ContactShadowsLength { get; set; } = 1f;
@@ -576,6 +577,6 @@ namespace LuminaMod.XML
             }
         }
 
-       
+        
     }
 }
