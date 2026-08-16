@@ -440,12 +440,16 @@
         protected override void OnUpdate()
         {
 
+#if DEBUG
             FPSSetup();
+#endif
 
+#if DEBUG
             if (GlobalVariables.Instance.SceneFlowCheckerEnabled)
             {
                 SceneFlowChecker.CheckForErrors();
             }
+#endif
 
             UpdateNames();
 
@@ -458,14 +462,16 @@
             ColorAdjustments();
             WhiteBalance();
             ShadowsMidTonesHighlights();
+            AmbientOcclusionUpdate();
             ContactShadowsUpdate();
             OriginalShadows();
-            AmbientOcclusionUpdate();
             UpdateSSR();
         }
 
+#if DEBUG
         private void FPSSetup()
         {
+
             if (UnityEngine.Time.deltaTime <= 0f)
             {
                 RenderEffectsSystem.CurrentFPS = 0f;
@@ -474,6 +480,7 @@
 
             RenderEffectsSystem.CurrentFPS = 1f / UnityEngine.Time.deltaTime;
         }
+#endif
 
         private void UpdateSSR()
         {
@@ -489,7 +496,9 @@
             m_ScreenSpaceRefraction.screenFadeDistance.Override(GlobalVariables.Instance.ScreenSpaceRefractionScreenFadeDistance);
         }
 
-        private void AmbientOcclusionUpdate()
+  
+
+        public static void AmbientOcclusionUpdate()
         {
             var gv = GlobalVariables.Instance;
             if (gv == null)
@@ -551,8 +560,9 @@
             }
             catch { Lumina.Mod.Log.Info("ao.receiverMotionRejection.Override(gv.AmbientOcclusionReceiverMotionRejection);"); }
 
-            // Ray tracing parameters
-            if (SystemInfo.supportsRayTracing)
+            bool rayTracingAvailable = IsRayTracingAvailable();
+
+            if (rayTracingAvailable)
             {
                 try { ao.rayTracing.Override(gv.AmbientOcclusionRayTracing); }
                 catch { Lumina.Mod.Log.Info("ao.rayTracing.Override(gv.AmbientOcclusionRayTracing);"); }
@@ -577,8 +587,18 @@
             try { ao.stepCount = gv.AmbientOcclusionStepCount; }
             catch { Lumina.Mod.Log.Info("ao.stepCount = gv.AmbientOcclusionStepCount;"); }
 
-            try { ao.fullResolution = gv.AmbientOcclusionFullResolution; }
-            catch { Lumina.Mod.Log.Info("ao.fullResolution = gv.AmbientOcclusionFullResolution;"); }
+            try
+            {
+                ao.quality.levelAndOverride = (
+                    ao.quality.levelAndOverride.level,
+                    true
+                );
+
+                ao.fullResolution = gv.AmbientOcclusionFullResolution;
+            }
+            catch
+            {
+            }
 
             try { ao.maximumRadiusInPixels = gv.AmbientOcclusionMaxRadiusInPixels; }
             catch { Lumina.Mod.Log.Info("ao.maximumRadiusInPixels = gv.AmbientOcclusionMaxRadiusInPixels;"); }
@@ -586,6 +606,24 @@
             try { ao.bilateralUpsample = gv.AmbientOcclusionBilateralUpsample; }
             catch { Lumina.Mod.Log.Info("ao.bilateralUpsample = gv.AmbientOcclusionBilateralUpsample;"); }
         }
+
+        private static bool IsRayTracingAvailable()
+        {
+            if (!SystemInfo.supportsRayTracing)
+                return false;
+
+            if (SystemInfo.graphicsDeviceType != UnityEngine.Rendering.GraphicsDeviceType.Direct3D12)
+                return false;
+
+            var hdrpAsset = GraphicsSettings.currentRenderPipeline as HDRenderPipelineAsset;
+
+            if (hdrpAsset == null)
+                return false;
+
+            return hdrpAsset.currentPlatformRenderPipelineSettings.supportRayTracing;
+        }
+
+
         private void OriginalShadows()
         {
       
@@ -1092,7 +1130,7 @@
 
                 // Add Volume component
                 LuminaVolume = globalVolume.AddComponent<Volume>();
-                LuminaVolume.priority = 1980f;
+                LuminaVolume.priority = 5000f;
                 Mod.Log.Info("[LUMINA] Priority set to 1980.");
 
                 if (GlobalVariables.Instance.LuminaVolumeEnabled)

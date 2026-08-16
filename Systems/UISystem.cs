@@ -60,6 +60,8 @@
                 return GlobalPaths.FreshInstall;
             }
         }
+
+
         /// <inheritdoc/>
         protected override void OnCreate()
         {
@@ -84,6 +86,8 @@
                 Mod.MODUI,
                 "FreshInstall",
                 () => FreshInstall));
+
+        
 
             AddBinding(new TriggerBinding(Mod.MODUI, "StopFreshInstall", StopFreshInstall));
 
@@ -250,6 +254,141 @@
 
         }
 
+
+        private void ApplySSAOPreset(string preset)
+        {
+            var settings = GlobalVariables.Instance;
+
+            settings.IsScreenSpaceAmbientOcclusion = true;
+            settings.AmbientOcclusionRayTracing = false;
+
+            // Common high-quality SSAO defaults.
+            settings.AmbientOcclusionTemporalAccumulation = true;
+            settings.AmbientOcclusionSpecularOcclusion = 1f;
+
+            settings.AmbientOcclusionOccluderMotionRejection = true;
+            settings.AmbientOcclusionReceiverMotionRejection = true;
+
+            switch (preset?.ToLowerInvariant())
+            {
+                /* =========================================
+                   LIGHT
+                   Performance oriented, barely visible
+                ========================================= */
+
+                case "light":
+                    settings.AmbientOcclusionIntensity = 0.50f;
+
+                    settings.AmbientOcclusionRadius = 0.35f;
+                    settings.AmbientOcclusionMaxRadiusInPixels = 20;
+
+                    settings.AmbientOcclusionStepCount = 4;
+
+                    settings.AmbientOcclusionDirectLightingStrength = 0.0f;
+
+                    settings.AmbientOcclusionBilateralAggressiveness = 0.35f;
+                    settings.AmbientOcclusionGhostingReduction = 0.5f;
+
+                    settings.AmbientOcclusionFullResolution = false;
+                    settings.AmbientOcclusionBilateralUpsample = true;
+
+                    break;
+
+
+                /* =========================================
+                   SUBTLE
+                   Vanilla+ / natural definition
+                ========================================= */
+
+                case "subtle":
+                    settings.AmbientOcclusionIntensity = 1.2f;
+
+                    settings.AmbientOcclusionRadius = 0.75f;
+                    settings.AmbientOcclusionMaxRadiusInPixels = 32;
+
+                    settings.AmbientOcclusionStepCount = 6;
+
+                    settings.AmbientOcclusionDirectLightingStrength = 0.05f;
+
+                    settings.AmbientOcclusionBilateralAggressiveness = 0.5f;
+                    settings.AmbientOcclusionGhostingReduction = 0.6f;
+
+                    settings.AmbientOcclusionFullResolution = true;
+                    settings.AmbientOcclusionBilateralUpsample = false;
+
+                    break;
+
+
+                /* =========================================
+                   HEAVY
+                   Clearly visible contact / structure AO
+                ========================================= */
+
+                case "heavy":
+                    settings.AmbientOcclusionIntensity = 5f;
+
+                    settings.AmbientOcclusionRadius = 1.75f;
+                    settings.AmbientOcclusionMaxRadiusInPixels = 72;
+
+                    settings.AmbientOcclusionStepCount = 10;
+
+                    settings.AmbientOcclusionDirectLightingStrength = 0.12f;
+
+                    settings.AmbientOcclusionBilateralAggressiveness = 0.65f;
+                    settings.AmbientOcclusionGhostingReduction = 0.7f;
+
+                    settings.AmbientOcclusionFullResolution = true;
+                    settings.AmbientOcclusionBilateralUpsample = false;
+
+                    break;
+
+
+                /* =========================================
+                   DARK
+                   Strong, deliberately stylized AO
+                ========================================= */
+
+                case "dark":
+                    settings.AmbientOcclusionIntensity = 10;
+
+                    settings.AmbientOcclusionRadius = 3.0f;
+                    settings.AmbientOcclusionMaxRadiusInPixels = 96;
+
+                    settings.AmbientOcclusionStepCount = 12;
+
+                    settings.AmbientOcclusionDirectLightingStrength = 1.22851968f;
+
+                    settings.AmbientOcclusionBilateralAggressiveness = 0.75f;
+                    settings.AmbientOcclusionGhostingReduction = 0.75f;
+
+                    settings.AmbientOcclusionFullResolution = true;
+                    settings.AmbientOcclusionBilateralUpsample = false;
+
+                    break;
+
+
+                default:
+                    Mod.Log.Warn($"[LUMINA] Unknown SSAO preset: {preset}");
+                    return;
+            }
+
+            /*
+             * Not used with temporal accumulation enabled,
+             * but retain sane defaults if the user disables it later.
+             */
+            settings.AmbientOcclusionDirectionCount = 2;
+            settings.AmbientOcclusionBlurSharpness = 0.25f;
+
+            /*
+             * Ray-traced AO defaults.
+             * Currently unused because ray tracing is disabled above.
+             */
+            settings.AmbientOcclusionRayLength = 3f;
+            settings.AmbientOcclusionSampleCount = 2;
+            settings.AmbientOcclusionDenoise = true;
+            settings.AmbientOcclusionDenoiserRadius = 0.5f;
+        }
+
         private void StopFreshInstall()
         {
             string marker = Path.Combine(
@@ -374,6 +513,18 @@
             // VALUE BINDINGS (UI reads)
             // =========================
 
+            AddBinding(new TriggerBinding<string>(
+Mod.MODUI,
+"ApplySSAOPreset",
+ApplySSAOPreset));
+
+            AddBinding(new TriggerBinding(
+    Mod.MODUI,
+    "OpenSSAOHelp",
+    () => OpenUrl("https://docs.unity3d.com/Packages/com.unity.render-pipelines.high-definition@14.0/manual/Override-Ambient-Occlusion.html")
+));
+
+
             AddUpdateBinding(new GetterValueBinding<bool>(
                 Mod.MODUI,
                 "IsScreenSpaceAmbientOcclusion",
@@ -480,12 +631,13 @@
                 () => GlobalVariables.Instance.AmbientOcclusionDenoiserRadius));
 
 
-          
+
 
 
             // =========================
             // TRIGGER BINDINGS (UI writes)
             // =========================
+
 
             AddBinding(new TriggerBinding<bool>(
                 Mod.MODUI,

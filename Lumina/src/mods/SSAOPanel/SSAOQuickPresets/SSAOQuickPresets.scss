@@ -1,0 +1,366 @@
+.ssao-quick-presets {
+  position: absolute;
+  top: 900rem;
+  left: 25rem;
+  height: 200rem;
+  width: 750rem;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  padding: 20rem 24rem;
+  gap: 22rem;
+
+  background: rgba(20, 21, 23, 0.98);
+
+  border-top: 1rem solid rgba(255, 255, 255, 0.06);
+  border-radius: 0 0 10rem 10rem;
+
+  font-family: "Inter Tight", sans-serif;
+  font-size: 14rem;
+
+  color: white;
+}
+
+/* =========================
+   QUICK PRESETS TITLE
+========================= */
+
+.ssao-quick-presets__intro {
+  width: 185rem;
+  flex-shrink: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ssao-quick-presets__title-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  gap: 10rem;
+}
+
+.ssao-quick-presets__bolt {
+  width: 30rem;
+  height: 30rem;
+
+  flex-shrink: 0;
+
+  color: #aab9ff;
+
+  stroke-width: 2.2;
+}
+
+.ssao-quick-presets__title {
+
+  font-weight: 700;
+
+  line-height: 1;
+
+  white-space: nowrap;
+}
+
+.ssao-quick-presets__subtitle {
+  margin-top: 12rem;
+  margin-left: 40rem;
+
+  max-width: 130rem;
+
+
+  line-height: 1.4;
+
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* =========================
+   PRESET AREA
+========================= */
+
+.ssao-quick-presets__items {
+  flex: 1;
+
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 10rem;
+}
+
+.ssao-preset-row {
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+
+  gap: 10rem;
+}
+
+/* =========================
+   PRESET CARD
+========================= */
+
+.ssao-preset-card {
+  flex: 1;
+
+  min-width: 0;
+  height: 66rem;
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  padding: 10rem 12rem;
+
+  gap: 12rem;
+
+  border: 1rem solid rgba(255, 255, 255, 0.07);
+  border-radius: 8rem;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.075),
+      rgba(255, 255, 255, 0.035)
+    );
+
+  color: white;
+
+  font-family: inherit;
+
+  overflow: hidden;
+
+  cursor: pointer;
+
+  transition:
+    background 100ms ease,
+    border-color 100ms ease,
+    box-shadow 100ms ease,
+    transform 100ms ease;
+}
+
+.ssao-preset-card:hover {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.12),
+      rgba(255, 255, 255, 0.055)
+    );
+}
+
+.ssao-preset-card:active {
+  transform: scale(0.985);
+}
+
+.ssao-preset-card.active {
+  border-color: rgba(40, 90, 255, 0.95);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(35, 70, 170, 0.4),
+      rgba(24, 45, 105, 0.28)
+    );
+
+  box-shadow:
+    0 0 12rem rgba(40, 80, 255, 0.4),
+    inset 0 0 12rem rgba(40, 80, 255, 0.08);
+}
+
+/* =========================
+   ICON
+========================= */
+
+.ssao-preset-card__icon {
+  width: 46rem;
+  height: 46rem;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8rem;
+
+  color: white;
+
+  box-shadow:
+    inset 0 1rem 0 rgba(255, 255, 255, 0.14),
+    0 4rem 10rem rgba(0, 0, 0, 0.2);
+
+  svg {
+    width: 24rem;
+    height: 24rem;
+
+    stroke-width: 2.2;
+  }
+}
+
+.ssao-preset-card__icon.subtle {
+  background:
+    linear-gradient(
+      145deg,
+      #2c6df1,
+      #1746ad
+    );
+}
+
+.ssao-preset-card__icon.heavy {
+  background:
+    linear-gradient(
+      145deg,
+      #744fc8,
+      #4b2d8a
+    );
+}
+
+.ssao-preset-card__icon.dark {
+  background:
+    linear-gradient(
+      145deg,
+      #db7d25,
+      #9d470c
+    );
+}
+
+.ssao-preset-card__icon.light {
+  background:
+    linear-gradient(
+      145deg,
+      #31ba66,
+      #18763c
+    );
+}
+
+/* =========================
+   CARD TEXT
+========================= */
+
+.ssao-preset-card__text {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: flex-start;
+  justify-content: center;
+
+  gap: 5rem;
+}
+
+.ssao-preset-card__name {
+
+  font-weight: 700;
+
+  line-height: 1;
+}
+
+.ssao-preset-card__description {
+
+
+  line-height: 1.15;
+
+  color: rgba(255, 255, 255, 0.53);
+
+  white-space: nowrap;
+}
+
+/* =========================
+   HELP
+========================= */
+
+.ssao-quick-presets__help {
+  width: 145rem;
+
+  flex-shrink: 0;
+
+  align-self: stretch;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  gap: 10rem;
+
+  padding-left: 18rem;
+
+  background: transparent;
+
+  border: 0;
+  border-left: 1rem solid rgba(255, 255, 255, 0.1);
+
+  color: white;
+
+  font-family: inherit;
+
+  text-align: left;
+
+  cursor: pointer;
+}
+
+.ssao-quick-presets__help-icon {
+  width: 32rem;
+  height: 32rem;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+
+  color: rgba(255, 255, 255, 0.6);
+
+  svg {
+    width: 30rem;
+    height: 30rem;
+
+    stroke-width: 1.8;
+  }
+}
+
+.ssao-quick-presets__help-text {
+  min-width: 0;
+
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 8rem;
+}
+
+.ssao-quick-presets__help-title {
+
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+.ssao-quick-presets__help-description {
+
+
+  line-height: 1.35;
+
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.ssao-quick-presets__help-arrow {
+  width: 18rem;
+  height: 18rem;
+
+  flex-shrink: 0;
+
+  color: rgba(255, 255, 255, 0.5);
+
+  stroke-width: 2;
+}

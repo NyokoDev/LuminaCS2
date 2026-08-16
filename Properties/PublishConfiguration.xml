@@ -79,7 +79,7 @@
 <!--Dependency for the mod, can be set multiple times-->
 <Dependency Id="" />
 <!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
-<ChangeLog Value="- v3.6.7R1: Improvements to the codebase." />
+<ChangeLog Value="- v3.6.8: Improvements, New Update Notification, New Start Screen, overall improvements to the codebase." />
 " />
 <!--ChangeLog>
 </ChangeLog-->

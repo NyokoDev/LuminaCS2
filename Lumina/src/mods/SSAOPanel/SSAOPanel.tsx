@@ -3,6 +3,7 @@ import { bindValue, trigger, useValue } from "cs2/api";
 import { Slider } from "mods/slider";
 import mod from "./../../../mod.json";
 import { Tooltip } from "cs2/ui";
+import { SSAOQuickPresets } from "./SSAOQuickPresets/QuickPresets";
 
 export interface SSAOPanelBaseProps {
   title?: string;
@@ -104,9 +105,11 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
   const handleSSAODenoise = (v: boolean) => trigger(mod.id, "HandleSSAODenoise", v);
   const handleSSAODenoiserRadius = (v: number) => trigger(mod.id, "HandleSSAODenoiserRadius", v);
 
+
   /* UI */
 
   return (
+    <>
     <div className={`ssao-panel-base ${className}`}>
       {title && <div className="ssaoconfiglabel">{title}</div>}
       {children}
@@ -294,6 +297,15 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
               step={0.001}
               onChange={handleSSAODenoiserRadius}
               disabled={!ssaoEnabled || !rayTracing} gamepadStep={0.001} noFill={false}      />
+
+
+
     </div>
+
+
+              <SSAOQuickPresets />
+
+
+    </>
   );
 };
