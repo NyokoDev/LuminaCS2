@@ -1,0 +1,279 @@
+@import "./lumina-tokens.scss";
+
+.lumina-section {
+    margin-bottom: var(--lumina-space-xl);
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.lumina-section__title {
+    font-size: 10rem;
+    font-weight: var(--lumina-font-normal);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--lumina-text-secondary);
+    margin: 0 0 var(--lumina-space-sm);
+}
+
+.lumina-section__desc {
+    font-size: 11rem;
+    font-weight: var(--lumina-font-light);
+    color: var(--lumina-text-muted);
+    margin: 0 0 var(--lumina-space-md);
+    line-height: 1.4;
+}
+
+.lumina-setting-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    grid-template-rows: auto auto;
+    align-items: center;
+    gap: var(--lumina-space-xs) var(--lumina-space-md);
+    min-height: var(--lumina-row-height);
+    padding: var(--lumina-space-sm) var(--lumina-space-md);
+    margin-bottom: 2rem;
+    background: var(--lumina-bg-section);
+    border: 1rem solid var(--lumina-border);
+    border-radius: var(--lumina-radius-sm);
+    box-sizing: border-box;
+}
+
+.lumina-setting-row__label {
+    grid-column: 1;
+    grid-row: 1;
+    font-size: 12rem;
+    font-weight: var(--lumina-font-light);
+    color: var(--lumina-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.lumina-setting-row__value {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 11rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--lumina-text-secondary);
+    min-width: 56rem;
+    text-align: right;
+}
+
+.lumina-setting-row__toggle {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+.lumina-setting-row__control {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+    min-width: 0;
+
+    input[type="range"] {
+        width: 100%;
+    }
+}
+
+.lumina-enable-toggle {
+    position: relative;
+    width: 28rem;
+    height: 28rem;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.lumina-enable-toggle__check {
+    position: absolute;
+    inset: 0;
+    background: url("coui://ui-mods/Icons/Checkmark.svg") center / 16rem 16rem no-repeat;
+    filter: invert(100%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.12s ease;
+
+    &--on {
+        opacity: 1;
+    }
+}
+
+.lumina-enable-toggle__hit {
+    position: absolute;
+    inset: 0;
+    padding: 0;
+    border: 1rem solid var(--lumina-border-strong);
+    border-radius: var(--lumina-radius-sm);
+    background: rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    z-index: 0;
+}
+
+.lumina-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 32rem;
+    padding: 0 var(--lumina-space-md);
+    font-family: var(--lumina-font);
+    font-size: 11rem;
+    font-weight: var(--lumina-font-light);
+    letter-spacing: 0.02em;
+    color: var(--lumina-text);
+    background: var(--lumina-bg-section);
+    border: 1rem solid var(--lumina-border-strong);
+    border-radius: var(--lumina-radius-sm);
+    cursor: pointer;
+    transition: background-color 0.12s ease, border-color 0.12s ease;
+
+    &:hover {
+        background: var(--lumina-bg-hover);
+        border-color: var(--lumina-accent-dim);
+    }
+
+    &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    &--primary {
+        border-color: var(--lumina-accent-dim);
+        color: var(--lumina-accent);
+    }
+}
+
+.lumina-btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--lumina-space-sm);
+    margin-top: var(--lumina-space-md);
+}
+
+.lumina-dialog-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 10000;
+    pointer-events: auto;
+}
+
+.lumina-dialog {
+    width: 420rem;
+    max-width: 90%;
+    background: var(--lumina-bg-shell);
+    border: 1rem solid var(--lumina-border-strong);
+    border-radius: var(--lumina-radius);
+    padding: var(--lumina-space-lg);
+    box-sizing: border-box;
+}
+
+.lumina-dialog__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--lumina-space-md);
+    font-size: 13rem;
+    font-weight: var(--lumina-font-normal);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.lumina-dialog__close {
+    cursor: pointer;
+    font-size: 18rem;
+    line-height: 1;
+    color: var(--lumina-text-secondary);
+    padding: var(--lumina-space-xs);
+
+    &:hover {
+        color: var(--lumina-text);
+    }
+}
+
+.lumina-dialog__body {
+    margin-bottom: var(--lumina-space-lg);
+}
+
+.lumina-dialog__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--lumina-space-sm);
+}
+
+.lumina-input,
+.lumina-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: var(--lumina-space-sm) var(--lumina-space-md);
+    font-family: var(--lumina-font);
+    font-size: 12rem;
+    color: var(--lumina-text);
+    background: var(--lumina-bg-section);
+    border: 1rem solid var(--lumina-border);
+    border-radius: var(--lumina-radius-sm);
+
+    &::placeholder {
+        color: var(--lumina-text-muted);
+    }
+}
+
+.lumina-textarea {
+    min-height: 160rem;
+    resize: vertical;
+    font-family: ui-monospace, monospace;
+    font-size: 11rem;
+}
+
+.lumina-hint {
+    font-size: 11rem;
+    font-weight: var(--lumina-font-light);
+    color: var(--lumina-text-secondary);
+    line-height: 1.45;
+    margin: var(--lumina-space-sm) 0;
+}
+
+.lumina-hint--warn {
+    color: #c9a227;
+}
+
+.lumina-import-mode-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--lumina-space-md);
+    margin: var(--lumina-space-md) 0;
+}
+
+.lumina-import-mode-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--lumina-space-xs);
+    padding: var(--lumina-space-md);
+    text-align: left;
+    background: var(--lumina-bg-section);
+    border: 1rem solid var(--lumina-border);
+    border-radius: var(--lumina-radius-sm);
+    cursor: pointer;
+    color: inherit;
+    font-family: inherit;
+
+    &:hover {
+        border-color: var(--lumina-accent-dim);
+        background: var(--lumina-bg-hover);
+    }
+}
+
+.lumina-import-mode-card__title {
+    font-size: 12rem;
+    color: var(--lumina-text);
+}
+
+.lumina-import-mode-card__desc {
+    font-size: 10rem;
+    font-weight: var(--lumina-font-light);
+    color: var(--lumina-text-secondary);
+    line-height: 1.35;
+}

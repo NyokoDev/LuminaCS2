@@ -1,0 +1,183 @@
+@import "./lumina-tokens.scss";
+
+.lumina-panel-shell {
+    position: absolute;
+    top: -900rem;
+    left: 140rem;
+    width: var(--lumina-panel-width);
+    height: var(--lumina-panel-height);
+    display: flex;
+    flex-direction: column;
+    font-family: var(--lumina-font);
+    font-weight: var(--lumina-font-normal);
+    color: var(--lumina-text);
+    background: var(--lumina-bg-shell);
+    border: 1rem solid var(--lumina-border);
+    border-radius: var(--lumina-radius);
+    pointer-events: auto;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.lumina-header {
+    display: flex;
+    align-items: center;
+    gap: var(--lumina-space-sm);
+    height: var(--lumina-header-height);
+    min-height: var(--lumina-header-height);
+    padding: 0 var(--lumina-space-md);
+    border-bottom: 1rem solid var(--lumina-border);
+    background: var(--lumina-bg-content);
+    flex-shrink: 0;
+}
+
+.lumina-header__drag {
+    flex-shrink: 0;
+    width: 28rem;
+    height: 28rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: move;
+    opacity: 0.6;
+
+    &:hover {
+        opacity: 1;
+    }
+}
+
+.lumina-header__brand {
+    display: flex;
+    align-items: center;
+    gap: var(--lumina-space-sm);
+    min-width: 0;
+}
+
+.lumina-header__logo {
+    width: 22rem;
+    height: 22rem;
+    background: url("coui://ui-mods/Icons/Lumina.svg") center / contain no-repeat;
+    filter: invert(100%);
+    flex-shrink: 0;
+}
+
+.lumina-header__title {
+    font-size: 13rem;
+    font-weight: var(--lumina-font-normal);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--lumina-text);
+    line-height: 1;
+}
+
+.lumina-header__version {
+    font-size: 10rem;
+    font-weight: var(--lumina-font-light);
+    color: var(--lumina-text-secondary);
+    letter-spacing: 0.04em;
+    margin-left: var(--lumina-space-xs);
+}
+
+.lumina-body {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+}
+
+.lumina-nav {
+    width: var(--lumina-nav-width);
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--lumina-space-xs);
+    padding: var(--lumina-space-sm) var(--lumina-space-xs);
+    border-right: 1rem solid var(--lumina-border);
+    background: var(--lumina-bg-content);
+    box-sizing: border-box;
+}
+
+.lumina-nav-item {
+    width: 36rem;
+    height: 36rem;
+    padding: 0;
+    border: 1rem solid transparent;
+    border-radius: var(--lumina-radius-sm);
+    background-color: transparent;
+    background-size: 20rem 20rem;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    filter: invert(72%);
+    transition: background-color 0.12s ease, border-color 0.12s ease, filter 0.12s ease;
+    flex-shrink: 0;
+
+    &:hover {
+        background-color: var(--lumina-bg-hover);
+        filter: invert(88%);
+    }
+
+    &--active {
+        background-color: var(--lumina-bg-active);
+        border-color: var(--lumina-accent-dim);
+        filter: invert(100%);
+    }
+}
+
+.lumina-nav-item--color {
+    background-image: url("coui://ui-mods/Icons/ColorAdjustments.svg");
+}
+
+.lumina-nav-item--settings {
+    background-image: url("coui://ui-mods/Icons/SettingsGear.svg");
+}
+
+.lumina-nav-item--planetary {
+    background-image: url("coui://ui-mods/Icons/Planet.svg");
+}
+
+.lumina-nav-item--tonemapping {
+    background-image: url("coui://ui-mods/Icons/CwrbLHu.png");
+    background-size: 22rem 22rem;
+}
+
+.lumina-nav-item--sky-fog {
+    background-image: url("coui://ui-mods/Icons/suuIDOT.png");
+    background-size: 22rem 22rem;
+}
+
+.lumina-nav-item--road {
+    background-image: url("../img/road.svg");
+    background-size: 22rem 22rem;
+}
+
+.lumina-nav-item--ssao {
+    background-image: url("../img/SSAO.png");
+    background-size: 22rem 22rem;
+}
+
+.lumina-nav-item--ssr {
+    background-image: url("../img/ssr.svg");
+    background-size: 22rem 22rem;
+}
+
+.lumina-content {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: var(--lumina-space-lg);
+    background: var(--lumina-bg-content);
+    box-sizing: border-box;
+}
+
+.lumina-view-title {
+    font-size: 12rem;
+    font-weight: var(--lumina-font-normal);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--lumina-text);
+    margin: 0 0 var(--lumina-space-lg);
+    padding-bottom: var(--lumina-space-sm);
+    border-bottom: 1rem solid var(--lumina-border);
+}

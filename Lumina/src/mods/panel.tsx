@@ -33,7 +33,7 @@ import DragButton from "./DraggableButton/DragButton";
 import './RoadPanel/roadpanel.scss';
 import { RoadPanelBase } from "./RoadPanel/RoadPanelBase";
 import { SSAOPanelBase } from "./SSAOPanel/SSAOPanel";
-import {  SSAOPopup } from "./UpdateNotifications/Update";
+import {  UpdateNotification } from "./UpdateNotifications/UpdateNotification";
 import "./HeroSettings.scss";
 import "././Cubemaps/Cubemaps.scss";
 import { TonemappingPanel } from "./TonemappingPanel/TonemappingPanel";
@@ -93,7 +93,7 @@ export const SunFlareSize$ = bindValue<number>(mod.id, "SunFlareSize");
 
 // Update
 
-export const UpdateNotification = bindValue<boolean>(mod.id, 'UpdateNotification');
+export const UpdateNotificationConst = bindValue<boolean>(mod.id, 'UpdateNotification');
 
 
 
@@ -352,7 +352,7 @@ const handleHighlights = (value: number) => {
         trigger(mod.id, 'OpenLegacyUI');
     }
 
-const updateNotification = useValue(UpdateNotification);
+const updateNotification = useValue(UpdateNotificationConst);
 const [showUpdate, setShowUpdate] = useState(false);
 
 useEffect(() => {
@@ -1753,14 +1753,10 @@ id="Global"
 <div>
   {/* Update Notification */}
   {showUpdate && (
-    <SSAOPopup
-      onClose={() => {
-        setShowUpdate(false);
-        trigger(mod.id, "StopUpdateNotification");
-      }}
+    <UpdateNotification      
     />
   )}
-</div>
+</div> 
 
 
 

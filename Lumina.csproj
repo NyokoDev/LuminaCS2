@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-		<TargetFramework>net472</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<Configurations>Debug;Release</Configurations>
 
 		<!--The folder where Game.dll is located. Set it only if the game is not installed in the default location, otherwise keep it empty-->
@@ -14,7 +14,7 @@
 		<!--Your.PDX@Account.login-->
 		<!--Your-PDX-Account-Pa$$word-->
 		<PDXAccountDataPath>$(USERPROFILE)\Desktop\pdx_account.txt</PDXAccountDataPath>
-		<LangVersion>9.0</LangVersion>
+		<LangVersion>preview</LangVersion>
 
 		<!--The file where mod information which is required for publishing mod on PDX mods are stored-->
 		<PublishConfigurationPath>Properties\PublishConfiguration.xml</PublishConfigurationPath>

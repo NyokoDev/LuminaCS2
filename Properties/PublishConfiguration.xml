@@ -73,13 +73,13 @@
 <!--Link to the forum post where the mod can be discussed-->
 <ForumLink Value="https://forum.paradoxplaza.com/forum/threads/lumina.1645623/" />
 <!--Version of the mod-->
-<ModVersion Value="v3.6.7" />
+<ModVersion Value="v3.6.7R1" />
 <!--Recommended version of the base game to use the mod-->
 <GameVersion Value="1.6.*" />
 <!--Dependency for the mod, can be set multiple times-->
 <Dependency Id="" />
 <!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
-<ChangeLog Value="- v3.6.7: Add hide toolbar icon option." />
+<ChangeLog Value="- v3.6.7R1: Improvements to the codebase." />
 " />
 <!--ChangeLog>
 </ChangeLog-->

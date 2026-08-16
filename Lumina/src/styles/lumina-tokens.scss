@@ -1,0 +1,36 @@
+:root {
+    --lumina-bg-shell: #18181c;
+    --lumina-bg-content: #1f1f24;
+    --lumina-bg-section: #26262c;
+    --lumina-bg-hover: rgba(255, 255, 255, 0.04);
+    --lumina-bg-active: rgba(107, 140, 255, 0.12);
+
+    --lumina-border: rgba(255, 255, 255, 0.08);
+    --lumina-border-strong: rgba(255, 255, 255, 0.14);
+
+    --lumina-text: #e8e8ec;
+    --lumina-text-secondary: #8a8a96;
+    --lumina-text-muted: #5c5c68;
+
+    --lumina-accent: #6b8cff;
+    --lumina-accent-dim: rgba(107, 140, 255, 0.35);
+
+    --lumina-radius-sm: 3rem;
+    --lumina-radius: 4rem;
+
+    --lumina-space-xs: 4rem;
+    --lumina-space-sm: 8rem;
+    --lumina-space-md: 12rem;
+    --lumina-space-lg: 16rem;
+    --lumina-space-xl: 24rem;
+
+    --lumina-font: "Inter Tight", "Segoe UI", system-ui, sans-serif;
+    --lumina-font-light: 300;
+    --lumina-font-normal: 400;
+
+    --lumina-panel-width: 720rem;
+    --lumina-panel-height: 640rem;
+    --lumina-nav-width: 48rem;
+    --lumina-header-height: 40rem;
+    --lumina-row-height: 36rem;
+}
