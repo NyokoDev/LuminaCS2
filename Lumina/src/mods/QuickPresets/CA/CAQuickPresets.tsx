@@ -1,4 +1,12 @@
 import React from "react";
+import {
+  Palette,
+  Sparkles,
+  Aperture,
+  Waves,
+  type LucideIcon,
+} from "lucide-react";
+
 import "./CAQuickPresets.scss";
 
 type QuickPresetName =
@@ -11,32 +19,39 @@ interface QuickPresetsProps {
   onPreset?: (preset: QuickPresetName) => void;
 }
 
-const presets = [
+interface QuickPreset {
+  id: QuickPresetName;
+  label: string;
+  icon: LucideIcon;
+  accentClass: string;
+}
+
+const presets: QuickPreset[] = [
   {
     id: "colorful",
     label: "Colorful",
-    icon: "◉",
+    icon: Palette,
     accentClass: "preset-colorful",
   },
   {
     id: "vibe",
     label: "Vibe",
-    icon: "⌁",
+    icon: Sparkles,
     accentClass: "preset-vibe",
   },
   {
     id: "non-contemporary",
     label: "Non-Contemporary",
-    icon: "▥",
+    icon: Aperture,
     accentClass: "preset-non-contemporary",
   },
   {
     id: "flow",
     label: "Flow",
-    icon: "≈",
+    icon: Waves,
     accentClass: "preset-flow",
   },
-] as const;
+];
 
 export const CAQuickPresets: React.FC<QuickPresetsProps> = ({
   onPreset,
@@ -54,26 +69,36 @@ export const CAQuickPresets: React.FC<QuickPresetsProps> = ({
       </div>
 
       <div className="quick-presets__items">
-        {presets.map((preset) => (
-          <button
-            key={preset.id}
-            type="button"
-            className={`quick-preset ${preset.accentClass}`}
-            onClick={() => onPreset?.(preset.id)}
-          >
-            <div className="quick-preset__content">
-              <span className="quick-preset__icon">
-                {preset.icon}
-              </span>
+        {presets.map((preset) => {
+          const Icon = preset.icon;
 
-              <span className="quick-preset__label">
-                {preset.label}
-              </span>
-            </div>
+          return (
+            <button
+              key={preset.id}
+              type="button"
+              className={`quick-preset ${preset.accentClass}`}
+              onClick={() => onPreset?.(preset.id)}
+            >
+              <div className="quick-preset__content">
+                <span className="quick-preset__icon">
+                  <Icon
+                    className="quick-preset__lucide"
+                    strokeWidth={1.7}
+                  />
+                </span>
 
-            <span className="quick-preset__accent" />
-          </button>
-        ))}
+                <span className="quick-preset__label">
+                  {preset.label}
+                </span>
+              </div>
+
+              <span
+                className="quick-preset__accent"
+                aria-hidden="true"
+              />
+            </button>
+          );
+        })}
       </div>
     </section>
   );

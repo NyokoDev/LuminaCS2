@@ -3,23 +3,29 @@
 ========================================= */
 
 .quick-presets {
-    position: absolute;
-      top: 900rem;
-  left: 25rem;
-  width: 100%;
+  position: absolute;
+
+  /* KEEP POSITIONING */
+  top: 630rem;
+  left: 225rem;
+  width: 750rem;
+  height:115rem;
+
   box-sizing: border-box;
 
-  padding: 12rem 14rem 14rem;
+  padding: 14rem 16rem 16rem;
 
-  background: rgba(17, 19, 21, 0.96);
+  background: rgba(17, 19, 21, 0.97);
 
-  border: 1rem solid rgba(255, 255, 255, 0.08);
+  border: 1rem solid rgba(255, 255, 255, 0.1);
   border-radius: 12rem;
 
   font-family:
     "Inter Tight",
     "Inter",
     sans-serif;
+
+  color: #ffffff;
 }
 
 
@@ -29,27 +35,30 @@
 
 .quick-presets__header {
   display: flex;
-  align-items: baseline;
-  gap: 8rem;
+  align-items: center;
 
-  margin-bottom: 10rem;
+gap: 50rem;
+
+  margin-bottom: 12rem;
 }
 
 .quick-presets__title {
-  color: rgba(255, 255, 255, 0.94);
+  flex-shrink: 0;
 
-  font-size: 14rem;
-  font-weight: 500;
+  color: rgba(255, 255, 255, 0.98);
+
+  font-size: 20rem;
+  font-weight: 600;
   line-height: 1;
 }
 
 .quick-presets__subtitle {
-  color: rgba(255, 255, 255, 0.38);
-
-  font-size: 10rem;
+  color: rgba(255, 255, 255, 0.52);
+margin-left: 30rem;
+  font-size: 15rem;
   font-weight: 400;
+  line-height: 1;
 }
-
 
 /* =========================================
    PRESET CONTAINER
@@ -57,14 +66,15 @@
 
 .quick-presets__items {
   display: flex;
-  gap: 7rem;
 
   width: 100%;
+
+  gap: 10rem;
 }
 
 
 /* =========================================
-   PRESET
+   PRESET BUTTON
 ========================================= */
 
 .quick-preset {
@@ -72,20 +82,22 @@
 
   flex: 1;
   min-width: 0;
-  height: 54rem;
+
+  height: 72rem;
 
   display: flex;
   align-items: center;
 
-  padding: 0 11rem;
+  padding: 0 16rem;
 
+  overflow: hidden;
 
-  border: 1rem solid rgba(255, 255, 255, 0.1);
-  border-radius: 8rem;
+  border: 1rem solid rgba(255, 255, 255, 0.18);
+  border-radius: 9rem;
 
-  background: rgba(255, 255, 255, 0.025);
+  background: rgba(255, 255, 255, 0.07);
 
-  color: rgba(255, 255, 255, 0.82);
+  color: #ffffff !important;
 
   cursor: pointer;
 
@@ -96,8 +108,8 @@
 }
 
 .quick-preset:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .quick-preset:active {
@@ -106,7 +118,7 @@
 
 
 /* =========================================
-   CONTENT
+   PRESET CONTENT
 ========================================= */
 
 .quick-preset__content {
@@ -115,36 +127,90 @@
   display: flex;
   align-items: center;
 
-  gap: 8rem;
+  gap: 12rem;
 }
 
-.quick-preset__icon {
-  width: 22rem;
-  height: 22rem;
 
-  flex-shrink: 0;
+/* =========================================
+   ICON CONTAINER
+========================================= */
+
+.quick-preset__icon {
+  width: 36rem;
+  height: 36rem;
+
+  flex: 0 0 36rem;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  color: var(--preset-accent);
+  color: var(--preset-accent) !important;
 
-  font-size: 17rem;
-  font-weight: 500;
+  opacity: 1 !important;
 }
 
+
+/* =========================================
+   LUCIDE ICON
+========================================= */
+
+.quick-preset__icon svg,
+.quick-preset__lucide {
+  width: 30rem !important;
+  height: 30rem !important;
+
+  min-width: 30rem !important;
+  min-height: 30rem !important;
+
+  display: block;
+
+  color: var(--preset-accent) !important;
+
+  stroke: var(--preset-accent) !important;
+  stroke-width: 2.2 !important;
+
+  fill: none !important;
+
+  opacity: 1 !important;
+
+  visibility: visible !important;
+}
+
+
+/* Make sure paths inside Lucide aren't being overridden */
+
+.quick-preset__icon svg path,
+.quick-preset__icon svg circle,
+.quick-preset__icon svg line,
+.quick-preset__icon svg polyline,
+.quick-preset__icon svg polygon,
+.quick-preset__icon svg rect {
+  stroke: var(--preset-accent) !important;
+}
+
+
+/* =========================================
+   LABEL
+========================================= */
+
 .quick-preset__label {
+  min-width: 0;
+
   overflow: hidden;
 
-  color: rgba(255, 255, 255, 0.88);
+  color: #ffffff !important;
 
-  font-size: 11rem;
-  font-weight: 450;
+  font-size: 14rem;
+  font-weight: 500;
   line-height: 1;
+
+  letter-spacing: 0.1rem;
 
   white-space: nowrap;
   text-overflow: ellipsis;
+
+  opacity: 1 !important;
 }
 
 
@@ -155,15 +221,17 @@
 .quick-preset__accent {
   position: absolute;
 
-  left: 10rem;
-  right: 10rem;
-  bottom: 5rem;
+  left: 14rem;
+  right: 14rem;
+  bottom: 7rem;
 
-  height: 1rem;
+  height: 2rem;
 
-  background: var(--preset-accent);
+  border-radius: 10rem;
 
-  opacity: 0.8;
+  background: var(--preset-accent) !important;
+
+  opacity: 1 !important;
 }
 
 
@@ -172,24 +240,45 @@
 ========================================= */
 
 .preset-colorful {
-  --preset-accent: #2fc8ec;
+  --preset-accent: #32d5ff;
 }
 
 .preset-vibe {
-  --preset-accent: #e54cba;
+  --preset-accent: #ff58c7;
 }
 
 .preset-non-contemporary {
-  --preset-accent: #e9a23b;
+  --preset-accent: #ffad32;
 }
 
 .preset-flow {
-  --preset-accent: #8dce53;
+  --preset-accent: #9cdd55;
 }
 
 
 /* =========================================
-   KEYBOARD FOCUS
+   INDIVIDUAL PRESET HOVER
+========================================= */
+
+.preset-colorful:hover {
+  border-color: rgba(50, 213, 255, 0.45);
+}
+
+.preset-vibe:hover {
+  border-color: rgba(255, 88, 199, 0.45);
+}
+
+.preset-non-contemporary:hover {
+  border-color: rgba(255, 173, 50, 0.45);
+}
+
+.preset-flow:hover {
+  border-color: rgba(156, 221, 85, 0.45);
+}
+
+
+/* =========================================
+   FOCUS
 ========================================= */
 
 .quick-preset:focus {
@@ -197,5 +286,43 @@
 }
 
 .quick-preset:focus-visible {
-  border-color: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
+
+/* =========================================
+   REMOVE DEFAULT BUTTON STYLING
+========================================= */
+
+.quick-preset {
+  appearance: none;
+
+  -webkit-appearance: none;
+
+  font: inherit;
+
+  text-align: left;
+
+  box-shadow: none;
+  outline: none;
+}
+
+
+/* =========================================
+   FORCE READABILITY INSIDE GAME UI
+========================================= */
+
+.quick-preset *,
+.quick-presets * {
+  box-sizing: border-box;
+}
+
+.quick-preset span {
+  text-shadow: none;
+}
+
+.quick-preset__label,
+.quick-presets__title,
+.quick-presets__subtitle {
+  -webkit-text-fill-color: currentColor;
 }
