@@ -81,10 +81,15 @@ namespace Lumina.XML
 
             private static readonly string guid = Guid.NewGuid().ToString("N").Substring(0, 8);
 
-            /// <summary>
-            /// Returns the version with a unique experimental GUID suffix if in experimental mode.
-            /// </summary>
-            public static readonly string Version = GetVersion();
+        /// <summary>
+        /// Confirms if the mod should check for updates and notify the user if a new version is available.
+        /// </summary>
+        public static bool UpdateNotification { get; set; } = false;
+
+        /// <summary>
+        /// Returns the version with a unique experimental GUID suffix if in experimental mode.
+        /// </summary>
+        public static readonly string Version = GetVersion();
 
             public static string GetVersion()
             {
@@ -127,6 +132,7 @@ namespace Lumina.XML
         public static string SupportedGameVersion = "1.6.0f1 (419.d6c6) [6216.19404]";
 
         public static string CurrentPresetPath { get; set; }
+        public static bool FreshInstall { get; set; } = true;
 
         /// <summary>
         /// Returns icon path for toast notifications.

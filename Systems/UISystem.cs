@@ -53,13 +53,18 @@
         private float SunDiameterValue { get; set; }
         public float SunIntensityValue { get; set; }
         public float SunFlareSizeValue { get; set; }
-       
-
+        public bool FreshInstall
+        {
+            get
+            {
+                return GlobalPaths.FreshInstall;
+            }
+        }
         /// <inheritdoc/>
         protected override void OnCreate()
         {
             base.OnCreate();
-            CheckVersionOnce();
+            UpdateNotification();
             InitializeLutName();
             CreateBindings();
             m_PlanetarySystem = World.GetExistingSystemManaged<PlanetarySystem>();
@@ -72,6 +77,16 @@
         /// </summary>
         private void CreateBindings()
         {
+
+            // FRESH INSTALL
+
+            AddUpdateBinding(new GetterValueBinding<bool>(
+                Mod.MODUI,
+                "FreshInstall",
+                () => FreshInstall));
+
+            AddBinding(new TriggerBinding(Mod.MODUI, "StopFreshInstall", StopFreshInstall));
+
             UseLuminaVolume();
             Checkboxes();
             ColorAdjustments();
@@ -235,6 +250,18 @@
 
         }
 
+        private void StopFreshInstall()
+        {
+            string marker = Path.Combine(
+                GlobalPaths.AssemblyDirectory,
+                "ngx"
+            );
+
+            File.WriteAllText(marker, string.Empty);
+
+            GlobalPaths.FreshInstall = false;
+        }
+
         private float SendFPS()
         {
             return RenderEffectsSystem.CurrentFPS;
@@ -297,76 +324,48 @@
 
         private void UpdateNotification()
         {
-            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "UpdateNotification", UpdateNotificationBool));
-            AddBinding(new TriggerBinding(Mod.MODUI, "StopUpdateNotification", StopUpdateNotification));
-        }
-
-        private bool CheckVersionOnce()
-        {
-            string url = "https://raw.githubusercontent.com/NyokoDev/LuminaCS2/main/XML/version.txt";
-            string currentVersion = GlobalPaths.Version;
-
-            try
-            {
-                using (WebClient client = new WebClient())
+            AddUpdateBinding(new GetterValueBinding<bool>(
+                Mod.MODUI,
+                "UpdateNotification",
+                () =>
                 {
-                    string latestVersion = client.DownloadString(url).Trim();
+                    const string url =
+                        "https://raw.githubusercontent.com/NyokoDev/LuminaCS2/main/XML/version.txt";
 
-                    // If versions mismatch, reset notification
-                    if (currentVersion != latestVersion)
+                    string currentVersion = GlobalPaths.Version;
+
+                    try
                     {
-                        Mod.Log.Info($"Lumina version mismatch. Current: {currentVersion} | Latest: {latestVersion}");
-                    }
+                        using (WebClient client = new WebClient())
+                        {
+                            string latestVersion = client.DownloadString(url).Trim();
 
-                    return true;
+                            if (currentVersion != latestVersion)
+                            {
+                                Mod.Log.Info(
+                                    $"Lumina version mismatch. Current: {currentVersion} | Latest: {latestVersion}"
+                                );
+
+                                GlobalPaths.UpdateNotification = true;
+                            }
+
+                            return GlobalPaths.UpdateNotification;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Mod.Log.Info("Error checking version: " + ex.Message);
+
+                        return GlobalPaths.UpdateNotification;
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                Mod.Log.Info("Error checking version: " + ex.Message);
-                return false;
-            }
-        }
-        
+            ));
 
-        private bool UpdateNotificationBool()
-        {
-            string url = "https://raw.githubusercontent.com/NyokoDev/LuminaCS2/main/XML/version.txt";
-            string currentVersion = GlobalPaths.Version;
-
-            try
-            {
-                using (WebClient client = new WebClient())
-                {
-                    string latestVersion = client.DownloadString(url).Trim();
-
-                    // If versions mismatch, reset notification
-                    if (currentVersion != latestVersion)
-                    {
-                      
-                        GlobalVariables.Instance.UpdateNotification = true;
-                    }
-
-                    // Respect user setting
-                    if (!GlobalVariables.Instance.UpdateNotification)
-                    {
-                        return false;
-                    }
-
-   
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Mod.Log.Info("Error checking version: " + ex.Message);
-                return false;
-            }
-        }
-
-        private void StopUpdateNotification()
-        {
-            GlobalVariables.Instance.UpdateNotification = false;
+            AddBinding(new TriggerBinding(
+                Mod.MODUI,
+                "StopUpdateNotification",
+                () => GlobalPaths.UpdateNotification = false
+            ));
         }
 
         private void AddScreenSpaceAmbientOcclusionBindings()
@@ -479,6 +478,9 @@
                 Mod.MODUI,
                 "AmbientOcclusionDenoiserRadius",
                 () => GlobalVariables.Instance.AmbientOcclusionDenoiserRadius));
+
+
+          
 
 
             // =========================
@@ -860,16 +862,15 @@
         private void CheckVersion()
         {
             string url = "https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/main/XML/version.txt";
-            string unityversion = UnityEngine.Application.unityVersion;
             string currentVersion = GlobalPaths.Version;
             string gameVersion = Version.current.fullVersion;
             string supportedGameVersion = GlobalPaths.SupportedGameVersion;
 
-       
-
             if (gameVersion != supportedGameVersion)
             {
-                string errorMsg = $"[LUMINA] Unsupported game version: {gameVersion}. Supported version is {supportedGameVersion}.";
+                string errorMsg =
+                    $"[LUMINA] Unsupported game version: {gameVersion}. Supported version is {supportedGameVersion}.";
+
                 string recommendation =
                     "Recommendations:\n" +
                     "- Update your game to the latest supported version.\n" +
@@ -877,16 +878,8 @@
                     "- Visit the Lumina support or GitHub page for help.\n" +
                     "- Join the Discord for assistance: https://discord.gg/5gZgRNm29e";
 
-                Mod.Log.Error($"{errorMsg}\n{recommendation}");
-
-                {
-                    GlobalPaths.SendMessage(errorMsg); // Show a message box with the version information
-                }
-
-                return;
+                Mod.Log.Info($"{errorMsg}\n{recommendation}");
             }
-
-     
 
             try
             {
@@ -894,24 +887,23 @@
                 {
                     string latestVersion = client.DownloadString(url).Trim();
 
-                    if (currentVersion == latestVersion)
+                    if (currentVersion != latestVersion)
                     {
-                       
-                    }
-                    else
-                    {
-                        string message = string.Format("Lumina new version available! Current: {0} | Latest: {1}", currentVersion, latestVersion);
-                        GlobalPaths.SendMessage(message); // Show a message box with the version information
-               
+                        Mod.Log.Info(
+                            $"Lumina new version available! Current: {currentVersion} | Latest: {latestVersion}"
+                        );
                     }
                 }
             }
             catch (Exception ex)
             {
-                Mod.Log.Info("Error checking version: " + ex.Message);
+                string errorMsg =
+                    $"Lumina failed to retrieve the latest version information.\n\n{ex.Message}";
+
+                Mod.Log.Info(errorMsg);
+                GlobalPaths.SendMessage(errorMsg);
             }
         }
-
 
         private void SendMessage()
         {

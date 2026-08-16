@@ -40,6 +40,7 @@ import { TonemappingPanel } from "./TonemappingPanel/TonemappingPanel";
 import "././TonemappingPanel/TonemappingPanelNew.scss";
 import { SSRPanelBase } from "./ScreenSpaceRefraction/SSRPanel";
 import "../mods/UpdateNotifications/UpdateNotification.scss";
+import { FreshInstall } from "./PopUps/FreshInstall/FreshInstall";
 
 
 
@@ -1774,7 +1775,7 @@ id="Global"
 
           </div>
       
-
+<FreshInstall />
 
 
     </>

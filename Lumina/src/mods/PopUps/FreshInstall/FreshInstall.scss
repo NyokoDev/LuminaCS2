@@ -1,0 +1,186 @@
+@font-face {
+  font-family: "Inter Tight";
+  src: url("../../fonts/InterTight-Italic-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+.fresh-install {
+  position: absolute;
+
+  top: -600rem;
+  left: 200rem;
+
+  z-index: 10000;
+
+  display: block;
+
+  width: 580rem;
+  height: 300rem;
+
+
+
+  border-radius: 55rem;
+
+  background: linear-gradient(
+    105deg,
+    rgba(145, 145, 145, 0.96) 0%,
+    rgba(127, 127, 127, 0.96) 46%,
+    rgba(70, 70, 70, 0.97) 100%
+  );
+
+  color: rgba(245, 245, 245, 0.88);
+
+font-family: "Inter Tight", sans-serif;
+font-weight: 300;
+
+  box-shadow: 0 6rem 20rem rgba(0, 0, 0, 0.18);
+
+  transition:
+    opacity 180ms ease,
+    visibility 180ms ease;
+
+  // --------------------------------------------------
+  // Visibility
+  // --------------------------------------------------
+
+  &--visible {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  &--hidden {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  // --------------------------------------------------
+  // Logo
+  // --------------------------------------------------
+
+  &__logo {
+    position: absolute;
+
+    top: 21rem;
+    left: -40rem;
+
+    width: 235rem;
+    height: 235rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0;
+    padding: 0;
+  }
+
+  &__logo-svg {
+    display: block;
+
+    width: 235rem;
+    height: 235rem;
+
+    margin: 0;
+
+    object-fit: contain;
+
+    opacity: 0.84;
+  }
+
+  // --------------------------------------------------
+  // Content
+  // --------------------------------------------------
+
+  &__content {
+    position: static;
+
+    width: 100%;
+    height: 100%;
+
+    margin: 0;
+    padding: 0;
+  }
+
+  // --------------------------------------------------
+  // Message
+  // --------------------------------------------------
+
+  &__message {
+    position: absolute;
+
+    top: 57rem;
+    left: 205rem;
+
+    width: 345rem;
+
+    margin: 0;
+
+    text-align: center;
+
+    white-space: nowrap;
+
+    font-size: 20.5rem;
+    font-weight: 300;
+    line-height: 1;
+
+    letter-spacing: -0.55rem;
+
+    color: rgba(245, 245, 245, 0.82);
+  }
+
+  // --------------------------------------------------
+  // Get Started
+  // --------------------------------------------------
+
+  &__button {
+    position: absolute;
+
+    left: 205rem;
+    bottom: 55rem;
+
+    width: 345rem;
+    min-width: 345rem;
+    height: 86rem;
+
+    margin: 0;
+    padding: 0 19rem;
+
+    border: 0;
+    border-radius: 45rem;
+
+    background: rgba(155, 155, 155, 0.58);
+
+    color: rgba(245, 245, 245, 0.78);
+
+    font: inherit;
+    font-size: 54rem;
+    font-weight: 300;
+    line-height: 1;
+
+    letter-spacing: -2rem;
+
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition:
+      background 120ms ease,
+      transform 120ms ease;
+
+    &:hover {
+      background: rgba(170, 170, 170, 0.68);
+    }
+
+    &:active {
+      transform: scale(0.985);
+    }
+
+    &:focus-visible {
+      outline: 1.5rem solid rgba(255, 255, 255, 0.72);
+      outline-offset: 2.5rem;
+    }
+  }
+}

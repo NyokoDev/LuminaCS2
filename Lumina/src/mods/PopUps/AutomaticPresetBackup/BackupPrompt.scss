@@ -1,0 +1,126 @@
+.backup-prompt {
+  position: fixed;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.025) 0%,
+      rgba(255, 255, 255, 0) 48%
+    ),
+    #111111;
+
+  color: #ffffff;
+
+  font-family:
+    "Inter Tight",
+    Inter,
+    system-ui,
+    sans-serif;
+
+  z-index: 9999;
+
+  &__content {
+    width: 1000rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
+  }
+
+  &__logo {
+    width: 110rem;
+    height: 110rem;
+
+    margin-bottom: 60rem;
+
+    object-fit: contain;
+  }
+
+  &__title {
+    margin: 0;
+
+    font-size: 46rem;
+    font-weight: 300;
+    line-height: 1.15;
+    letter-spacing: -1rem;
+
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  &__actions {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 250rem;
+    margin-top: 100rem;
+  }
+
+  &__button {
+    width: 365rem;
+    height: 88rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 1rem solid rgba(255, 255, 255, 0.4);
+    border-radius: 12rem;
+
+    background: rgba(255, 255, 255, 0.015);
+
+    font-family: inherit;
+    font-size: 38rem;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: 8rem;
+
+    cursor: pointer;
+
+    transition:
+      background 120ms ease,
+      border-color 120ms ease,
+      transform 120ms ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.75);
+    }
+
+    &:active {
+      transform: scale(0.985);
+    }
+
+    &--accept {
+      color: #8cff64;
+
+      &:hover {
+        background: rgba(140, 255, 100, 0.05);
+        border-color: rgba(140, 255, 100, 0.7);
+      }
+    }
+
+    &--decline {
+      color: #ff5f63;
+
+      &:hover {
+        background: rgba(255, 95, 99, 0.05);
+        border-color: rgba(255, 95, 99, 0.7);
+      }
+    }
+  }
+}

@@ -62,6 +62,8 @@ namespace Lumina
             GlobalVariables.EnsureSettingsFileExists(GlobalPaths.GlobalModSavingPath);
             GlobalVariables.LoadFromFile(GlobalPaths.GlobalModSavingPath);
 
+            IsLuminaFreshInstallOrFolderModified();
+
             harmony = new Harmony($"{nameof(Lumina)}.{nameof(Mod)}");
 
             RunTranspilerPatch();
@@ -133,6 +135,30 @@ namespace Lumina
             SendNotification();
         }
 
+        private void IsLuminaFreshInstallOrFolderModified()
+        {
+            try
+            {
+                string marker = Path.Combine(
+                    GlobalPaths.AssemblyDirectory,
+                    "ngx"
+                );
+
+                if (File.Exists(marker))
+                {
+                    GlobalPaths.FreshInstall = false;
+                }
+                else
+                {
+                    GlobalPaths.FreshInstall = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Mod.Log.Warn($"Failed to check Lumina installation state: {ex.Message}");
+                GlobalPaths.FreshInstall = false;
+            }
+        }
 
         public static void RunTranspilerPatch()
         {

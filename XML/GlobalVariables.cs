@@ -345,8 +345,7 @@ namespace LuminaMod.XML
         [XmlElement]
         public float AmbientOcclusionDenoiserRadius { get;  set; }
 
-        [XmlElement]
-        public bool UpdateNotification { get; set; } = true;
+
 
 
 
