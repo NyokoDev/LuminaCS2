@@ -41,6 +41,7 @@ import "././TonemappingPanel/TonemappingPanelNew.scss";
 import { SSRPanelBase } from "./ScreenSpaceRefraction/SSRPanel";
 import "../mods/UpdateNotifications/UpdateNotification.scss";
 import { FreshInstall } from "./PopUps/FreshInstall/FreshInstall";
+import { CAQuickPresets } from "./QuickPresets/CA/CAQuickPresets";
 
 
 
@@ -1444,7 +1445,7 @@ id="Global"
 
 
 
-
+<CAQuickPresets />
 
 
 
@@ -1476,7 +1477,7 @@ id="Global"
             </div>
 
             <div className="VersionBadge">
-                VERSION 3.6.8
+                VERSION 3.6.9
             </div>
 
         </div>

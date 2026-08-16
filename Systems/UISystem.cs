@@ -356,7 +356,7 @@
 
                     settings.AmbientOcclusionStepCount = 12;
 
-                    settings.AmbientOcclusionDirectLightingStrength = 1.22851968f;
+                    settings.AmbientOcclusionDirectLightingStrength = 0.5089463f;
 
                     settings.AmbientOcclusionBilateralAggressiveness = 0.75f;
                     settings.AmbientOcclusionGhostingReduction = 0.75f;

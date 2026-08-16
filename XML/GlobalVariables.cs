@@ -31,7 +31,7 @@ namespace LuminaMod.XML
         /// NGX Mode is enabled or disabled.
         /// </summary>
         [XmlElement]
-        public bool NGXMode { get; set; } = true;
+        public bool NGXMode { get; set; } = false;
 
         /// <summary>
         /// Gets or sets postExposure.

@@ -1,0 +1,201 @@
+/* =========================================
+   LUMINA - COLOR ADJUSTMENTS QUICK PRESETS
+========================================= */
+
+.quick-presets {
+    position: absolute;
+      top: 900rem;
+  left: 25rem;
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 12rem 14rem 14rem;
+
+  background: rgba(17, 19, 21, 0.96);
+
+  border: 1rem solid rgba(255, 255, 255, 0.08);
+  border-radius: 12rem;
+
+  font-family:
+    "Inter Tight",
+    "Inter",
+    sans-serif;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.quick-presets__header {
+  display: flex;
+  align-items: baseline;
+  gap: 8rem;
+
+  margin-bottom: 10rem;
+}
+
+.quick-presets__title {
+  color: rgba(255, 255, 255, 0.94);
+
+  font-size: 14rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.quick-presets__subtitle {
+  color: rgba(255, 255, 255, 0.38);
+
+  font-size: 10rem;
+  font-weight: 400;
+}
+
+
+/* =========================================
+   PRESET CONTAINER
+========================================= */
+
+.quick-presets__items {
+  display: flex;
+  gap: 7rem;
+
+  width: 100%;
+}
+
+
+/* =========================================
+   PRESET
+========================================= */
+
+.quick-preset {
+  position: relative;
+
+  flex: 1;
+  min-width: 0;
+  height: 54rem;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 11rem;
+
+
+  border: 1rem solid rgba(255, 255, 255, 0.1);
+  border-radius: 8rem;
+
+  background: rgba(255, 255, 255, 0.025);
+
+  color: rgba(255, 255, 255, 0.82);
+
+  cursor: pointer;
+
+  transition:
+    background 120ms ease,
+    border-color 120ms ease,
+    transform 120ms ease;
+}
+
+.quick-preset:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.quick-preset:active {
+  transform: scale(0.985);
+}
+
+
+/* =========================================
+   CONTENT
+========================================= */
+
+.quick-preset__content {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8rem;
+}
+
+.quick-preset__icon {
+  width: 22rem;
+  height: 22rem;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--preset-accent);
+
+  font-size: 17rem;
+  font-weight: 500;
+}
+
+.quick-preset__label {
+  overflow: hidden;
+
+  color: rgba(255, 255, 255, 0.88);
+
+  font-size: 11rem;
+  font-weight: 450;
+  line-height: 1;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+
+/* =========================================
+   BOTTOM ACCENT
+========================================= */
+
+.quick-preset__accent {
+  position: absolute;
+
+  left: 10rem;
+  right: 10rem;
+  bottom: 5rem;
+
+  height: 1rem;
+
+  background: var(--preset-accent);
+
+  opacity: 0.8;
+}
+
+
+/* =========================================
+   PRESET COLORS
+========================================= */
+
+.preset-colorful {
+  --preset-accent: #2fc8ec;
+}
+
+.preset-vibe {
+  --preset-accent: #e54cba;
+}
+
+.preset-non-contemporary {
+  --preset-accent: #e9a23b;
+}
+
+.preset-flow {
+  --preset-accent: #8dce53;
+}
+
+
+/* =========================================
+   KEYBOARD FOCUS
+========================================= */
+
+.quick-preset:focus {
+  outline: none;
+}
+
+.quick-preset:focus-visible {
+  border-color: rgba(255, 255, 255, 0.4);
+}
