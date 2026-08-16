@@ -19,12 +19,10 @@ export const $hideToolbarButton = bindValue<boolean>(
     "HideToolbarButton"
 );
 
-
 export const $ngxMode = bindValue<boolean>(
     mod.id,
     "NGXMode"
 );
-
 
 const ToolBarButtonTheme: any = getModule(
     "game-ui/game/components/toolbar/components/feature-button/toolbar-feature-button.module.scss",
@@ -36,11 +34,8 @@ const ToolBarTheme: any = getModule(
     "classes"
 );
 
-
-
 export const LuminaButton: ModuleRegistryExtend = (Component) => {
     return (props) => {
-
         const {
             children,
             ...otherProps
@@ -54,102 +49,84 @@ export const LuminaButton: ModuleRegistryExtend = (Component) => {
 
 
         const handleClick = useCallback(() => {
+            trigger("Lumina", "SaveAutomatically");
 
-            trigger("Lumina","SaveAutomatically");
+        
 
             if (panelOpen) {
                 setPanelOpen(false);
                 return;
             }
 
-            
-
             setUseNGXPanel(Boolean(ngxMode));
             setPanelOpen(true);
-
         }, [
             panelOpen,
             ngxMode
         ]);
 
-
         const buttonClassName = useMemo(() => {
-
             return (
                 ToolBarButtonTheme.button +
                 " " +
                 styles.LuminaIcon +
                 (panelOpen ? " " + styles.active : "")
             );
-
         }, [
             panelOpen
         ]);
 
-
         return (
             <>
-                {
+                {!hideToolbarButton && (
+                    <>
+                        <div className={styles.LuminaButtonWrapper}>
+                            <Button
+                                className={buttonClassName}
+                                variant="icon"
+                                focusKey={
+                                    VanillaComponentResolver.instance
+                                        .FOCUS_DISABLED
+                                }
+                                onClick={handleClick}
+                            >
+                                <div
+                                    className={
+                                        styles.IconInner +
+                                        " " +
+                                        (
+                                            ngxMode
+                                                ? styles.NGXIcon
+                                                : styles.ClassicIcon
+                                        )
+                                    }
+                                />
+                            </Button>
+                        </div>
 
-    !hideToolbarButton && (
-        <>
-            <div className={styles.LuminaButtonWrapper}>
-                <Button
-                    className={buttonClassName}
-                    variant="icon"
-                    focusKey={VanillaComponentResolver.instance.FOCUS_DISABLED}
-                    onClick={handleClick}
-                >
-                    <div
-                        className={
-                            styles.IconInner +
-                            " " +
-                            (ngxMode ? styles.NGXIcon : styles.ClassicIcon)
-                        }
-                    />
-                </Button>
-            </div>
+                        <div
+                            className={
+                                ToolBarTheme.divider +
+                                " " +
+                                styles.LuminaDivider
+                            }
+                        />
+                    </>
+                )}
 
-            <div
-                className={
-                    ToolBarTheme.divider +
-                    " " +
-                    styles.LuminaDivider
-                }
-            />
-        </>
-    )
-}
-
-
-                <div
-                    className={
-                        ToolBarTheme.divider +
-                        " " +
-                        styles.LuminaDivider
-                    }
-                />
-
-                {/* Always keep original toolbar props */}
                 <Component {...otherProps}>
                     {children}
                 </Component>
 
-
-                {/* Replace the panel when opened */}
-                {
-                    panelOpen &&
-                    useNGXPanel &&
+                {panelOpen && useNGXPanel && (
                     <NGXWorkspace />
-                }
+                )}
 
-
-                {
-                    panelOpen &&
-                    !useNGXPanel &&
+                {panelOpen && !useNGXPanel && (
                     <YourPanelComponent />
-                }
+                )}
 
+               
             </>
         );
     };

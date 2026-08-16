@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./UpdateNotification.scss";
+import LuminaSVG from "../../img/Lumina.svg";
 
 export const UpdateNotification: React.FC = () => {
   const [visible, setVisible] = useState(true);
@@ -9,92 +10,58 @@ export const UpdateNotification: React.FC = () => {
   }
 
   return (
-  <main
-    className="UpdateNotification"
-    aria-label="Application update notification"
-  >
-    <section
-      className="update-modal"
-      id="update-modal"
+    <div
+      className="update-notification"
       role="dialog"
-      aria-modal="true"
       aria-labelledby="update-title"
-      aria-describedby="update-description"
     >
       <button
-        className="update-modal__close"
+        className="update-notification__close"
         type="button"
         aria-label="Close update notification"
         onClick={() => setVisible(false)}
       >
-        <svg
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-          focusable="false"
-        >
+        ×
+      </button>
+
+      <div className="update-notification__header">
+        <h2 id="update-title">
+          New version
+          <br />
+          available
+        </h2>
+      </div>
+
+      <div className="update-notification__graphic">
+        <img
+          src={LuminaSVG}
+          alt="Lumina"
+          className="update-notification__logo"
+        />
+      </div>
+
+      <div className="update-notification__version">
+        v3.1.6
+      </div>
+
+      <button
+        className="update-notification__download"
+        type="button"
+        aria-label="View update"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
           <path
-            d="M18 6 6 18M6 6l12 12"
+            d="M12 3v12m0 0 5-5m-5 5-5-5M5 17v3h14v-3"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="2.4"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
         </svg>
       </button>
-
-      <div className="update-modal__content">
-        <div className="update-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" focusable="false">
-            <circle
-              cx="12"
-              cy="12"
-              r="10"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            />
-
-            <path
-              d="m16 12-4-4-4 4M12 16V8"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </div>
-
-        <h1
-          className="update-modal__title"
-          id="update-title"
-        >
-          New version
-          <br />
-          is available
-        </h1>
-
-        <p
-          className="update-modal__description"
-          id="update-description"
-        >
-          A brand new version of Lumina
-          <br />
-          is available with improvements,
-          <br />
-          bug fixes and new features.
-        </p>
-
-        <button
-          className="update-modal__action"
-          type="button"
-        >
-          View update
-        </button>
-      </div>
-    </section>
-  </main>
-);
+    </div>
+  );
 };
+
 export default UpdateNotification;

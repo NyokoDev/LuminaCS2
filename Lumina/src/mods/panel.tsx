@@ -39,6 +39,7 @@ import "././Cubemaps/Cubemaps.scss";
 import { TonemappingPanel } from "./TonemappingPanel/TonemappingPanel";
 import "././TonemappingPanel/TonemappingPanelNew.scss";
 import { SSRPanelBase } from "./ScreenSpaceRefraction/SSRPanel";
+import "../mods/UpdateNotifications/UpdateNotification.scss";
 
 
 
@@ -79,7 +80,7 @@ export const HighlightsActive$ =  bindValue<boolean>(mod.id, 'GetHighlightsCheck
 //Presets
 
 
-// Planetary Settings
+
 
 export const LatitudeValue$ = bindValue<number>(mod.id, 'LatitudeValue');
 export const LongitudeValue$ = bindValue<number>(mod.id, 'LongitudeValue');
@@ -163,6 +164,7 @@ const EmissionMultiplier = useValue(EmissionMultiplier$);
 const SunDiameter = useValue(SunDiameter$);
 const SunIntensity = useValue(SunIntensity$);
 const SunFlareSize = useValue(SunFlareSize$);
+const updateNotification = useValue(UpdateNotificationConst);
 
 
 // Initialize state variables using useState hook
@@ -175,7 +177,9 @@ const [OnImport, OnImportChange] = useState(false);
 const [RoadPanel, setRoadPanel] = useState(false);
 const [SSAOPanel, setSSAOPanel] = useState(false);
 const [SSRPanel, setSSROPanel] = useState(false);
+const [UpdateCardEnabled, setUpdateCardEnabled] = useState(false);
 const [IsClicked, setIsClicked] = useState(false);
+
 
 
 
@@ -352,7 +356,7 @@ const handleHighlights = (value: number) => {
         trigger(mod.id, 'OpenLegacyUI');
     }
 
-const updateNotification = useValue(UpdateNotificationConst);
+
 const [showUpdate, setShowUpdate] = useState(false);
 
 useEffect(() => {
@@ -505,12 +509,11 @@ const reloadCubemaps = () =>
 return (
     <>
         
-            
+             
        
              <div className="Global"
 
-  
-  
+
 
 
 
@@ -531,6 +534,7 @@ id="Global"
 
 <DragButton />
 
+   
 
 {/* SSR Panel */}
 {SSRPanel && (
@@ -539,6 +543,12 @@ id="Global"
     </div>
 )}
 
+
+{updateNotification && (
+      <div className="UpdateCard">
+        <UpdateNotification />
+      </div>
+    )}
 
 
 {/* TONEMAPPING PANEL */}
@@ -1752,10 +1762,9 @@ id="Global"
           </div>
 <div>
   {/* Update Notification */}
-  {showUpdate && (
-    <UpdateNotification      
-    />
-  )}
+  
+
+  
 </div> 
 
 
@@ -1765,6 +1774,9 @@ id="Global"
 
           </div>
       
+
+
+
     </>
 );
 
