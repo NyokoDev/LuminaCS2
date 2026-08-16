@@ -1,9 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./UpdateNotification.scss";
 import LuminaSVG from "../../img/Lumina.svg";
 
 export const UpdateNotification: React.FC = () => {
   const [visible, setVisible] = useState(true);
+  const [latestVersion, setLatestVersion] = useState("");
+
+  useEffect(() => {
+    const xhr = new XMLHttpRequest();
+
+    xhr.open(
+      "GET",
+      "https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/main/XML/version.txt",
+      true
+    );
+
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState !== 4) {
+        return;
+      }
+
+      if (xhr.status >= 200 && xhr.status < 300) {
+        setLatestVersion(xhr.responseText.trim());
+      } else {
+        console.error(
+          `Failed to retrieve Lumina version: ${xhr.status}`
+        );
+      }
+    };
+
+    xhr.onerror = () => {
+      console.error("Failed to retrieve Lumina version.");
+    };
+
+    xhr.send();
+  }, []);
 
   if (!visible) {
     return null;
@@ -41,7 +72,7 @@ export const UpdateNotification: React.FC = () => {
       </div>
 
       <div className="update-notification__version">
-        v3.1.6
+        {latestVersion}
       </div>
 
       <button
