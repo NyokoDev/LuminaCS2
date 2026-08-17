@@ -53,6 +53,12 @@
         private float SunDiameterValue { get; set; }
         public float SunIntensityValue { get; set; }
         public float SunFlareSizeValue { get; set; }
+
+        private const string VersionUrl =
+            "https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/main/XML/version.txt";
+
+        private int _versionCheckStarted;
+        private string _latestVersion;
         public bool FreshInstall
         {
             get
@@ -66,12 +72,14 @@
         protected override void OnCreate()
         {
             base.OnCreate();
-            UpdateNotification();
             InitializeLutName();
             CreateBindings();
             m_PlanetarySystem = World.GetExistingSystemManaged<PlanetarySystem>();
             m_ReplaceRoadWearSystem = World.GetExistingSystemManaged<ReplaceRoadWearSystem>();
 
+            // Version checks perform network I/O. Start one background check instead of
+            // doing synchronous web requests from a UI update binding.
+            StartVersionCheck();
         }
 
         /// <summary>
@@ -79,179 +87,171 @@
         /// </summary>
         private void CreateBindings()
         {
+            RegisterFreshInstallBindings();
+            RegisterCoreVisualBindings();
+            RegisterPresetManagementBindings();
+            RegisterTonemappingBindings();
+            RegisterTimeAndCubemapBindings();
+            RegisterSkyAndSunBindings();
+            RegisterUtilityBindings();
+            RegisterRoadBindings();
 
-            // FRESH INSTALL
+            AddSupportBindings();
+            AddScreenSpaceAmbientOcclusionBindings();
+            AddScreenSpaceRefractionBindings();
 
+            RegisterPresetImportBindings();
+            RegisterStatusBindings();
+        }
+
+        private void RegisterFreshInstallBindings()
+        {
             AddUpdateBinding(new GetterValueBinding<bool>(
                 Mod.MODUI,
                 "FreshInstall",
                 () => FreshInstall));
 
-        
-
             AddBinding(new TriggerBinding(Mod.MODUI, "StopFreshInstall", StopFreshInstall));
+        }
 
+        private void RegisterCoreVisualBindings()
+        {
             UseLuminaVolume();
             Checkboxes();
             ColorAdjustments();
-
             WhiteBalance();
             WhiteBalanceCheckboxes();
-
             StartShadowsMidtonesHighlights();
             ShadowsMidtonesHighlightsCheckboxes();
             PlanetarySettings();
             UpdateNotification();
+        }
 
-
-
-
-            //LegacyUI
+        private void RegisterPresetManagementBindings()
+        {
             AddBinding(new TriggerBinding(Mod.MODUI, "OpenLegacyUI", OpenLegacyUI));
             AddBinding(new TriggerBinding(Mod.MODUI, "ImportLuminaPreset", PresetManagement.ExecuteImport));
             AddBinding(new TriggerBinding(Mod.MODUI, "ExportLuminaPreset", PresetManagement.ExportLuminaPreset));
             AddBinding(new TriggerBinding<string>(Mod.MODUI, "UpdatePresetName", PresetManagement.UpdatePresetName));
-
             AddBinding(new TriggerBinding(Mod.MODUI, "OpenPresetFolder", PresetManagement.OpenPresetFolder));
+        }
 
-            //Tonemapping
+        private void RegisterTonemappingBindings()
+        {
             AddBinding(new TriggerBinding<string>(Mod.MODUI, "UpdateLUTName", UpdateLUTName));
             AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "TonemappingMode", GetTonemappingMode));
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetTonemappingMode", SetTonemappingMode));
 
-
             AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "LUTName", GetLUTName));
-
-            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetLutContributionValue", () => GetLutContributionValue()));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetLutContributionValue", GetLutContributionValue));
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleLUTContribution", HandleLUTContribution));
             AddBinding(new TriggerBinding(Mod.MODUI, "OpenLUTFolder", OpenLUTFolder));
             AddBinding(new TriggerBinding(Mod.MODUI, "UpdateLUT", UpdateLUT));
 
-            // Texture Format
             AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "TextureFormat", GetTextureFormatMode));
 
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsExternal", IsExternalMode));
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsCustom", IsCustomMode));
 
-
-            AddBinding(new TriggerBinding(Mod.MODUI, "Save", SaveToFile));
-            AddBinding(new TriggerBinding(Mod.MODUI, "ResetLuminaSettings", Reset));
-
-
-            //Time of day
-            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "TimeFloatIsActive", () => TimeFloatIsActive()));
-            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "TimeFloatValue", () => TimeFloatValue()));
-            AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleTimeFloatValue", HandleTimeFloatValue));
-            // Array
-            LutArrayExtended = CreateBinding("LUTArray", LUTArray());
-            CubemapArrayExtended = CreateBinding("CubemapArrayExtended", CubemapArrayExtendedReturn());
-
-            //Cubemaps
-            AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "CubemapName", ReturnCubemapName));
-
-            // Time Lock Status
-
-            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "TimeLockStatus", () => TimeLockStatus()));
-
-            //TonemappingExternalMode
-            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsExternal", () => IsExternalMode()));
-
-            //TonemappingCustomMode
-            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsCustom", () => IsCustomMode()));
-
-
-            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsToeStrengthActive", () => IsToeStrengthActive()));
-            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "ToeStrengthValue", () => GetToeStrengthValue()));
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsToeStrengthActive", IsToeStrengthActive));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "ToeStrengthValue", GetToeStrengthValue));
             AddBinding(new TriggerBinding(Mod.MODUI, "SetToeStrengthActive", SetToeStrengthActive));
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleToeStrengthActive", HandleToeStrengthActive));
 
-            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsToeLengthActive", () => IsToeLengthActive()));
-            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "ToeLengthValue", () => ToeLengthValue()));
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsToeLengthActive", IsToeLengthActive));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "ToeLengthValue", ToeLengthValue));
             AddBinding(new TriggerBinding(Mod.MODUI, "SetToeLengthActive", SetToeLengthActive));
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleToeLengthActive", HandleToeLengthActive));
 
-            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsShoulderStrengthActive", () => IsShoulderStrengthActive()));
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsShoulderStrengthActive", IsShoulderStrengthActive));
             AddBinding(new TriggerBinding(Mod.MODUI, "SetShoulderStrengthActive", SetShoulderStrengthActive));
-            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "ShoulderStrengthValue", () => ShoulderStrengthValue()));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "ShoulderStrengthValue", ShoulderStrengthValue));
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "handleShoulderStrength", handleShoulderStrength));
+        }
 
-            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsHDRISkyEnabled", () => IsHDRISkyEnabled()));
-            AddBinding(new TriggerBinding(Mod.MODUI, "SetHDRISkyEnabled", SetHDRISkyEnabled));
+        private void RegisterTimeAndCubemapBindings()
+        {
+            AddBinding(new TriggerBinding(Mod.MODUI, "Save", SaveToFile));
+            AddBinding(new TriggerBinding(Mod.MODUI, "ResetLuminaSettings", Reset));
 
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "TimeFloatIsActive", TimeFloatIsActive));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "TimeFloatValue", TimeFloatValue));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleTimeFloatValue", HandleTimeFloatValue));
+
+            LutArrayExtended = CreateBinding("LUTArray", LUTArray());
+            CubemapArrayExtended = CreateBinding("CubemapArrayExtended", CubemapArrayExtendedReturn());
+
+            AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "CubemapName", ReturnCubemapName));
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "TimeLockStatus", TimeLockStatus));
             AddBinding(new TriggerBinding<string>(Mod.MODUI, "UpdateCubemapName", UpdateCubemapName));
+            AddBinding(new TriggerBinding(Mod.MODUI, "LockTime", HandleTimeLocked));
+        }
 
+        private void RegisterSkyAndSunBindings()
+        {
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsHDRISkyEnabled", IsHDRISkyEnabled));
+            AddBinding(new TriggerBinding(Mod.MODUI, "SetHDRISkyEnabled", SetHDRISkyEnabled));
 
             AddBinding(new TriggerBinding(Mod.MODUI, "SaveAutomatically", SaveAutomatically));
 
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "handleEmissionMultiplier", handleEmissionMultiplier));
-            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "EmissionMultiplier", () => GetEmissionMultiplier()));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "EmissionMultiplier", GetEmissionMultiplier));
 
-            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsCustomSunEnabled", () => IsCustomSunEnabled()));
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "IsCustomSunEnabled", IsCustomSunEnabled));
             AddBinding(new TriggerBinding(Mod.MODUI, "SetCustomSunEnabled", SetCustomSunEnabled));
 
-
-            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "SunDiameter", () => SunDiameter()));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "SunDiameter", SunDiameter));
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "handleAngularDiameter", handleAngularDiameter));
 
-            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "SunIntensity", () => SunIntensity()));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "SunIntensity", SunIntensity));
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "handleSunIntensity", handleSunIntensity));
 
-            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "SunFlareSize", () => SunFlareSize()));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "SunFlareSize", SunFlareSize));
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "handleSunFlareSize", handleSunFlareSize));
+        }
 
-
-            // UI Update
+        private void RegisterUtilityBindings()
+        {
             AddBinding(new TriggerBinding(Mod.MODUI, "UpdateUIElements", UpdateUIElements));
-
             AddBinding(new TriggerBinding(Mod.MODUI, "UploadLUTFileDialog", OpenLUTFileDialog));
-
             AddBinding(new TriggerBinding(Mod.MODUI, "OpenPresetFileDialog", OpenPresetFileDialog));
+        }
 
-            AddBinding(new TriggerBinding(Mod.MODUI, "LockTime", HandleTimeLocked));
-
-
-            // Road Networks - Textures Replacer
-
-            // Value bindings for the sliders
+        private void RegisterRoadBindings()
+        {
             AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetOpacity", () => GlobalVariables.Instance.TextureOpacity));
             AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetBrightness", () => GlobalVariables.Instance.TextureBrightness));
             AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetSmoothness", () => GlobalVariables.Instance.RoadTextureSmoothness));
 
-            // Trigger bindings for slider changes
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetOpacity", SetOpacity));
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetBrightness", SetBrightness));
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetSmoothness", SetSmoothness));
-
             AddBinding(new TriggerBinding(Mod.MODUI, "OpenTexturesFolder", OpenTexturesFolder));
             AddBinding(new TriggerBinding(Mod.MODUI, "ApplyRoadTextures", ApplyImmediately));
 
-            // Road Colors
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandlePrimaryRoadColor", HandlePrimaryRoadColor));
             AddBinding(new TriggerBinding<string>(Mod.MODUI, "HandlePrimaryRoadColorHex", HandlePrimaryRoadColorHex));
             AddBinding(new TriggerBinding<string>(Mod.MODUI, "HandleSecondaryRoadColorHex", HandleSecondaryRoadColorHex));
             AddBinding(new TriggerBinding(Mod.MODUI, "HandleRandomizer", HandleRandomizer));
             AddBinding(new TriggerBinding(Mod.MODUI, "OpenColorPickerSite", OpenColorPickerSite));
 
-
             AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "PrimaryRoadColor", GetPrimaryRoadHex));
             AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "SecondaryRoadColor", GetSecondaryRoadHex));
+        }
 
-            AddSupportBindings();
-            AddScreenSpaceAmbientOcclusionBindings();
-            AddScreenSpaceRefractionBindings();
-
-
+        private void RegisterPresetImportBindings()
+        {
             ImportLuminaPresetXML();
             AddBinding(new TriggerBinding<string>(Mod.MODUI, "ImportLuminaPresetByName", ImportLuminaPresetByName));
-            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetFPS", () => SendFPS()));
+        }
 
-            AddUpdateBinding(
-    new GetterValueBinding<bool>(
-        Mod.MODUI,
-        "HideToolbarButton",
-        () => GlobalVariables.Instance.HideToolbarButton
-    )
-);
-
-
+        private void RegisterStatusBindings()
+        {
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetFPS", SendFPS));
+            AddUpdateBinding(new GetterValueBinding<bool>(
+                Mod.MODUI,
+                "HideToolbarButton",
+                () => GlobalVariables.Instance.HideToolbarButton));
         }
 
 
@@ -516,48 +516,54 @@
 
         private void UpdateNotification()
         {
+            // Keep the update binding extremely cheap. The actual web request is performed
+            // once in the background by StartVersionCheck().
             AddUpdateBinding(new GetterValueBinding<bool>(
                 Mod.MODUI,
                 "UpdateNotification",
-                () =>
-                {
-                    const string url =
-                        "https://raw.githubusercontent.com/NyokoDev/LuminaCS2/main/XML/version.txt";
-
-                    string currentVersion = GlobalPaths.Version;
-
-                    try
-                    {
-                        using (WebClient client = new WebClient())
-                        {
-                            string latestVersion = client.DownloadString(url).Trim();
-
-                            if (currentVersion != latestVersion)
-                            {
-                                Mod.Log.Info(
-                                    $"Lumina version mismatch. Current: {currentVersion} | Latest: {latestVersion}"
-                                );
-
-                                GlobalPaths.UpdateNotification = true;
-                            }
-
-                            return GlobalPaths.UpdateNotification;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Mod.Log.Info("Error checking version: " + ex.Message);
-
-                        return GlobalPaths.UpdateNotification;
-                    }
-                }
-            ));
+                () => GlobalPaths.UpdateNotification));
 
             AddBinding(new TriggerBinding(
                 Mod.MODUI,
                 "StopUpdateNotification",
-                () => GlobalPaths.UpdateNotification = false
-            ));
+                () => GlobalPaths.UpdateNotification = false));
+        }
+
+        private void StartVersionCheck()
+        {
+            // Interlocked guarantees that OnCreate/SaveAutomatically cannot start multiple
+            // concurrent requests. This also prevents duplicate work when the UI is active.
+            if (Interlocked.Exchange(ref _versionCheckStarted, 1) != 0)
+            {
+                return;
+            }
+
+            _ = Task.Run(CheckVersionInBackground);
+        }
+
+        private void CheckVersionInBackground()
+        {
+            try
+            {
+                using (WebClient client = new WebClient())
+                {
+                    _latestVersion = client.DownloadString(VersionUrl).Trim();
+                }
+
+                if (!string.IsNullOrWhiteSpace(_latestVersion) &&
+                    !string.Equals(GlobalPaths.Version, _latestVersion, StringComparison.Ordinal))
+                {
+                    Mod.Log.Info(
+                        $"Lumina version mismatch. Current: {GlobalPaths.Version} | Latest: {_latestVersion}");
+
+                    GlobalPaths.UpdateNotification = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Failure to reach GitHub must never block or destabilize the UI.
+                Mod.Log.Info("Error checking Lumina version: " + ex.Message);
+            }
         }
 
         private void AddScreenSpaceAmbientOcclusionBindings()
@@ -696,7 +702,7 @@ ApplySSAOPreset));
                 Mod.MODUI,
                 "HandleSSAOEnabled",
                 value => GlobalVariables.Instance.IsScreenSpaceAmbientOcclusion = value));
-             
+
 
             AddBinding(new TriggerBinding<float>(
                 Mod.MODUI,
@@ -911,21 +917,21 @@ ApplySSAOPreset));
                 return;
             }
             try
-        {
-            Process.Start(new ProcessStartInfo
             {
-                FileName = "https://htmlcolorcodes.com/",
-                UseShellExecute = true // Opens in the default system browser
-            });
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = "https://htmlcolorcodes.com/",
+                    UseShellExecute = true // Opens in the default system browser
+                });
+            }
+            catch (Exception ex)
+            {
+                Mod.Log.Info($"[LUMINA] Failed to open browser: {ex.Message}");
+            }
         }
-        catch (Exception ex)
-        {
-            Mod.Log.Info($"[LUMINA] Failed to open browser: {ex.Message}");
-        }
-    }
 
 
-    private void HandlePrimaryRoadColorHex(string hex)
+        private void HandlePrimaryRoadColorHex(string hex)
         {
             if (!GlobalVariables.Instance.UseRoadTextures)
             {
@@ -1066,8 +1072,6 @@ ApplySSAOPreset));
 
         private void CheckVersion()
         {
-            string url = "https://raw.githubusercontent.com/NyokoDev/LuminaCS2/refs/heads/main/XML/version.txt";
-            string currentVersion = GlobalPaths.Version;
             string gameVersion = Version.current.fullVersion;
             string supportedGameVersion = GlobalPaths.SupportedGameVersion;
 
@@ -1086,28 +1090,9 @@ ApplySSAOPreset));
                 Mod.Log.Info($"{errorMsg}\n{recommendation}");
             }
 
-            try
-            {
-                using (WebClient client = new WebClient())
-                {
-                    string latestVersion = client.DownloadString(url).Trim();
-
-                    if (currentVersion != latestVersion)
-                    {
-                        Mod.Log.Info(
-                            $"Lumina new version available! Current: {currentVersion} | Latest: {latestVersion}"
-                        );
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                string errorMsg =
-                    $"Lumina failed to retrieve the latest version information.\n\n{ex.Message}";
-
-                Mod.Log.Info(errorMsg);
-                GlobalPaths.SendMessage(errorMsg);
-            }
+            // Never perform synchronous network I/O from SaveAutomatically.
+            // The single background check started during OnCreate is reused here.
+            StartVersionCheck();
         }
 
         private void SendMessage()
@@ -1174,7 +1159,7 @@ ApplySSAOPreset));
         public void OpenPresetFileDialog()
         {
             string filePath = XMLFileDialog.ShowPresetDialog(
-           
+
             );
 
             using var dialog = new OpenFileDialog();
@@ -1271,7 +1256,7 @@ ApplySSAOPreset));
         }
 
 
-            private float SunFlareSize()
+        private float SunFlareSize()
         {
             SunFlareSizeValue = GlobalVariables.Instance.SunFlareSize;
             return SunFlareSizeValue;
@@ -1285,8 +1270,8 @@ ApplySSAOPreset));
 
         private float SunIntensity()
         {
-                SunIntensityValue = GlobalVariables.Instance.SunIntensity;
-                return SunIntensityValue;
+            SunIntensityValue = GlobalVariables.Instance.SunIntensity;
+            return SunIntensityValue;
         }
 
         private void handleAngularDiameter(float obj)
@@ -1399,7 +1384,8 @@ ApplySSAOPreset));
                 if (RenderEffectsSystem.CubemapFiles == null || RenderEffectsSystem.CubemapFiles.Length == 0)
                 {
                     // Log a warning if no cubemap files are found
-                    if (GlobalVariables.Instance.EnableDebugLogs) { 
+                    if (GlobalVariables.Instance.EnableDebugLogs)
+                    {
                         Mod.Log.Info("No cubemap files found.");
                     }
                     return new string[] { "None" }; // Return "None" instead of an empty array
@@ -1520,7 +1506,7 @@ ApplySSAOPreset));
             }
             catch (Exception ex)
             {
-                 Mod.Log.Info("[FAILURE] Failed to add or update binding for LUTArray: " + ex.Message);
+                Mod.Log.Info("[FAILURE] Failed to add or update binding for LUTArray: " + ex.Message);
             }
 
         }
@@ -1530,13 +1516,13 @@ ApplySSAOPreset));
             try
             {
                 // Log the incoming value for debugging
-                 Mod.Log.Info($"SendLUTName() called with value: {obj}");
+                Mod.Log.Info($"SendLUTName() called with value: {obj}");
 
                 // Assign the value to RenderEffectsSystem.LutName_Example
                 RenderEffectsSystem.LutName_Example = obj;
 
                 // Log the successful update
-                 Mod.Log.Info($"LutName_Example successfully updated to: {RenderEffectsSystem.LutName_Example}");
+                Mod.Log.Info($"LutName_Example successfully updated to: {RenderEffectsSystem.LutName_Example}");
             }
             catch (Exception ex)
             {
@@ -1553,7 +1539,7 @@ ApplySSAOPreset));
             // Check if lutFiles is null and update it with the directory files if necessary
             if (lutFiles == null)
             {
-                 Mod.Log.Info("LUTArray() returned null from RenderEffectsSystem.LutFiles. Populating with files from the directory.");
+                Mod.Log.Info("LUTArray() returned null from RenderEffectsSystem.LutFiles. Populating with files from the directory.");
 
                 // Populate RenderEffectsSystem.LutFiles with files from the specified directory
                 var filesWithFullPath = Directory.GetFiles(GlobalPaths.LuminaLUTSDirectory, "*.cube");
@@ -1566,13 +1552,13 @@ ApplySSAOPreset));
                 // Update RenderEffectsSystem.LutFiles with only the file names
                 RenderEffectsSystem.LutFiles = fileNames;
 
-                 Mod.Log.Info(string.Join(", ", RenderEffectsSystem.LutFiles)); // Log the result for debugging
+                Mod.Log.Info(string.Join(", ", RenderEffectsSystem.LutFiles)); // Log the result for debugging
             }
 
             // Optionally, check if the array is empty and handle it if needed
             if (RenderEffectsSystem.LutFiles.Length == 0)
             {
-                 Mod.Log.Info("LUTArray() returned an empty array from RenderEffectsSystem.LutFiles.");
+                Mod.Log.Info("LUTArray() returned an empty array from RenderEffectsSystem.LutFiles.");
             }
         }
 
@@ -1623,7 +1609,7 @@ ApplySSAOPreset));
 
         private string GetLUTName()
         {
-            
+
             return RenderEffectsSystem.LutName_Example;
         }
 
@@ -1634,7 +1620,7 @@ ApplySSAOPreset));
 
         private void SetTonemappingMode(float obj)
         {
-          RenderEffectsSystem.SetTonemappingMode(obj);
+            RenderEffectsSystem.SetTonemappingMode(obj);
         }
 
         private string GetTonemappingMode()
@@ -1656,7 +1642,7 @@ ApplySSAOPreset));
 
         private bool IsTimeLocked()
         {
-                       return TimeOfDayProcessor.Locked;
+            return TimeOfDayProcessor.Locked;
         }
 
         private void HandleTimeLocked()
@@ -1697,18 +1683,18 @@ ApplySSAOPreset));
         private void UpdateLUTName(string obj)
         {
             // Log the incoming value
-             Mod.Log.Info($"[DEBUG] UpdateLUTName called with obj: {obj}");
+            Mod.Log.Info($"[DEBUG] UpdateLUTName called with obj: {obj}");
 
             // Check if obj is null or empty
             if (string.IsNullOrEmpty(obj))
             {
-                 Mod.Log.Info("[DEBUG] UpdateLUTName received an empty or null value.");
+                Mod.Log.Info("[DEBUG] UpdateLUTName received an empty or null value.");
             }
             else
             {
                 // Log the values before assignment
-                 Mod.Log.Info($"[DEBUG] Setting RenderEffectsSystem.LutName_Example to: {obj}");
-                 Mod.Log.Info($"[DEBUG] Setting GlobalVariables.Instance.LUTName to: {obj}");
+                Mod.Log.Info($"[DEBUG] Setting RenderEffectsSystem.LutName_Example to: {obj}");
+                Mod.Log.Info($"[DEBUG] Setting GlobalVariables.Instance.LUTName to: {obj}");
             }
 
             try
@@ -1718,12 +1704,12 @@ ApplySSAOPreset));
                 GlobalVariables.Instance.LUTName = obj;
 
                 // Confirm successful assignment
-                 Mod.Log.Info($"[DEBUG] Successfully updated LUT names: RenderEffectsSystem.LutName_Example = {RenderEffectsSystem.LutName_Example}, GlobalVariables.Instance.LUTName = {GlobalVariables.Instance.LUTName}");
+                Mod.Log.Info($"[DEBUG] Successfully updated LUT names: RenderEffectsSystem.LutName_Example = {RenderEffectsSystem.LutName_Example}, GlobalVariables.Instance.LUTName = {GlobalVariables.Instance.LUTName}");
             }
             catch (Exception ex)
             {
                 // Log any exceptions
-                 Mod.Log.Info($"[ERROR] Exception occurred in UpdateLUTName: {ex.Message}\n{ex.StackTrace}");
+                Mod.Log.Info($"[ERROR] Exception occurred in UpdateLUTName: {ex.Message}\n{ex.StackTrace}");
             }
         }
         private void UpdateLUT()
@@ -1922,7 +1908,7 @@ ApplySSAOPreset));
 
         private void SethueshiftCheckbox()
         {
-           GlobalVariables.Instance.HueShiftActive = !GlobalVariables.Instance.HueShiftActive;
+            GlobalVariables.Instance.HueShiftActive = !GlobalVariables.Instance.HueShiftActive;
         }
 
         private bool GetcontrastCheckbox()
@@ -2023,7 +2009,7 @@ ApplySSAOPreset));
 
         private void SetHueShift(float obj)
         {
-            GlobalVariables.Instance.HueShift = obj; 
+            GlobalVariables.Instance.HueShift = obj;
         }
 
         private float GetHueShift()
@@ -2049,7 +2035,7 @@ ApplySSAOPreset));
         private float GetSetPostExposure()
         {
             return GlobalVariables.Instance.PostExposure;
-           
+
         }
     }
 }

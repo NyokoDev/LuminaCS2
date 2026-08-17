@@ -2,31 +2,14 @@ import { ButtonTheme, Tooltip, Button, ConfirmationDialog, Panel, Portal, Floati
 import { bindValue, trigger, useValue, } from "cs2/api";
 import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
-import { game, tool, Theme, } from "cs2/bindings";
-import { getModule, ModuleRegistryExtend } from "cs2/modding";
-import { VanillaComponentResolver } from "classes/VanillaComponentResolver";
 import { Slider, PropsSlider, SliderValueTransformer } from "./slider";
-//import { LocalizedString, useLocalization } from "cs2/l10n";
 import { useLocalization } from "cs2/l10n";
 import mod from "../../mod.json";
 import "../luminapanel.scss"; 
 import "./SSAOPanel/SSAOPanel.scss";
 import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
 import React, { Fragment } from 'react';
-import {SketchPicker} from 'react-color';
-import FilePicker from "./FilePicker";
-import { TonemappingDropdown } from "./TonemappingDropdown";
-import { LUTSDropdown } from "./LUTSDropdown";
-import { ToeStrengthCheckbox } from "./Checkboxes/ToeStrengthCheckbox";
 import './Checkboxes/CheckboxesStyle.scss'
-import ToeLengthCheckbox from "./Checkboxes/ToeLengthCheckbox";
-import ShoulderStrengthCheckbox from "./Checkboxes/ShoulderStrengthCheckbox";
-import { CubemapsDropdown } from "./Cubemaps/CubemapsDropdown";
-import SpaceEmissionCheckbox from "./Checkboxes/UseHDRISky";
-import CustomSunCheckbox from "./Checkboxes/UseCustomSunCheckbox";
-import { LUTContributionSlider } from "./Sliders/LutContributionSlider";
-import { OpenFileDialogButton } from "./Buttons/UploadFileButton";
 import LuminaVolumeCheckbox from "./Components/UseLuminaVolumeCheckbox";
 import './Cubemaps/Cubemaps.scss'
 import DragButton from "./DraggableButton/DragButton";
@@ -35,13 +18,13 @@ import { RoadPanelBase } from "./RoadPanel/RoadPanelBase";
 import { SSAOPanelBase } from "./SSAOPanel/SSAOPanel";
 import {  UpdateNotification } from "./UpdateNotifications/UpdateNotification";
 import "./HeroSettings.scss";
-import "././Cubemaps/Cubemaps.scss";
 import { TonemappingPanel } from "./TonemappingPanel/TonemappingPanel";
 import "././TonemappingPanel/TonemappingPanelNew.scss";
 import { SSRPanelBase } from "./ScreenSpaceRefraction/SSRPanel";
 import "../mods/UpdateNotifications/UpdateNotification.scss";
 import { FreshInstall } from "./PopUps/FreshInstall/FreshInstall";
 import { CAQuickPresets } from "./QuickPresets/CA/CAQuickPresets";
+import { SkyAndFogPanel } from "./SkyAndFogPanel/SkyAndFogPanel";
 
 
 
@@ -89,10 +72,6 @@ export const LongitudeValue$ = bindValue<number>(mod.id, 'LongitudeValue');
 
 
 
-export const EmissionMultiplier$ = bindValue<number>(mod.id, "EmissionMultiplier");
-export const SunDiameter$ = bindValue<number>(mod.id, "SunDiameter");
-export const SunIntensity$ = bindValue<number>(mod.id, "SunIntensity");
-export const SunFlareSize$ = bindValue<number>(mod.id, "SunFlareSize");
 
 // Update
 
@@ -157,15 +136,6 @@ const HighlightsActive = useValue(HighlightsActive$);
 const LatitudeValue = useValue(LatitudeValue$);
 const LongitudeValue = useValue(LongitudeValue$);
 
-
-
-
-
-
-const EmissionMultiplier = useValue(EmissionMultiplier$);
-const SunDiameter = useValue(SunDiameter$);
-const SunIntensity = useValue(SunIntensity$);
-const SunFlareSize = useValue(SunFlareSize$);
 const updateNotification = useValue(UpdateNotificationConst);
 
 
@@ -223,15 +193,8 @@ const [IsClicked, setIsClicked] = useState(false);
 };
 
 const handleContrast = (value: number) => {
-  // Round the value to the nearest step size of 0.001
-  const roundedValue = Math.round(value / 0.001) * 0.001;
-  // Convert the rounded value to an integer if necessary
-  const id = globalstart + (value * globalstepSize);
-  // Trigger the action with the adjusted value
-  trigger(mod.id, 'SetContrast', id);
+    trigger(mod.id, "SetContrast", value);
 };
-
-
 
 
 
@@ -515,23 +478,14 @@ return (
        
              <div className="Global"
 
-
-
-
-
-
-
 id="Global"
   
 
       style={{
-        transform: `translate(${position.x}px, ${position.y}px)`, // Use transform for smooth movement
-        transition: 'transform 0.02s ease', // Smooth transition for dragging
-        cursor: 'move',
-        position: 'absolute',
-        left: position.x,
-        top: position.y,
-      }}
+    transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
+    cursor: "move",
+    position: "absolute",
+}}
     >
 
 <DragButton />
@@ -560,93 +514,8 @@ id="Global"
     </div>
 )}
 
-
-
-
-
-
-
 {SkyAndFogEnabled$ &&
-<div className="SkyAndFogPanel"> 
-<h1 className="CubemapName">{translate("LUMINA.cubemapname")}</h1>
-    
-  <label className="space-emission-texture-label">{translate("LUMINA.environmenthdrisky")}</label>
-  <SpaceEmissionCheckbox
-  />
-
-<CustomSunCheckbox
-
-/>
-
-<label className="custom-sun-label">{translate("LUMINA.usecustomsunproperties")}</label>
-<label className="sun-diameter-label">{translate("LUMINA.sundiameter")}</label>
-<Slider
-    value={SunDiameter}
-    start={0}       // Minimum value of the slider
-    end={100}         // Maximum value of the slider
-    step={0.000001}   // Step size for precision
-    className="sun-adjust-diameter-slider"
-    gamepadStep={stepSize} // Step size for gamepad interaction
-    valueTransformer={SliderValueTransformer.floatTransformer} // Value transformation logic
-    disabled={false}
-    noFill={false}
-    onChange={(number) => handleAngularDiameter(number)} // Callback for value change
-  />
-
-
-
-<label className="sun-intensity-label">{translate("LUMINA.sunintensity")}</label>
-<Slider
-    value={SunIntensity}
-    start={0}       // Minimum value of the slider
-    end={100}         // Maximum value of the slider
-    step={0.000001}   // Step size for precision
-    className="sun-adjust-intensity-slider"
-    gamepadStep={stepSize} // Step size for gamepad interaction
-    valueTransformer={SliderValueTransformer.floatTransformer} // Value transformation logic
-    disabled={false}
-    noFill={false}
-    onChange={(number) => handleSunIntensity(number)} // Callback for value change
-  />
-
-<label className="sun-flare-size-label">{translate("LUMINA.sunflaresize")}</label>
-<Slider
-    value={SunFlareSize}
-    start={0}       // Minimum value of the slider
-    end={100}         // Maximum value of the slider
-    step={0.000001}  
-    className="sun-adjust-flare-size-slider"
-    gamepadStep={stepSize} // Step size for gamepad interaction
-    valueTransformer={SliderValueTransformer.floatTransformer} // Value transformation logic
-    disabled={false}
-    noFill={false}
-    onChange={(number) => handleSunFlareSize(number)} // Callback for value change
-  />
-
-
-<div className="CubemapHeader">
-    <div className="CubemapsDropdown">
-        <CubemapsDropdown />
-    </div>
-
-<button
-    className="ReloadCubemapsButton"
-    onClick={() => reloadCubemaps()}
->
-    <img
-        className="ReloadCubemapsIcon"
-        src="coui://ui-mods/Icons/Refresh.svg"
-    />
-
-    <span className="ReloadCubemapsText">
-        Reload Cubemaps
-    </span>
-</button>
-</div>
-
-
-
-  </div>
+<SkyAndFogPanel />
 
 }
 

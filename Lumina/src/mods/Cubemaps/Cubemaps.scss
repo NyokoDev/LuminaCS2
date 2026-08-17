@@ -12,30 +12,21 @@
     width: 480rem;
     height: 750rem;
 
-font-family:
-    "Helvetica-Light",
-    "Noto Sans",
-    sans-serif;
+    font-family:
+        "Helvetica-Light",
+        "Noto Sans",
+        sans-serif;
 
+    background: rgba(35, 35, 35, 0.92);
 
-    background:
-        linear-gradient(
-            180deg,
-            rgba(30, 35, 45, 0.97) 0%,
-            rgba(15, 18, 25, 0.99) 100%
-        );
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 
-    
-
+    border: 1rem solid rgba(255, 255, 255, 0.06);
     border-radius: 22rem;
 
-    border: 1rem solid rgba(110, 180, 255, 0.15);
-
-
-
-    overflow-y: auto;
-    overflow-x: hidden;
-
+    
+ pointer-events: all;
     color: white;
 }
 
@@ -71,7 +62,7 @@ font-family:
     left: 20rem;
 
     font-size: 18rem;
-    font-weight: 700;
+
 
     letter-spacing: 1rem;
 
@@ -106,7 +97,7 @@ font-family:
 
     font-size: 13rem;
 
-    font-weight: 600;
+
 
     letter-spacing: 0.8rem;
 
@@ -222,7 +213,7 @@ font-family:
 
     font-size: 13rem;
 
-    font-weight: 700;
+
 
     letter-spacing: 0.6rem;
 
@@ -260,7 +251,7 @@ font-family:
 
     width: 440rem;
 
-    pointer-events: auto;
+    pointer-events: all;
 }
 
 .sun-adjust-diameter-slider
@@ -318,28 +309,6 @@ font-family:
         invert(100%)
         drop-shadow(0 0 18rem rgba(0,180,255,0.9));
 }
-
-/* ========================================================= */
-/* SCROLLBAR */
-/* ========================================================= */
-
-.SkyAndFogPanel::-webkit-scrollbar
-{
-    width: 8rem;
-}
-
-.SkyAndFogPanel::-webkit-scrollbar-thumb
-{
-    border-radius: 999rem;
-
-    background: rgba(255,255,255,0.18);
-}
-
-.SkyAndFogPanel::-webkit-scrollbar-thumb:hover
-{
-    background: rgba(255,255,255,0.30);
-}
-
 
 
 .CubemapHeader
@@ -448,7 +417,7 @@ font-family:
 
     font-size: 14rem;
 
-    font-weight: 600;
+
 
     text-transform: uppercase;
 
