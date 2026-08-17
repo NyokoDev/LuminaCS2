@@ -10,6 +10,7 @@ import {
 import { trigger } from "cs2/api";
 import "./CAQuickPresets.scss";
 import mod from "../../../../mod.json";
+import { useLocalization } from "cs2/l10n";
 
 type QuickPresetName =
   | "colorful"
@@ -24,34 +25,37 @@ interface QuickPreset {
   accentClass: string;
 }
 
-const presets: QuickPreset[] = [
-  {
-    id: "colorful",
-    label: "Colorful",
-    icon: Palette,
-    accentClass: "preset-colorful",
-  },
-  {
-    id: "vibe",
-    label: "Vibe",
-    icon: Sparkles,
-    accentClass: "preset-vibe",
-  },
-  {
-    id: "non-contemporary",
-    label: "Non-Contemporary",
-    icon: Aperture,
-    accentClass: "preset-non-contemporary",
-  },
-  {
-    id: "flow",
-    label: "Flow",
-    icon: Waves,
-    accentClass: "preset-flow",
-  },
-];
-
 export const CAQuickPresets: React.FC = () => {
+  const { translate } = useLocalization();
+
+  const presets: QuickPreset[] = [
+    {
+      id: "colorful",
+      label: translate("LUMINA.presetcolorful") ?? "Colorful",
+      icon: Palette,
+      accentClass: "preset-colorful",
+    },
+    {
+      id: "vibe",
+      label: translate("LUMINA.presetvibe") ?? "Vibe",
+      icon: Sparkles,
+      accentClass: "preset-vibe",
+    },
+    {
+      id: "non-contemporary",
+      label:
+        translate("LUMINA.presetnoncontemporary") ?? "Non-Contemporary",
+      icon: Aperture,
+      accentClass: "preset-non-contemporary",
+    },
+    {
+      id: "flow",
+      label: translate("LUMINA.presetflow") ?? "Flow",
+      icon: Waves,
+      accentClass: "preset-flow",
+    },
+  ];
+
   const applyPreset = (preset: QuickPresetName) => {
     trigger(
       mod.id,
@@ -59,15 +63,16 @@ export const CAQuickPresets: React.FC = () => {
       preset
     );
   };
+
   return (
     <section className="quick-presets">
       <div className="quick-presets__header">
         <span className="quick-presets__title">
-          Quick Presets
+          {translate("LUMINA.caquickpresets")}
         </span>
 
         <span className="quick-presets__subtitle">
-          One click. Different vibes.
+          {translate("LUMINA.oneclickcoloradjustment")}
         </span>
       </div>
 

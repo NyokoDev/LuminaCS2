@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "./UpdateNotification.scss";
 import LuminaSVG from "../../img/Lumina.svg";
+import { useLocalization } from "cs2/l10n";
 
 export const UpdateNotification: React.FC = () => {
   const [visible, setVisible] = useState(true);
   const [latestVersion, setLatestVersion] = useState("");
 
   useEffect(() => {
+   
     const xhr = new XMLHttpRequest();
 
     xhr.open(
@@ -40,6 +42,8 @@ export const UpdateNotification: React.FC = () => {
     return null;
   }
 
+     //Use localization
+      const { translate } = useLocalization();
   return (
     <div
       className="update-notification"
@@ -57,9 +61,9 @@ export const UpdateNotification: React.FC = () => {
 
       <div className="update-notification__header">
         <h2 id="update-title">
-          New version
+          {translate("LUMINA.newversion")}
           <br />
-          available
+          {translate("LUMINA.available")}
         </h2>
       </div>
 
