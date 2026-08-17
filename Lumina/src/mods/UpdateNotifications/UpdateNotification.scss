@@ -1,6 +1,12 @@
 .update-notification {
   position: relative;
 
+    font-family:
+    "Inter Tight",
+    "Noto Sans",
+    sans-serif;
+
+
   width: 138rem;
   height: 445rem;
 
@@ -26,7 +32,11 @@
   width: 138rem;
   height: 445rem;
 
-  font-family: "Inter Tight", sans-serif;
+  font-family:
+    "Inter Tight",
+    "Noto Sans",
+    sans-serif;
+
 
   z-index: 10000;
   pointer-events: auto;

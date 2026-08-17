@@ -3,6 +3,10 @@ import "./FreshInstall.scss";
 import { bindValue, trigger, useValue } from "cs2/api";
 import mod from "../../../../mod.json";
 import LuminaSVG from "../../../img/Lumina.svg";
+import { useLocalization } from "cs2/l10n";
+
+       //Use localization
+      const { translate } = useLocalization();
 
 const freshInstall$ = bindValue<boolean>(
   mod.id,
@@ -28,7 +32,7 @@ export const FreshInstall: React.FC = () => {
 
       <div className="fresh-install__content">
         <p className="fresh-install__message">
-          Thank you for installing Lumina.
+          {translate("LUMINA.thankyou") ?? "Thank you for installing Lumina."}
         </p>
 
         <button
@@ -36,7 +40,7 @@ export const FreshInstall: React.FC = () => {
           type="button"
           onClick={() => trigger(mod.id, "StopFreshInstall")}
         >
-          Get Started
+          {translate("LUMINA.getstarted") ?? "Get Started"}
         </button>
       </div>
     </div>

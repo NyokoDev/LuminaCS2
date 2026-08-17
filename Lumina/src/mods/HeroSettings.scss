@@ -4,10 +4,11 @@
     top: 0rem;
     left: 0rem;
 
-font-family:
-    "Helvetica-Light",
+  font-family:
+    "Inter Tight",
     "Noto Sans",
     sans-serif;
+
 
     width: 100%;
     height: 100%;
@@ -218,8 +219,16 @@ font-family:
 
 .VolumeToggleTitle
 {
+      line-height: 1;
+
+  letter-spacing: 0.1rem;
+  font-size: 20rem;
+
+  line-height: 1;
+
+  color: rgba(255, 255, 255, 0.98);
     font-size: 20rem;
-    font-weight: 600;
+   
 }
 
 .VolumeToggleSubtitle
@@ -358,6 +367,8 @@ font-family:
 
     width: 100%;
 
+
+
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -376,6 +387,8 @@ font-family:
     flex: 1;
     color: white;
 
+        background:#262A30;
+        border:#4D93FF;
     min-height: 60rem;
 
     position: relative;

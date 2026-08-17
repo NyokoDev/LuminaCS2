@@ -7,6 +7,10 @@ export const UpdateNotification: React.FC = () => {
   const [visible, setVisible] = useState(true);
   const [latestVersion, setLatestVersion] = useState("");
 
+
+       //Use localization
+      const { translate } = useLocalization();
+
   useEffect(() => {
    
     const xhr = new XMLHttpRequest();
@@ -42,8 +46,7 @@ export const UpdateNotification: React.FC = () => {
     return null;
   }
 
-     //Use localization
-      const { translate } = useLocalization();
+
   return (
     <div
       className="update-notification"
