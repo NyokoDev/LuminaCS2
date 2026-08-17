@@ -1469,11 +1469,11 @@ id="Global"
             </div>
 
 <div className="LuminaTitleNGX">
-    If you want to use Lumina NGX, activate it via settings.
+    {translate("LUMINA.ngx")}
 </div>
 
             <div className="LuminaSubtitle">
-                Advanced Visual Enhancement Suite
+                {translate("LUMINA.advancedpostprocessing")}
             </div>
 
             <div className="VersionBadge">
@@ -1485,11 +1485,10 @@ id="Global"
         <div className="AboutHeroRight">
 
             <div className="AboutDescription">
-                Lumina is a powerful post-processing and visual enhancement toolkit
-                for Cities Skylines II.
+                {translate("LUMINA.aboutdescription")}
                 <br />
                 <br />
-                Fine tune lighting, colors and atmosphere to create the city you imagine.
+                {translate("LUMINA.finetune")} 
             </div>
 
    <div className="VolumeToggleCard">
@@ -1501,7 +1500,7 @@ id="Global"
         </div>
 
         <div className="VolumeToggleSubtitle">
-            Enable or disable the Lumina post-processing volume.
+            {translate("LUMINA.enablelabelvolume")}
         </div>
 
     </div>

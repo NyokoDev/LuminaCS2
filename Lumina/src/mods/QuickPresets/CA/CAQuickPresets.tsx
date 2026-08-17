@@ -7,17 +7,15 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
+import { trigger } from "cs2/api";
 import "./CAQuickPresets.scss";
+import mod from "../../../../mod.json";
 
 type QuickPresetName =
   | "colorful"
   | "vibe"
   | "non-contemporary"
   | "flow";
-
-interface QuickPresetsProps {
-  onPreset?: (preset: QuickPresetName) => void;
-}
 
 interface QuickPreset {
   id: QuickPresetName;
@@ -53,9 +51,14 @@ const presets: QuickPreset[] = [
   },
 ];
 
-export const CAQuickPresets: React.FC<QuickPresetsProps> = ({
-  onPreset,
-}) => {
+export const CAQuickPresets: React.FC = () => {
+  const applyPreset = (preset: QuickPresetName) => {
+    trigger(
+      mod.id,
+      "ApplyColorAdjustmentQuickPreset",
+      preset
+    );
+  };
   return (
     <section className="quick-presets">
       <div className="quick-presets__header">
@@ -77,7 +80,7 @@ export const CAQuickPresets: React.FC<QuickPresetsProps> = ({
               key={preset.id}
               type="button"
               className={`quick-preset ${preset.accentClass}`}
-              onClick={() => onPreset?.(preset.id)}
+              onClick={() => applyPreset(preset.id)}
             >
               <div className="quick-preset__content">
                 <span className="quick-preset__icon">

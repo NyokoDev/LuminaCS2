@@ -255,6 +255,59 @@
         }
 
 
+        private void ApplyColorAdjustmentQuickPreset(string preset)
+        {
+            var gv = GlobalVariables.Instance;
+
+            float postExposure = 0f;
+            float contrast = 0f;
+            float hueShift = 0f;
+            float saturation = 0f;
+
+            switch (preset)
+            {
+                case "colorful":
+                    postExposure = 0.189462f;
+                    contrast = 33.6385f;
+                    hueShift = 17.69099f;
+                    saturation = 100;
+                    break;
+
+                case "vibe":
+                    postExposure = 0.936776f;
+                    contrast = 56.423698f;
+                    hueShift = -33.963101f;
+                    saturation = 89.032897f;
+                    break;
+
+                case "non-contemporary":
+                    postExposure = -1.17304f;
+                    contrast = 20f;
+                    hueShift = -5f;
+                    saturation = -18f;
+                    break;
+
+                case "flow":
+                    postExposure = 0.05f;
+                    contrast = 100f;
+                    hueShift = 2f;
+                    saturation = 5f;
+                    break;
+
+                default:
+                    return;
+            }
+
+            gv.PostExposure = postExposure;
+            gv.Contrast = contrast;
+            gv.HueShift = hueShift;
+            gv.Saturation = saturation;
+            gv.PostExposureActive = true;
+            gv.ContrastActive = true;
+            gv.HueShiftActive = true;
+            gv.SaturationActive = true;
+        }
+
         private void ApplySSAOPreset(string preset)
         {
             var settings = GlobalVariables.Instance;
@@ -1808,6 +1861,15 @@ ApplySSAOPreset));
 
         private void ColorAdjustments()
         {
+
+            AddBinding(
+    new TriggerBinding<string>(
+        Mod.MODUI,
+        "ApplyColorAdjustmentQuickPreset",
+        ApplyColorAdjustmentQuickPreset
+    )
+);
+
             //AddBinding(_ShowUI = new(Mod.MOD_UI, "MIT_ShowUI", false));
             AddBinding(new TriggerBinding(Mod.MODUI, "MIT_EnableToggle", SliderPanel.Toggle));
             AddBinding(new TriggerBinding(Mod.MODUI, "LUM_SendToLumina", SliderPanel.SendToLumina));
