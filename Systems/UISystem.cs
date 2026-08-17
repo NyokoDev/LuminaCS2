@@ -1249,12 +1249,30 @@ ApplySSAOPreset));
             LUTArray();
         }
 
+
+        private void handleAngularDiameter(float obj)
+        {
+            SunDiameterValue = obj;
+            GlobalVariables.Instance.AngularDiameter = SunDiameterValue;
+
+            RenderEffectsSystem.AdjustAngularDiameter();
+        }
+
+        private void handleSunIntensity(float obj)
+        {
+            SunIntensityValue = obj;
+            GlobalVariables.Instance.SunIntensity = SunIntensityValue;
+
+            RenderEffectsSystem.AdjustAngularDiameter();
+        }
+
         private void handleSunFlareSize(float obj)
         {
             SunFlareSizeValue = obj;
             GlobalVariables.Instance.SunFlareSize = SunFlareSizeValue;
-        }
 
+            RenderEffectsSystem.AdjustAngularDiameter();
+        }
 
         private float SunFlareSize()
         {
@@ -1262,11 +1280,7 @@ ApplySSAOPreset));
             return SunFlareSizeValue;
         }
 
-        private void handleSunIntensity(float obj)
-        {
-            SunIntensityValue = obj;
-            GlobalVariables.Instance.SunIntensity = SunIntensityValue;
-        }
+ 
 
         private float SunIntensity()
         {
@@ -1274,11 +1288,6 @@ ApplySSAOPreset));
             return SunIntensityValue;
         }
 
-        private void handleAngularDiameter(float obj)
-        {
-            SunDiameterValue = obj;
-            GlobalVariables.Instance.AngularDiameter = SunDiameterValue;
-        }
 
         private float SunDiameter()
         {

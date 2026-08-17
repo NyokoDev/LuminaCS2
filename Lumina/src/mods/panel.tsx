@@ -192,10 +192,15 @@ const [IsClicked, setIsClicked] = useState(false);
     trigger(mod.id, 'SetPostExposure', value);
 };
 
-const handleContrast = (value: number) => {
-    trigger(mod.id, "SetContrast", value);
-};
 
+const handleContrast = (value: number) => {
+  // Round the value to the nearest step size of 0.001
+  const roundedValue = Math.round(value / 0.001) * 0.001;
+  // Convert the rounded value to an integer if necessary
+  const id = globalstart + (value * globalstepSize);
+  // Trigger the action with the adjusted value
+  trigger(mod.id, "SetContrast", id);
+};
 
 
 const handleHueShift = (value: number) => {
