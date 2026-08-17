@@ -5,8 +5,7 @@ import mod from "../../../../mod.json";
 import LuminaSVG from "../../../img/Lumina.svg";
 import { useLocalization } from "cs2/l10n";
 
-       //Use localization
-      const { translate } = useLocalization();
+ 
 
 const freshInstall$ = bindValue<boolean>(
   mod.id,
@@ -14,6 +13,8 @@ const freshInstall$ = bindValue<boolean>(
 );
 
 export const FreshInstall: React.FC = () => {
+        //Use localization
+      const { translate } = useLocalization();
   const isFreshInstall = useValue(freshInstall$);
 
   return (
