@@ -56,6 +56,9 @@ namespace Lumina.NGX
         {
             public int formatVersion = NGXSaveFormatVersion;
 
+            // "all" or "selected"
+            public string saveScope = "all";
+
             public List<NGXVolumeChange> volumes =
                 new List<NGXVolumeChange>();
         }
@@ -1067,18 +1070,55 @@ namespace Lumina.NGX
             return cachedNGXSaves;
         }
 
-        private void SaveNGX(string saveName)
+        private void SaveNGX(string data)
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(data))
+                    return;
+
+                string scope = "all";
+                string saveName = data;
+
+                int separator = data.IndexOf('|');
+
+                if (separator >= 0)
+                {
+                    scope = data.Substring(0, separator).Trim();
+                    saveName = data.Substring(separator + 1).Trim();
+                }
+
+                bool selectedOnly =
+                    scope.Equals(
+                        "selected",
+                        StringComparison.OrdinalIgnoreCase);
+
                 string safeName = SanitizeSaveName(saveName);
 
                 if (string.IsNullOrEmpty(safeName))
                     safeName = "NGX Preset";
 
+                if (selectedOnly && selectedVolume == null)
+                {
+                    Mod.Log.Info(
+                        "NGX: Cannot save selected volume because no volume is selected."
+                    );
+
+                    return;
+                }
+
                 Directory.CreateDirectory(NGXSaveDirectory);
 
-                NGXSaveFile save = CaptureCurrentNGXState();
+                NGXSaveFile save =
+                    CaptureCurrentNGXState(selectedOnly);
+
+                save.saveScope =
+                    selectedOnly
+                        ? "selected"
+                        : "all";
+
+                // Preserve explicit component deletions.
+                MergeTrackedDeletions(save);
 
                 string json = JsonConvert.SerializeObject(
                     save,
@@ -1100,10 +1140,11 @@ namespace Lumina.NGX
                 File.Move(tempPath, path);
 
                 trackedNGXChanges = save;
+
                 ngxSavesDirty = true;
 
                 Mod.Log.Info(
-                    $"NGX preset saved: {safeName} | Volumes: {save.volumes.Count}"
+                    $"NGX preset saved: {safeName} | Scope: {save.saveScope} | Volumes: {save.volumes.Count}"
                 );
             }
             catch (Exception ex)
@@ -1114,18 +1155,35 @@ namespace Lumina.NGX
             }
         }
 
-        private NGXSaveFile CaptureCurrentNGXState()
+        private NGXSaveFile CaptureCurrentNGXState(bool selectedOnly)
         {
             NGXSaveFile save = new NGXSaveFile
             {
                 formatVersion = NGXSaveFormatVersion,
+
+                saveScope = selectedOnly
+                    ? "selected"
+                    : "all",
+
                 volumes = new List<NGXVolumeChange>()
             };
 
-            Volume[] sceneVolumes =
-                UnityEngine.Object.FindObjectsOfType<Volume>();
+            IEnumerable<Volume> volumes;
 
-            foreach (Volume volume in sceneVolumes)
+            if (selectedOnly)
+            {
+                if (selectedVolume == null)
+                    return save;
+
+                volumes = new[] { selectedVolume };
+            }
+            else
+            {
+                volumes =
+                    UnityEngine.Object.FindObjectsOfType<Volume>();
+            }
+
+            foreach (Volume volume in volumes)
             {
                 if (volume == null)
                     continue;
@@ -1136,13 +1194,17 @@ namespace Lumina.NGX
                 if (string.IsNullOrEmpty(volume.name))
                     continue;
 
-                NGXVolumeChange volumeSave = new NGXVolumeChange
-                {
-                    volumeName = volume.name,
-                    components = new List<NGXComponentChange>()
-                };
+                NGXVolumeChange volumeSave =
+                    new NGXVolumeChange
+                    {
+                        volumeName = volume.name,
+                        components =
+                            new List<NGXComponentChange>()
+                    };
 
-                foreach (VolumeComponent component in volume.profile.components)
+                foreach (
+                    VolumeComponent component
+                    in volume.profile.components)
                 {
                     if (component == null)
                         continue;
@@ -1150,14 +1212,16 @@ namespace Lumina.NGX
                     NGXComponentChange componentSave =
                         new NGXComponentChange
                         {
-                            componentName = component.GetType().Name,
+                            componentName =
+                                component.GetType().Name,
 
                             existence = 1,
 
                             hasActiveState = true,
                             activeState = component.active,
 
-                            properties = new List<NGXPropertyChange>()
+                            properties =
+                                new List<NGXPropertyChange>()
                         };
 
                     FieldInfo[] fields =
@@ -1176,7 +1240,8 @@ namespace Lumina.NGX
                         }
 
                         VolumeParameter parameter =
-                            field.GetValue(component) as VolumeParameter;
+                            field.GetValue(component)
+                            as VolumeParameter;
 
                         if (parameter == null)
                             continue;
@@ -1193,18 +1258,119 @@ namespace Lumina.NGX
                             {
                                 propertyName = field.Name,
                                 value = serializedValue,
-                                overrideState = parameter.overrideState
+                                overrideState =
+                                    parameter.overrideState
                             }
                         );
                     }
 
-                    volumeSave.components.Add(componentSave);
+                    volumeSave.components.Add(
+                        componentSave
+                    );
                 }
 
                 save.volumes.Add(volumeSave);
             }
 
             return save;
+        }
+
+        private void MergeTrackedDeletions(
+    NGXSaveFile save)
+        {
+            if (save == null)
+                return;
+
+            NormalizeSaveData(save);
+            NormalizeSaveData(trackedNGXChanges);
+
+            foreach (
+                NGXVolumeChange trackedVolume
+                in trackedNGXChanges.volumes)
+            {
+                if (trackedVolume == null)
+                    continue;
+
+                // For a selected-volume preset, only preserve
+                // deletions belonging to the selected volume.
+                if (save.saveScope.Equals(
+                        "selected",
+                        StringComparison.OrdinalIgnoreCase))
+                {
+                    if (selectedVolume == null)
+                        continue;
+
+                    if (!trackedVolume.volumeName.Equals(
+                            selectedVolume.name,
+                            StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+                }
+
+                foreach (
+                    NGXComponentChange trackedComponent
+                    in trackedVolume.components)
+                {
+                    if (trackedComponent == null)
+                        continue;
+
+                    if (trackedComponent.existence != 0)
+                        continue;
+
+                    NGXVolumeChange targetVolume =
+                        save.volumes.FirstOrDefault(x =>
+                            x.volumeName.Equals(
+                                trackedVolume.volumeName,
+                                StringComparison.OrdinalIgnoreCase));
+
+                    if (targetVolume == null)
+                    {
+                        targetVolume =
+                            new NGXVolumeChange
+                            {
+                                volumeName =
+                                    trackedVolume.volumeName,
+
+                                components =
+                                    new List<NGXComponentChange>()
+                            };
+
+                        save.volumes.Add(targetVolume);
+                    }
+
+                    NGXComponentChange existing =
+                        targetVolume.components
+                            .FirstOrDefault(x =>
+                                x.componentName.Equals(
+                                    trackedComponent.componentName,
+                                    StringComparison.OrdinalIgnoreCase));
+
+                    if (existing != null)
+                    {
+                        existing.existence = 0;
+                        existing.hasActiveState = false;
+                        existing.properties.Clear();
+                    }
+                    else
+                    {
+                        targetVolume.components.Add(
+                            new NGXComponentChange
+                            {
+                                componentName =
+                                    trackedComponent.componentName,
+
+                                existence = 0,
+
+                                hasActiveState = false,
+
+                                properties =
+                                    new List<NGXPropertyChange>()
+                            }
+                        );
+                    }
+                }
+            }
         }
 
         private void LoadNGX(string saveName)
@@ -1291,90 +1457,320 @@ namespace Lumina.NGX
 
         private void ApplyNGXSave(NGXSaveFile save)
         {
-            Volume[] sceneVolumes = UnityEngine.Object.FindObjectsOfType<Volume>();
+            if (save == null || save.volumes == null)
+                return;
+
+            Volume[] sceneVolumes =
+                UnityEngine.Object.FindObjectsOfType<Volume>();
 
             foreach (NGXVolumeChange volumeChange in save.volumes)
             {
-                if (volumeChange == null || string.IsNullOrEmpty(volumeChange.volumeName))
+                if (volumeChange == null ||
+                    string.IsNullOrEmpty(volumeChange.volumeName))
+                {
                     continue;
+                }
 
-                Volume volume = sceneVolumes.FirstOrDefault(x =>
-                    x != null && x.name.Equals(volumeChange.volumeName, StringComparison.OrdinalIgnoreCase));
+                // Volume names are currently stable across users,
+                // so always restore to the exact volume it was saved from.
+                Volume volume =
+                    sceneVolumes.FirstOrDefault(x =>
+                        x != null &&
+                        x.name.Equals(
+                            volumeChange.volumeName,
+                            StringComparison.OrdinalIgnoreCase
+                        )
+                    );
 
                 if (volume == null)
                 {
-                    Mod.Log.Info("NGX load skipped missing volume: " + volumeChange.volumeName);
+                    Mod.Log.Info(
+                        "NGX load skipped missing volume: " +
+                        volumeChange.volumeName
+                    );
+
                     continue;
                 }
 
                 if (volume.profile == null)
-                    volume.profile = ScriptableObject.CreateInstance<VolumeProfile>();
+                {
+                    volume.profile =
+                        ScriptableObject.CreateInstance<VolumeProfile>();
+                }
 
-                if (volumeChange.components == null)
+                ApplyNGXVolume(
+                    volume,
+                    volumeChange
+                );
+            }
+
+            selectedComponent = null;
+
+            volumesDirty = true;
+            componentsDirty = true;
+            componentPropertiesDirty = true;
+        }
+
+        private void ApplyNGXVolume(
+    Volume volume,
+    NGXVolumeChange volumeChange)
+        {
+            if (volume == null ||
+                volume.profile == null ||
+                volumeChange == null)
+            {
+                return;
+            }
+
+            List<NGXComponentChange> presetComponents =
+                volumeChange.components ??
+                new List<NGXComponentChange>();
+
+
+            // =====================================================
+            // BUILD LIST OF COMPONENTS THAT SHOULD EXIST
+            // =====================================================
+
+            HashSet<string> componentsThatShouldExist =
+                new HashSet<string>(
+                    presetComponents
+                        .Where(x =>
+                            x != null &&
+                            x.existence != 0 &&
+                            !string.IsNullOrEmpty(x.componentName)
+                        )
+                        .Select(x => x.componentName),
+
+                    StringComparer.OrdinalIgnoreCase
+                );
+
+
+            // =====================================================
+            // REMOVE COMPONENTS NOT PRESENT IN THE PRESET
+            // =====================================================
+            //
+            // Current:
+            //
+            // Lumina
+            //   ColorAdjustments
+            //   SSAO
+            //   WhiteBalance
+            //
+            // Preset:
+            //
+            // Lumina
+            //   ColorAdjustments
+            //   WhiteBalance
+            //
+            // SSAO gets removed.
+            // =====================================================
+
+            VolumeComponent[] existingComponents =
+                volume.profile.components
+                    .Where(x => x != null)
+                    .ToArray();
+
+
+            foreach (VolumeComponent component in existingComponents)
+            {
+                string componentName =
+                    component.GetType().Name;
+
+                if (!componentsThatShouldExist.Contains(componentName))
+                {
+                    volume.profile.components.Remove(component);
+
+                    if (selectedComponent == component)
+                        selectedComponent = null;
+                }
+            }
+
+
+            // =====================================================
+            // RESTORE PRESET COMPONENTS
+            // =====================================================
+
+            foreach (
+                NGXComponentChange componentChange
+                in presetComponents)
+            {
+                if (componentChange == null ||
+                    string.IsNullOrEmpty(componentChange.componentName))
+                {
+                    continue;
+                }
+
+
+                VolumeComponent component =
+                    volume.profile.components
+                        .FirstOrDefault(x =>
+                            x != null &&
+                            x.GetType().Name.Equals(
+                                componentChange.componentName,
+                                StringComparison.OrdinalIgnoreCase
+                            )
+                        );
+
+
+                // =================================================
+                // EXPLICIT DELETION
+                // =================================================
+
+                if (componentChange.existence == 0)
+                {
+                    if (component != null)
+                    {
+                        volume.profile.components.Remove(component);
+
+                        if (selectedComponent == component)
+                            selectedComponent = null;
+                    }
+
+                    continue;
+                }
+
+
+                // =================================================
+                // COMPONENT MUST EXIST
+                // =================================================
+
+                if (component == null)
+                {
+                    component =
+                        EnsureComponent(
+                            volume,
+                            componentChange.componentName
+                        );
+                }
+
+                if (component == null)
                     continue;
 
-                foreach (NGXComponentChange componentChange in volumeChange.components)
+
+                // =================================================
+                // ACTIVE STATE
+                // =================================================
+
+                if (componentChange.hasActiveState)
                 {
-                    if (componentChange == null || string.IsNullOrEmpty(componentChange.componentName))
-                        continue;
+                    component.active =
+                        componentChange.activeState;
 
-                    VolumeComponent component = volume.profile.components.FirstOrDefault(x =>
-                        x != null && x.GetType().Name.Equals(
-                            componentChange.componentName,
-                            StringComparison.OrdinalIgnoreCase));
+                    SetInternalEnableParameter(
+                        component,
+                        componentChange.activeState
+                    );
+                }
 
-                    if (componentChange.existence == 0)
-                    {
-                        if (component != null)
-                            volume.profile.components.Remove(component);
 
-                        continue;
-                    }
+                // =================================================
+                // PROPERTIES
+                // =================================================
 
-                    // Added components must be recreated. Also recreate a missing component when
-                    // the preset contains state/property edits for it, so those edits can be restored.
-                    bool needsComponent =
-                        componentChange.existence == 1 ||
-                        componentChange.hasActiveState ||
-                        (componentChange.properties != null && componentChange.properties.Count > 0);
+                ApplyNGXComponentProperties(
+                    component,
+                    componentChange
+                );
+            }
+        }
 
-                    if (component == null && needsComponent)
-                        component = EnsureComponent(volume, componentChange.componentName);
+        private void ApplyNGXComponentProperties(
+    VolumeComponent component,
+    NGXComponentChange componentChange)
+        {
+            if (component == null ||
+                componentChange == null)
+            {
+                return;
+            }
 
-                    if (component == null)
-                        continue;
 
-                    if (componentChange.hasActiveState)
-                    {
-                        component.active = componentChange.activeState;
-                        SetInternalEnableParameter(component, componentChange.activeState);
-                    }
+            List<NGXPropertyChange> presetProperties =
+                componentChange.properties ??
+                new List<NGXPropertyChange>();
 
-                    if (componentChange.properties == null)
-                        continue;
 
-                    foreach (NGXPropertyChange propertyChange in componentChange.properties)
-                    {
-                        if (propertyChange == null || string.IsNullOrEmpty(propertyChange.propertyName))
-                            continue;
+            Dictionary<string, NGXPropertyChange> propertyMap =
+                presetProperties
+                    .Where(x =>
+                        x != null &&
+                        !string.IsNullOrEmpty(x.propertyName)
+                    )
+                    .GroupBy(
+                        x => x.propertyName,
+                        StringComparer.OrdinalIgnoreCase
+                    )
+                    .ToDictionary(
+                        x => x.Key,
+                        x => x.Last(),
+                        StringComparer.OrdinalIgnoreCase
+                    );
 
-                        FieldInfo field = component.GetType().GetField(
-                            propertyChange.propertyName,
-                            BindingFlags.Instance |
-                            BindingFlags.Public |
-                            BindingFlags.NonPublic |
-                            BindingFlags.IgnoreCase);
 
-                        if (field == null)
-                            continue;
+            FieldInfo[] fields =
+                component.GetType().GetFields(
+                    BindingFlags.Instance |
+                    BindingFlags.Public |
+                    BindingFlags.NonPublic
+                );
 
-                        VolumeParameter parameter = field.GetValue(component) as VolumeParameter;
-                        if (parameter == null)
-                            continue;
 
-                        if (TrySetParameterValue(parameter, propertyChange.value))
-                            parameter.overrideState = propertyChange.overrideState;
-                    }
+            foreach (FieldInfo field in fields)
+            {
+                if (!typeof(VolumeParameter)
+                    .IsAssignableFrom(field.FieldType))
+                {
+                    continue;
+                }
+
+
+                VolumeParameter parameter =
+                    field.GetValue(component)
+                    as VolumeParameter;
+
+                if (parameter == null)
+                    continue;
+
+
+                // =================================================
+                // PRESET DOES NOT CONTAIN THIS PROPERTY
+                // =================================================
+                //
+                // Example:
+                //
+                // User:
+                // postExposure = 500
+                // overrideState = true
+                //
+                // Downloaded preset:
+                // no postExposure
+                //
+                // Result:
+                // overrideState = false
+                //
+                // The old 500 stops affecting HDRP.
+                // =================================================
+
+                if (!propertyMap.TryGetValue(
+                        field.Name,
+                        out NGXPropertyChange propertyChange))
+                {
+                    parameter.overrideState = false;
+
+                    continue;
+                }
+
+
+                // =================================================
+                // PRESET CONTAINS PROPERTY
+                // =================================================
+
+                if (TrySetParameterValue(
+                        parameter,
+                        propertyChange.value))
+                {
+                    parameter.overrideState =
+                        propertyChange.overrideState;
                 }
             }
         }

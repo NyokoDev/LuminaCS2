@@ -223,8 +223,7 @@ const beginDrag = (e: React.MouseEvent) => {
 <div className="NGXNotice">
 
         <p>
-            Lumina NGX is currently running in inspector mode. You can explore
-            volumes and add/remove component properties, but editing is not available yet.
+            Lumina NGX is running in inspector mode. Explore volumes, modify component properties, add or remove components, and save or load your changes using NGX Presets.
         </p>
 
 
