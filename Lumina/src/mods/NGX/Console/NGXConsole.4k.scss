@@ -1,0 +1,183 @@
+/* ==========================================================
+   NGX Console — 4K / 3840x2160 Overrides
+   ========================================================== */
+
+@media screen and (min-width: 3840px) and (min-height: 2160px) {
+
+    /* ======================================================
+       Console Window
+       ====================================================== */
+
+    .NGXConsoleWindow {
+        top: 240px;
+        left: 360px;
+
+        width: 1300px;
+        height: 800px;
+
+        min-width: 900px;
+        min-height: 500px;
+
+        max-width: calc(100vw - 80px);
+        max-height: calc(100vh - 80px);
+
+        border-width: 2px;
+        border-radius: 20px;
+
+        box-shadow:
+            0 20px 70px rgba(0, 0, 0, .55),
+            inset 0 2px rgba(255, 255, 255, .03);
+    }
+
+
+    /* ======================================================
+       Header
+       ====================================================== */
+
+    .NGXConsoleHeader {
+        padding: 20px 28px;
+
+        border-bottom-width: 2px;
+    }
+
+    .NGXConsoleHeader h3 {
+        font-size: 32px;
+    }
+
+    .NGXConsoleHeader button {
+        width: 60px;
+        height: 60px;
+
+        border-radius: 12px;
+    }
+
+
+    /* ======================================================
+       Toolbar
+       ====================================================== */
+
+    .NGXConsoleToolbar {
+        gap: 16px;
+
+        padding: 16px 24px;
+
+        border-bottom-width: 2px;
+    }
+
+    .NGXConsoleToolbar button {
+        padding: 10px 20px;
+
+        border-radius: 10px;
+
+        font-size: 24px;
+    }
+
+
+    /* ======================================================
+       Console Output
+       ====================================================== */
+
+    .NGXConsoleMessages {
+        padding: 24px;
+
+        font-size: 26px;
+
+        /* Keep same visual ratio as normal UI */
+        line-height: 1.6;
+    }
+
+    .NGXConsoleMessages::-webkit-scrollbar {
+        width: 16px;
+    }
+
+    .NGXConsoleMessages::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+    }
+
+
+    /* ======================================================
+       Messages
+       ====================================================== */
+
+    .ConsoleMessage {
+        padding: 8px 16px;
+
+        border-radius: 8px;
+    }
+
+
+    /* ======================================================
+       Input
+       ====================================================== */
+
+    .NGXConsoleInput {
+        gap: 16px;
+
+        padding: 20px 24px;
+
+        border-top-width: 2px;
+
+        font-size: 26px;
+    }
+
+    .NGXConsoleInput span {
+        font-size: 26px;
+    }
+
+    .NGXConsoleInput input {
+        font-size: 26px;
+    }
+
+
+    /* ======================================================
+       Empty State
+       ====================================================== */
+
+    .ConsoleEmpty {
+        font-size: 26px;
+    }
+
+
+    /* ======================================================
+       Workspace Header Buttons
+       ====================================================== */
+
+    .NGXHeaderButtons {
+        gap: 16px;
+    }
+
+    .ConsoleButton {
+        width: 68px;
+        height: 68px;
+
+        border-radius: 14px;
+
+        font-size: 30px;
+    }
+
+    .ConsoleButton:hover {
+        transform: translateY(-2px);
+    }
+
+
+    /* ======================================================
+       Close Button
+       ====================================================== */
+
+    .NGXConsoleHeader .NGXConsoleClose {
+        /*
+         * Your original uses rem here rather than px.
+         * Keep rem because CS2's UI scaling may be tied to it.
+         */
+        width: 64rem;
+        height: 64rem;
+
+        border-width: 2rem;
+        border-radius: 12rem;
+    }
+
+    .NGXConsoleCloseIcon {
+        width: 38rem;
+        height: 38rem;
+    }
+}

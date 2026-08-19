@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { bindValue, trigger, useValue } from "cs2/api";
 import "./NGXWorkspace.scss";
+import "./NGXWorkspace.4k.scss";
 import "./NGXNotice.scss";
 import "./NGXConfirmation.scss";
 import "./AddComponent.scss";

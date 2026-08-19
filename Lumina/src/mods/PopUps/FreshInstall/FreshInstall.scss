@@ -18,8 +18,13 @@
 
 ========================================= */
 
+
+
+
 .fresh-install {
 
+  
+  
   position: absolute;
 
   top: -800rem;
@@ -71,6 +76,18 @@
     visibility 260ms ease;
 
 }
+
+
+
+
+// 4K OVERRIDE
+@media screen and (min-width: 3840px) and (min-height: 2160px) {
+  .fresh-install {
+    top: -920rem;
+  }
+}
+
+
 
 .fresh-install,
 

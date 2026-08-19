@@ -29,6 +29,15 @@
 }
 
 
+// 4K OVERRIDE
+@media screen and (min-width: 3840px) and (min-height: 2160px) {
+  .workflow {
+    top: -920rem;
+  }
+}
+
+
+
 /* =========================================
    FORCE LUMINA FONT EVERYWHERE
 ========================================= */

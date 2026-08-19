@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import "./NGXConsole.scss";
+import "./NGXConsole.4k.scss";
 import { trigger } from "cs2/api";
 import { X } from "lucide-react";
 
