@@ -32,8 +32,14 @@ export const Workflow: React.FC<WorkflowProps> = ({
   const [selected, setSelected] =
     useState<WorkflowType>("classic");
 
+
   const handleComplete = () => {
+    if (selected === "ngx") {
+      trigger(mod.id, "UserSelectNGXMode");
+    }
+
     onComplete(selected);
+
     trigger(mod.id, "StopFreshInstall");
   };
 

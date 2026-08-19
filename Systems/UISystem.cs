@@ -67,6 +67,8 @@
             }
         }
 
+   
+
 
         /// <inheritdoc/>
         protected override void OnCreate()
@@ -106,12 +108,23 @@
 
         private void RegisterFreshInstallBindings()
         {
+            AddBinding(new TriggerBinding(
+                Mod.MODUI,
+                "UserSelectNGXMode",
+                NGXMODE
+            ));
+
             AddUpdateBinding(new GetterValueBinding<bool>(
                 Mod.MODUI,
                 "FreshInstall",
                 () => FreshInstall));
 
             AddBinding(new TriggerBinding(Mod.MODUI, "StopFreshInstall", StopFreshInstall));
+        }
+
+        private void NGXMODE()
+        {
+            GlobalVariables.Instance.NGXMode = true;
         }
 
         private void RegisterCoreVisualBindings()
