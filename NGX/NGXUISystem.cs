@@ -51,6 +51,13 @@ namespace Lumina.NGX
         private Dictionary<string, Type> cachedVolumeComponentTypes;
         private string[] cachedAvailableComponents;
 
+        // Reflection is expensive when sliders fire SetProperty many times per second.
+        // Cache all metadata by runtime type and reuse it for the lifetime of the UI system.
+        private readonly Dictionary<Type, FieldInfo[]> cachedParameterFields = new Dictionary<Type, FieldInfo[]>();
+        private readonly Dictionary<Type, Dictionary<string, FieldInfo>> cachedComponentFields = new Dictionary<Type, Dictionary<string, FieldInfo>>();
+        private readonly Dictionary<Type, PropertyInfo> cachedValueProperties = new Dictionary<Type, PropertyInfo>();
+        private readonly Dictionary<Type, FieldInfo> cachedEnableFields = new Dictionary<Type, FieldInfo>();
+
         [Serializable]
         public sealed class NGXSaveFile
         {
@@ -113,28 +120,93 @@ namespace Lumina.NGX
                 return cachedComponentProperties;
             }
 
-            cachedComponentProperties = selectedComponent
-                .GetType()
-                .GetFields(BindingFlags.Instance | BindingFlags.Public)
-                .Where(f => typeof(VolumeParameter).IsAssignableFrom(f.FieldType))
-                .Select(f =>
+            FieldInfo[] fields = GetVolumeParameterFields(selectedComponent.GetType());
+            string[] result = new string[fields.Length];
+
+            for (int i = 0; i < fields.Length; i++)
+            {
+                FieldInfo field = fields[i];
+                VolumeParameter parameter = field.GetValue(selectedComponent) as VolumeParameter;
+                string value = string.Empty;
+
+                if (parameter != null)
                 {
-                    var parameter = (VolumeParameter)f.GetValue(selectedComponent);
-                    string value = "";
+                    PropertyInfo valueProperty = GetValueProperty(parameter.GetType());
+                    if (valueProperty != null && valueProperty.CanRead)
+                        value = valueProperty.GetValue(parameter)?.ToString() ?? string.Empty;
+                }
 
-                    if (parameter != null)
-                    {
-                        var valueProperty = parameter.GetType().GetProperty("value");
-                        if (valueProperty != null && valueProperty.CanRead)
-                            value = valueProperty.GetValue(parameter)?.ToString() ?? "";
-                    }
+                result[i] = $"{field.Name}|{parameter?.GetType().Name}|{value}";
+            }
 
-                    return $"{f.Name}|{parameter?.GetType().Name}|{value}";
-                })
-                .ToArray();
-
+            cachedComponentProperties = result;
             componentPropertiesDirty = false;
             return cachedComponentProperties;
+        }
+
+        private FieldInfo[] GetVolumeParameterFields(Type componentType)
+        {
+            if (componentType == null)
+                return Array.Empty<FieldInfo>();
+
+            if (cachedParameterFields.TryGetValue(componentType, out FieldInfo[] fields))
+                return fields;
+
+            fields = componentType
+                .GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                .Where(f => typeof(VolumeParameter).IsAssignableFrom(f.FieldType))
+                .ToArray();
+
+            cachedParameterFields[componentType] = fields;
+            return fields;
+        }
+
+        private FieldInfo GetComponentField(Type componentType, string fieldName)
+        {
+            if (componentType == null || string.IsNullOrEmpty(fieldName))
+                return null;
+
+            if (!cachedComponentFields.TryGetValue(componentType, out Dictionary<string, FieldInfo> fields))
+            {
+                fields = componentType
+                    .GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    .GroupBy(f => f.Name, StringComparer.OrdinalIgnoreCase)
+                    .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
+
+                cachedComponentFields[componentType] = fields;
+            }
+
+            fields.TryGetValue(fieldName, out FieldInfo field);
+            return field;
+        }
+
+        private PropertyInfo GetValueProperty(Type parameterType)
+        {
+            if (parameterType == null)
+                return null;
+
+            if (cachedValueProperties.TryGetValue(parameterType, out PropertyInfo property))
+                return property;
+
+            property = parameterType.GetProperty("value");
+            cachedValueProperties[parameterType] = property;
+            return property;
+        }
+
+        private FieldInfo GetEnableField(Type componentType)
+        {
+            if (componentType == null)
+                return null;
+
+            if (cachedEnableFields.TryGetValue(componentType, out FieldInfo field))
+                return field;
+
+            field = componentType.GetField(
+                "enable",
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+            cachedEnableFields[componentType] = field;
+            return field;
         }
 
         /// <summary>
@@ -312,137 +384,71 @@ namespace Lumina.NGX
             if (string.IsNullOrEmpty(data))
                 return;
 
+            int firstSeparator = data.IndexOf('|');
+            int secondSeparator = firstSeparator >= 0 ? data.IndexOf('|', firstSeparator + 1) : -1;
 
-            string[] args = data.Split('|');
-
-
-            if (args.Length != 3)
-            {
-                Mod.Log.Info(
-                    "NGX: Invalid SetProperty format"
-                );
-
+            if (firstSeparator <= 0 || secondSeparator <= firstSeparator + 1 || secondSeparator >= data.Length - 1)
                 return;
-            }
 
+            string volumeName = data.Substring(0, firstSeparator);
+            string propertyPath = data.Substring(firstSeparator + 1, secondSeparator - firstSeparator - 1);
+            string value = data.Substring(secondSeparator + 1);
 
-            string volumeName = args[0];
-            string propertyPath = args[1];
-            string value = args[2];
-
-
-            Volume volume =
-    UnityEngine.Object
-    .FindObjectsOfType<Volume>()
-    .FirstOrDefault(
-        x => x.name.Equals(
-            volumeName,
-            StringComparison.OrdinalIgnoreCase
-        )
-    );
-
-
-            if (volume == null)
-            {
-                Mod.Log.Info(
-                    "NGX: Volume not found " + volumeName
-                );
-
+            int propertySeparator = propertyPath.IndexOf('.');
+            if (propertySeparator <= 0 || propertySeparator >= propertyPath.Length - 1)
                 return;
-            }
 
+            string componentName = propertyPath.Substring(0, propertySeparator);
+            string propertyName = propertyPath.Substring(propertySeparator + 1);
+
+            // Never scan the whole Unity scene for every slider tick.
+            if (volumesDirty)
+                GetVolumes();
+
+            if (!cachedVolumeObjects.TryGetValue(volumeName, out Volume volume) || volume == null)
+            {
+                volumesDirty = true;
+                GetVolumes();
+
+                if (!cachedVolumeObjects.TryGetValue(volumeName, out volume) || volume == null)
+                    return;
+            }
 
             if (volume.profile == null)
                 return;
 
+            VolumeComponent component = null;
+            List<VolumeComponent> components = volume.profile.components;
 
-            string[] propertyParts =
-                propertyPath.Split('.');
-
-
-            if (propertyParts.Length != 2)
+            for (int i = 0; i < components.Count; i++)
             {
-                Mod.Log.Info(
-                    "NGX: Invalid property path"
-                );
-
-                return;
+                VolumeComponent candidate = components[i];
+                if (candidate != null && candidate.GetType().Name.Equals(componentName, StringComparison.OrdinalIgnoreCase))
+                {
+                    component = candidate;
+                    break;
+                }
             }
-
-
-            string componentName = propertyParts[0];
-            string propertyName = propertyParts[1];
-
-
-            VolumeComponent component =
-    volume.profile.components
-    .FirstOrDefault(
-        x => x.GetType().Name.Equals(
-            componentName,
-            StringComparison.OrdinalIgnoreCase
-        )
-    );
 
             if (component == null)
-            {
-                Mod.Log.Info(
-                    "NGX: Component not found " + componentName
-                );
-
                 return;
-            }
 
-
-            var field =
-    component.GetType()
-    .GetField(
-        propertyName,
-        System.Reflection.BindingFlags.Instance |
-        System.Reflection.BindingFlags.Public |
-        System.Reflection.BindingFlags.NonPublic |
-        System.Reflection.BindingFlags.IgnoreCase
-    );
-
-
+            FieldInfo field = GetComponentField(component.GetType(), propertyName);
             if (field == null)
-            {
-                Mod.Log.Info(
-                    "NGX: Property not found " + propertyName
-                );
-
                 return;
-            }
 
-
-            object parameter = field.GetValue(component);
-
-            if (parameter is VolumeParameter volumeParameter)
-            {
-                if (TrySetParameterValue(volumeParameter, value))
-                {
-                    TrackPropertyChange(volumeName, componentName, propertyName, volumeParameter);
-                    componentPropertiesDirty = true;
-
-                    Mod.Log.Info(
-                        $"NGX: {componentName}.{propertyName} = {value}"
-                    );
-                }
-                else
-                {
-                    Mod.Log.Info(
-                        $"NGX: Unsupported parameter type ({parameter.GetType().Name})"
-                    );
-                }
-
+            VolumeParameter volumeParameter = field.GetValue(component) as VolumeParameter;
+            if (volumeParameter == null)
                 return;
-            }
 
-            Mod.Log.Info(
-                $"NGX: {propertyName} is not a VolumeParameter.");
+            if (!TrySetParameterValue(volumeParameter, value))
+                return;
 
+            TrackPropertyChange(volumeName, componentName, propertyName, volumeParameter);
+
+            if (selectedComponent == component)
+                componentPropertiesDirty = true;
         }
-
-
 
 
 
@@ -453,18 +459,7 @@ namespace Lumina.NGX
 
             var culture = System.Globalization.CultureInfo.InvariantCulture;
 
-            var valueProperty = parameter.GetType().GetProperty("value");
-            Mod.Log.Info("Parameter Type: " + parameter.GetType().FullName);
-
-            if (valueProperty == null)
-            {
-                Mod.Log.Info("valueProperty == NULL");
-                return false;
-            }
-
-            Mod.Log.Info("Value Property Type: " + valueProperty.PropertyType.FullName);
-            Mod.Log.Info("Incoming Value: " + value);
-
+            PropertyInfo valueProperty = GetValueProperty(parameter.GetType());
             if (valueProperty == null || !valueProperty.CanWrite)
                 return false;
 
@@ -495,7 +490,6 @@ namespace Lumina.NGX
 
                 if (valueType == typeof(Color))
                 {
-                    Mod.Log.Info("Entered Color parser");
                     string colorValue = value.Trim();
 
                     // HTML colors (#FF0000)
@@ -540,7 +534,6 @@ namespace Lumina.NGX
                         valueProperty.SetValue(parameter,
                             new Color(r, g, b, a));
 
-                        Mod.Log.Info("Successfully assigned color");
                         return true;
                     }
 
@@ -620,13 +613,10 @@ namespace Lumina.NGX
                     return true;
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                Mod.Log.Info(ex.ToString());
                 return false;
             }
-
-            Mod.Log.Info($"Unsupported value type: {valueType.FullName}");
 
             return false;
         }
@@ -856,12 +846,7 @@ namespace Lumina.NGX
             TrackComponentActiveState(selectedVolume.name, componentName, newState);
 
             // Toggle internal "enable" BoolParameter if it exists
-            var enableField = component.GetType().GetField(
-                "enable",
-                System.Reflection.BindingFlags.Instance |
-                System.Reflection.BindingFlags.Public |
-                System.Reflection.BindingFlags.NonPublic
-            );
+            FieldInfo enableField = GetEnableField(component.GetType());
 
 
             if (enableField != null)
@@ -884,152 +869,70 @@ namespace Lumina.NGX
             if (string.IsNullOrEmpty(path))
                 return;
 
-
-            string[] split = path.Split('.');
-
-
-            if (split.Length != 2)
-            {
-                Mod.Log.Info(
-                    "NGX: Invalid inspect path"
-                );
-
+            int separator = path.IndexOf('.');
+            if (separator <= 0 || separator >= path.Length - 1)
                 return;
-            }
 
+            string componentName = path.Substring(0, separator);
+            string propertyName = path.Substring(separator + 1);
 
-            string componentName = split[0];
-            string propertyName = split[1];
-
-
-            Type componentType =
-                AppDomain.CurrentDomain
-                .GetAssemblies()
-                .SelectMany(x =>
-                {
-                    try
-                    {
-                        return x.GetTypes();
-                    }
-                    catch
-                    {
-                        return Array.Empty<Type>();
-                    }
-
-                })
-                .FirstOrDefault(x =>
-                    x.Name == componentName &&
-                    typeof(VolumeComponent)
-                    .IsAssignableFrom(x)
-                );
-
-
+            Type componentType = FindVolumeComponentType(componentName);
             if (componentType == null)
-            {
-                Mod.Log.Info(
-                    "NGX: Component not found"
-                );
-
                 return;
-            }
 
-
-            var field =
-                componentType.GetField(
-                    propertyName,
-                    System.Reflection.BindingFlags.Instance |
-                    System.Reflection.BindingFlags.Public |
-                    System.Reflection.BindingFlags.NonPublic
-                );
-
-
+            FieldInfo field = GetComponentField(componentType, propertyName);
             if (field == null)
-            {
-                Mod.Log.Info(
-                    "NGX: Property not found"
-                );
-
                 return;
-            }
 
+            PropertyInfo valueProperty = field.FieldType.GetProperty("value");
+            if (valueProperty == null)
+                return;
 
-            Type valueType =
-                field.FieldType
-                .GetProperty("value")
-                .PropertyType;
+            Type valueType = valueProperty.PropertyType;
 
-
-            Mod.Log.Info(
-                $"AVAILABLE ADJUSTMENTS FOR {path}:"
-            );
-
+            // This method is explicitly diagnostic, so logging here is intentional.
+            Mod.Log.Info($"AVAILABLE ADJUSTMENTS FOR {path}:");
 
             if (valueType.IsEnum)
             {
-                foreach (var value in Enum.GetNames(valueType))
-                {
-                    Mod.Log.Info(value);
-                }
-
+                foreach (string enumValue in Enum.GetNames(valueType))
+                    Mod.Log.Info(enumValue);
                 return;
             }
-
 
             if (valueType == typeof(bool))
             {
                 Mod.Log.Info("true");
                 Mod.Log.Info("false");
-
                 return;
             }
-
 
             if (valueType == typeof(Color))
             {
-                Mod.Log.Info(
-                    "Format: RGBA(r,g,b,a)"
-                );
-
+                Mod.Log.Info("Format: RGBA(r,g,b,a)");
                 return;
             }
-
 
             if (valueType == typeof(Vector2))
             {
-                Mod.Log.Info(
-                    "Format: (x,y)"
-                );
-
+                Mod.Log.Info("Format: (x,y)");
                 return;
             }
-
 
             if (valueType == typeof(Vector3))
             {
-                Mod.Log.Info(
-                    "Format: (x,y,z)"
-                );
-
+                Mod.Log.Info("Format: (x,y,z)");
                 return;
             }
-
 
             if (valueType == typeof(Vector4))
             {
-                Mod.Log.Info(
-                    "Format: (x,y,z,w)"
-                );
-
+                Mod.Log.Info("Format: (x,y,z,w)");
                 return;
             }
 
-
-            Mod.Log.Info(
-                "Numeric value"
-            );
+            Mod.Log.Info("Numeric value");
         }
-
-
 
 
         // ===============================
@@ -1224,12 +1127,7 @@ namespace Lumina.NGX
                                 new List<NGXPropertyChange>()
                         };
 
-                    FieldInfo[] fields =
-                        component.GetType().GetFields(
-                            BindingFlags.Instance |
-                            BindingFlags.Public |
-                            BindingFlags.NonPublic
-                        );
+                    FieldInfo[] fields = GetVolumeParameterFields(component.GetType());
 
                     foreach (FieldInfo field in fields)
                     {
@@ -1707,12 +1605,7 @@ namespace Lumina.NGX
                     );
 
 
-            FieldInfo[] fields =
-                component.GetType().GetFields(
-                    BindingFlags.Instance |
-                    BindingFlags.Public |
-                    BindingFlags.NonPublic
-                );
+            FieldInfo[] fields = GetVolumeParameterFields(component.GetType());
 
 
             foreach (FieldInfo field in fields)
@@ -1812,9 +1705,7 @@ namespace Lumina.NGX
             if (component == null)
                 return;
 
-            FieldInfo enableField = component.GetType().GetField(
-                "enable",
-                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            FieldInfo enableField = GetEnableField(component.GetType());
 
             if (enableField == null)
                 return;
@@ -1923,7 +1814,7 @@ namespace Lumina.NGX
         {
             value = null;
 
-            PropertyInfo valueProperty = parameter.GetType().GetProperty("value");
+            PropertyInfo valueProperty = GetValueProperty(parameter.GetType());
             if (valueProperty == null || !valueProperty.CanRead)
                 return false;
 
