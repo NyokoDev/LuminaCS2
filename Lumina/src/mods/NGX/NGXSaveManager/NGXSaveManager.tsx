@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import { bindValue, trigger } from "cs2/api";
 
 import "./NGXSaveManager.scss";
+import { X } from "lucide-react";
 
 import mod from "../../../../mod.json";
 
@@ -78,13 +79,17 @@ export const NGXSaveManager: React.FC<{ onClose: () => void }> = ({
                     </div>
                 </div>
 
-                <button
-                    className="ngx-save-manager__close"
-                    type="button"
-                    onClick={onClose}
-                >
-                    ×
-                </button>
+           <button
+    className="ngx-save-manager__close"
+    type="button"
+    onClick={onClose}
+    aria-label="Close NGX Presets"
+>
+    <X
+        className="ngx-save-manager__close-icon"
+        strokeWidth={2}
+    />
+</button>
             </div>
 
 

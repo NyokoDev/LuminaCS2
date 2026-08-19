@@ -55,7 +55,9 @@ namespace Lumina.NGX
         public sealed class NGXSaveFile
         {
             public int formatVersion = NGXSaveFormatVersion;
-            public List<NGXVolumeChange> volumes = new List<NGXVolumeChange>();
+
+            public List<NGXVolumeChange> volumes =
+                new List<NGXVolumeChange>();
         }
 
         [Serializable]

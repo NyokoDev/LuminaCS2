@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import "./NGXConsole.scss";
 import { trigger } from "cs2/api";
+import { X } from "lucide-react";
 
 interface NGXConsoleProps {
     onClose: () => void;
@@ -348,11 +349,16 @@ while ((match = regex.exec(trimmed)) !== null)
                     </h3>
 
                     <button
-                        onMouseDown={e => e.stopPropagation()}
-                        onClick={onClose}
-                    >
-                        ✕
-                    </button>
+    className="NGXConsoleClose"
+    onMouseDown={e => e.stopPropagation()}
+    onClick={onClose}
+    aria-label="Close NGX Console"
+>
+    <X
+        className="NGXConsoleCloseIcon"
+        strokeWidth={2}
+    />
+</button>
 
                 </div>
 

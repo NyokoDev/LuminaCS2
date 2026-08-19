@@ -467,3 +467,51 @@
 .NGXPresetsButton {
     color: #ffffff;
 }
+
+
+
+/* =========================================
+   STYLIZED CLOSE X
+========================================= */
+
+.ngx-save-manager__close {
+    width: 32rem;
+    height: 32rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+    padding: 0;
+
+    background: transparent;
+    border: 0;
+    border-radius: 6rem;
+
+    color: rgba(255, 255, 255, 0.65);
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        color 0.15s ease;
+}
+
+.ngx-save-manager__close:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+}
+
+.ngx-save-manager__close:active {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.ngx-save-manager__close-icon {
+    width: 19rem;
+    height: 19rem;
+
+    display: block;
+
+    stroke: currentColor;
+}
