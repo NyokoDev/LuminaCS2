@@ -32,7 +32,10 @@ export let ColorAdjustmentsEnabled = true;
 export let ToneMappingEnabled = false;
 
 
-
+export const freshInstall$ = bindValue<boolean>(
+  mod.id,
+  "FreshInstall"
+);
 
 // ColorAdjustments
 export const PostExposure$ = bindValue<number>(mod.id, 'PostExposure');
@@ -476,11 +479,13 @@ const reloadCubemaps = () =>
     trigger(mod.id, "ReloadCubemaps");
 };
 
+const isFreshInstall = useValue(freshInstall$);
+
 return (
     <>
         
              
-       
+       {!isFreshInstall && (
              <div className="Global"
 
 id="Global"
@@ -1648,7 +1653,8 @@ id="Global"
 
 
           </div>
-      
+          )}
+
 <FreshInstall />
 
 

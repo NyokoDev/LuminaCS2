@@ -1,0 +1,709 @@
+/* =========================================
+   WORKFLOW ROOT
+========================================= */
+
+.workflow {
+    position: absolute;
+    inset: 0;
+
+  top: -800rem;
+  right: -1150rem;
+  width: 800rem;
+  height: 800rem;
+
+  pointer-events: auto;
+
+    box-sizing: border-box;
+    padding: 34rem 42rem 28rem;
+
+    display: flex;
+    flex-direction: column;
+
+    background: #050505;
+    color: #ffffff;
+
+    font-family:
+        "Inter Tight",
+        "Noto Sans",
+        sans-serif;
+}
+
+
+/* =========================================
+   FORCE LUMINA FONT EVERYWHERE
+========================================= */
+
+.workflow,
+.workflow *,
+.workflow *::before,
+.workflow *::after {
+    font-family:
+        "Inter Tight",
+        "Noto Sans",
+        sans-serif;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.workflow__header {
+    flex: 0 0 auto;
+
+    text-align: center;
+    margin-bottom: 28rem;
+}
+
+.workflow__title {
+    margin: 0;
+
+    font-size: 46rem;
+    font-weight: 400;
+    line-height: 1.05;
+
+    letter-spacing: -1rem;
+
+    transition:
+        transform 180ms ease,
+        letter-spacing 180ms ease,
+        opacity 180ms ease;
+}
+
+.workflow__title:hover {
+    transform: translateY(-2rem);
+    letter-spacing: -0.5rem;
+}
+
+.workflow__subtitle {
+    margin: 10rem 0 0;
+
+    font-size: 16rem;
+    font-weight: 400;
+    line-height: 1.4;
+
+    color: rgba(255, 255, 255, 0.6);
+
+    transition:
+        color 180ms ease,
+        transform 180ms ease;
+}
+
+.workflow__subtitle:hover {
+    color: rgba(255, 255, 255, 0.9);
+    transform: translateY(-1rem);
+}
+
+
+/* =========================================
+   OPTIONS — HORIZONTAL
+========================================= */
+
+.workflow__options {
+    width: 100%;
+
+    flex: 1;
+    min-height: 0;
+
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+
+    gap: 28rem;
+}
+
+
+/* =========================================
+   CARDS
+========================================= */
+
+.workflow-card {
+    position: relative;
+
+    flex: 1 1 0;
+    width: 0;
+
+    min-width: 0;
+    min-height: 0;
+
+    box-sizing: border-box;
+    padding: 28rem 30rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    appearance: none;
+
+    background: #080808;
+
+    border: 1rem solid rgba(255, 255, 255, 0.18);
+    border-radius: 16rem;
+
+    color: #ffffff;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    overflow: hidden;
+
+    transform: translateY(0) scale(1);
+
+    transition:
+        transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1),
+        border-color 180ms ease,
+        background-color 180ms ease,
+        box-shadow 180ms ease;
+}
+
+.workflow-card:hover {
+    transform: translateY(-5rem) scale(1.01);
+
+    background: #0d0d0d;
+
+    border-color: rgba(255, 255, 255, 0.55);
+
+    box-shadow:
+        0 12rem 28rem rgba(0, 0, 0, 0.35);
+}
+
+.workflow-card:active {
+    transform: translateY(-1rem) scale(0.99);
+}
+
+.workflow-card--selected {
+    border: 2rem solid #ffffff;
+
+    padding: 27rem 29rem;
+
+    background: #0a0a0a;
+
+    box-shadow:
+        0 0 0 1rem rgba(255, 255, 255, 0.04);
+}
+
+.workflow-card--selected:hover {
+    border-color: #ffffff;
+
+    box-shadow:
+        0 14rem 32rem rgba(0, 0, 0, 0.42),
+        0 0 0 1rem rgba(255, 255, 255, 0.07);
+}
+
+
+/* =========================================
+   CARD CHILD ANIMATION ON HOVER
+========================================= */
+
+.workflow-card:hover .workflow-card__title,
+.workflow-card:hover .workflow-card__description,
+.workflow-card:hover .workflow-card__badge,
+.workflow-card:hover .workflow-card__logo,
+.workflow-card:hover .workflow-card__ngx-logo,
+.workflow-card:hover .workflow-card__features li {
+    transform: translateY(-1rem);
+}
+
+
+/* =========================================
+   BADGES
+========================================= */
+
+.workflow-card__badge {
+    box-sizing: border-box;
+
+    padding: 5rem 9rem;
+    margin-bottom: 16rem;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #ffffff;
+    color: #050505;
+
+    border-radius: 3rem;
+
+    font-size: 10rem;
+    font-weight: 700;
+    line-height: 1;
+
+    text-transform: uppercase;
+    letter-spacing: 0.3rem;
+
+    transition:
+        transform 160ms ease,
+        background-color 160ms ease,
+        color 160ms ease,
+        letter-spacing 160ms ease;
+}
+
+.workflow-card__badge:hover {
+    transform: translateY(-2rem) scale(1.04);
+
+    letter-spacing: 0.6rem;
+}
+
+.workflow-card__badge--advanced {
+    background: transparent;
+
+    color: rgba(255, 255, 255, 0.7);
+
+    border: 1rem solid rgba(255, 255, 255, 0.45);
+}
+
+.workflow-card__badge--advanced:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+}
+
+
+/* =========================================
+   LOGOS
+========================================= */
+
+.workflow-card__logo {
+    width: 42rem;
+    height: 42rem;
+
+    flex: 0 0 auto;
+
+    margin-bottom: 18rem;
+
+    display: block;
+
+    object-fit: contain;
+
+    transition:
+        transform 180ms ease,
+        opacity 180ms ease;
+}
+
+.workflow-card__logo:hover {
+    transform: scale(1.08) rotate(-2deg);
+
+    opacity: 0.95;
+}
+
+.workflow-card__ngx-logo {
+    width: 42rem;
+    height: 42rem;
+
+    flex: 0 0 42rem;
+
+    margin-bottom: 18rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    border: 1rem solid rgba(255, 255, 255, 0.45);
+    border-radius: 8rem;
+
+    color: #ffffff;
+
+    transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        background-color 180ms ease;
+}
+
+.workflow-card__ngx-logo:hover {
+    transform: scale(1.08) rotate(2deg);
+
+    border-color: #ffffff;
+
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.workflow-card__ngx-logo svg {
+    width: 23rem;
+    height: 23rem;
+
+    display: block;
+
+    color: inherit;
+
+    stroke: currentColor;
+    stroke-width: 1.6;
+
+    transition:
+        transform 180ms ease,
+        stroke-width 180ms ease;
+}
+
+.workflow-card__ngx-logo:hover svg {
+    transform: scale(1.08);
+
+    stroke-width: 1.9;
+}
+
+
+/* =========================================
+   CARD TITLES
+========================================= */
+
+.workflow-card__title {
+    margin: 0;
+
+    font-size: 31rem;
+    font-weight: 400;
+    line-height: 1.08;
+
+    letter-spacing: -0.5rem;
+
+    color: #ffffff;
+
+    transition:
+        transform 180ms ease,
+        letter-spacing 180ms ease;
+}
+
+.workflow-card__title:hover {
+    transform: translateX(2rem);
+
+    letter-spacing: -0.2rem;
+}
+
+
+/* =========================================
+   DESCRIPTION
+========================================= */
+
+.workflow-card__description {
+    margin: 14rem 0 0;
+
+    font-size: 15rem;
+    font-weight: 400;
+    line-height: 1.4;
+
+    color: rgba(255, 255, 255, 0.65);
+
+    transition:
+        transform 180ms ease,
+        color 180ms ease;
+}
+
+.workflow-card__description:hover {
+    transform: translateX(2rem);
+
+    color: rgba(255, 255, 255, 0.9);
+}
+
+
+/* =========================================
+   DIVIDER
+========================================= */
+
+.workflow-card__divider {
+    width: 100%;
+    height: 1rem;
+
+    flex: 0 0 auto;
+
+    margin: 20rem 0;
+
+    background: rgba(255, 255, 255, 0.12);
+
+    transform-origin: left center;
+
+    transition:
+        background-color 180ms ease,
+        transform 180ms ease;
+}
+
+.workflow-card:hover .workflow-card__divider {
+    background: rgba(255, 255, 255, 0.28);
+
+    transform: scaleX(1.02);
+}
+
+
+/* =========================================
+   FEATURES
+========================================= */
+
+.workflow-card__features {
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 12rem;
+
+    list-style: none;
+}
+
+.workflow-card__features li {
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10rem;
+
+    font-size: 14rem;
+    font-weight: 400;
+    line-height: 1.25;
+
+    color: rgba(255, 255, 255, 0.84);
+
+    transition:
+        transform 160ms ease,
+        color 160ms ease;
+}
+
+.workflow-card__features li:hover {
+    transform: translateX(4rem);
+
+    color: #ffffff;
+}
+
+.workflow-card__features li::before {
+    content: none;
+}
+
+.workflow-card__feature-icon {
+    width: 18rem;
+    height: 18rem;
+
+    flex: 0 0 18rem;
+
+    display: block;
+
+    color: rgba(255, 255, 255, 0.85);
+
+    stroke: currentColor;
+    stroke-width: 1.7;
+
+    transition:
+        transform 160ms ease,
+        color 160ms ease,
+        stroke-width 160ms ease;
+}
+
+.workflow-card__features li:hover .workflow-card__feature-icon {
+    transform: scale(1.12);
+
+    color: #ffffff;
+
+    stroke-width: 2;
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.workflow__footer {
+    width: 100%;
+
+    flex: 0 0 auto;
+
+    box-sizing: border-box;
+
+    margin-top: 24rem;
+    padding-top: 20rem;
+
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+
+    border-top: 1rem solid rgba(255, 255, 255, 0.18);
+
+    transition:
+        border-color 180ms ease;
+}
+
+.workflow__footer:hover {
+    border-color: rgba(255, 255, 255, 0.32);
+}
+
+
+/* =========================================
+   BACK
+========================================= */
+
+.workflow__back {
+    justify-self: start;
+
+    padding: 8rem 0;
+
+    display: flex;
+    align-items: center;
+    gap: 8rem;
+
+    appearance: none;
+
+    background: transparent;
+    border: none;
+
+    color: rgba(255, 255, 255, 0.7);
+
+    font-size: 16rem;
+    font-weight: 400;
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        color 160ms ease,
+        transform 160ms ease,
+        opacity 160ms ease;
+}
+
+.workflow__back:hover {
+    color: #ffffff;
+
+    transform: translateX(-3rem);
+}
+
+.workflow__back:active {
+    transform: translateX(-1rem) scale(0.97);
+}
+
+
+/* =========================================
+   STEPS
+========================================= */
+
+.workflow__steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 9rem;
+}
+
+.workflow__steps span {
+    width: 9rem;
+    height: 9rem;
+
+    display: block;
+
+    box-sizing: border-box;
+
+    border: 1rem solid rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+
+    background: transparent;
+
+    transition:
+        transform 160ms ease,
+        background-color 160ms ease,
+        border-color 160ms ease;
+}
+
+.workflow__steps span:hover {
+    transform: scale(1.3);
+
+    border-color: #ffffff;
+}
+
+.workflow__steps .workflow__step--active {
+    background: #ffffff;
+    border-color: #ffffff;
+
+    transform: scale(1.1);
+}
+
+.workflow__steps .workflow__step--active:hover {
+    transform: scale(1.4);
+}
+
+
+/* =========================================
+   CONTINUE
+========================================= */
+
+.workflow__continue {
+    justify-self: end;
+
+    padding: 8rem 0;
+
+    display: flex;
+    align-items: center;
+    gap: 9rem;
+
+    appearance: none;
+
+    background: transparent;
+    border: none;
+
+    color: #ffffff;
+
+    font-size: 24rem;
+    font-weight: 400;
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        transform 160ms ease,
+        opacity 160ms ease,
+        letter-spacing 160ms ease;
+}
+
+.workflow__continue:hover {
+    transform: translateX(4rem);
+
+    opacity: 0.85;
+
+    letter-spacing: 0.3rem;
+}
+
+.workflow__continue:active {
+    transform: translateX(2rem) scale(0.97);
+}
+
+
+/* =========================================
+   NAV ICONS
+========================================= */
+
+.workflow__nav-icon {
+    width: 20rem;
+    height: 20rem;
+
+    flex: 0 0 20rem;
+
+    display: block;
+
+    color: inherit;
+
+    stroke: currentColor;
+    stroke-width: 1.7;
+
+    transition:
+        transform 160ms ease,
+        stroke-width 160ms ease;
+}
+
+.workflow__back:hover .workflow__nav-icon {
+    transform: translateX(-3rem);
+
+    stroke-width: 2;
+}
+
+.workflow__continue:hover .workflow__nav-icon {
+    transform: translateX(4rem);
+
+    stroke-width: 2;
+}
+
+
+/* =========================================
+   KEYBOARD FOCUS
+========================================= */
+
+.workflow-card:focus-visible,
+.workflow__back:focus-visible,
+.workflow__continue:focus-visible {
+    outline: 2rem solid rgba(255, 255, 255, 0.9);
+    outline-offset: 4rem;
+}

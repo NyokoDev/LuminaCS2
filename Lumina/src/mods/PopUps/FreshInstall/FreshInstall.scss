@@ -1,189 +1,1173 @@
 @font-face {
+
   font-family: "Inter Tight";
+
   src: url("../../fonts/InterTight-VariableFont_wght.ttf") format("truetype");
+
   font-weight: 100 900;
+
+  font-style: normal;
+
   font-display: swap;
+
 }
 
+/* =========================================
+
+   ROOT
+
+========================================= */
+
 .fresh-install {
+
   position: absolute;
 
-  top: -600rem;
-  left: 200rem;
+  top: -800rem;
+
+  right: -1150rem;
+
+  width: 800rem;
+
+  height: 800rem;
+
+  box-sizing: border-box;
 
   z-index: 10000;
 
-  display: block;
+  overflow: hidden;
 
-  width: 580rem;
-  height: 300rem;
+  pointer-events: auto;
 
-
+  border: 1rem solid rgba(255, 255, 255, 0.08);
 
   border-radius: 55rem;
 
   background: linear-gradient(
-    105deg,
-    rgba(145, 145, 145, 0.96) 0%,
-    rgba(127, 127, 127, 0.96) 46%,
-    rgba(70, 70, 70, 0.97) 100%
+
+    145deg,
+
+    rgba(104, 105, 106, 0.99),
+
+    rgba(69, 70, 72, 0.99) 47%,
+
+    rgba(30, 31, 33, 0.995)
+
   );
 
-  color: rgba(245, 245, 245, 0.88);
+  color: #fff;
 
-font-family:
-        "Inter-Tight",
-        "Noto Sans",
-        sans-serif;
+  font-family: "Inter Tight", "Noto Sans", sans-serif;
 
+  box-shadow:
 
-  box-shadow: 0 6rem 20rem rgba(0, 0, 0, 0.18);
+    0 18rem 48rem rgba(0, 0, 0, 0.34),
+
+    inset 0 1rem 0 rgba(255, 255, 255, 0.07);
 
   transition:
+
+    opacity 260ms ease,
+
+    visibility 260ms ease;
+
+}
+
+.fresh-install,
+
+.fresh-install *,
+
+.fresh-install *::before,
+
+.fresh-install *::after {
+
+  font-family: "Inter Tight", "Noto Sans", sans-serif;
+
+}
+
+.fresh-install--visible {
+
+  visibility: visible;
+
+  opacity: 1;
+
+  pointer-events: auto;
+
+}
+
+.fresh-install--hidden {
+
+  visibility: hidden;
+
+  opacity: 0;
+
+  pointer-events: auto;
+
+}
+
+.fresh-install__content {
+
+  position: relative;
+
+  width: 100%;
+
+  height: 100%;
+
+  box-sizing: border-box;
+
+  text-align: center;
+
+  z-index: 2;
+
+}
+
+
+/* =========================================
+
+   BACKGROUND
+
+========================================= */
+
+.fresh-install::before {
+
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 0;
+
+  pointer-events: auto;
+
+  background:
+
+    radial-gradient(
+
+      circle at 50% 16%,
+
+      rgba(255, 255, 255, 0.11),
+
+      rgba(255, 255, 255, 0.035) 26%,
+
+      transparent 47%
+
+    ),
+
+    radial-gradient(
+
+      circle at 12% 74%,
+
+      rgba(255, 255, 255, 0.035),
+
+      transparent 35%
+
+    );
+
+  animation: fresh-install-background-breathe 8s ease-in-out infinite alternate;
+
+}
+
+
+/* =========================================
+
+   WELCOME
+
+========================================= */
+
+.fresh-install::after {
+
+  content: "WELCOME";
+
+  position: absolute;
+
+  top: 34rem;
+
+  left: 50%;
+
+  z-index: 4;
+
+  transform: translateX(-50%);
+
+  font-size: 10rem;
+
+  font-weight: 650;
+
+  line-height: 1;
+
+  letter-spacing: 4rem;
+
+  color: rgba(255, 255, 255, 0.58);
+
+  pointer-events: auto;
+
+}
+
+
+/* =========================================
+
+   LOGO
+
+========================================= */
+
+.fresh-install__logo {
+
+  position: absolute;
+
+  top: 67rem;
+
+  left: 50%;
+
+  width: 110rem;
+
+  height: 110rem;
+
+  transform: translateX(-50%);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  pointer-events: auto;
+
+}
+
+.fresh-install__logo::before {
+
+  content: "";
+
+  position: absolute;
+
+  width: 130rem;
+
+  height: 130rem;
+
+  border-radius: 50%;
+
+  pointer-events: auto;
+
+  background: radial-gradient(
+
+    circle,
+
+    rgba(255, 255, 255, 0.09),
+
+    rgba(255, 255, 255, 0.035) 40%,
+
+    transparent 72%
+
+  );
+
+  animation: fresh-install-logo-glow 4.8s ease-in-out infinite;
+
+}
+
+.fresh-install__logo-svg {
+
+  position: relative;
+
+  width: 108rem;
+
+  height: 108rem;
+
+  display: block;
+
+  object-fit: contain;
+
+  opacity: 0.92;
+
+  z-index: 1;
+
+  transition:
+
+    opacity 200ms ease,
+
+    filter 200ms ease;
+
+}
+
+.fresh-install:hover .fresh-install__logo-svg {
+
+  opacity: 1;
+
+  filter: brightness(1.08);
+
+}
+
+
+/* =========================================
+
+   TEXT
+
+========================================= */
+
+.fresh-install__title,
+
+.fresh-install__message,
+
+.fresh-install__description,
+
+.fresh-install__hint {
+
+  position: absolute;
+
+  left: 50%;
+
+  margin: 0;
+
+  transform: translateX(-50%);
+
+  text-align: center;
+
+  pointer-events: auto;
+
+}
+
+.fresh-install__title {
+
+  top: 192rem;
+
+  width: 680rem;
+
+  font-size: 53rem;
+
+  font-weight: 390;
+
+  line-height: 1;
+
+  letter-spacing: -2.5rem;
+
+  color: rgba(255, 255, 255, 0.98);
+
+  white-space: nowrap;
+
+  text-shadow: 0 2rem 16rem rgba(0, 0, 0, 0.18);
+
+}
+
+.fresh-install__title::after {
+
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+
+  bottom: -23rem;
+
+  width: 38rem;
+
+  height: 1rem;
+
+  transform: translateX(-50%);
+
+  background: rgba(255, 255, 255, 0.42);
+
+}
+
+.fresh-install__message {
+
+  top: 285rem;
+
+  width: 610rem;
+
+  font-size: 22rem;
+
+  font-weight: 430;
+
+  line-height: 1.25;
+
+  letter-spacing: -0.55rem;
+
+  color: rgba(255, 255, 255, 0.88);
+
+}
+
+.fresh-install__description {
+
+  top: 325rem;
+
+  width: 570rem;
+
+  font-size: 16rem;
+
+  font-weight: 340;
+
+  line-height: 1.45;
+
+  letter-spacing: -0.2rem;
+
+  color: rgba(255, 255, 255, 0.53);
+
+}
+
+.fresh-install__hint {
+
+  top: 392rem;
+
+  width: 610rem;
+
+  height: 72rem;
+
+  box-sizing: border-box;
+
+  padding: 0 26rem;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-top: 1rem solid rgba(255, 255, 255, 0.055);
+
+  border-bottom: 1rem solid rgba(255, 255, 255, 0.055);
+
+  font-size: 14rem;
+
+  font-weight: 410;
+
+  line-height: 1.4;
+
+  color: rgba(255, 255, 255, 0.48);
+
+}
+
+
+/* =========================================
+
+   GET STARTED BUTTON
+
+   HOVER = LIGHT ONLY
+   ENTRANCE ANIMATION UNCHANGED
+
+========================================= */
+
+.fresh-install__button {
+
+  position: absolute;
+
+  top: 498rem;
+
+  left: 50%;
+
+  width: 390rem;
+
+  min-width: 390rem;
+
+  height: 76rem;
+
+  margin: 0;
+
+  padding: 0 60rem 0 34rem;
+
+  transform: translateX(-50%);
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  appearance: none;
+
+  cursor: pointer;
+
+  pointer-events: auto;
+
+  z-index: 20;
+
+  border: 1rem solid rgba(255, 255, 255, 0.24);
+
+  border-radius: 20rem;
+
+  background: linear-gradient(
+
+    180deg,
+
+    rgba(255, 255, 255, 0.115),
+
+    rgba(255, 255, 255, 0.055)
+
+  );
+
+  color: rgba(255, 255, 255, 0.96);
+
+  font-size: 27rem;
+
+  font-weight: 420;
+
+  line-height: 1;
+
+  letter-spacing: -0.8rem;
+
+  white-space: nowrap;
+
+  box-shadow:
+
+    inset 0 1rem 0 rgba(255, 255, 255, 0.08),
+
+    0 8rem 20rem rgba(0, 0, 0, 0.12);
+
+  transition:
+
+    background 200ms ease,
+
+    border-color 200ms ease,
+
+    box-shadow 200ms ease,
+
+    filter 200ms ease;
+
+}
+
+
+/* Arrow */
+
+.fresh-install__button::after {
+
+  content: "›";
+
+  position: absolute;
+
+  right: 27rem;
+
+  top: 50%;
+
+  transform: translateY(-53%);
+
+  font-size: 34rem;
+
+  font-weight: 280;
+
+  line-height: 1;
+
+  color: rgba(255, 255, 255, 0.78);
+
+  pointer-events: none;
+
+  transition:
+
+    color 180ms ease,
+
+    text-shadow 180ms ease;
+
+}
+
+
+/* Hover only lights up — no translate, scale or arrow movement */
+
+.fresh-install__button:hover {
+
+  background: linear-gradient(
+
+    180deg,
+
+    rgba(255, 255, 255, 0.22),
+
+    rgba(255, 255, 255, 0.105)
+
+  );
+
+  border-color: rgba(255, 255, 255, 0.5);
+
+  box-shadow:
+
+    inset 0 1rem 0 rgba(255, 255, 255, 0.17),
+
+    0 10rem 26rem rgba(0, 0, 0, 0.18),
+
+    0 0 18rem rgba(255, 255, 255, 0.055);
+
+  filter: brightness(1.08);
+
+}
+
+.fresh-install__button:hover::after {
+
+  color: #ffffff;
+
+  text-shadow: 0 0 10rem rgba(255, 255, 255, 0.34);
+
+}
+
+
+/* Press remains tactile; hover itself never moves */
+
+.fresh-install__button:active {
+
+  transform:
+
+    translateX(-50%)
+
+    scale(0.985);
+
+  transition-duration: 70ms;
+
+}
+
+.fresh-install__button:focus-visible {
+
+  outline: 2rem solid rgba(255, 255, 255, 0.76);
+
+  outline-offset: 4rem;
+
+}
+
+
+/* =========================================
+
+   SETUP DOTS
+
+========================================= */
+
+.fresh-install__steps {
+
+  position: absolute;
+
+  top: 600rem;
+
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 9rem;
+
+  pointer-events: auto;
+
+}
+
+.fresh-install__step {
+
+  width: 7rem;
+
+  height: 7rem;
+
+  display: block;
+
+  box-sizing: border-box;
+
+  border: 1rem solid rgba(255, 255, 255, 0.38);
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.06);
+
+  opacity: 0.75;
+
+  transition:
+
+    width 260ms cubic-bezier(0.22, 1, 0.36, 1),
+
     opacity 180ms ease,
-    visibility 180ms ease;
 
-  // --------------------------------------------------
-  // Visibility
-  // --------------------------------------------------
+    background-color 180ms ease,
 
-  &--visible {
-    visibility: visible;
-    opacity: 1;
-    pointer-events: auto;
-  }
+    border-color 180ms ease,
 
-  &--hidden {
-    visibility: hidden;
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+
+}
+
+.fresh-install__step--active {
+
+  width: 23rem;
+
+  border-radius: 8rem;
+
+  background: rgba(255, 255, 255, 0.92);
+
+  border-color: rgba(255, 255, 255, 0.92);
+
+  opacity: 1;
+
+  animation: fresh-install-active-step 2.2s ease-in-out infinite;
+
+}
+
+
+/* =========================================
+
+   SKIP
+
+========================================= */
+
+.fresh-install__skip {
+
+  position: absolute;
+
+  top: 635rem;
+
+  left: 50%;
+
+  height: 38rem;
+
+  padding: 0 18rem;
+
+  transform: translateX(-50%);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  appearance: none;
+
+  cursor: pointer;
+
+  pointer-events: auto;
+
+  z-index: 20;
+
+  border: none;
+
+  border-radius: 19rem;
+
+  background: rgba(255, 255, 255, 0.045);
+
+  color: rgba(255, 255, 255, 0.62);
+
+  font-size: 15rem;
+
+  font-weight: 430;
+
+  line-height: 1;
+
+  letter-spacing: -0.15rem;
+
+  white-space: nowrap;
+
+  transition:
+
+    background 200ms ease,
+
+    color 180ms ease,
+
+    box-shadow 200ms ease,
+
+    filter 200ms ease;
+
+}
+
+.fresh-install__skip:hover {
+
+  background: rgba(255, 255, 255, 0.11);
+
+  color: rgba(255, 255, 255, 0.98);
+
+  box-shadow:
+
+    0 5rem 16rem rgba(0, 0, 0, 0.14),
+
+    0 0 12rem rgba(255, 255, 255, 0.045);
+
+  filter: brightness(1.08);
+
+}
+
+.fresh-install__skip:active {
+
+  transform:
+
+    translateX(-50%)
+
+    scale(0.98);
+
+}
+
+.fresh-install__skip:focus-visible {
+
+  outline: 1rem solid rgba(255, 255, 255, 0.6);
+
+  outline-offset: 3rem;
+
+  border-radius: 8rem;
+
+}
+
+
+/* =========================================
+
+   BOTTOM ACCENT
+
+========================================= */
+
+.fresh-install__content::after {
+
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+
+  bottom: 25rem;
+
+  width: 110rem;
+
+  height: 1rem;
+
+  transform: translateX(-50%);
+
+  pointer-events: auto;
+
+  background: linear-gradient(
+
+    90deg,
+
+    transparent,
+
+    rgba(255, 255, 255, 0.12),
+
+    transparent
+
+  );
+
+  animation: fresh-install-bottom-accent 4s ease-in-out infinite;
+
+}
+
+
+/* =========================================
+
+   ENTRANCE ANIMATIONS
+
+========================================= */
+
+.fresh-install--visible::after {
+
+  animation: fresh-install-enter-eyebrow 520ms 70ms cubic-bezier(0.22, 1, 0.36, 1) both;
+
+}
+
+.fresh-install--visible .fresh-install__logo {
+
+  animation: fresh-install-enter-logo 650ms 100ms cubic-bezier(0.16, 1, 0.3, 1) both;
+
+}
+
+.fresh-install--visible
+
+:is(
+
+  .fresh-install__title,
+
+  .fresh-install__message,
+
+  .fresh-install__description,
+
+  .fresh-install__hint,
+
+  .fresh-install__steps
+
+) {
+
+  animation: fresh-install-enter-centered 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
+
+}
+
+.fresh-install--visible .fresh-install__title {
+
+  animation-delay: 170ms;
+
+}
+
+.fresh-install--visible .fresh-install__message {
+
+  animation-delay: 230ms;
+
+}
+
+.fresh-install--visible .fresh-install__description {
+
+  animation-delay: 280ms;
+
+}
+
+.fresh-install--visible .fresh-install__hint {
+
+  animation-delay: 330ms;
+
+}
+
+.fresh-install--visible .fresh-install__steps {
+
+  animation-duration: 480ms;
+
+  animation-delay: 470ms;
+
+}
+
+.fresh-install--visible .fresh-install__button {
+
+  animation: fresh-install-enter-button 620ms 390ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+
+}
+
+.fresh-install--visible .fresh-install__skip {
+
+  animation: fresh-install-enter-centered 480ms 520ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+
+}
+
+/* =========================================
+
+   KEYFRAMES
+
+========================================= */
+
+@keyframes fresh-install-enter-centered {
+
+  from {
+
     opacity: 0;
-    pointer-events: none;
+
+    transform:
+
+      translateX(-50%)
+
+      translateY(14rem);
+
   }
 
-  // --------------------------------------------------
-  // Logo
-  // --------------------------------------------------
+  to {
 
-  &__logo {
-    position: absolute;
+    opacity: 1;
 
-    top: 21rem;
-    left: -40rem;
+    transform:
 
-    width: 235rem;
-    height: 235rem;
+      translateX(-50%)
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+      translateY(0);
 
-    margin: 0;
-    padding: 0;
   }
 
-  &__logo-svg {
-    display: block;
+}
 
-    width: 235rem;
-    height: 235rem;
+@keyframes fresh-install-enter-eyebrow {
 
-    margin: 0;
+  from {
 
-    object-fit: contain;
+    opacity: 0;
+
+    transform:
+
+      translateX(-50%)
+
+      translateY(-8rem);
+
+    letter-spacing: 6rem;
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+
+      translateX(-50%)
+
+      translateY(0);
+
+    letter-spacing: 4rem;
+
+  }
+
+}
+
+@keyframes fresh-install-enter-logo {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+
+      translateX(-50%)
+
+      translateY(14rem)
+
+      scale(0.88);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+
+      translateX(-50%)
+
+      translateY(0)
+
+      scale(1);
+
+  }
+
+}
+
+@keyframes fresh-install-enter-button {
+
+  0% {
+
+    opacity: 0;
+
+    transform:
+
+      translateX(-50%)
+
+      translateY(18rem)
+
+      scale(0.96);
+
+  }
+
+  70% {
+
+    opacity: 1;
+
+    transform:
+
+      translateX(-50%)
+
+      translateY(-2rem)
+
+      scale(1.008);
+
+  }
+
+  100% {
+
+    opacity: 1;
+
+    transform:
+
+      translateX(-50%)
+
+      scale(1);
+
+  }
+
+}
+
+@keyframes fresh-install-logo-glow {
+
+  0%,
+
+  100% {
+
+    opacity: 0.65;
+
+    transform: scale(0.96);
+
+  }
+
+  50% {
+
+    opacity: 1;
+
+    transform: scale(1.04);
+
+  }
+
+}
+
+@keyframes fresh-install-active-step {
+
+  0%,
+
+  100% {
+
+    opacity: 0.88;
+
+  }
+
+  50% {
+
+    opacity: 1;
+
+  }
+
+}
+
+@keyframes fresh-install-background-breathe {
+
+  from {
 
     opacity: 0.84;
+
   }
 
-  // --------------------------------------------------
-  // Content
-  // --------------------------------------------------
+  to {
 
-  &__content {
-    position: static;
+    opacity: 1;
 
-    width: 100%;
-    height: 100%;
-
-    margin: 0;
-    padding: 0;
   }
 
-  // --------------------------------------------------
-  // Message
-  // --------------------------------------------------
+}
 
-  &__message {
-    position: absolute;
+@keyframes fresh-install-bottom-accent {
 
-    top: 57rem;
-    left: 205rem;
+  0%,
 
-    width: 345rem;
+  100% {
 
-    margin: 0;
+    opacity: 0.45;
 
-    text-align: center;
+    transform:
 
-    white-space: nowrap;
+      translateX(-50%)
 
-    font-size: 20.5rem;
-    font-weight: 300;
-    line-height: 1;
+      scaleX(0.78);
 
-    letter-spacing: -0.55rem;
-
-    color: rgba(245, 245, 245, 0.82);
   }
 
-  // --------------------------------------------------
-  // Get Started
-  // --------------------------------------------------
+  50% {
 
-  &__button {
-    position: absolute;
+    opacity: 1;
 
-    left: 205rem;
-    bottom: 55rem;
+    transform:
 
-    width: 345rem;
-    min-width: 345rem;
-    height: 86rem;
+      translateX(-50%)
 
-    margin: 0;
-    padding: 0 19rem;
+      scaleX(1);
 
-    border: 0;
-    border-radius: 45rem;
-
-    background: rgba(155, 155, 155, 0.58);
-
-    color: rgba(245, 245, 245, 0.78);
-
-    font: inherit;
-    font-size: 54rem;
-    font-weight: 300;
-    line-height: 1;
-
-    letter-spacing: -2rem;
-
-    white-space: nowrap;
-
-    cursor: pointer;
-
-    transition:
-      background 120ms ease,
-      transform 120ms ease;
-
-    &:hover {
-      background: rgba(170, 170, 170, 0.68);
-    }
-
-    &:active {
-      transform: scale(0.985);
-    }
-
-    &:focus-visible {
-      outline: 1.5rem solid rgba(255, 255, 255, 0.72);
-      outline-offset: 2.5rem;
-    }
   }
+
+}
+
+
+/* =========================================
+
+   REDUCED MOTION
+
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .fresh-install,
+
+  .fresh-install *,
+
+  .fresh-install *::before,
+
+  .fresh-install *::after {
+
+    animation: none !important;
+
+    transition-duration: 0.01ms !important;
+
+  }
+
 }
