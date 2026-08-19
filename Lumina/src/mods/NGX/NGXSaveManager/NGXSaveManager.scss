@@ -1,0 +1,469 @@
+.ngx-save-manager {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 16rem;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(27, 28, 30, 0.98) 0%,
+            rgba(21, 22, 24, 0.98) 100%
+        );
+
+    border: 1rem solid rgba(255, 255, 255, 0.06);
+    border-radius: 10rem;
+
+    font-family:
+        "Inter Tight",
+        "Noto Sans",
+        sans-serif;
+
+    color: #ffffff;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.ngx-save-manager__header {
+    margin-bottom: 16rem;
+}
+
+.ngx-save-manager__title {
+    margin: 0;
+
+    font-size: 24rem;
+    font-weight: 600;
+
+    color: #ffffff;
+}
+
+.ngx-save-manager__description {
+    margin-top: 4rem;
+
+    font-size: 14rem;
+    font-weight: 400;
+
+    color: rgba(255, 255, 255, 0.65);
+}
+
+
+/* =========================================
+   SAVE AREA
+========================================= */
+
+.ngx-save-manager__save {
+    display: flex;
+    align-items: center;
+
+    gap: 8rem;
+
+    margin-bottom: 14rem;
+}
+
+.ngx-save-manager__input {
+    flex: 1;
+
+    min-width: 0;
+    height: 42rem;
+
+    box-sizing: border-box;
+
+    padding: 0 13rem;
+
+    border: 1rem solid rgba(255, 255, 255, 0.26);
+    border-radius: 6rem;
+
+    background: #26272a !important;
+    background-color: #26272a !important;
+    background-image: none !important;
+
+    color: #ffffff !important;
+
+    -webkit-text-fill-color: #ffffff !important;
+
+    caret-color: #ffffff;
+
+    font-family:
+        "Inter Tight",
+        "Noto Sans",
+        sans-serif;
+
+    font-size: 17rem;
+    font-weight: 500;
+
+    line-height: 42rem;
+
+    opacity: 1 !important;
+
+    outline: none;
+}
+
+.ngx-save-manager__input:hover {
+    border-color: rgba(255, 255, 255, 0.38);
+}
+
+.ngx-save-manager__input:focus {
+    border-color: rgba(84, 255, 24, 0.8);
+
+    background: #2d2e31 !important;
+    background-color: #2d2e31 !important;
+
+    color: #ffffff !important;
+
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+.ngx-save-manager__input::placeholder {
+    color: rgba(255, 255, 255, 0.42) !important;
+
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.42) !important;
+
+    opacity: 1;
+}
+
+
+/* =========================================
+   SAVE BUTTON
+========================================= */
+
+.ngx-save-manager__save-button {
+    appearance: none;
+
+    height: 34rem;
+
+    padding: 0 15rem;
+
+    border: none !important;
+    border-radius: 6rem;
+
+    background: #55ff18 !important;
+    background-color: #55ff18 !important;
+    background-image: none !important;
+
+    color: #101010 !important;
+
+    font-family:
+        "Inter Tight",
+        "Noto Sans",
+        sans-serif;
+
+    font-size: 14rem;
+    font-weight: 700;
+
+    letter-spacing: 0.2rem;
+
+    cursor: pointer;
+}
+
+.ngx-save-manager__save-button:hover {
+    background: #70ff3c !important;
+    background-color: #70ff3c !important;
+}
+
+.ngx-save-manager__save-button:active {
+    background: #45d914 !important;
+    background-color: #45d914 !important;
+}
+
+.ngx-save-manager__save-button:disabled {
+    background: rgba(255, 255, 255, 0.08) !important;
+
+    color: rgba(255, 255, 255, 0.28) !important;
+
+    opacity: 1;
+
+    cursor: default;
+}
+
+
+/* =========================================
+   SAVED PRESETS HEADER
+========================================= */
+
+.ngx-save-manager__list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin: 14rem 2rem 8rem;
+
+    font-size: 14rem;
+    font-weight: 600;
+
+    color: rgba(255, 255, 255, 0.5);
+
+    text-transform: uppercase;
+    letter-spacing: 0.5rem;
+}
+
+.ngx-save-manager__list-count {
+    font-size: 13rem;
+    font-weight: 400;
+
+    color: rgba(255, 255, 255, 0.36);
+
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+
+/* =========================================
+   PRESET LIST
+========================================= */
+
+.ngx-save-manager__list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 6rem;
+}
+
+.ngx-save-manager__preset {
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    min-height: 48rem;
+
+    padding: 6rem 8rem 6rem 12rem;
+
+    box-sizing: border-box;
+
+    border: 1rem solid rgba(255, 255, 255, 0.075);
+    border-radius: 7rem;
+
+    background: rgba(255, 255, 255, 0.03) !important;
+    background-color: rgba(255, 255, 255, 0.03) !important;
+    background-image: none !important;
+}
+
+.ngx-save-manager__preset:hover {
+    border-color: rgba(255, 255, 255, 0.13);
+
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.ngx-save-manager__preset--selected {
+    border-color: rgba(255, 255, 255, 0.17);
+
+    background: rgba(255, 255, 255, 0.075) !important;
+}
+
+
+/* =========================================
+   PRESET NAME
+========================================= */
+
+.ngx-save-manager__preset-name {
+    flex: 1;
+
+    min-width: 0;
+
+    appearance: none;
+
+    overflow: hidden;
+
+    padding: 0;
+
+    border: none !important;
+
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+
+    color: #ffffff !important;
+
+    -webkit-text-fill-color: #ffffff !important;
+
+    font-family:
+        "Inter Tight",
+        "Noto Sans",
+        sans-serif;
+
+    font-size: 18rem;
+    font-weight: 500;
+
+    line-height: 34rem;
+
+    text-align: left;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    cursor: pointer;
+}
+
+.ngx-save-manager__preset-name:hover {
+    color: #ffffff !important;
+}
+
+
+/* =========================================
+   ACTION AREA
+========================================= */
+
+.ngx-save-manager__actions {
+    display: flex;
+    align-items: center;
+
+    gap: 7rem;
+
+    margin-left: 8rem;
+}
+
+
+/* =========================================
+   LOAD
+========================================= */
+
+.ngx-save-manager__action {
+    appearance: none;
+
+    min-width: 44rem;
+    height: 28rem;
+
+    padding: 0 8rem;
+
+    border: 1rem solid transparent !important;
+    border-radius: 4rem;
+
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+
+    color: #ff2f91 !important;
+
+    font-family:
+        "Inter Tight",
+        "Noto Sans",
+        sans-serif;
+
+    font-size: 14rem;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.ngx-save-manager__action:hover {
+    background: rgba(255, 47, 145, 0.08) !important;
+
+    border-color: rgba(255, 47, 145, 0.18) !important;
+
+    color: #ff5aaa !important;
+}
+
+.ngx-save-manager__action:active {
+    background: rgba(255, 47, 145, 0.12) !important;
+
+    color: #d91e76 !important;
+}
+
+
+/* =========================================
+   DELETE
+========================================= */
+
+.ngx-save-manager__action--delete {
+    min-width: 48rem;
+    height: 28rem;
+
+    padding: 0 8rem;
+
+    border: 1rem solid rgba(255, 100, 110, 0.1) !important;
+    border-radius: 4rem !important;
+
+    background: rgba(112, 36, 42, 0.28) !important;
+    background-color: rgba(112, 36, 42, 0.28) !important;
+
+    color: #e1848c !important;
+
+    font-size: 13rem;
+    font-weight: 600;
+}
+
+.ngx-save-manager__action--delete:hover {
+    background: rgba(145, 48, 56, 0.42) !important;
+
+    border-color: rgba(255, 110, 120, 0.2) !important;
+
+    color: #ff9ba3 !important;
+}
+
+.ngx-save-manager__action--delete:active {
+    background: rgba(85, 27, 32, 0.5) !important;
+}
+
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.ngx-save-manager__empty {
+    padding: 22rem 10rem;
+
+    border: 1rem dashed rgba(255, 255, 255, 0.07);
+    border-radius: 7rem;
+
+    background: rgba(255, 255, 255, 0.015);
+
+    text-align: center;
+
+    color: rgba(255, 255, 255, 0.38);
+
+    font-size: 14rem;
+}
+
+
+/* =========================================
+   INFO FOOTER
+========================================= */
+
+.ngx-save-manager__info {
+    display: flex;
+    align-items: center;
+
+    gap: 9rem;
+
+    margin-top: 12rem;
+    padding: 10rem 11rem;
+
+    border: 1rem solid rgba(255, 255, 255, 0.055);
+    border-radius: 6rem;
+
+    background: rgba(255, 255, 255, 0.018);
+
+    color: rgba(255, 255, 255, 0.48);
+
+    font-size: 13rem;
+}
+
+.ngx-save-manager__info-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 auto;
+
+    width: 19rem;
+    height: 19rem;
+
+    border: 1rem solid rgba(78, 128, 255, 0.8);
+    border-radius: 50%;
+
+    color: rgba(100, 145, 255, 0.95);
+
+    font-size: 12rem;
+    font-weight: 700;
+}
+
+
+/* =========================================
+   OPEN PRESETS BUTTON
+========================================= */
+
+.NGXPresetsButton {
+    color: #ffffff;
+}

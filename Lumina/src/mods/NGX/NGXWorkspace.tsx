@@ -7,6 +7,8 @@ import "./AddComponent.scss";
 import LuminaLogo from "../../img/Lumina.svg"
 import { createPortal } from "react-dom";
 import NGXConsole from "./Console/NGXConsole";
+import NGXSaveManager from "./NGXSaveManager/NGXSaveManager";
+import "./NGXSaveManager/NGXSaveManager.scss";
 
 
 // ==============================
@@ -116,6 +118,7 @@ const beginDrag = (e: React.MouseEvent) => {
     const [removeTarget, setRemoveTarget] = useState<string | null>(null);
     const [showAddComponents, setShowAddComponents] = useState(false);
     const [showConsole, setShowConsole] = useState(false);
+    const [showSaveManager, setShowSaveManager] = useState(false);
 
     const volumeList = useValue(volumes) ?? [];
     const currentVolume = useValue(selectedVolume) ?? "";
@@ -184,22 +187,37 @@ const beginDrag = (e: React.MouseEvent) => {
 
     </div>
 
- <div
-        className="NGXHeaderButtons"
-        onMouseDown={e => e.stopPropagation()}
+<div
+    className="NGXHeaderButtons"
+    onMouseDown={e => e.stopPropagation()}
+>
+    <button
+        className="NGXPresetsButton"
+        onClick={() => setShowSaveManager(true)}
+        title="NGX Presets"
     >
+        Presets
+    </button>
 
-        <button
-            className="ConsoleButton"
-            onClick={() => setShowConsole(true)}
-            title="Open Console"
-        >
-            &gt;_
-        </button>
-
-    </div>
+    <button
+        className="ConsoleButton"
+        onClick={() => setShowConsole(true)}
+        title="Open Console"
+    >
+        &gt;_
+    </button>
+</div>
 
 </div>
+
+{
+    showSaveManager && (
+        <NGXSaveManager
+            onClose={() => setShowSaveManager(false)}
+        />
+    )
+}
+
 
 {/* NGX BETA NOTICE */}
 <div className="NGXNotice">
@@ -636,7 +654,10 @@ showAddComponents && (
         />
     )
 }
-        </div>
+
+    </div>
+
+        
         
 
         

@@ -158,6 +158,10 @@
 			<Private>false</Private>
 		  <HintPath>F:\SteamLibrary\steamapps\common\Cities Skylines II\Cities2_Data\Managed\mscorlib.dll</HintPath>
 		</Reference>
+		<Reference Include="Newtonsoft.Json">
+			<Private>false</Private>
+		  <HintPath>F:\SteamLibrary\steamapps\common\Cities Skylines II\Cities2_Data\Managed\Newtonsoft.Json.dll</HintPath>
+		</Reference>
 		<Reference Include="System.IO.Compression" />
 		<Reference Include="System.Windows.Forms" />
 		<Reference Include="Unity.Burst">
@@ -355,6 +359,10 @@
 		<Reference Include="UnityEngine.InputLegacyModule">
 			<Private>false</Private>
 		  <HintPath>F:\SteamLibrary\steamapps\common\Cities Skylines II\Cities2_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.JSONSerializeModule">
+			<Private>false</Private>
+		  <HintPath>F:\SteamLibrary\steamapps\common\Cities Skylines II\Cities2_Data\Managed\UnityEngine.JSONSerializeModule.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEngine.UIModule">
 			<Private>false</Private>
