@@ -821,8 +821,14 @@ ApplySSAOPreset));
         private void AddSupportBindings()
         {
             AddBinding(new TriggerBinding(Mod.MODUI, "discordlink", DiscordLink));
+            AddBinding(new TriggerBinding(Mod.MODUI, "OpenLuminaDocs", OpenLuminaDocs));
             AddBinding(new TriggerBinding(Mod.MODUI, "paypallink", PayPalLink));
             AddBinding(new TriggerBinding(Mod.MODUI, "kofilink", KoFiLink));
+        }
+
+        private void OpenLuminaDocs()
+        {
+            OpenUrl("https://skylinx.gitbook.io/lumina");
         }
 
         // Method to open Discord

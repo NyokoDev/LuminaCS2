@@ -8,13 +8,14 @@ import mod from "../../../../mod.json";
 import LuminaSVG from "../../../img/Lumina.svg";
 
 import { Workflow, WorkflowType } from "./Workflow/Workflow";
+import { Ready } from "./Workflow/Ready";
 
 const freshInstall$ = bindValue<boolean>(
   mod.id,
   "FreshInstall"
 );
 
-type OnboardingStep = "welcome" | "workflow";
+type OnboardingStep = "welcome" | "workflow" | "ready";
 
 export const FreshInstall: React.FC = () => {
   const { translate } = useLocalization();
@@ -23,13 +24,12 @@ export const FreshInstall: React.FC = () => {
   const [step, setStep] =
     useState<OnboardingStep>("welcome");
 
-  const handleWorkflowComplete = (
-    workflow: WorkflowType
-  ) => {
-    // We'll connect this to NGXMode / Classic mode.
-    console.log("Selected workflow:", workflow);
-
-  };
+const handleWorkflowComplete = (
+  workflow: WorkflowType
+) => {
+  console.log("Selected workflow:", workflow);
+  setStep("ready");
+};
 
   const handleSkip = () => {
     trigger(mod.id, "StopFreshInstall");
@@ -51,6 +51,16 @@ export const FreshInstall: React.FC = () => {
       />
     );
   }
+
+
+if (step === "ready") {
+  return (
+    <Ready
+      onBack={() => setStep("workflow")}
+      onComplete={() => trigger(mod.id, "StopFreshInstall")}
+    />
+  );
+}
 
   /* ========================================
      WELCOME
@@ -78,6 +88,11 @@ export const FreshInstall: React.FC = () => {
           {translate("LUMINA.thankyou") ??
             "Thank you for installing Lumina."}
         </p>
+
+          <div className="fresh-install__steps" aria-label="Setup progress">
+    <span className="fresh-install__step fresh-install__step--active" />
+    <span className="fresh-install__step" />
+  </div>
 
         <p className="fresh-install__description">
           This onboarding process will make things easier for you.

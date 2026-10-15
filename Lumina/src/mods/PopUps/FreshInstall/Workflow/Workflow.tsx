@@ -33,15 +33,14 @@ export const Workflow: React.FC<WorkflowProps> = ({
     useState<WorkflowType>("classic");
 
 
-  const handleComplete = () => {
-    if (selected === "ngx") {
-      trigger(mod.id, "UserSelectNGXMode");
-    }
+  
+const handleComplete = () => {
+  if (selected === "ngx") {
+    trigger(mod.id, "UserSelectNGXMode");
+  }
 
-    onComplete(selected);
-
-    trigger(mod.id, "StopFreshInstall");
-  };
+  onComplete(selected);
+};
 
   return (
     <div className="workflow">
@@ -184,11 +183,11 @@ export const Workflow: React.FC<WorkflowProps> = ({
           Back
         </button>
 
-        <div className="workflow__steps">
-          <span />
-          <span className="workflow__step--active" />
-        </div>
-
+     <div className="workflow__steps">
+  <span />
+  <span className="workflow__step--active" />
+  <span />
+</div>
         <button
           type="button"
           className="workflow__continue"
