@@ -129,7 +129,7 @@ namespace Lumina.XML
         /// <summary>
         /// SupportedGameVersion, returns the supported game version..
         /// </summary>
-        public static string SupportedGameVersion = "1.6.0f1 (419.d6c6) [6216.19404]";
+        public static string SupportedGameVersion = "1.6.2f1 (767.21d1) [6300.26419]";
 
         public static string CurrentPresetPath { get; set; }
         public static bool FreshInstall { get; set; } = true;
