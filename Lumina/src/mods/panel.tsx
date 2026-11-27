@@ -130,7 +130,7 @@ const ColorValueInput: React.FC<{
 style={{
   width: "55rem",
   transform: "translate(45rem, -6rem)",
-  height: "24rem",
+  height: "26rem",
   margin: 0
 }}
       onFocus={() => { editing.current = true; cancelled.current = false; }}

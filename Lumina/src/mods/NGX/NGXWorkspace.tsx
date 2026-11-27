@@ -202,7 +202,7 @@ export default function NGXWorkspace() {
                     </> : <div className="ngx-empty ngx-inspector-empty"><SlidersHorizontal /><strong>Select a component</strong><span>Its editable HDRP parameters will appear here.</span></div>}
                 </div>
             </div>
-            <div className="ngx-footer"><span>Unity HDRP · Direct property editing</span><button className="ngx-button" type="button" onClick={() => openConsole()}><Terminal />Optional console</button></div>
+            <div className="ngx-footer"><span></span><button className="ngx-button" type="button" onClick={() => openConsole()}><Terminal />Console</button></div>
         </>}
         {showPresets && !compact && <div className="ngx-preset-overlay"><NGXSaveManager onClose={() => setShowPresets(false)} /></div>}
         {removeTarget && <div className="ngx-confirm-overlay">
