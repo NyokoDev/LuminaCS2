@@ -1244,3 +1244,38 @@ $hueshift-top: 80rem;
     width: inherit;
     height: inherit;
 }
+
+.Panel input.lumina-color-value,
+.Panel input.ssao-number,
+.Panel input.road-material-number,
+.Panel input.road-material-hex,
+.Panel input.planetary-coordinate-input {
+  appearance: none;
+  -webkit-appearance: none;
+  background: #202020;
+  border: 1rem solid #565656;
+  border-radius: 4rem;
+  box-shadow: none;
+  outline: none;
+  padding: 0 4rem;
+  color: #e0e0e0;
+  font-family: inherit;
+  font-size: 15rem;
+  font-weight: 400;
+  line-height: normal;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.Panel input.lumina-color-value:focus,
+.Panel input.ssao-number:focus,
+.Panel input.road-material-number:focus,
+.Panel input.road-material-hex:focus,
+.Panel input.planetary-coordinate-input:focus {
+  border-color: #bf8a39;
+  background: #292724;
+}
+
+.Panel input.ssao-number:disabled {
+  opacity: .45;
+}
