@@ -1,3 +1,4 @@
+import { useLocalization } from "cs2/l10n";
 import React, { useEffect, useRef, useState } from "react";
 import { bindValue, trigger, useValue } from "cs2/api";
 import { Slider } from "mods/slider";
@@ -54,6 +55,7 @@ type NumericControlProps = {
 };
 
 const SSAONumber = ({ label, value, min, max, step, disabled, onChange }: NumericControlProps) => {
+  const { translate } = useLocalization();
   const format = (v: number) => Number.isFinite(v) ? String(Number(v.toFixed(3))) : "";
   const [draft, setDraft] = useState(format(value));
   const editing = useRef(false);
@@ -95,7 +97,7 @@ const SSAONumber = ({ label, value, min, max, step, disabled, onChange }: Numeri
           }
         }}
       />
-      <button type="button" className="ssao-reset" title="Restore value from when this panel opened" aria-label={"Restore " + label} disabled={disabled || !Number.isFinite(initial.current)} onClick={() => onChange(initial.current)}>
+      <button type="button" className="ssao-reset" title={(translate("LUMINA.restoreopening") ?? "Restore value from when this panel opened")} aria-label={(translate("LUMINA.restoreopening") ?? "Restore value from when this panel opened") + " · " + label} disabled={disabled || !Number.isFinite(initial.current)} onClick={() => onChange(initial.current)}>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M4 11a8 8 0 1 1 2 6M4 4v7h7" /></svg>
       </button>
     </div>
@@ -124,6 +126,8 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
   children,
   className = "",
 }) => {
+
+  const { translate } = useLocalization();
 
   /* VALUES */
 
@@ -188,40 +192,40 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
   return (
     <div className={`ssao-panel-base ${className}`}>
       <div className="ssao-brand">
-        <div><div className="ssao-brand-name">LUMINA</div><div className="ssao-brand-subtitle">{title || "Screen Space Ambient Occlusion"}</div></div>
+        <div><div className="ssao-brand-name">LUMINA</div><div className="ssao-brand-subtitle">{title || (translate("LUMINA.ssao") ?? "Screen Space Ambient Occlusion")}</div></div>
         <div className="ssao-brand-logo" />
       </div>
       {children}
       <div className="ssao-master-row">
-        <span>Ambient Occlusion</span>
-        <SSAOCheck label={ssaoEnabled ? "Enabled" : "Disabled"} value={ssaoEnabled} onChange={handleSSAOEnabled} />
+        <span>{(translate("LUMINA.ao") ?? "Ambient Occlusion")}</span>
+        <SSAOCheck label={ssaoEnabled ? (translate("LUMINA.enabled") ?? "Enabled") : (translate("LUMINA.disabled") ?? "Disabled")} value={ssaoEnabled} onChange={handleSSAOEnabled} />
       </div>
-      <SSAOSection title="Ambient Occlusion" open={sections.ambient} onToggle={() => toggleSection("ambient")}>
-        <SSAONumber label="Intensity" value={intensity} min={0} max={10} step={0.01} disabled={disabled} onChange={handleSSAOIntensity} />
-        <SSAONumber label="Maximum Radius in Pixels" value={maxRadius} min={16} max={256} step={1} disabled={disabled} onChange={handleSSAOMaxRadius} />
-        <SSAONumber label="Radius" value={radius} min={1} max={256} step={0.25} disabled={disabled} onChange={handleSSAORadius} />
-        <SSAONumber label="Step Count" value={stepCount} min={0} max={32} step={1} disabled={disabled} onChange={handleSSAOStepCount} />
-        <SSAONumber label="Direct Lighting Strength" value={directLighting} min={0} max={10} step={0.5} disabled={disabled} onChange={handleSSAODirectLighting} />
+      <SSAOSection title={(translate("LUMINA.ao") ?? "Ambient Occlusion")} open={sections.ambient} onToggle={() => toggleSection("ambient")}>
+        <SSAONumber label={(translate("LUMINA.intensity") ?? "Intensity")} value={intensity} min={0} max={10} step={0.01} disabled={disabled} onChange={handleSSAOIntensity} />
+        <SSAONumber label={(translate("LUMINA.maxradius") ?? "Maximum Radius in Pixels")} value={maxRadius} min={16} max={256} step={1} disabled={disabled} onChange={handleSSAOMaxRadius} />
+        <SSAONumber label={(translate("LUMINA.radius") ?? "Radius")} value={radius} min={1} max={256} step={0.25} disabled={disabled} onChange={handleSSAORadius} />
+        <SSAONumber label={(translate("LUMINA.stepcount") ?? "Step Count")} value={stepCount} min={0} max={32} step={1} disabled={disabled} onChange={handleSSAOStepCount} />
+        <SSAONumber label={(translate("LUMINA.directlighting") ?? "Direct Lighting Strength")} value={directLighting} min={0} max={10} step={0.5} disabled={disabled} onChange={handleSSAODirectLighting} />
       </SSAOSection>
-      <SSAOSection title="Filtering & Quality" open={sections.filtering} onToggle={() => toggleSection("filtering")}>
-        <SSAONumber label="Bilateral Aggressiveness" value={bilateral} min={0} max={100} step={0.25} disabled={disabled} onChange={handleSSAOBilateral} />
-        <SSAONumber label="Ghosting Reduction" value={ghosting} min={0} max={10} step={0.01} disabled={disabled} onChange={handleSSAOGhosting} />
-        <SSAONumber label="Blur Sharpness" value={blurSharpness} min={0.1} max={1} step={0.1} disabled={disabled} onChange={handleSSAOBlurSharpness} />
-        <SSAONumber label="Specular Occlusion" value={specular} min={0.5} max={100} step={0.01} disabled={disabled} onChange={handleSSAOSpecular} />
+      <SSAOSection title={(translate("LUMINA.filterquality") ?? "Filtering & Quality")} open={sections.filtering} onToggle={() => toggleSection("filtering")}>
+        <SSAONumber label={(translate("LUMINA.bilateral") ?? "Bilateral Aggressiveness")} value={bilateral} min={0} max={100} step={0.25} disabled={disabled} onChange={handleSSAOBilateral} />
+        <SSAONumber label={(translate("LUMINA.ghosting") ?? "Ghosting Reduction")} value={ghosting} min={0} max={10} step={0.01} disabled={disabled} onChange={handleSSAOGhosting} />
+        <SSAONumber label={(translate("LUMINA.blursharpness") ?? "Blur Sharpness")} value={blurSharpness} min={0.1} max={1} step={0.1} disabled={disabled} onChange={handleSSAOBlurSharpness} />
+        <SSAONumber label={(translate("LUMINA.specular") ?? "Specular Occlusion")} value={specular} min={0.5} max={100} step={0.01} disabled={disabled} onChange={handleSSAOSpecular} />
         <div className="ssao-check-grid">
-          <SSAOCheck label="Temporal Accumulation" value={temporal} disabled={disabled} onChange={handleSSAOTemporal} />
-          <SSAOCheck label="Full Resolution" value={fullRes} disabled={disabled} onChange={handleSSAOFullResolution} />
-          <SSAOCheck label="Bilateral Upsample" value={bilateralUpsample} disabled={disabled} onChange={handleSSAOBilateralUpsample} />
-          <SSAOCheck label="Occluder Motion Rejection" value={occluderMotion} disabled={disabled} onChange={handleSSAOOccluderMotion} />
-          <SSAOCheck label="Receiver Motion Rejection" value={receiverMotion} disabled={disabled} onChange={handleSSAOReceiverMotion} />
+          <SSAOCheck label={(translate("LUMINA.temporal") ?? "Temporal Accumulation")} value={temporal} disabled={disabled} onChange={handleSSAOTemporal} />
+          <SSAOCheck label={(translate("LUMINA.fullresolution") ?? "Full Resolution")} value={fullRes} disabled={disabled} onChange={handleSSAOFullResolution} />
+          <SSAOCheck label={(translate("LUMINA.bilateralupsample") ?? "Bilateral Upsample")} value={bilateralUpsample} disabled={disabled} onChange={handleSSAOBilateralUpsample} />
+          <SSAOCheck label={(translate("LUMINA.occludermotion") ?? "Occluder Motion Rejection")} value={occluderMotion} disabled={disabled} onChange={handleSSAOOccluderMotion} />
+          <SSAOCheck label={(translate("LUMINA.receivermotion") ?? "Receiver Motion Rejection")} value={receiverMotion} disabled={disabled} onChange={handleSSAOReceiverMotion} />
         </div>
       </SSAOSection>
-      <SSAOSection title="Ray Tracing" open={sections.ray} onToggle={() => toggleSection("ray")}>
-        <SSAOCheck label="Enable Ray Tracing" value={rayTracing} disabled={disabled} onChange={handleSSAORayTracing} />
-        <SSAONumber label="Ray Length" value={rayLength} min={0.01} max={50} step={1} disabled={rayDisabled} onChange={handleSSAORayLength} />
-        <SSAONumber label="Sample Count" value={sampleCountRT} min={1} max={64} step={1} disabled={rayDisabled} onChange={handleSSAOSampleCountRT} />
-        <SSAOCheck label="Denoise" value={denoise} disabled={rayDisabled} onChange={handleSSAODenoise} />
-        <SSAONumber label="Denoiser Radius" value={denoiserRadius} min={0.1} max={1} step={0.001} disabled={rayDisabled || !denoise} onChange={handleSSAODenoiserRadius} />
+      <SSAOSection title={(translate("LUMINA.raytracing") ?? "Ray Tracing")} open={sections.ray} onToggle={() => toggleSection("ray")}>
+        <SSAOCheck label={(translate("LUMINA.enableraytracing") ?? "Enable Ray Tracing")} value={rayTracing} disabled={disabled} onChange={handleSSAORayTracing} />
+        <SSAONumber label={(translate("LUMINA.raylength") ?? "Ray Length")} value={rayLength} min={0.01} max={50} step={1} disabled={rayDisabled} onChange={handleSSAORayLength} />
+        <SSAONumber label={(translate("LUMINA.samplecount") ?? "Sample Count")} value={sampleCountRT} min={1} max={64} step={1} disabled={rayDisabled} onChange={handleSSAOSampleCountRT} />
+        <SSAOCheck label={(translate("LUMINA.denoise") ?? "Denoise")} value={denoise} disabled={rayDisabled} onChange={handleSSAODenoise} />
+        <SSAONumber label={(translate("LUMINA.denoiserradius") ?? "Denoiser Radius")} value={denoiserRadius} min={0.1} max={1} step={0.001} disabled={rayDisabled || !denoise} onChange={handleSSAODenoiserRadius} />
       </SSAOSection>
       <div className="ssao-footer">SSAO · HDRP</div>
       <SSAOQuickPresets />
