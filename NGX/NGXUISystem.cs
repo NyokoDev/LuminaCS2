@@ -128,20 +128,91 @@ namespace Lumina.NGX
                 FieldInfo field = fields[i];
                 VolumeParameter parameter = field.GetValue(selectedComponent) as VolumeParameter;
                 string value = string.Empty;
+                string kind = "readonly";
+                string min = string.Empty;
+                string max = string.Empty;
+                string[] options = Array.Empty<string>();
 
                 if (parameter != null)
                 {
                     PropertyInfo valueProperty = GetValueProperty(parameter.GetType());
                     if (valueProperty != null && valueProperty.CanRead)
-                        value = valueProperty.GetValue(parameter)?.ToString() ?? string.Empty;
+                    {
+                        object current = valueProperty.GetValue(parameter);
+                        value = current is IFormattable formatted
+                            ? formatted.ToString(null, CultureInfo.InvariantCulture)
+                            : current?.ToString() ?? string.Empty;
+
+                        Type valueType = valueProperty.PropertyType;
+                        if (valueProperty.CanWrite)
+                        {
+                            if (valueType == typeof(float)) kind = "float";
+                            else if (valueType == typeof(int)) kind = "int";
+                            else if (valueType == typeof(bool)) kind = "bool";
+                            else if (valueType == typeof(Color)) kind = "color";
+                            else if (valueType == typeof(Vector2)) kind = "vector2";
+                            else if (valueType == typeof(Vector3)) kind = "vector3";
+                            else if (valueType == typeof(Vector4)) kind = "vector4";
+                            else if (valueType == typeof(LayerMask)) kind = "mask";
+                            else if (valueType.IsEnum)
+                            {
+                                kind = "enum";
+                                options = Enum.GetNames(valueType);
+                            }
+
+                            if (current is Color color)
+                                value = FormattableString.Invariant($"{color.r:R},{color.g:R},{color.b:R},{color.a:R}");
+                            else if (current is Vector2 v2)
+                                value = FormattableString.Invariant($"{v2.x:R},{v2.y:R}");
+                            else if (current is Vector3 v3)
+                                value = FormattableString.Invariant($"{v3.x:R},{v3.y:R},{v3.z:R}");
+                            else if (current is Vector4 v4)
+                                value = FormattableString.Invariant($"{v4.x:R},{v4.y:R},{v4.z:R},{v4.w:R}");
+                            else if (current is LayerMask mask)
+                                value = mask.value.ToString(CultureInfo.InvariantCulture);
+
+                            if (kind == "float" || kind == "int")
+                            {
+                                min = ReadNGXBound(parameter, "min");
+                                max = ReadNGXBound(parameter, "max");
+                            }
+                        }
+                    }
                 }
 
-                result[i] = $"{field.Name}|{parameter?.GetType().Name}|{value}";
+                result[i] = JsonConvert.SerializeObject(new
+                {
+                    name = field.Name,
+                    type = parameter?.GetType().Name ?? string.Empty,
+                    value,
+                    kind,
+                    min,
+                    max,
+                    options
+                });
             }
 
             cachedComponentProperties = result;
             componentPropertiesDirty = false;
             return cachedComponentProperties;
+        }
+
+        private static string ReadNGXBound(VolumeParameter parameter, string name)
+        {
+            try
+            {
+                Type type = parameter.GetType();
+                const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+                object bound = type.GetField(name, flags)?.GetValue(parameter);
+                if (bound == null)
+                    bound = type.GetProperty(name, flags)?.GetValue(parameter);
+                if (bound is float f && !float.IsNaN(f) && !float.IsInfinity(f))
+                    return f.ToString("R", CultureInfo.InvariantCulture);
+                if (bound is int i)
+                    return i.ToString(CultureInfo.InvariantCulture);
+            }
+            catch { }
+            return string.Empty;
         }
 
         private FieldInfo[] GetVolumeParameterFields(Type componentType)
