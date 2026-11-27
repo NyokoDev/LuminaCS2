@@ -24,14 +24,13 @@ Description.md
 <!--Link to the forum post where the mod can be discussed-->
 <ForumLink Value="https://forum.paradoxplaza.com/forum/threads/lumina.1645623/" />
 <!--Version of the mod-->
-<ModVersion Value="v3.6.9" />
+<ModVersion Value="v3.7" />
 <!--Recommended version of the base game to use the mod-->
 <GameVersion Value="1.6.*" />
 <!--Dependency for the mod, can be set multiple times-->
 <Dependency Id="" />
 <!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
-<ChangeLog Value="Lumina v3.6.9 is an important update that fixes a major UI performance issue that could cause FPS to drop from around 100 FPS to 8 FPS while the Lumina panel was open. The update also restores Chinese, Russian, Korean, Japanese, and other translations with improved Noto Sans font support and adds additional localization. Introduction of Quick Presets." />
-" />
+	<ChangeLog Value="Lumina v3.7: Introduced a redesigned welcome experience, workflow selection for Lumina Classic and Lumina NGX, improved UI navigation, and refinements to NGX integration and localization." />
 <!--ChangeLog>
 </ChangeLog-->
 <!--External links-->

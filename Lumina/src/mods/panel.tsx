@@ -126,7 +126,16 @@ const ColorValueInput: React.FC<{
       inputMode="decimal"
       aria-label={label}
       value={draft}
-      style={{ width: "90rem", backgroundColor: "rgba(0,0,0,0.35)", border: "1px solid rgba(255,255,255,0.35)", textAlign: "right" }}
+style={{
+  width: "55rem",
+  transform: "translate(45rem, -6rem)",
+  height: "24rem",
+  backgroundColor: "rgba(0,0,0,0.35)",
+  border: "1px solid rgba(255,255,255,0.35)",
+  textAlign: "center",
+  boxSizing: "border-box",
+  fontSize: "16rem"
+}}
       onFocus={() => { editing.current = true; cancelled.current = false; }}
       onChange={(event) => setDraft(event.target.value)}
       onBlur={() => {
