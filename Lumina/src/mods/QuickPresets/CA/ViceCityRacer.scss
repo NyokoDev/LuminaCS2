@@ -1,0 +1,115 @@
+.vc-racer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,.64);
+    pointer-events: auto !important;
+}
+.vc-racer {
+    width: 430rem;
+    max-width: 94vw;
+    max-height: 94vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    background: #17151e;
+    border: 1rem solid #8b526f;
+    border-radius: 10rem;
+    padding: 14rem;
+    color: #f5e5ed;
+    font-family: "Inter Tight", "Noto Sans", sans-serif;
+    outline: none;
+}
+.vc-racer-header, .vc-racer-score, .vc-racer-controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.vc-racer-header > div, .vc-racer-score > div {
+    display: flex;
+    flex-direction: column;
+}
+.vc-racer-header span, .vc-racer-score span {
+    color: #c598b6;
+    font-size: 12rem;
+    letter-spacing: 2rem;
+}
+.vc-racer-header strong {
+    font-size: 23rem;
+    color: #ffa9d7;
+    font-style: italic;
+}
+.vc-racer-header button {
+    width: 30rem;
+    height: 30rem;
+    border: 1rem solid #735268;
+    border-radius: 5rem;
+    background: #29212e;
+    color: white;
+    cursor: pointer;
+}
+.vc-racer-header button svg { width: 18rem; height: 18rem; }
+.vc-racer-score {
+    padding: 9rem 4rem;
+}
+.vc-racer-score strong {
+    font-size: 22rem;
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+}
+.vc-racer-score > div:last-child { align-items: flex-end; }
+.vc-racer-screen {
+    position: relative;
+    width: 100%;
+    height: 520rem;
+    max-height: 65vh;
+    border: 1rem solid #5b465e;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+.vc-racer-screen canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+}
+.vc-racer-message {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(22,14,29,.84);
+    text-align: center;
+    padding: 14rem;
+}
+.vc-racer-message > span { color: #76d7d5; font-size: 13rem; letter-spacing: 2rem; }
+.vc-racer-message > strong { color: #ffa9d7; font-size: 30rem; font-style: italic; margin: 12rem 0; }
+.vc-racer-message > div { color: #e6d6e3; font-size: 15rem; }
+.vc-racer-message button {
+    height: 42rem;
+    padding: 0 22rem;
+    margin-top: 22rem;
+    border: 1rem solid #e3a0c9;
+    border-radius: 5rem;
+    background: #d07aab;
+    color: #241524;
+    font-size: 15rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+.vc-racer-controls {
+    padding-top: 12rem;
+    color: #b3a5b6;
+    font-size: 12rem;
+}
