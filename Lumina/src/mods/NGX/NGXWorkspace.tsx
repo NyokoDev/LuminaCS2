@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { bindValue, trigger, useValue } from "cs2/api";
 import { Slider, SliderValueTransformer } from "../slider";
-import { createPortal } from "react-dom";
 import { Box, Layers, Search, Terminal, Check, ChevronRight, SlidersHorizontal } from "lucide-react";
 import LuminaLogo from "../../img/Lumina.svg";
 import NGXConsole from "./Console/NGXConsole";
@@ -206,7 +205,26 @@ export default function NGXWorkspace() {
             <div className="ngx-footer"><span>Unity HDRP · Direct property editing</span><button className="ngx-button" type="button" onClick={() => openConsole()}><Terminal />Optional console</button></div>
         </>}
         {showPresets && !compact && <div className="ngx-preset-overlay"><NGXSaveManager onClose={() => setShowPresets(false)} /></div>}
-        {removeTarget && createPortal(<div className="NGXConfirmOverlay"><div className="NGXConfirm"><h3>Remove component?</h3><p>Remove {friendly(removeTarget)} from the selected volume? This cannot be undone. Save your preset or game first.</p><div className="NGXConfirmButtons"><button className="Cancel" onClick={() => setRemoveTarget(null)}>Cancel</button><button className="Danger" onClick={() => { trigger("Lumina", "RemoveComponent", removeTarget); setSelectedComponent(null); setRemoveTarget(null); }}>Remove</button></div></div></div>, document.body)}
+        {removeTarget && <div className="ngx-confirm-overlay">
+            <div className="ngx-confirm-dialog" role="alertdialog" aria-modal="true" aria-labelledby="ngx-remove-title" aria-describedby="ngx-remove-description">
+                <div className="ngx-confirm-header">
+                    <div className="ngx-confirm-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 3L2.8 19a1 1 0 0 0 .9 1.5h16.6a1 1 0 0 0 .9-1.5L12 3zM12 9v4.5M12 17h.01" /></svg></div>
+                    <strong id="ngx-remove-title">Remove component?</strong>
+                    <span className="ngx-header-spacer" />
+                    <button className="ngx-icon-button" type="button" aria-label="Close confirmation" onClick={() => setRemoveTarget(null)}><WorkspaceIcon kind="close" /></button>
+                </div>
+                <div className="ngx-confirm-body">
+                    <div className="ngx-confirm-target"><Layers /><div className="ngx-confirm-target-copy"><strong>{friendly(removeTarget)}</strong><span>{currentVolume}</span></div></div>
+                    <div id="ngx-remove-description" className="ngx-confirm-description">This component will be removed from the selected volume. This action cannot be undone.</div>
+                    <div className="ngx-confirm-note">Save your preset or game before continuing.</div>
+                </div>
+                <div className="ngx-confirm-actions">
+                    <span className="ngx-header-spacer" />
+                    <button className="ngx-button" type="button" onClick={() => setRemoveTarget(null)}>Cancel</button>
+                    <button className="ngx-button ngx-confirm-danger" type="button" onClick={() => { trigger("Lumina", "RemoveComponent", removeTarget); setSelectedComponent(null); setRemoveTarget(null); }}>Remove component</button>
+                </div>
+            </div>
+        </div>}
         {showConsole && <NGXConsole onClose={() => setShowConsole(false)} command={consoleCommand} clearCommand={() => setConsoleCommand("")} />}
     </div>;
 }
