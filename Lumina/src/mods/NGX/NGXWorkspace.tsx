@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { bindValue, trigger, useValue } from "cs2/api";
 import { Slider, SliderValueTransformer } from "../slider";
 import { createPortal } from "react-dom";
-import { Box, Layers, Search, Terminal, Plus, X, Check, ChevronRight, SlidersHorizontal, RotateCcw } from "lucide-react";
+import { Box, Layers, Search, Terminal, Check, ChevronRight, SlidersHorizontal } from "lucide-react";
 import LuminaLogo from "../../img/Lumina.svg";
 import NGXConsole from "./Console/NGXConsole";
 import NGXSaveManager from "./NGXSaveManager/NGXSaveManager";
@@ -16,6 +16,12 @@ export const volumeComponents = bindValue<string[]>("Lumina", "GetVolumeComponen
 export const availableComponents = bindValue<string[]>("Lumina", "GetAvailableComponents");
 export const componentProperties = bindValue<string[]>("Lumina", "GetComponentProperties");
 export const componentStates = bindValue<string[]>("Lumina", "GetComponentStates");
+
+const WorkspaceIcon = ({ kind }: { kind: "close" | "plus" | "minus" }) => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+        {kind === "close" ? <path d="M6 6l12 12M18 6L6 18" /> : <path d={kind === "plus" ? "M12 5v14M5 12h14" : "M5 12h14"} />}
+    </svg>
+);
 
 type Property = {
     name: string;
@@ -161,11 +167,11 @@ export default function NGXWorkspace() {
             <div className="ngx-header-actions" onMouseDown={e => e.stopPropagation()}>
                 <button className="ngx-button" type="button" onClick={() => setShowPresets(!showPresets)}><Layers />Presets</button>
                 <button className="ngx-button" type="button" onClick={() => openConsole()}><Terminal />Console</button>
-                <button className="ngx-icon-button" type="button" title={compact ? "Expand workspace" : "Collapse workspace"} onClick={() => setCompact(!compact)}>{compact ? "+" : "−"}</button>
+                <button className="ngx-icon-button" type="button" title={compact ? "Expand workspace" : "Collapse workspace"} onClick={() => setCompact(!compact)}><WorkspaceIcon kind={compact ? "plus" : "minus"} /></button>
             </div>
         </div>
         {!compact && <>
-            <div className="ngx-context"><span>Scene volumes</span><ChevronRight /><span>{currentVolume || "Select a volume"}</span>{activeComponent && <><ChevronRight /><strong>{friendly(activeComponent)}</strong></>}<span className="ngx-context-end">HDRP Volume Inspector</span></div>
+            <div className="ngx-context"><span>Scene volumes</span><ChevronRight /><span>{currentVolume || "Select a volume"}</span>{activeComponent && <><ChevronRight /><strong>{friendly(activeComponent)}</strong></>}<span className="ngx-header-spacer" /><span className="ngx-context-end">HDRP Volume Inspector</span></div>
             <div className="ngx-columns">
                 <div className="ngx-column ngx-volumes">
                     <div className="ngx-section-title"><Box /><strong>Scene volumes</strong><small>{volumeList.length}</small></div>
@@ -176,14 +182,14 @@ export default function NGXWorkspace() {
                     </div>
                 </div>
                 <div className="ngx-column ngx-components">
-                    <div className="ngx-section-title"><Layers /><strong>Components</strong><small>{currentVolume ? components.length : 0}</small><button className="ngx-icon-button" disabled={!currentVolume} title="Add component" type="button" onClick={() => { setShowAdd(!showAdd); setAddSearch(""); }}><Plus /></button></div>
+                    <div className="ngx-section-title"><Layers /><strong>Components</strong><small>{currentVolume ? components.length : 0}</small><span className="ngx-header-spacer" /><button className="ngx-icon-button ngx-add-button" disabled={!currentVolume} title="Add component" type="button" onClick={() => { setShowAdd(!showAdd); setAddSearch(""); }}><WorkspaceIcon kind="plus" /></button></div>
                     <div className="ngx-search"><Search /><input value={componentSearch} disabled={!currentVolume} placeholder="Search components..." onChange={e => setComponentSearch(e.target.value)} onKeyDown={selectAll} /></div>
-                    {showAdd && currentVolume && <div className="ngx-add-panel"><div className="ngx-section-title"><strong>Add component</strong><button className="ngx-icon-button" type="button" onClick={() => setShowAdd(false)}><X /></button></div><div className="ngx-search"><Search /><input value={addSearch} placeholder="Search available..." onChange={e => setAddSearch(e.target.value)} onKeyDown={selectAll} /></div><div className="ngx-add-list">{addable.map(name => <button key={name} type="button" className="ngx-list-item" onClick={() => { trigger("Lumina", "AddComponent", name); setShowAdd(false); }}><Plus /><span>{friendly(name)}</span></button>)}{!addable.length && <div className="ngx-empty">No additional components.</div>}</div></div>}
+                    {showAdd && currentVolume && <div className="ngx-add-panel"><div className="ngx-section-title"><strong>Add component</strong><span className="ngx-header-spacer" /><button className="ngx-icon-button" type="button" onClick={() => setShowAdd(false)}><WorkspaceIcon kind="close" /></button></div><div className="ngx-search"><Search /><input value={addSearch} placeholder="Search available..." onChange={e => setAddSearch(e.target.value)} onKeyDown={selectAll} /></div><div className="ngx-add-list">{addable.map(name => <button key={name} type="button" className="ngx-list-item" onClick={() => { trigger("Lumina", "AddComponent", name); setShowAdd(false); }}><WorkspaceIcon kind="plus" /><span>{friendly(name)}</span></button>)}{!addable.length && <div className="ngx-empty">No additional components.</div>}</div></div>}
                     <div className="ngx-scroll">
                         {currentVolume ? filteredComponents.map(name => <div key={name} className={"ngx-component-row" + (name === activeComponent ? " selected" : "")}>
                             <button type="button" className={"ngx-component-toggle" + (enabled(name) ? " active" : "")} title={enabled(name) ? "Disable component" : "Enable component"} aria-pressed={enabled(name)} onClick={() => trigger("Lumina", "ToggleComponent", name)}>{enabled(name) && <Check />}</button>
                             <button type="button" className="ngx-component-name" title={name} onClick={() => chooseComponent(name)}>{friendly(name)}</button>
-                            <button type="button" className="ngx-icon-button ngx-remove" title="Remove component" onClick={() => setRemoveTarget(name)}><X /></button>
+                            <button type="button" className="ngx-icon-button ngx-remove" title="Remove component" onClick={() => setRemoveTarget(name)}><WorkspaceIcon kind="close" /></button>
                         </div>) : <div className="ngx-empty">Select a scene volume to browse its components.</div>}
                         {currentVolume && !filteredComponents.length && <div className="ngx-empty">No matching components.</div>}
                     </div>
