@@ -25,184 +25,168 @@ BUTTON
 
 
 
-/* =========================================
-   MAIN PANEL
-========================================= */
 .ssao-panel-base {
   position: absolute;
-  left: 20rem;
-  width: 750rem;
-  padding: 25rem;
-
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 18rem 22rem;
   display: flex;
   flex-direction: column;
-
-  background: linear-gradient(145deg, #1e1e1e, #252525);
-  border-radius: 20rem;
-
-  box-shadow:
-    8rem 8rem 20rem #141414,
-    -8rem -8rem 20rem #2a2a2a;
-
-  transition: all 0.25s ease;
-
-  .ssaoconfiglabel {
-    font-size: 26rem;
-    font-weight: 600;
-    margin-bottom: 10rem;
-    letter-spacing: 0.5rem;
-  }
+  overflow-y: auto;
+  overflow-x: hidden;
+  color: #e0e0e0;
+  font-size: 17rem;
 }
 
-
-/* =========================================
-   LABELS
-========================================= */
-.title_SVH.title_zQN {
-  font-size: 15rem;
-  font-weight: 500;
-  opacity: 0.85;
-  margin-top: 10rem;
-  margin-bottom: 4rem;
-  transition: opacity 0.2s ease;
-
-  &:hover {
-    opacity: 1;
-  }
+.ssao-brand {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12rem;
+  border-bottom: 1rem solid rgba(255,255,255,.12);
+  flex-shrink: 0;
 }
 
+.ssao-brand-name { font-size: 28rem; letter-spacing: 7rem; color: white; }
+.ssao-brand-subtitle { font-size: 17rem; color: #b9b9b9; margin-top: 5rem; }
+.ssao-brand-logo {
+  width: 48rem;
+  height: 40rem;
+  background: url("coui://ui-mods/Icons/Lumina.svg") center / contain no-repeat;
+}
 
-/* =========================================
-   SLIDERS
-========================================= */
-.ssao-panel-base .Slider,
-.ssao-panel-base input[type="range"] {
+.ssao-master-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 46rem;
+  flex-shrink: 0;
+}
+
+.ssao-section {
+  margin-bottom: 8rem;
+  flex-shrink: 0;
+}
+
+.ssao-section-heading {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   width: 100%;
-  height: 12rem;
-
-  transition: transform 0.2s ease, opacity 0.2s ease;
-
-  &:hover {
-    transform: scale(1.02);
-    opacity: 1;
-  }
-
-  &:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    transform: none;
-  }
-}
-
-
-/* =========================================
-   TOGGLE BUTTON (PRIMARY STYLE)
-========================================= */
-.SSAOToggleButton {
-  width: 100%;
-  height: 44rem;
-
-  border-radius: 30rem;
-  border: none;
+  height: 36rem;
+  padding: 0 10rem;
+  border: 0;
+  border-radius: 4rem;
+  background: rgba(255,255,255,.07);
+  color: white;
+  font-size: 17rem;
+  text-align: left;
   cursor: pointer;
+}
 
-  font-size: 15rem;
-  font-weight: 600;
-  letter-spacing: 0.5rem;
+.ssao-section-heading:hover { background: rgba(255,255,255,.12); }
+.ssao-chevron {
+  width: 8rem;
+  height: 8rem;
+  border-right: 2rem solid #ccc;
+  border-bottom: 2rem solid #ccc;
+  transform: rotate(-45deg);
+  margin-right: 12rem;
+}
+.ssao-chevron.open { transform: rotate(45deg); }
+.ssao-section-content { display: flex; flex-direction: column; padding: 4rem 6rem; }
+.ssao-section-content.ssao-collapsed { display: none; }
 
+.ssao-setting-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  min-height: 39rem;
+  flex-shrink: 0;
+}
+.ssao-setting-label {
+  width: 255rem;
+  flex-shrink: 0;
+  font-size: 16rem;
+  color: #ddd;
+}
+.ssao-slider-wrap { flex: 1; min-width: 0; display: flex; align-items: center; margin-right: 12rem; }
+.ssao-setting-slider { width: 100%; height: 24rem; }
+.ssao-number {
+  width: 55rem;
+  height: 25rem;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 16rem;
+  color: white;
+  background: rgba(0,0,0,.35);
+  border: 1rem solid rgba(255,255,255,.35);
+}
+.ssao-number:focus { border-color: #bf8a39; }
+.ssao-reset {
+  width: 28rem;
+  height: 28rem;
+  margin-left: 8rem;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #bcbcbc;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+.ssao-reset svg { width: 20rem; height: 20rem; }
+.ssao-reset:hover { color: #e5ad58; }
 
-  background: linear-gradient(145deg, #2e2e2e, #252525);
-  color: #ffffff;
+.ssao-check-grid { display: flex; flex-direction: row; flex-wrap: wrap; margin-top: 6rem; }
+.ssao-check-grid .ssao-check { width: 50%; }
+.ssao-check {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  min-height: 33rem;
+  background: transparent;
+  border: 0;
+  padding: 2rem 0;
+  color: #ddd;
+  font-size: 16rem;
+  cursor: pointer;
+  text-align: left;
+}
+.ssao-check-box {
+  width: 20rem;
+  height: 20rem;
+  box-sizing: border-box;
+  border: 1rem solid #999;
+  background: rgba(0,0,0,.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 9rem;
+  color: white;
+  flex-shrink: 0;
+}
+.ssao-check-box.checked { background: #a8752a; border-color: #d39b48; }
+.ssao-check:disabled, .ssao-number:disabled, .ssao-reset:disabled { opacity: .4; cursor: default; }
+.ssao-footer { font-size: 14rem; color: #999; padding: 8rem 0; flex-shrink: 0; }
 
-  box-shadow:
-    6rem 6rem 15rem #141414,
-    -6rem -6rem 15rem #2a2a2a;
-
-  transition:
-    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.25s ease,
-    background 0.25s ease,
-    opacity 0.2s ease;
-
-  &:hover:not(:disabled) {
-    transform: translateY(-3rem) scale(1.03);
-    box-shadow:
-      8rem 8rem 20rem #101010,
-      -8rem -8rem 20rem #303030,
-      0 0 10rem 3rem #4d90fe55;
-  }
-
-  &:active:not(:disabled) {
-    transform: scale(0.96);
-    box-shadow:
-      inset 4rem 4rem 8rem #1a1a1a,
-      inset -4rem -4rem 8rem #2f2f2f;
-  }
-
-  &:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow:
-      inset 4rem 4rem 8rem #1a1a1a,
-      inset -4rem -4rem 8rem #2a2a2a;
-  }
-
-  &.enabled {
-    background: linear-gradient(145deg, #1f4fff, #1a3fd9);
-    box-shadow:
-      6rem 6rem 15rem #0f1f5c,
-      -6rem -6rem 15rem #2a5cff,
-      0 0 15rem 5rem #4d90fe66;
-  }
-
-  &.disabled {
-    opacity: 0.65;
-  }
+.ssao-panel-base .ssao-quick-presets {
+  position: relative;
+  top: auto;
+  left: auto;
+  width: 100%;
+  height: auto;
+  min-height: 180rem;
+  flex-shrink: 0;
+  border-radius: 6rem;
 }
 
-
-/* =========================================
-   VISUAL SEPARATION (AUTO SECTION SPACING)
-   Adds subtle separation between groups
-========================================= */
-.ssao-panel-base > *:nth-child(n + 3) {
-  margin-top: 4rem;
-}
-
-
-/* =========================================
-   RAY TRACING VISUAL GROUPING
-   (Since JSX doesn't wrap it in a div)
-========================================= */
-.SSAOToggleButton:nth-of-type(n + 6) {
-  margin-top: 12rem;
-}
-
-
-/* =========================================
-   SCROLL SAFETY (If panel grows large)
-========================================= */
-.ssao-panel-base {
-  max-height: 900rem;
-  overflow-y: auto;
-
-  scrollbar-width: thin;
-  scrollbar-color: #444 #1e1e1e;
-}
-
-.ssao-panel-base::-webkit-scrollbar {
-  width: 6rem;
-}
-
-.ssao-panel-base::-webkit-scrollbar-track {
-  background: #1e1e1e;
-}
-
-.ssao-panel-base::-webkit-scrollbar-thumb {
-  background: #444;
-  border-radius: 10rem;
-}
+.ssao-panel-base::-webkit-scrollbar { width: 6rem; }
+.ssao-panel-base::-webkit-scrollbar-thumb { background: #555; border-radius: 3rem; }
