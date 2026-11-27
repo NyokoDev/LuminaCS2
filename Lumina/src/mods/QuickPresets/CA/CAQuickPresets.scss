@@ -337,47 +337,97 @@ margin-left: 30rem;
   -webkit-text-fill-color: currentColor;
 }
 
+.quick-presets {
+  padding: 12rem 12rem 10rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.quick-presets__header {
+  gap: 0;
+  margin-bottom: 8rem;
+  flex-shrink: 0;
+}
+
+.quick-presets__subtitle {
+  margin-left: 18rem;
+}
+
+.quick-presets__items {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0;
+  flex: 1;
+  min-height: 0;
+}
+
 .quick-presets__items .quick-preset {
-  padding: 0 8rem;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 55rem;
+  padding: 0 5rem;
+  margin: 0 2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background: transparent !important;
+  border: 1rem solid transparent !important;
+  border-radius: 6rem;
+}
+
+.quick-presets__items .quick-preset:hover,
+.quick-presets__items .quick-preset:focus-visible {
+  background: rgba(255,255,255,.06) !important;
+  border-color: rgba(255,255,255,.16) !important;
 }
 
 .quick-presets__items .quick-preset__content {
-  gap: 6rem;
+  width: auto;
+  max-width: 100%;
+  justify-content: center;
+  gap: 0;
 }
 
 .quick-presets__items .quick-preset__icon {
-  width: 28rem;
-  flex: 0 0 28rem;
+  width: 24rem;
+  height: 24rem;
+  flex: 0 0 24rem;
+  margin-right: 7rem;
 }
 
 .quick-presets__items .quick-preset__icon svg {
-  width: 24rem !important;
-  height: 24rem !important;
-  min-width: 24rem !important;
-  min-height: 24rem !important;
+  width: 22rem !important;
+  height: 22rem !important;
+  min-width: 22rem !important;
+  min-height: 22rem !important;
 }
 
 .quick-presets__items .quick-preset__label {
   font-size: 13rem;
 }
 
-.quick-presets__items .preset-vice-city {
-  --preset-accent: #ed85ca;
-  justify-content: center;
-  background: linear-gradient(145deg, #25202a, #342333);
-  border-color: rgba(237, 133, 202, .45);
+.quick-presets__items .preset-non-contemporary {
+  flex: 1.45 1 0;
 }
 
-.quick-presets__items .preset-vice-city:hover {
-  background: #433046;
-  border-color: #ed85ca;
+.quick-presets__items .preset-vice-city {
+  --preset-accent: #ed85ca;
+}
+
+.quick-presets__items .quick-preset__accent {
+  display: none;
 }
 
 .quick-preset__vice-logo {
   display: block;
-  width: 100%;
-  height: 52rem;
+  width: 94rem;
+  max-width: 100%;
+  height: 42rem;
+  flex-shrink: 0;
   object-fit: contain;
-  margin-bottom: 5rem;
+  margin: 0;
   pointer-events: none;
 }
