@@ -1,0 +1,185 @@
+.planetary-settings {
+  position: relative;
+  width: 800rem;
+  box-sizing: border-box;
+  padding: 18rem 22rem;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  color: #e0e0e0;
+  font-size: 17rem;
+
+  .planetary-brand {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10rem;
+    border-bottom: 1rem solid rgba(255,255,255,.12);
+    flex-shrink: 0;
+  }
+
+  .planetary-brand-name { font-size: 28rem; letter-spacing: 7rem; color: white; }
+  .planetary-subtitle { font-size: 17rem; color: #b9b9b9; margin-top: 4rem; }
+  .planetary-logo {
+    width: 48rem;
+    height: 40rem;
+    background: url("coui://ui-mods/Icons/Lumina.svg") center / contain no-repeat;
+  }
+
+  .planetary-heading {
+    color: white;
+    font-size: 18rem;
+    margin-top: 12rem;
+    margin-bottom: 8rem;
+  }
+
+  .planetary-map-frame {
+    display: flex;
+    flex-direction: column;
+    background: #1b1c1c;
+    border: 1rem solid rgba(255,255,255,.15);
+    border-radius: 5rem;
+    padding: 6rem;
+    flex-shrink: 0;
+  }
+
+  .planetary-world-map {
+    display: block;
+    width: 100%;
+    height: 240rem;
+    cursor: crosshair;
+    flex-shrink: 0;
+  }
+
+  .planetary-map-caption {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 28rem;
+    padding: 4rem 6rem 0;
+    color: #aaa;
+    font-size: 15rem;
+  }
+
+  .planetary-map-value { color: #d3a052; font-size: 16rem; }
+
+  .planetary-coordinate-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    min-height: 39rem;
+    flex-shrink: 0;
+  }
+
+  .planetary-coordinate-label { width: 155rem; flex-shrink: 0; }
+  .planetary-slider-wrap { flex: 1; min-width: 0; display: flex; align-items: center; margin-right: 12rem; }
+  .planetary-coordinate-slider { width: 100%; height: 24rem; }
+
+  .planetary-coordinate-input {
+    width: 95rem;
+    height: 27rem;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 16rem;
+    color: white;
+    background: rgba(0,0,0,.35);
+    border: 1rem solid rgba(255,255,255,.35);
+  }
+  .planetary-coordinate-input:focus { border-color: #bf8a39; }
+
+  .planetary-reset-icon {
+    width: 28rem;
+    height: 28rem;
+    margin-left: 8rem;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 0;
+    color: #bbb;
+    cursor: pointer;
+  }
+  .planetary-reset-icon svg { width: 20rem; height: 20rem; }
+  .planetary-reset-icon:hover { color: #e5ad58; }
+
+  .planetary-locations {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .planetary-location {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 32%;
+    min-height: 54rem;
+    margin-bottom: 7rem;
+    padding: 6rem 10rem;
+    box-sizing: border-box;
+    border: 1rem solid rgba(255,255,255,.15);
+    border-radius: 4rem;
+    background: rgba(255,255,255,.05);
+    color: white;
+    font-size: 16rem;
+    cursor: pointer;
+  }
+  .planetary-location:hover { background: rgba(255,255,255,.1); }
+  .planetary-location.active { border-color: #bf8a39; background: rgba(191,138,57,.12); }
+  .planetary-location-coordinates { color: #aaa; font-size: 13rem; margin-top: 3rem; }
+
+  .planetary-notice {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8rem 10rem;
+    margin-top: 6rem;
+    background: rgba(191,138,57,.09);
+    border: 1rem solid rgba(191,138,57,.2);
+    border-radius: 4rem;
+    color: #c9c0ae;
+    font-size: 14rem;
+    flex-shrink: 0;
+  }
+  .planetary-notice-symbol {
+    width: 20rem;
+    height: 20rem;
+    border: 1rem solid #c6a269;
+    border-radius: 10rem;
+    color: #c6a269;
+    text-align: center;
+    margin-right: 10rem;
+    flex-shrink: 0;
+  }
+
+  .planetary-footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12rem;
+    padding-top: 9rem;
+    border-top: 1rem solid rgba(255,255,255,.1);
+    color: #999;
+    font-size: 13rem;
+    flex-shrink: 0;
+  }
+  .planetary-reset-button {
+    min-height: 32rem;
+    padding: 5rem 12rem;
+    border: 1rem solid rgba(255,255,255,.18);
+    border-radius: 4rem;
+    color: #ddd;
+    background: rgba(255,255,255,.05);
+    font-size: 15rem;
+    cursor: pointer;
+  }
+  .planetary-reset-button:hover { background: rgba(255,255,255,.12); }
+}
