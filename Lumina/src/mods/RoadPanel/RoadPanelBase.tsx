@@ -31,6 +31,7 @@ const formatNumber = (value: number) => Number.isFinite(value) ? String(Number(v
 const normalizeHex = (value: string) => /^#?[0-9a-f]{6}$/i.test(value) ? "#" + value.replace(/^#/, "").toLowerCase() : null;
 
 const RoadNumber = ({ label, value, onChange, initial, gamepadStep }: { label: string; value: number; onChange: (v: number) => void; initial: number; gamepadStep: number }) => {
+  const { translate } = useLocalization();
   const [draft, setDraft] = useState(formatNumber(value));
   const editing = useRef(false);
   const cancelled = useRef(false);
@@ -67,7 +68,7 @@ const RoadNumber = ({ label, value, onChange, initial, gamepadStep }: { label: s
             event.currentTarget.blur();
           }
         }} />
-      <button type="button" className="road-material-icon-button" title="Restore value from when this panel opened" aria-label={"Restore " + label} disabled={!Number.isFinite(initial)} onClick={() => onChange(initial)}><RoadIcon name="reset" /></button>
+      <button type="button" className="road-material-icon-button" title={(translate("LUMINA.restoreopening") ?? "Restore value from when this panel opened")} aria-label={(translate("LUMINA.restoreopening") ?? "Restore value from when this panel opened") + " · " + label} disabled={!Number.isFinite(initial)} onClick={() => onChange(initial)}><RoadIcon name="reset" /></button>
     </div>
   );
 };
@@ -142,19 +143,19 @@ export const RoadPanelBase: React.FC<RoadPanelBaseProps> = ({ title = "", childr
   return (
     <div className={`road-material-panel ${className}`}>
       <div className="road-material-brand">
-        <div><div className="road-material-brand-name">LUMINA</div><div className="road-material-subtitle">{title || "Road Materials"}</div></div>
+        <div><div className="road-material-brand-name">LUMINA</div><div className="road-material-subtitle">{title || (translate("LUMINA.roadmaterials") ?? "Road Materials")}</div></div>
         <div className="road-material-logo" aria-hidden="true" />
       </div>
       {children}
       <div className="road-material-section">
-        <div className="road-material-heading">Surface properties</div>
+        <div className="road-material-heading">{(translate("LUMINA.surfaceproperties") ?? "Surface properties")}</div>
         <RoadNumber label={translate("LUMINA.opacity") ?? "Opacity"} value={opacity} initial={initial.current.opacity} gamepadStep={0.001} onChange={setOpacity} />
         <RoadNumber label={translate("LUMINA.brightness") ?? "Brightness"} value={brightness} initial={initial.current.brightness} gamepadStep={0.001} onChange={setBrightness} />
         <RoadNumber label={translate("LUMINA.smoothness") ?? "Smoothness"} value={smoothness} initial={initial.current.smoothness} gamepadStep={0.00001} onChange={setSmoothness} />
       </div>
       <div className="road-material-section">
         <div className="road-material-heading road-material-heading-actions">
-          <span>Road color</span>
+          <span>{(translate("LUMINA.roadcolor") ?? "Road color")}</span>
           <div className="road-material-actions">
             <button type="button" className="road-material-icon-button" title={translate("LUMINA.colorpicker") ?? "Open color picker website"} onClick={() => trigger(mod.id, "OpenColorPickerSite")}><RoadIcon name="palette" /></button>
             <button type="button" className="road-material-icon-button" title={translate("LUMINA.randomize") ?? "Randomize primary color"} onClick={() => trigger(mod.id, "HandleRandomizer")}><RoadIcon name="dice" /></button>
@@ -164,24 +165,24 @@ export const RoadPanelBase: React.FC<RoadPanelBaseProps> = ({ title = "", childr
           <RoadColor label={translate("LUMINA.hexprimarycolor") ?? "Primary color"} value={primary} onCommit={setPrimary} />
           <RoadColor label={translate("LUMINA.hexsecondcolor") ?? "Secondary color"} value={secondary} onCommit={setSecondary} />
         </div>
-        <div className="road-material-quick-label">Quick colors</div>
+        <div className="road-material-quick-label">{(translate("LUMINA.quickcolors") ?? "Quick colors")}</div>
         <div className="road-material-presets">
           {quickColors.map(p => (
             <button key={p.name} type="button" className={"road-material-preset" + (normalizeHex(primary || "") === p.primary && normalizeHex(secondary || "") === p.secondary ? " active" : "")} onClick={() => { setPrimary(p.primary); setSecondary(p.secondary); }}>
               <span className="road-material-preset-swatch"><span style={{ backgroundColor: p.primary }} /><span style={{ backgroundColor: p.secondary }} /></span>
-              <span>{p.name}</span>
+              <span>{translate("LUMINA." + p.name.toLowerCase()) ?? p.name}</span>
             </button>
           ))}
         </div>
       </div>
       <div className="road-material-section">
-        <div className="road-material-heading">Custom textures</div>
+        <div className="road-material-heading">{(translate("LUMINA.customtextures") ?? "Custom textures")}</div>
         <div className="road-material-texture-actions">
           <button type="button" className="road-material-button" onClick={() => trigger(mod.id, "OpenTexturesFolder")}><RoadIcon name="folder" />{translate("LUMINA.opentexturesbutton") ?? "Open textures folder"}</button>
           <button type="button" className="road-material-button" onClick={() => trigger(mod.id, "ApplyRoadTextures")}><RoadIcon name="reload" />{translate("LUMINA.applytexturesbutton") ?? "Reload textures"}</button>
         </div>
       </div>
-      <div className="road-material-footer"><span>ROAD MATERIALS · LUMINA</span><button type="button" className="road-material-button" onClick={reset}><RoadIcon name="reset" />Restore opening values</button></div>
+      <div className="road-material-footer"><span>{(translate("LUMINA.roadmaterials") ?? "Road Materials")} · LUMINA</span><button type="button" className="road-material-button" onClick={reset}><RoadIcon name="reset" />{(translate("LUMINA.restoreallopening") ?? "Restore opening values")}</button></div>
     </div>
   );
 };
