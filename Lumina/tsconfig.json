@@ -16,4 +16,6 @@
       "mod.json": ["../mod.json"]
     }
   },
-} 
+  "include": ["src/**/*", "types/**/*.d.ts"],
+  "exclude": ["node_modules", "build", "lumina-preview"]
+}
