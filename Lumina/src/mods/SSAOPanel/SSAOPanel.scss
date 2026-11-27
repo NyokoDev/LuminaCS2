@@ -194,3 +194,16 @@ BUTTON
 
 .ssao-panel-base::-webkit-scrollbar { width: 6rem; }
 .ssao-panel-base::-webkit-scrollbar-thumb { background: #555; border-radius: 3rem; }
+
+.title_SVH.title_zQN {
+  font-size: 15rem;
+  font-weight: 500;
+  opacity: 0.85;
+  margin-top: 10rem;
+  margin-bottom: 4rem;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+}
