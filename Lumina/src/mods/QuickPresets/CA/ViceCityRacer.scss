@@ -113,3 +113,23 @@
     color: #b3a5b6;
     font-size: 12rem;
 }
+
+.vc-racer-header .vc-racer-brand {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    min-height: 45rem;
+}
+.vc-racer-brand img {
+    width: 100rem;
+    height: 45rem;
+    object-fit: contain;
+    margin-right: 9rem;
+}
+.vc-racer-header .vc-racer-brand span {
+    font-size: 26rem;
+    font-weight: 700;
+    font-style: italic;
+    letter-spacing: 0;
+    color: #f5e5ed;
+}
