@@ -1055,7 +1055,7 @@ id="Global"
         <label className="title_SVH title_zQN CALabel">{translate("LUMINA.coloradjustments")}</label>
      
         <label className="title_SVH title_zQN PostExposureLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.postexposure")}</label>
-        <ColorValueInput className="title_SVH title_zQN PostExposureValue" label={translate("LUMINA.postexposure")} value={PEValue} min={-5} max={3} onCommit={(value) => trigger(mod.id, "SetPostExposure", value)} />
+        <ColorValueInput className="title_SVH title_zQN PostExposureValue" label={translate("LUMINA.postexposure") ?? "Post Exposure"} value={PEValue} min={-5} max={3} onCommit={(value) => trigger(mod.id, "SetPostExposure", value)} />
 
 
      
@@ -1101,7 +1101,7 @@ id="Global"
           />
 
         <label className="title_SVH title_zQN ContrastLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.contrast")}</label>
-        <ColorValueInput className="title_SVH title_zQN ContrastValue" label={translate("LUMINA.contrast")} value={COValue} min={globalstart} max={globalend} onCommit={(value) => trigger(mod.id, "SetContrast", value)} />
+        <ColorValueInput className="title_SVH title_zQN ContrastValue" label={translate("LUMINA.contrast") ?? "Contrast"} value={COValue} min={globalstart} max={globalend} onCommit={(value) => trigger(mod.id, "SetContrast", value)} />
 
         <Slider
            value={(COValue- globalstart) / globalstepSize}
@@ -1135,7 +1135,7 @@ id="Global"
 
 
 <label className="title_SVH title_zQN HueshiftLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.hueshift")}</label>
-        <ColorValueInput className="title_SVH title_zQN HueshiftValue" label={translate("LUMINA.hueshift")} value={HSValue} min={-180} max={180} onCommit={(value) => trigger(mod.id, "SetHueShift", value)} />
+        <ColorValueInput className="title_SVH title_zQN HueshiftValue" label={translate("LUMINA.hueshift") ?? "Hue Shift"} value={HSValue} min={-180} max={180} onCommit={(value) => trigger(mod.id, "SetHueShift", value)} />
 
         <div className="hscheckbox">
   {hueshiftActive && (
@@ -1169,7 +1169,7 @@ id="Global"
         />
 
 <label className="title_SVH title_zQN SaturationLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.saturation")}</label>
-        <ColorValueInput className="title_SVH title_zQN SaturationValue" label={translate("LUMINA.saturation")} value={SAValue} min={globalstart} max={globalend} onCommit={(value) => trigger(mod.id, "SetSaturation", value)} />
+        <ColorValueInput className="title_SVH title_zQN SaturationValue" label={translate("LUMINA.saturation") ?? "Saturation"} value={SAValue} min={globalstart} max={globalend} onCommit={(value) => trigger(mod.id, "SetSaturation", value)} />
 
         <div className="satcheckbox">
   {saturationActive && (
@@ -1202,7 +1202,7 @@ id="Global"
 
 <label className="title_SVH title_zQN WBLabel">{translate("LUMINA.whitebalance")}</label>
 <label className="title_SVH title_zQN TemperatureLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.temperature")}</label>
-        <ColorValueInput className="title_SVH title_zQN TemperatureValue" label={translate("LUMINA.temperature")} value={TempValue} min={globalstart} max={globalend} onCommit={(value) => trigger(mod.id, "SetTemperature", value)} />
+        <ColorValueInput className="title_SVH title_zQN TemperatureValue" label={translate("LUMINA.temperature") ?? "Temperature"} value={TempValue} min={globalstart} max={globalend} onCommit={(value) => trigger(mod.id, "SetTemperature", value)} />
 
         <div className="tempcheckbox">
   {TempActive && (
@@ -1235,7 +1235,7 @@ id="Global"
         />
 
 <label className="title_SVH title_zQN TintLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.tint")}</label>
-        <ColorValueInput className="title_SVH title_zQN TintValue" label={translate("LUMINA.tint")} value={TintValue} min={globalstart} max={globalend} onCommit={(value) => trigger(mod.id, "SetTint", value)} />
+        <ColorValueInput className="title_SVH title_zQN TintValue" label={translate("LUMINA.tint") ?? "Tint"} value={TintValue} min={globalstart} max={globalend} onCommit={(value) => trigger(mod.id, "SetTint", value)} />
 
 
         <div className="tintcheckbox">
@@ -1270,7 +1270,7 @@ id="Global"
 <label className="title_SVH title_zQN BLabel">{translate("LUMINA.brightness")}</label>
 
 <label className="title_SVH title_zQN ShadowsLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.shadows")}</label>
-        <ColorValueInput className="title_SVH title_zQN ShadowsValue" label={translate("LUMINA.shadows")} value={ShadowsValue} min={start} max={end} onCommit={(value) => trigger(mod.id, "SetShadows", value)} />
+        <ColorValueInput className="title_SVH title_zQN ShadowsValue" label={translate("LUMINA.shadows") ?? "Shadows"} value={ShadowsValue} min={start} max={end} onCommit={(value) => trigger(mod.id, "SetShadows", value)} />
 
         <div className="shadowscheckbox">
   {ShadowsActive && (
@@ -1304,7 +1304,7 @@ id="Global"
 
         
 <label className="title_SVH title_zQN MidtonesLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.midtones")}</label>
-        <ColorValueInput className="title_SVH title_zQN MidtonesValue" label={translate("LUMINA.midtones")} value={MidtonesValue} min={start} max={end} onCommit={(value) => trigger(mod.id, "SetMidtones", value)} />
+        <ColorValueInput className="title_SVH title_zQN MidtonesValue" label={translate("LUMINA.midtones") ?? "Midtones"} value={MidtonesValue} min={start} max={end} onCommit={(value) => trigger(mod.id, "SetMidtones", value)} />
 
         <div className="midtonescheckbox">
   {MidtonesActive && (
@@ -1337,7 +1337,7 @@ id="Global"
         />
 
 <label className="title_SVH title_zQN HighlightsLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.highlights")}</label>
-        <ColorValueInput className="title_SVH title_zQN HighlightsValue" label={translate("LUMINA.highlights")} value={HighlightsValue} min={start} max={end} onCommit={(value) => trigger(mod.id, "SetHighlights", value)} />
+        <ColorValueInput className="title_SVH title_zQN HighlightsValue" label={translate("LUMINA.highlights") ?? "Highlights"} value={HighlightsValue} min={start} max={end} onCommit={(value) => trigger(mod.id, "SetHighlights", value)} />
 
 
         <div className="highlightscheckbox">
