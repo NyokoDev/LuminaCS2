@@ -307,6 +307,17 @@
                     saturation = 5f;
                     break;
 
+                case "vice-city":
+                    postExposure = 0.25f;
+                    contrast = 18f;
+                    hueShift = -5f;
+                    saturation = 28f;
+                    gv.Temperature = 15f;
+                    gv.Tint = 22f;
+                    gv.TemperatureActive = true;
+                    gv.TintActive = true;
+                    break;
+
                 default:
                     return;
             }
