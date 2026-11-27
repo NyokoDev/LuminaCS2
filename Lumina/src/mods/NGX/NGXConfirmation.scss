@@ -1,132 +1,162 @@
-.Component {
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 8px;
-
-    min-width: 0;
-
-}
-
-.ComponentName {
-
-    flex: 1;
-
-    min-width: 0;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
-    cursor: pointer;
-
-}
-
-.RemoveComponent {
-
-    width: 24px;
-    height: 24px;
-
-    flex-shrink: 0;
-
-    border: none;
-    border-radius: 50%;
-
-    background: rgba(255,80,80,.15);
-
-    color: white;
-
-    font-size: 16px;
-
-    cursor: pointer;
-
-    transition: background .15s ease;
-
-    &:hover {
-
-        background: rgba(255,80,80,.35);
-
+.NGXWorkspace.ngx-modern {
+    .ngx-confirm-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, .65);
     }
 
-}
-
-.NGXConfirmOverlay {
-
-    position: absolute;
-
-    top: 200rem;
-    right: 300rem;
-
-    align-items: center;
-    justify-content: center;
-
-    background: rgba(0,0,0,.55);
-
-    z-index: 999;
-
-}
-
-.NGXConfirm {
-
-    width: 320px;
-
-    padding: 20px;
-
-    border-radius: 14px;
-
-    background: #16181d;
-
-    border: 1px solid rgba(255,255,255,.1);
-
-    h3 {
-        margin: 0 0 10px;
-        color: white;
+    .ngx-confirm-dialog {
+        width: 420rem;
+        max-width: 90%;
+        max-height: 95%;
+        overflow-y: auto;
+        box-sizing: border-box;
+        background: #242424;
+        border: 1rem solid #555;
+        border-radius: 8rem;
+        color: #ededed;
+        box-shadow: 0 12rem 32rem rgba(0, 0, 0, .45);
+        font-family: "Inter Tight", "Noto Sans", sans-serif;
+        text-align: left;
+        white-space: normal;
     }
 
-    p {
-        color: white;
-        font-size: 13px;
+    .ngx-confirm-header {
+        display: flex;
+        align-items: center;
+        padding: 12rem 14rem;
+        background: #2b2b2b;
+        border-bottom: 1rem solid #414141;
     }
 
-}
-
-.NGXConfirmButtons {
-
-    display: flex;
-
-    justify-content: flex-end;
-
-    gap: 10px;
-
-    margin-top: 20px;
-
-    button {
-
-        padding: 8px 14px;
-
-        border: none;
-        border-radius: 8px;
-
-        cursor: pointer;
-
-        transition: background .15s ease;
-
+    .ngx-confirm-header strong {
+        font-size: 19rem;
+        font-weight: 600;
+        color: #eee;
     }
 
-    .Cancel {
-
-        background: greenyellow;
-        color: green;
-
+    .ngx-confirm-symbol {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30rem;
+        height: 30rem;
+        margin-right: 10rem;
+        background: #383838;
+        border: 1rem solid #555;
+        border-radius: 5rem;
+        color: #d4d4d4;
+        flex-shrink: 0;
     }
 
-    .Danger {
-
-        background: #d94b4b;
-        color: white;
-
+    .ngx-confirm-symbol svg {
+        width: 19rem;
+        height: 19rem;
     }
 
+    .ngx-confirm-header .ngx-icon-button {
+        width: 26rem;
+        height: 26rem;
+        background: transparent;
+        border-color: transparent;
+    }
+
+    .ngx-confirm-body {
+        display: flex;
+        flex-direction: column;
+        padding: 16rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .ngx-confirm-target {
+        display: flex;
+        align-items: center;
+        padding: 11rem;
+        background: #1b1b1b;
+        border: 1rem solid #414141;
+        border-radius: 5rem;
+        margin-bottom: 14rem;
+    }
+
+    .ngx-confirm-target > svg {
+        width: 22rem;
+        height: 22rem;
+        color: #bcbcbc;
+        margin-right: 10rem;
+        flex-shrink: 0;
+    }
+
+    .ngx-confirm-target-copy {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .ngx-confirm-target-copy strong, .ngx-confirm-target-copy span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .ngx-confirm-target-copy strong {
+        font-size: 16rem;
+        color: #eee;
+    }
+
+    .ngx-confirm-target-copy span {
+        margin-top: 3rem;
+        font-size: 13rem;
+        color: #aaa;
+    }
+
+    .ngx-confirm-description, .ngx-confirm-note {
+        width: 100%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        text-align: left;
+        font-size: 14rem;
+        line-height: 20rem;
+        color: #d0d0d0;
+    }
+
+    .ngx-confirm-note {
+        margin-top: 8rem;
+        color: #999;
+        font-size: 13rem;
+    }
+
+    .ngx-confirm-actions {
+        display: flex;
+        align-items: center;
+        padding: 12rem 16rem;
+        border-top: 1rem solid #414141;
+        background: #202020;
+    }
+
+    .ngx-confirm-actions .ngx-button {
+        margin-left: 8rem;
+        height: 34rem;
+        padding: 0 13rem;
+        font-size: 14rem;
+    }
+
+    .ngx-confirm-actions .ngx-confirm-danger {
+        background: #854044;
+        border-color: #a65d60;
+        color: #fff;
+    }
+
+    .ngx-confirm-actions .ngx-confirm-danger:hover {
+        background: #a04c50;
+        border-color: #c07779;
+    }
 }
