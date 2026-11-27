@@ -99,6 +99,10 @@ let tab2 = false;
 
 
 
+const ConfirmationDialogCompat = ConfirmationDialog as unknown as (props: Parameters<typeof ConfirmationDialog>[0]) => React.ReactElement | null;
+const TonemappingPanelCompat = TonemappingPanel as unknown as (props: Parameters<typeof TonemappingPanel>[0]) => React.ReactElement | null;
+const SkyAndFogPanelCompat = SkyAndFogPanel as unknown as (props: Parameters<typeof SkyAndFogPanel>[0]) => React.ReactElement | null;
+
 const ColorValueInput: React.FC<{
   className: string;
   label: string;
@@ -306,7 +310,7 @@ function ResetToDefault() {
   return (
     <div>
       <p>{translate("LUMINA.resettodefault")}</p>
-      <ConfirmationDialog
+      <ConfirmationDialogCompat
         message={translate("LUMINA.resettodefault")}
         onCancel={() => console.log("Dialog canceled.")}
         onConfirm={(dismiss: boolean): void => {
@@ -569,12 +573,12 @@ id="Global"
 {/* TONEMAPPING PANEL */}
 {ToneMappingEnabled$ && (
     <div className="TonemappingPanelNew">
-        <TonemappingPanel />
+        <TonemappingPanelCompat />
     </div>
 )}
 
 {SkyAndFogEnabled$ &&
-<SkyAndFogPanel />
+<SkyAndFogPanelCompat />
 
 }
 
@@ -1558,7 +1562,7 @@ id="Global"
     {IsClicked && (
         <div className="ResetConfirmationDialog">
 
-            <ConfirmationDialog
+            <ConfirmationDialogCompat
                 message={translate("LUMINA.resettodefaultconfirmation")}
                 onCancel={() => {
                     setIsClicked(false);
