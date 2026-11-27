@@ -336,3 +336,48 @@ margin-left: 30rem;
 .quick-presets__subtitle {
   -webkit-text-fill-color: currentColor;
 }
+
+.quick-presets__items .quick-preset {
+  padding: 0 8rem;
+}
+
+.quick-presets__items .quick-preset__content {
+  gap: 6rem;
+}
+
+.quick-presets__items .quick-preset__icon {
+  width: 28rem;
+  flex: 0 0 28rem;
+}
+
+.quick-presets__items .quick-preset__icon svg {
+  width: 24rem !important;
+  height: 24rem !important;
+  min-width: 24rem !important;
+  min-height: 24rem !important;
+}
+
+.quick-presets__items .quick-preset__label {
+  font-size: 13rem;
+}
+
+.quick-presets__items .preset-vice-city {
+  --preset-accent: #ed85ca;
+  justify-content: center;
+  background: linear-gradient(145deg, #25202a, #342333);
+  border-color: rgba(237, 133, 202, .45);
+}
+
+.quick-presets__items .preset-vice-city:hover {
+  background: #433046;
+  border-color: #ed85ca;
+}
+
+.quick-preset__vice-logo {
+  display: block;
+  width: 100%;
+  height: 52rem;
+  object-fit: contain;
+  margin-bottom: 5rem;
+  pointer-events: none;
+}
