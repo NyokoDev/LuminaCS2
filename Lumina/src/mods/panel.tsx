@@ -122,7 +122,7 @@ const ColorValueInput: React.FC<{
 
   return (
     <input
-      className={className}
+      className={className + " lumina-color-value"}
       type="text"
       inputMode="decimal"
       aria-label={label}
@@ -131,11 +131,7 @@ style={{
   width: "55rem",
   transform: "translate(45rem, -6rem)",
   height: "24rem",
-  backgroundColor: "rgba(0,0,0,0.35)",
-  border: "1px solid rgba(255,255,255,0.35)",
-  textAlign: "center",
-  boxSizing: "border-box",
-  fontSize: "16rem"
+  margin: 0
 }}
       onFocus={() => { editing.current = true; cancelled.current = false; }}
       onChange={(event) => setDraft(event.target.value)}
