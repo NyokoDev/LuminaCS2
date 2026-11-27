@@ -25,18 +25,22 @@ BUTTON
 
 
 
+.SSAOPanelBase {
+  position: relative;
+  width: 800rem;
+  min-height: 750rem;
+  flex-shrink: 0;
+}
+
 .ssao-panel-base {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  position: relative;
+  width: 800rem;
+  height: auto;
   box-sizing: border-box;
   padding: 18rem 22rem;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  overflow-x: hidden;
+  flex-shrink: 0;
   color: #e0e0e0;
   font-size: 17rem;
 }
@@ -99,7 +103,7 @@ BUTTON
   margin-right: 12rem;
 }
 .ssao-chevron.open { transform: rotate(45deg); }
-.ssao-section-content { display: flex; flex-direction: column; padding: 4rem 6rem; }
+.ssao-section-content { display: flex; flex-direction: column; padding: 4rem 6rem; flex-shrink: 0; }
 .ssao-section-content.ssao-collapsed { display: none; }
 
 .ssao-setting-row {
