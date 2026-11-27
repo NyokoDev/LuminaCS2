@@ -99,6 +99,55 @@ let tab2 = false;
 
 
 
+const ColorValueInput: React.FC<{
+  className: string;
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+  onCommit: (value: number) => void;
+}> = ({ className, label, value, min, max, onCommit }) => {
+  const [draft, setDraft] = useState(String(value));
+  const editing = useRef(false);
+  const cancelled = useRef(false);
+
+  useEffect(() => {
+    if (!editing.current) setDraft(String(value));
+  }, [value]);
+
+  return (
+    <input
+      className={className}
+      type="text"
+      inputMode="decimal"
+      aria-label={label}
+      value={draft}
+      style={{ width: "90rem", backgroundColor: "rgba(0,0,0,0.35)", border: "1px solid rgba(255,255,255,0.35)", textAlign: "right" }}
+      onFocus={() => { editing.current = true; cancelled.current = false; }}
+      onChange={(event) => setDraft(event.target.value)}
+      onBlur={() => {
+        editing.current = false;
+        const parsed = Number(draft);
+        if (cancelled.current || !draft.trim() || !Number.isFinite(parsed)) {
+          setDraft(String(value));
+          return;
+        }
+        const next = Math.max(min, Math.min(max, parsed));
+        setDraft(String(next));
+        if (next !== value) onCommit(next);
+      }}
+      onKeyDown={(event) => {
+        event.stopPropagation();
+        if (event.key === "Enter" || event.key === "Escape") {
+          event.preventDefault();
+          cancelled.current = event.key === "Escape";
+          event.currentTarget.blur();
+        }
+      }}
+    />
+  );
+};
+
 export const YourPanelComponent: React.FC<any> = () => {
   // Values
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -1006,7 +1055,7 @@ id="Global"
         <label className="title_SVH title_zQN CALabel">{translate("LUMINA.coloradjustments")}</label>
      
         <label className="title_SVH title_zQN PostExposureLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.postexposure")}</label>
-        <label className="title_SVH title_zQN PostExposureValue" >{PEValue.toString()} </label>
+        <ColorValueInput className="title_SVH title_zQN PostExposureValue" label={translate("LUMINA.postexposure")} value={PEValue} min={-5} max={3} onCommit={(value) => trigger(mod.id, "SetPostExposure", value)} />
 
 
      
@@ -1052,7 +1101,7 @@ id="Global"
           />
 
         <label className="title_SVH title_zQN ContrastLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.contrast")}</label>
-        <label className="title_SVH title_zQN ContrastValue" >{COValue.toString()} </label>
+        <ColorValueInput className="title_SVH title_zQN ContrastValue" label={translate("LUMINA.contrast")} value={COValue} min={globalstart} max={globalend} onCommit={(value) => trigger(mod.id, "SetContrast", value)} />
 
         <Slider
            value={(COValue- globalstart) / globalstepSize}
@@ -1086,7 +1135,7 @@ id="Global"
 
 
 <label className="title_SVH title_zQN HueshiftLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.hueshift")}</label>
-        <label className="title_SVH title_zQN HueshiftValue" >{HSValue.toString()} </label>
+        <ColorValueInput className="title_SVH title_zQN HueshiftValue" label={translate("LUMINA.hueshift")} value={HSValue} min={-180} max={180} onCommit={(value) => trigger(mod.id, "SetHueShift", value)} />
 
         <div className="hscheckbox">
   {hueshiftActive && (
@@ -1120,7 +1169,7 @@ id="Global"
         />
 
 <label className="title_SVH title_zQN SaturationLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.saturation")}</label>
-        <label className="title_SVH title_zQN SaturationValue" >{SAValue.toString()} </label>
+        <ColorValueInput className="title_SVH title_zQN SaturationValue" label={translate("LUMINA.saturation")} value={SAValue} min={globalstart} max={globalend} onCommit={(value) => trigger(mod.id, "SetSaturation", value)} />
 
         <div className="satcheckbox">
   {saturationActive && (
@@ -1153,7 +1202,7 @@ id="Global"
 
 <label className="title_SVH title_zQN WBLabel">{translate("LUMINA.whitebalance")}</label>
 <label className="title_SVH title_zQN TemperatureLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.temperature")}</label>
-        <label className="title_SVH title_zQN TemperatureValue" >{TempValue.toString()} </label>
+        <ColorValueInput className="title_SVH title_zQN TemperatureValue" label={translate("LUMINA.temperature")} value={TempValue} min={globalstart} max={globalend} onCommit={(value) => trigger(mod.id, "SetTemperature", value)} />
 
         <div className="tempcheckbox">
   {TempActive && (
@@ -1186,7 +1235,7 @@ id="Global"
         />
 
 <label className="title_SVH title_zQN TintLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.tint")}</label>
-        <label className="title_SVH title_zQN TintValue" >{TintValue.toString()} </label>
+        <ColorValueInput className="title_SVH title_zQN TintValue" label={translate("LUMINA.tint")} value={TintValue} min={globalstart} max={globalend} onCommit={(value) => trigger(mod.id, "SetTint", value)} />
 
 
         <div className="tintcheckbox">
@@ -1221,7 +1270,7 @@ id="Global"
 <label className="title_SVH title_zQN BLabel">{translate("LUMINA.brightness")}</label>
 
 <label className="title_SVH title_zQN ShadowsLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.shadows")}</label>
-        <label className="title_SVH title_zQN ShadowsValue" >{ShadowsValue.toString()} </label>
+        <ColorValueInput className="title_SVH title_zQN ShadowsValue" label={translate("LUMINA.shadows")} value={ShadowsValue} min={start} max={end} onCommit={(value) => trigger(mod.id, "SetShadows", value)} />
 
         <div className="shadowscheckbox">
   {ShadowsActive && (
@@ -1255,7 +1304,7 @@ id="Global"
 
         
 <label className="title_SVH title_zQN MidtonesLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.midtones")}</label>
-        <label className="title_SVH title_zQN MidtonesValue" >{MidtonesValue.toString()} </label>
+        <ColorValueInput className="title_SVH title_zQN MidtonesValue" label={translate("LUMINA.midtones")} value={MidtonesValue} min={start} max={end} onCommit={(value) => trigger(mod.id, "SetMidtones", value)} />
 
         <div className="midtonescheckbox">
   {MidtonesActive && (
@@ -1288,7 +1337,7 @@ id="Global"
         />
 
 <label className="title_SVH title_zQN HighlightsLabel" style={{ whiteSpace: 'nowrap' }}>{translate("LUMINA.highlights")}</label>
-        <label className="title_SVH title_zQN HighlightsValue" >{HighlightsValue.toString()} </label>
+        <ColorValueInput className="title_SVH title_zQN HighlightsValue" label={translate("LUMINA.highlights")} value={HighlightsValue} min={start} max={end} onCommit={(value) => trigger(mod.id, "SetHighlights", value)} />
 
 
         <div className="highlightscheckbox">
