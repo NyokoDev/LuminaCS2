@@ -1,5 +1,6 @@
 import { bindValue, trigger, useValue } from "cs2/api";
 import mod from "../../mod.json";
+import { ModuleRegistryExtend } from "cs2/modding";
 import { Slider, SliderValueTransformer } from "./slider";
 import "./time-of-day-css.scss";
 import LockTimeButton from "./LockTimeButton/locktimebutton";
@@ -9,8 +10,8 @@ export const TimeFloatValue$ = bindValue<number>(mod.id, 'TimeFloatValue');
 export const Active$ = bindValue<boolean>(mod.id, 'TimeFloatIsActive');
 
 // HOC to inject the Time of Day slider at the top of the settings panel
-export const TimeOfDaySliderModuleRegistryExtend = (Component: React.ComponentType) => {
-  return (props: any) => {
+export const TimeOfDaySliderModuleRegistryExtend: ModuleRegistryExtend = (Component) => {
+  return (props) => {
     const TimeFloatValue = useValue(TimeFloatValue$);
     const TimeFloatIsActive = useValue(Active$);
 
