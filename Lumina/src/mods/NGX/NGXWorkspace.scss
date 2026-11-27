@@ -1,797 +1,222 @@
-@font-face {
-    font-family: "JetBrainsMonoNL-Medium";
-    src: url("./Fonts/JetBrainsMonoNL-Medium.ttf") format("truetype");
-}
-
-.NGXWorkspace {
-
+.NGXWorkspace.ngx-modern {
+    position: absolute;
+    top: -1000rem;
+    width: 1120rem;
+    max-width: 92vw;
+    height: 610rem;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
     box-sizing: border-box;
-
+    padding: 0;
+    overflow: hidden;
     pointer-events: auto !important;
     user-select: auto !important;
+    background: #181818;
+    color: #ececec;
+    border: 1rem solid #4b4b4b;
+    border-radius: 10rem;
+    font-family: "Inter Tight", "Noto Sans", sans-serif;
+    font-size: 16rem;
 
-    position: absolute;
-    /* removed will-change to avoid unnecessary compositing layers */
-    /*
-    Controlled externally by CS2/UI logic
-    */
-    top: -1000rem;
+    &.ngx-compact { height: 58rem; }
 
-
-    width: 420px;
-
-    max-height: 700px;
-
-
-    padding: 16px;
-
-
-    overflow-y: auto;
-
-
-    font-family: "JetBrainsMonoNL-Medium", monospace;
-
-    color: white;
-
-
-    background:
-        rgba(20,20,24,0.96);
-
-
-    border-radius: 12px;
-
-
-    
-
-
-    
-
-
-    animation:
-        NGXOpen .35s cubic-bezier(.2,.8,.2,1);
-}
-
-
-@keyframes NGXOpen {
-
-    from {
-        opacity: 0;
-        transform: translateY(20px) scale(0.96);
+    button, input, select {
+        font-family: inherit;
+        font-size: inherit;
+        box-sizing: border-box;
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
+    .ngx-header {
+        min-height: 58rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 16rem;
+        background: #242424;
+        border-bottom: 1rem solid #454545;
+        cursor: grab;
+        flex-shrink: 0;
     }
-}
-
-
-
-
-.NGXHeader {
-    cursor: grab;
-
-
-    &:active {
-        cursor: grabbing;
+    .ngx-brand, .ngx-header-actions, .ngx-context, .ngx-section-title, .ngx-footer {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
     }
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    margin-bottom: 15px;
-
-
-    h2 {
-        margin: 0;
-
-        font-size: 18px;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-
-        animation: FadeSlide 0.4s ease;
+    .ngx-brand img { width: 30rem; height: 30rem; margin-right: 10rem; }
+    .ngx-brand strong { font-size: 23rem; font-weight: 650; }
+    .ngx-brand > span { color: #bdbdbd; }
+    .ngx-brand .ngx-header-divider { width: 1rem; height: 22rem; background: #555; margin: 0 12rem; }
+    .ngx-brand small { border: 1rem solid #585858; border-radius: 4rem; color: #aaa; padding: 3rem 6rem; margin-left: 12rem; font-size: 11rem; }
+    .ngx-header-actions > button { margin-left: 7rem; }
+    .ngx-button, .ngx-icon-button {
+        appearance: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 32rem;
+        border: 1rem solid #505050;
+        border-radius: 5rem;
+        background: #303030;
+        color: #e6e6e6;
+        cursor: pointer;
+        padding: 0 10rem;
+        flex-shrink: 0;
     }
-}
-
-
-.NGXTitle {
-
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.NGXLogo {
-
-    width: 26px;
-    height: 26px;
-
-    flex-shrink: 0;
-
-    /* avoid CSS filters (expensive); keep simple transform animation */
-    transition: transform .2s ease;
-}
-
-.NGXHeader:hover .NGXLogo {
-
-    transform: rotate(-8deg) scale(1.08);
-}
-
-
-@keyframes FadeSlide {
-
-    from {
-        opacity: 0;
-        transform: translateX(-10px);
+    .ngx-button svg, .ngx-icon-button svg { width: 17rem; height: 17rem; }
+    .ngx-button svg { margin-right: 6rem; }
+    .ngx-icon-button { width: 30rem; padding: 0; }
+    .ngx-button:hover, .ngx-icon-button:hover { background: #454545; border-color: #777; }
+    .ngx-icon-button:disabled { opacity: .35; cursor: default; }
+    .ngx-context {
+        height: 39rem;
+        padding: 0 16rem;
+        color: #aaa;
+        border-bottom: 1rem solid #393939;
+        flex-shrink: 0;
+        font-size: 14rem;
     }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
+    .ngx-context svg { width: 14rem; height: 14rem; margin: 0 8rem; }
+    .ngx-context strong { color: #eee; }
+    .ngx-context-end { margin-left: auto; font-size: 12rem; color: #888; }
+    .ngx-columns { flex: 1; min-height: 0; display: flex; flex-direction: row; padding: 10rem; }
+    .ngx-column {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        min-width: 0;
+        background: #222;
+        border: 1rem solid #3d3d3d;
+        border-radius: 7rem;
+        overflow: hidden;
     }
-}
-
-
-
-
-.NGXPanel {
-
-    display: flex;
-    flex-direction: column;
-
-    gap: 10px;
-
-    margin-bottom: 14px;
-    padding: 12px;
-
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,0.08),
-            rgba(255,255,255,0.03)
-        );
-
-
-    border-radius: 10px;
-
-
-  
-
-    &:hover {
-
-        transform: translateY(-2px);
-
-        background:
-            rgba(255,255,255,0.08);
+    .ngx-volumes { width: 25%; margin-right: 8rem; }
+    .ngx-components { width: 27%; margin-right: 8rem; position: relative; }
+    .ngx-inspector { flex: 1; }
+    .ngx-section-title {
+        min-height: 44rem;
+        padding: 0 10rem;
+        flex-shrink: 0;
+        background: #292929;
+        border-bottom: 1rem solid #3d3d3d;
     }
-
-
-
-    h3 {
-
-        margin: 0;
-
-        font-size: 15px;
-        font-weight: 600;
+    .ngx-section-title > svg { width: 19rem; height: 19rem; margin-right: 8rem; color: #c0c0c0; }
+    .ngx-section-title strong { font-weight: 600; font-size: 17rem; }
+    .ngx-section-title small { font-size: 12rem; color: #999; margin-left: 7rem; }
+    .ngx-section-title .ngx-icon-button { margin-left: auto; }
+    .ngx-search {
+        display: flex;
+        align-items: center;
+        height: 34rem;
+        margin: 8rem;
+        padding: 0 9rem;
+        background: #191919;
+        border: 1rem solid #414141;
+        border-radius: 5rem;
+        flex-shrink: 0;
     }
-
-
-
-    h4 {
-
-        margin: 8px 0 2px;
-
-        font-size: 13px;
-        font-weight: 500;
-
-        opacity: 0.8;
-    }
-
-
-
-    p {
-
-        margin: 5px 0;
-
-        font-size: 12px;
-
-        opacity: 0.6;
-    }
-}
-
-
-
-
-
-
-// SEARCH BOXES
-
-.NGXPanel input {
-
-    height: 32px;
-
-    padding: 0 10px;
-
-
-    border: none;
-    outline: none;
-
-
-    border-radius: 8px;
-
-
-    background:
-        rgba(255,255,255,0.08);
-
-
-    color: white;
-
-
-    font-size: 13px;
-
-
-    transition:
-
-        background 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-
-
-
-    &:hover {
-
-        background:
-            rgba(255,255,255,0.12);
-    }
-
-
-
-    &:focus {
-
-        background:
-            rgba(255,255,255,0.16);
-
-
-        transform:
-            scale(1.02);
-
-
-        box-shadow:
-            0 0 0 2px rgba(255,255,255,0.12);
-    }
-
-
-
-    &::placeholder {
-
-        color:
-            rgba(255,255,255,0.45);
-    }
-}
-
-
-
-
-
-
-
-// BUTTON LISTS
-
-.VolumeList,
-.ComponentList {
-
-    display: flex;
-    flex-direction: column;
-
-    gap: 6px;
-
-
-    max-height: 220px;
-
-    overflow-y: auto;
-}
-
-
-
-
-
-
-.VolumeList button,
-.ComponentList button {
-
-    width: 100%;
-
-
-    padding: 8px 10px;
-
-
-    text-align: left;
-
-
-    border: none;
-
-    border-radius: 8px;
-
-
-    cursor: pointer;
-
-
-    color: white;
-
-
-    background:
-        rgba(255,255,255,0.06);
-
-
-
-    transition:
-
-        transform 0.15s ease,
-        background 0.15s ease,
-        box-shadow 0.15s ease;
-
-
-
-    animation:
-        ButtonAppear 0.25s ease backwards;
-
-
-
-    &:hover {
-
-        background:
-            rgba(255,255,255,0.15);
-
-
-        transform:
-            translateX(4px);
-
-
-        /* reduced shadow to lower paint cost */
-        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    }
-
-
-
-    &:active {
-
-        transform:
-            scale(0.97);
-
-
-        background:
-            rgba(255,255,255,0.22);
-    }
-}
-
-
-
-@keyframes ButtonAppear {
-
-    from {
-
-        opacity: 0;
-
-        transform:
-            translateY(8px);
-    }
-
-
-    to {
-
-        opacity: 1;
-
-        transform:
-            translateY(0);
-    }
-}
-
-
-
-
-
-
-// EXISTING COMPONENTS
-
-.Component {
-
-    padding: 8px 10px;
-
-
-    border-radius: 8px;
-
-
-    background:
-        rgba(0,0,0,0.25);
-
-
-    font-size: 13px;
-
-
-    border-left:
-        3px solid rgba(255,255,255,0.35);
-
-
-
-    animation:
-        ComponentFade 0.25s ease;
-
-
-    transition:
-        transform 0.2s ease;
-
-
-
-    &:hover {
-
-        transform:
-            translateX(4px);
-    }
-}
-
-
-
-@keyframes ComponentFade {
-
-    from {
-
-        opacity:0;
-
-        transform:
-            translateY(10px);
-    }
-
-
-    to {
-
-        opacity:1;
-
-        transform:
-            translateY(0);
-    }
-}
-
-
-
-
-
-.ComponentToggle {
-
-    width: 22px;
-    height: 22px;
-
-    border-radius: 6px;
-
-    border: 1px solid rgba(255,255,255,.25);
-
-    background:
-        rgba(255,255,255,.05);
-
-    color:white;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    cursor:pointer;
-
-    transition:
-        background .2s ease,
-        transform .15s ease;
-
-
-    &:hover {
-        transform:scale(1.1);
-    }
-
-
-    &.Enabled {
-
-        background:
-            rgba(80,200,120,.35);
-
-        border-color:
-            rgba(80,255,120,.8);
-
-        box-shadow:
-            0 0 12px rgba(80,255,120,.35);
-    }
-}
-
-
-.Component {
-
-    display:flex;
-    align-items:center;
-    gap:8px;
-
-}
-
-
-.ComponentName {
-
-    flex:1;
-
-}
-
-// SCROLLBAR
-
-.NGXWorkspace,
-.VolumeList,
-.ComponentList {
-
-
-    scrollbar-width:
-        thin;
-
-
-    scrollbar-color:
-        rgba(255,255,255,0.25)
-        transparent;
-
-
-
-
-
-
-// SEARCH BOXES
-
-.SearchBox {
-
-    display: flex;
-    align-items: center;
-
-    height: 34px;
-
-    gap: 8px;
-
-    padding: 0 12px;
-
-    border-radius: 10px;
-
-
-    background:
-        rgba(255,255,255,0.06);
-
-
-    border:
-        1px solid rgba(255,255,255,0.08);
-
-
-    transition:
-        background 0.2s ease,
-        border 0.2s ease,
-        box-shadow 0.2s ease;
-
-
-
-    &:hover {
-
-        background:
-            rgba(255,255,255,0.09);
-    }
-
-
-
-    &:focus-within {
-
-        background:
-            rgba(255,255,255,0.12);
-
-
-        border:
-            1px solid rgba(255,255,255,0.25);
-
-
-        box-shadow:
-            0 0 12px rgba(255,255,255,0.08);
-    }
-}
-
-
-
-.SearchIcon {
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    width: 18px;
-
-    color:
-        rgba(255,255,255,0.55);
-
-
-    font-size: 18px;
-
-    pointer-events: none;
-}
-
-.SearchIcon svg {
-    width: 16px;
-    height: 16px;
-}
-
-.SearchBox input {
-
-    flex: 1;
-
-    height: 100%;
-
-    padding: 0;
-
-
-    border: none;
-    outline: none;
-
-
-    background: transparent;
-
-
-    color:
-        rgba(255,255,255,0.95);
-
-
-    font-size: 13px;
-
-
-
-    &::placeholder {
-
-        color:
-            rgba(255,255,255,0.4);
-    }
-
-
-
-    &:focus {
-
+    .ngx-search > svg { width: 16rem; height: 16rem; color: #999; margin-right: 7rem; flex-shrink: 0; }
+    .ngx-search input {
+        appearance: none;
+        border: 0;
+        outline: 0;
         background: transparent;
-
-        transform: none;
-
+        color: #eee;
+        padding: 0;
+        width: 100%;
+        min-width: 0;
+        height: 100%;
+        font-size: 14rem;
         box-shadow: none;
     }
-}
-
-// SELECTED COMPONENT
-
-.Component {
-
-    cursor: pointer;
-
-    &.Selected {
-
-        background:
-            rgba(255,255,255,0.18);
-
-        border-left:
-            3px solid white;
-
-        transform:
-            translateX(4px);
+    .ngx-search input::placeholder { color: #888; }
+    .ngx-scroll { flex: 1; min-height: 0; overflow-y: auto; padding: 0 7rem 7rem; }
+    .ngx-list-item, .ngx-component-row {
+        width: 100%;
+        min-height: 39rem;
+        display: flex;
+        align-items: center;
+        text-align: left;
+        background: transparent;
+        border: 1rem solid transparent;
+        border-radius: 4rem;
+        color: #d3d3d3;
+        padding: 4rem 7rem;
+        margin-bottom: 3rem;
     }
-}
-
-
-
-// INSPECTOR PROPERTIES
-// PROPERTIES
-
-.PropertyList {
-
-    display: flex;
-    flex-direction: column;
-
-    margin-top: 8px;
-
-    border-radius: 8px;
-
-    overflow: hidden;
-
-    background: rgba(255,255,255,.04);
-}
-
-.PropertyRow {
-
-    display: grid;
-
-    grid-template-columns:
-        1.5fr
-        1fr
-        1fr
-        35px;
-
-    align-items: center;
-
-    gap: 10px;
-
-    padding: 8px 12px;
-
-    border-bottom:
-        1px solid rgba(255,255,255,.06);
-
-    transition:
-        background .15s;
-}
-
-.ConsolePropertyButton {
-
-    width: 28px;
-    height: 24px;
-
-    border: none;
-    border-radius: 6px;
-
-    cursor: pointer;
-
-    color: white;
-
-    background:
-        rgba(255,255,255,0.08);
-
-    font-size: 12px;
-    font-weight: bold;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    transition:
-        background .15s ease,
-        transform .15s ease,
-        box-shadow .15s ease;
-
-
-    &:hover {
-
-        background:
-            rgba(0,180,255,0.35);
-
-        transform:
-            scale(1.1);
-
-        box-shadow:
-            0 0 10px rgba(0,180,255,0.35);
+    .ngx-list-item { cursor: pointer; }
+    .ngx-list-item > svg { width: 17rem; height: 17rem; margin-right: 8rem; flex-shrink: 0; }
+    .ngx-list-item > span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14rem; }
+    .ngx-list-item > svg:last-child { margin-right: 0; }
+    .ngx-list-item:hover, .ngx-component-row:hover { background: #303030; }
+    .ngx-list-item.selected, .ngx-component-row.selected { border-color: #666; background: #424242; color: white; }
+    .ngx-component-toggle {
+        appearance: none;
+        width: 19rem;
+        height: 19rem;
+        border: 1rem solid #777;
+        border-radius: 4rem;
+        background: #242424;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        padding: 0;
+        cursor: pointer;
+        margin-right: 7rem;
     }
-
-
-    &:active {
-
-        transform:
-            scale(0.95);
-
-        background:
-            rgba(0,180,255,0.5);
+    .ngx-component-toggle.active { background: #d3d3d3; color: #1a1a1a; }
+    .ngx-component-toggle svg { width: 15rem; height: 15rem; }
+    .ngx-component-name { background: transparent; border: 0; color: inherit; flex: 1; min-width: 0; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; padding: 4rem 0; font-size: 14rem; }
+    .ngx-remove { width: 24rem; height: 24rem; border: 0; background: transparent; color: #888; }
+    .ngx-remove:hover { color: white; background: #555; }
+    .ngx-empty { color: #999; font-size: 14rem; padding: 14rem 10rem; }
+    .ngx-inspector-empty { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+    .ngx-inspector-empty svg { width: 32rem; height: 32rem; margin-bottom: 12rem; }
+    .ngx-inspector-empty strong { color: #ddd; margin-bottom: 6rem; }
+    .ngx-inspector-heading { display: flex; align-items: center; justify-content: space-between; padding: 12rem 12rem 2rem; flex-shrink: 0; }
+    .ngx-inspector-heading strong { font-size: 19rem; }
+    .ngx-properties { padding: 0 9rem 9rem; }
+    .ngx-property-row { display: flex; align-items: center; min-height: 48rem; border-bottom: 1rem solid #383838; padding: 6rem 2rem; }
+    .ngx-property-label { width: 37%; min-width: 0; display: flex; flex-direction: column; padding-right: 8rem; box-sizing: border-box; }
+    .ngx-property-label span { color: #ddd; font-size: 15rem; overflow: hidden; text-overflow: ellipsis; }
+    .ngx-property-label small { color: #858585; font-size: 11rem; overflow: hidden; text-overflow: ellipsis; }
+    .ngx-property-editor { display: flex; align-items: center; justify-content: flex-end; flex: 1; min-width: 0; }
+    .ngx-slider { flex: 1; min-width: 40rem; margin-right: 9rem; display: flex; align-items: center; }
+    .ngx-slider > * { width: 100%; }
+    .ngx-value-input {
+        appearance: none;
+        background: #171717;
+        color: #eee;
+        border: 1rem solid #545454;
+        border-radius: 4rem;
+        box-shadow: none;
+        outline: none;
+        padding: 3rem 6rem;
+        height: 29rem;
+        width: 100%;
+        min-width: 0;
+        font-size: 14rem;
+        text-align: center;
     }
-}
-
-.PropertyRow:last-child {
-    border-bottom: none;
-}
-
-.PropertyRow:hover {
-    background: rgba(255,255,255,.06);
-}
-
-.PropertyName {
-
-    font-weight: 600;
-    color: white;
-}
-
-.PropertyType {
-
-    color: rgba(255,255,255,.55);
-    font-size: 11px;
-    text-transform: uppercase;
-}
-
-.PropertyValue {
-
-    
-    text-align: right;
-}
+    .ngx-value-input.numeric { width: 78rem; flex-shrink: 0; }
+    .ngx-value-input:focus { border-color: #c0c0c0; background: #292929; }
+    .ngx-property-console { width: 25rem; height: 25rem; margin-left: 6rem; background: transparent; border-color: transparent; color: #888; }
+    .ngx-property-console svg { width: 14rem; height: 14rem; }
+    .ngx-swatch { width: 25rem; height: 25rem; border: 1rem solid #777; border-radius: 4rem; margin-right: 7rem; flex-shrink: 0; }
+    .ngx-switch { width: 36rem; height: 20rem; background: #3d3d3d; border: 1rem solid #666; border-radius: 12rem; padding: 2rem; display: flex; align-items: center; cursor: pointer; flex-shrink: 0; }
+    .ngx-switch span { width: 14rem; height: 14rem; border-radius: 8rem; background: #999; }
+    .ngx-switch.active { background: #777; justify-content: flex-end; }
+    .ngx-switch.active span { background: #fff; }
+    .ngx-readonly { color: #999; font-size: 13rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .ngx-add-panel { position: absolute; left: 5rem; right: 5rem; top: 45rem; bottom: 5rem; z-index: 3; background: #262626; border: 1rem solid #777; border-radius: 5rem; display: flex; flex-direction: column; }
+    .ngx-add-list { flex: 1; min-height: 0; overflow-y: auto; padding: 0 5rem 5rem; }
+    .ngx-footer { justify-content: space-between; min-height: 42rem; padding: 0 14rem; border-top: 1rem solid #393939; color: #aaa; font-size: 13rem; flex-shrink: 0; background: #202020; }
+    .ngx-preset-overlay { position: absolute; top: 62rem; right: 10rem; bottom: 10rem; overflow-y: auto; z-index: 5; }
+    .ngx-save-manager__scope-card--active { border-color: #aaa !important; background: #454545 !important; }
+    .ngx-save-manager__scope-card--active .ngx-save-manager__scope-icon { color: #ddd; }
+    .ngx-save-manager__save-button { background: #ddd !important; color: #222 !important; }
+    .ngx-save-manager__save-button:disabled { background: #333 !important; color: #777 !important; }
+    .ngx-save-manager__action--load { background: #373737 !important; color: #eee !important; border-color: #666 !important; }
+    .ngx-save-manager__preset--selected { border-color: #777; background: #303030 !important; }
 }
