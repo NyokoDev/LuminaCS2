@@ -25,6 +25,7 @@ import "../mods/UpdateNotifications/UpdateNotification.scss";
 import { FreshInstall } from "./PopUps/FreshInstall/FreshInstall";
 import { CAQuickPresets } from "./QuickPresets/CA/CAQuickPresets";
 import { SkyAndFogPanel } from "./SkyAndFogPanel/SkyAndFogPanel";
+import { PlanetarySettings } from "./PlanetaryPanel";
 
 
 
@@ -1614,82 +1615,9 @@ id="Global"
 
   )}
 
-{PlanetaryEnabled$ && 
-<div className="PlanetaryPanel">
-
-  {/* Latitude */}
-  <label className="title_SVH title_zQN LatitudeLabel" style={{ whiteSpace: 'nowrap' }}>
-    {translate("LUMINA.latitude")}
-  </label>
-
-  <Slider
-    value={LatitudeValue}
-    start={-90}
-    end={90}
-    step={0.000000000000000001}
-    className="LatitudeSlider"
-    gamepadStep={0.000000000000000001}
-    valueTransformer={SliderValueTransformer.floatTransformer}
-    disabled={false}
-    noFill={false}
-    onChange={handleLatitude}
-  />
-
-  <input
-    value={LatitudeValue}
-    type="range"
-    min={-90}
-    max={90}
-    step={0.000000000000000001}
-    className="toggle_cca item-mouse-states_Fmi toggle_th_ LatitudeInput"
-    onChange={(e) => handleLatitude(parseFloat(e.target.value))}
-  />
-
-  {/* Longitude */}
-  <label className="title_SVH title_zQN LongitudeLabel" style={{ whiteSpace: 'nowrap' }}>
-    {translate("LUMINA.longitude")}
-  </label>
-
-  <Slider
-    value={LongitudeValue}
-    start={-180}
-    end={180}
-    step={0.000000000000000001}
-    className="LongitudeSlider"
-    gamepadStep={0.000000000000000001}
-    valueTransformer={SliderValueTransformer.floatTransformer}
-    disabled={false}
-    noFill={false}
-    onChange={handleLongitude}
-  />
-
-  <input
-    value={LongitudeValue}
-    type="range"
-    min={-180}
-    max={180}
-    step={0.000000000000000001}
-    className="toggle_cca item-mouse-states_Fmi toggle_th_ LongitudeInput"
- onChange={(e) => handleLongitude(parseFloat(e.target.value))}
-  />
-
-  <div style={{
-    marginTop: '16px',
-    padding: '1px',
-    borderRadius: '6px',
-    fontSize: '14px',
-    color: 'white',
-    textAlign: 'center'
-  }}>
-    Please ensure latitude and longitude adjustments are turned on in the game settings menu.
-  </div>
-</div>
-
-}
-
-
-
-
+{PlanetaryEnabled$ && (
+  <PlanetarySettings latitude={LatitudeValue} longitude={LongitudeValue} onLatitude={handleLatitude} onLongitude={handleLongitude} />
+)}
 
 {RoadPanel && <div className="RoadPanelBase"> 
 
