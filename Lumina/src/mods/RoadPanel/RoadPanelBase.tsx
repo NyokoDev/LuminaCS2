@@ -1,22 +1,14 @@
 import { bindValue, trigger, useValue } from "cs2/api";
 import { Slider, SliderValueTransformer } from "mods/slider";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import mod from "../../../mod.json";
-import './roadpanel.scss';
+import "./roadpanel.scss";
 import { useLocalization } from "cs2/l10n";
-import { ChromePicker } from "react-color";
-import { useState } from "react";
-import { Color } from "cs2/bindings";
-import { getModule } from "cs2/modding";
-import { Tooltip } from "cs2/ui";
 
-// Imports
 export const GetOpacity$ = bindValue<number>(mod.id, "GetOpacity");
 export const GetBrightness$ = bindValue<number>(mod.id, "GetBrightness");
 export const GetSmoothness$ = bindValue<number>(mod.id, "GetSmoothness");
 export const primaryRoadColor$ = bindValue<string>(mod.id, "PrimaryRoadColor");
-
-  // New secondary color bind
 export const secondaryRoadColor$ = bindValue<string>(mod.id, "SecondaryRoadColor");
 
 type RoadPanelBaseProps = {
@@ -25,277 +17,171 @@ type RoadPanelBaseProps = {
   className?: string;
 };
 
-export const RoadPanelBase: React.FC<RoadPanelBaseProps> = ({
-  title = "",
-  children,
-  className = "",
-}) => {
+const RoadIcon = ({ name }: { name: "reset" | "folder" | "reload" | "dice" | "palette" }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    {name === "reset" && <path d="M4 11a8 8 0 1 1 2 6M4 4v7h7" />}
+    {name === "folder" && <path d="M3 7V5h6l2 3h10v3M3 7v13h15l4-10H7L3 20" />}
+    {name === "reload" && <path d="M20 10a8 8 0 0 0-14-4L3 9m0-6v6h6M4 14a8 8 0 0 0 14 4l3-3m0 6v-6h-6" />}
+    {name === "dice" && <><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1"/><circle cx="16" cy="8" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="8" cy="16" r="1"/><circle cx="16" cy="16" r="1"/></>}
+    {name === "palette" && <><path d="M12 3a9 9 0 1 0 0 18h2a2 2 0 0 0 1-4 2 2 0 0 1 1-4h3a2 2 0 0 0 2-2c0-5-5-8-9-8z"/><circle cx="7" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7" r="1"/></>}
+  </svg>
+);
 
+const formatNumber = (value: number) => Number.isFinite(value) ? String(Number(value.toFixed(3))) : "";
+const normalizeHex = (value: string) => /^#?[0-9a-f]{6}$/i.test(value) ? "#" + value.replace(/^#/, "").toLowerCase() : null;
 
-const handleRandomizeClick = () => {
-  // Generate random float 0 to 1 for your color hue or whatever logic
-  const randomHue = Math.random();
-
-  // Trigger your mod method
-  trigger(mod.id, "HandleRandomizer");
-};
-
-
- const handlePrimaryRoadHueChange = (value: number) => {
-  trigger(mod.id, "HandlePrimaryRoadColor", value); // send float to C#
-};
-  const HandleOpacity = (value: number) => {
-    trigger(mod.id, "SetOpacity", value);
-  };
-
-  const HandleBrightness = (value: number) => {
-    trigger(mod.id, "SetBrightness", value);
-  };
-
-  const HandleSmoothness = (value: number) => {
-    trigger(mod.id, "SetSmoothness", value);
-  };
-
-
-      const HandleSecondaryRoadColor = (value: number) => {
-    trigger(mod.id, "HandleSecondaryRoadColor", value);
-  };
-
-
-  const GetOpacity = useValue(GetOpacity$);
-  const GetBrightness = useValue(GetBrightness$);
-  const GetSmoothness = useValue(GetSmoothness$);
-  const PrimaryRoadColor = useValue(primaryRoadColor$);
-  const SecondaryRoadColor = useValue(secondaryRoadColor$);
-
-  const [primaryHex, setPrimaryHex] = useState("#ffffff");
-  const [secondaryHex, setSecondaryHex] = useState("#ffffff");
-
-
-
-    //Use localization
-    const { translate } = useLocalization();
-
- const OpenLUTFolder= () => {
-      trigger(mod.id, 'OpenTexturesFolder'); 
-    }
-
- const ApplyTextures= () => {
-      trigger(mod.id, 'ApplyRoadTextures'); 
-    }
-
-    function hueToHex(hue: number): string {
-  const rgb = hsvToRgb(hue, 1, 1); // Full saturation/value
-  return "#" + rgb.map(x => x.toString(16).padStart(2, "0")).join("");
-}
-
-function hsvToRgb(h: number, s: number, v: number): [number, number, number] {
-  let r = 0, g = 0, b = 0;
-  const i = Math.floor(h * 6);
-  const f = h * 6 - i;
-  const p = v * (1 - s);
-  const q = v * (1 - f * s);
-  const t = v * (1 - (1 - f) * s);
-
-  switch (i % 6) {
-    case 0: r = v; g = t; b = p; break;
-    case 1: r = q; g = v; b = p; break;
-    case 2: r = p; g = v; b = t; break;
-    case 3: r = p; g = q; b = v; break;
-    case 4: r = t; g = p; b = v; break;
-    case 5: r = v; g = p; b = q; break;
-  }
-
-  return [
-    Math.round(r * 255),
-    Math.round(g * 255),
-    Math.round(b * 255),
-  ];
-}
-
-
-const [hexInput, setHexInput] = useState("#ffffff");
-
-
-useEffect(() => {
-    if (PrimaryRoadColor?.startsWith("#") && primaryHex.toLowerCase() !== PrimaryRoadColor.toLowerCase()) {
-      setPrimaryHex(PrimaryRoadColor);
-    }
-  }, [PrimaryRoadColor]);
+const RoadNumber = ({ label, value, onChange, initial, gamepadStep }: { label: string; value: number; onChange: (v: number) => void; initial: number; gamepadStep: number }) => {
+  const [draft, setDraft] = useState(formatNumber(value));
+  const editing = useRef(false);
+  const cancelled = useRef(false);
 
   useEffect(() => {
-    if (SecondaryRoadColor?.startsWith("#") && secondaryHex.toLowerCase() !== SecondaryRoadColor.toLowerCase()) {
-      setSecondaryHex(SecondaryRoadColor);
-    }
-  }, [SecondaryRoadColor]);
-
-
-  const handlePrimaryHexChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setPrimaryHex(val);
-    if (/^#?[0-9a-fA-F]{6}$/.test(val)) {
-      const formatted = val.startsWith("#") ? val : `#${val}`;
-      trigger(mod.id, "HandlePrimaryRoadColorHex", formatted);
-    }
-  };
-
- const handleSecondaryHueChange = (value: number) => {
-    trigger(mod.id, "HandleSecondaryRoadColor", value);
-  };
-  const handleSecondaryHexChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setSecondaryHex(val);
-    if (/^#?[0-9a-fA-F]{6}$/.test(val)) {
-      const formatted = val.startsWith("#") ? val : `#${val}`;
-      trigger(mod.id, "HandleSecondaryRoadColorHex", formatted);
-    }
-  };
-
-
+    if (!editing.current) setDraft(formatNumber(value));
+  }, [value]);
 
   return (
-    <div className={className}>
+    <div className="road-material-row">
+      <span className="road-material-label">{label}</span>
+      <div className="road-material-slider-wrap">
+        <Slider value={value} start={-1} end={5} step={0.00001} gamepadStep={gamepadStep} valueTransformer={SliderValueTransformer.floatTransformer} disabled={false} noFill={false} onChange={onChange} className="road-material-slider" />
+      </div>
+      <input className="road-material-number" type="text" inputMode="decimal" aria-label={label} value={draft}
+        onFocus={() => { editing.current = true; cancelled.current = false; }}
+        onChange={event => setDraft(event.target.value)}
+        onBlur={() => {
+          editing.current = false;
+          const parsed = Number(draft);
+          if (cancelled.current || !draft.trim() || !Number.isFinite(parsed) || draft === formatNumber(value)) {
+            setDraft(formatNumber(value));
+            return;
+          }
+          const next = Math.max(-1, Math.min(5, parsed));
+          setDraft(formatNumber(next));
+          if (next !== value) onChange(next);
+        }}
+        onKeyDown={event => {
+          event.stopPropagation();
+          if (event.key === "Enter" || event.key === "Escape") {
+            event.preventDefault();
+            cancelled.current = event.key === "Escape";
+            event.currentTarget.blur();
+          }
+        }} />
+      <button type="button" className="road-material-icon-button" title="Restore value from when this panel opened" aria-label={"Restore " + label} disabled={!Number.isFinite(initial)} onClick={() => onChange(initial)}><RoadIcon name="reset" /></button>
+    </div>
+  );
+};
 
-<h1 className="title_SVH title_zQN roadconfiglabel">{translate("LUMINA.roadconfig")}</h1>
-      
-<div className="road-panel-base">
+const RoadColor = ({ label, value, onCommit }: { label: string; value: string; onCommit: (v: string) => void }) => {
+  const color = normalizeHex(value || "") || "#ffffff";
+  const [draft, setDraft] = useState(color);
+  const editing = useRef(false);
+  const cancelled = useRef(false);
+  useEffect(() => {
+    if (!editing.current) setDraft(color);
+  }, [color]);
 
+  return (
+    <div className="road-material-color">
+      <span className="road-material-color-label">{label}</span>
+      <div className="road-material-color-preview" style={{ backgroundColor: color }}>
+        <input type="color" className="road-material-picker" value={color} aria-label={"Pick " + label} onChange={event => onCommit(event.target.value)} />
+      </div>
+      <input className="road-material-hex" type="text" maxLength={7} aria-label={label} value={draft}
+        onFocus={() => { editing.current = true; cancelled.current = false; }}
+        onChange={event => setDraft(event.target.value)}
+        onBlur={() => {
+          editing.current = false;
+          const next = cancelled.current ? null : normalizeHex(draft.trim());
+          setDraft(next || color);
+          if (next && next !== color) onCommit(next);
+        }}
+        onKeyDown={event => {
+          event.stopPropagation();
+          if (event.key === "Enter" || event.key === "Escape") {
+            event.preventDefault();
+            cancelled.current = event.key === "Escape";
+            event.currentTarget.blur();
+          }
+        }} />
+    </div>
+  );
+};
 
+const quickColors = [
+  { name: "Natural", primary: "#ffffff", secondary: "#ffffff" },
+  { name: "Asphalt", primary: "#505256", secondary: "#737477" },
+  { name: "Dark", primary: "#303236", secondary: "#525457" },
+  { name: "Warm", primary: "#777168", secondary: "#a09a90" }
+];
 
-  <div className="opacity-container">
-    <div className="slider-label-1">{translate("LUMINA.opacity")}</div>
-    <Slider
-      value={GetOpacity}
-      start={-1}
-      end={5}
-      step={0.00001}
-      className="opacity-slider"
-      gamepadStep={0.001}
-      valueTransformer={SliderValueTransformer.floatTransformer}
-      disabled={false}
-      noFill={false}
-      onChange={HandleOpacity}
-    />
-  </div>
+export const RoadPanelBase: React.FC<RoadPanelBaseProps> = ({ title = "", children, className = "" }) => {
+  const opacity = useValue(GetOpacity$);
+  const brightness = useValue(GetBrightness$);
+  const smoothness = useValue(GetSmoothness$);
+  const primary = useValue(primaryRoadColor$);
+  const secondary = useValue(secondaryRoadColor$);
+  const { translate } = useLocalization();
+  const initial = useRef({ opacity, brightness, smoothness, primary, secondary });
 
-  <div className="brightness-container">
-    <div className="slider-label-2"> {translate("LUMINA.brightness")}</div>
-    <Slider
-      value={GetBrightness}
-      start={-1}
-      end={5}
-      step={0.00001}
-      className="brightness-slider"
-      gamepadStep={0.001}
-      valueTransformer={SliderValueTransformer.floatTransformer}
-      disabled={false}
-      noFill={false}
-      onChange={HandleBrightness}
-    />
-  </div>
+  const setOpacity = (v: number) => trigger(mod.id, "SetOpacity", v);
+  const setBrightness = (v: number) => trigger(mod.id, "SetBrightness", v);
+  const setSmoothness = (v: number) => trigger(mod.id, "SetSmoothness", v);
+  const setPrimary = (v: string) => trigger(mod.id, "HandlePrimaryRoadColorHex", v);
+  const setSecondary = (v: string) => trigger(mod.id, "HandleSecondaryRoadColorHex", v);
+  const reset = () => {
+    if (Number.isFinite(initial.current.opacity)) setOpacity(initial.current.opacity);
+    if (Number.isFinite(initial.current.brightness)) setBrightness(initial.current.brightness);
+    if (Number.isFinite(initial.current.smoothness)) setSmoothness(initial.current.smoothness);
+    const p = normalizeHex(initial.current.primary || "");
+    const s = normalizeHex(initial.current.secondary || "");
+    if (p) setPrimary(p);
+    if (s) setSecondary(s);
+  };
 
-  <div className="smoothness-container">
-    <div className="slider-label-3"> {translate("LUMINA.smoothness")}</div>
-    <Slider
-      value={GetSmoothness}
-      start={-1}
-      end={5}
-      step={0.00001}
-      className="smoothness-slider"
-      gamepadStep={0.00001}
-      valueTransformer={SliderValueTransformer.floatTransformer}
-      disabled={false}
-      noFill={false}
-      onChange={HandleSmoothness}
-    />
-  </div>
-
-<div className="color-container">
-  <div className="color-label-1">{translate("LUMINA.hexprimarycolor")}</div>
-
-<input
-            type="text"
-            value={primaryHex}
-            onChange={handlePrimaryHexChange}
-            maxLength={7}
-            className="toggle_cca item-mouse-states_Fmi toggle_th_ hex-input"
-          />
-
-
-<Tooltip tooltip={translate("LUMINA.colorpicker")}> 
-<button
-  onClick={() => trigger(mod.id, "OpenColorPickerSite")}
-  title="Open HTML Color Codes"
-  className="ColorPickerButton1"
->
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="white"
-  >
-    <path d="M12 2C6.486 2 2 6.017 2 11c0 3.225 2.078 6.048 5.081 7.293-.001.002-.008.026-.011.07-.019.214-.081.828.137 1.352.144.345.381.703.754.964.374.263.855.395 1.386.395 1.132 0 2.01-.742 2.01-2v-1.037c0-.222.187-.403.421-.382C19.106 18.484 22 15.002 22 11c0-4.983-4.486-9-10-9zm-4 10c-.552 0-1-.447-1-1s.448-1 1-1 1 .447 1 1-.448 1-1 1zm3-4c-.552 0-1-.447-1-1s.448-1 1-1 1 .447 1 1-.448 1-1 1zm4 0c-.552 0-1-.447-1-1s.448-1 1-1 1 .447 1 1-.448 1-1 1zm2 4c-.552 0-1-.447-1-1s.448-1 1-1 1 .447 1 1-.448 1-1 1z" />
-  </svg>
-</button>
-</Tooltip>
-
-<Tooltip tooltip={translate("LUMINA.randomize")}> 
-<button
-  onClick={handleRandomizeClick}
-  title="Randomize Color"
-  className="ColorPickerButtonRandomize"
->
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="white"
-  >
-    {/* Simple dice icon for randomize */}
-    <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-8 13a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm-4-4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm8 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm-4-4a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-  </svg>
-</button>
-</Tooltip>
-
-
-</div>
-
-{/* Secondary Color Input */}
-        <div className="color-container-2" style={{ marginTop: "1rem" }}>
-          <div className="color-label-2">{translate("LUMINA.hexsecondcolor")}</div>
-          <input
-            type="text"
-            value={secondaryHex}
-            onChange={handleSecondaryHexChange}
-            maxLength={7}
-            className="toggle_cca item-mouse-states_Fmi toggle_th_ hex-input-2"
-          />
+  return (
+    <div className={`road-material-panel ${className}`}>
+      <div className="road-material-brand">
+        <div><div className="road-material-brand-name">LUMINA</div><div className="road-material-subtitle">{title || "Road Materials"}</div></div>
+        <div className="road-material-logo" aria-hidden="true" />
+      </div>
+      {children}
+      <div className="road-material-section">
+        <div className="road-material-heading">Surface properties</div>
+        <RoadNumber label={translate("LUMINA.opacity") ?? "Opacity"} value={opacity} initial={initial.current.opacity} gamepadStep={0.001} onChange={setOpacity} />
+        <RoadNumber label={translate("LUMINA.brightness") ?? "Brightness"} value={brightness} initial={initial.current.brightness} gamepadStep={0.001} onChange={setBrightness} />
+        <RoadNumber label={translate("LUMINA.smoothness") ?? "Smoothness"} value={smoothness} initial={initial.current.smoothness} gamepadStep={0.00001} onChange={setSmoothness} />
+      </div>
+      <div className="road-material-section">
+        <div className="road-material-heading road-material-heading-actions">
+          <span>Road color</span>
+          <div className="road-material-actions">
+            <button type="button" className="road-material-icon-button" title={translate("LUMINA.colorpicker") ?? "Open color picker website"} onClick={() => trigger(mod.id, "OpenColorPickerSite")}><RoadIcon name="palette" /></button>
+            <button type="button" className="road-material-icon-button" title={translate("LUMINA.randomize") ?? "Randomize primary color"} onClick={() => trigger(mod.id, "HandleRandomizer")}><RoadIcon name="dice" /></button>
+          </div>
         </div>
-
-
-
-
-
-      <button
-        onClick={OpenLUTFolder}
-        className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS OpenRoadTexturesButton">
-        {translate("LUMINA.opentexturesbutton")}
-      </button>
-
-            <button
-        onClick={ApplyTextures}
-        className="button_uFa child-opacity-transition_nkS button_uFa child-opacity-transition_nkS ApplyTexturesButton">
-        {translate("LUMINA.applytexturesbutton")}
-      </button>
-
-</div>
-
-
-
-      <h2 className="text-xl font-bold mb-4">{title}</h2>
-      <div>{children}</div>
+        <div className="road-material-color-row">
+          <RoadColor label={translate("LUMINA.hexprimarycolor") ?? "Primary color"} value={primary} onCommit={setPrimary} />
+          <RoadColor label={translate("LUMINA.hexsecondcolor") ?? "Secondary color"} value={secondary} onCommit={setSecondary} />
+        </div>
+        <div className="road-material-quick-label">Quick colors</div>
+        <div className="road-material-presets">
+          {quickColors.map(p => (
+            <button key={p.name} type="button" className={"road-material-preset" + (normalizeHex(primary || "") === p.primary && normalizeHex(secondary || "") === p.secondary ? " active" : "")} onClick={() => { setPrimary(p.primary); setSecondary(p.secondary); }}>
+              <span className="road-material-preset-swatch"><span style={{ backgroundColor: p.primary }} /><span style={{ backgroundColor: p.secondary }} /></span>
+              <span>{p.name}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="road-material-section">
+        <div className="road-material-heading">Custom textures</div>
+        <div className="road-material-texture-actions">
+          <button type="button" className="road-material-button" onClick={() => trigger(mod.id, "OpenTexturesFolder")}><RoadIcon name="folder" />{translate("LUMINA.opentexturesbutton") ?? "Open textures folder"}</button>
+          <button type="button" className="road-material-button" onClick={() => trigger(mod.id, "ApplyRoadTextures")}><RoadIcon name="reload" />{translate("LUMINA.applytexturesbutton") ?? "Reload textures"}</button>
+        </div>
+      </div>
+      <div className="road-material-footer"><span>ROAD MATERIALS · LUMINA</span><button type="button" className="road-material-button" onClick={reset}><RoadIcon name="reset" />Restore opening values</button></div>
     </div>
   );
 };
