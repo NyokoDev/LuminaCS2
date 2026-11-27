@@ -23,203 +23,234 @@
   transform: translateY(-15%) scale(1.05);
 }
 
-.road-panel-base {
-  position: absolute;
-  left: 20rem;
-  width: auto;
-  height: auto;
-  background-color: rgb(243, 0, 0); /* no alpha here */
- 
+.RoadPanelBase {
+  position: relative;
+  width: 800rem;
+  min-height: 750rem;
 }
 
-
-
-.opacity-container {
-  position: absolute;
-  width:200rem;
-  top: 50rem;    /* Stacked below opacity */
-  left: 1rem;
-  right: 1rem;
+.road-material-panel {
+  position: relative;
   display: flex;
   flex-direction: column;
-}
+  width: 800rem;
+  box-sizing: border-box;
+  padding: 18rem 22rem;
+  color: #e0e0e0;
+  font-size: 17rem;
+  flex-shrink: 0;
 
-.brightness-container {
-  position: absolute;
-  top: 100rem;    /* Stacked below opacity */
-    width:200rem;
-  left: 1rem;
-  right: 1rem;
-  display: flex;
-  flex-direction: column;
-}
+  .road-material-brand {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 12rem;
+    border-bottom: 1rem solid rgba(255,255,255,.12);
+    flex-shrink: 0;
+  }
 
-.smoothness-container {
-  position: absolute;
-  top: 150rem;   /* Stacked below brightness */
-      width:200rem;
-  left: 1rem;
-  right: 1rem;
-  display: flex;
-  flex-direction: column;
-}
+  .road-material-brand-name {
+    font-size: 28rem;
+    letter-spacing: 7rem;
+    color: white;
+  }
 
-.slider-label-1 {
-  position: absolute;
-  top: -20rem;  /* or whatever negative offset you want */
-  left: 0;      /* or right: 0, depending on alignment */
-}
+  .road-material-subtitle {
+    font-size: 17rem;
+    color: #b9b9b9;
+    margin-top: 5rem;
+  }
 
-.slider-label-2 {
-  position: absolute;
-  top: -20rem;  /* different offset for second label */
-  left: 0;
-}
+  .road-material-logo {
+    width: 48rem;
+    height: 40rem;
+    background: url("coui://ui-mods/Icons/Lumina.svg") center / contain no-repeat;
+  }
 
-.slider-label-3 {
-  position: absolute;
-  top: -20rem;       /* third label position */
-  left: 0;
-}
+  .road-material-section {
+    display: flex;
+    flex-direction: column;
+    margin-top: 14rem;
+    padding-bottom: 12rem;
+    border-bottom: 1rem solid rgba(255,255,255,.1);
+    flex-shrink: 0;
+  }
 
-.OpenRoadTexturesButton{
+  .road-material-heading {
+    font-size: 18rem;
+    color: white;
+    margin-bottom: 7rem;
+    min-height: 30rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .road-material-heading-actions {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .road-material-actions {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .road-material-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    min-height: 42rem;
+    flex-shrink: 0;
+  }
+
+  .road-material-label {
+    width: 190rem;
+    flex-shrink: 0;
+    font-size: 17rem;
+  }
+
+  .road-material-slider-wrap {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    margin-right: 12rem;
+  }
+
+  .road-material-slider {
+    width: 100%;
+    height: 24rem;
+  }
+
+  .road-material-number, .road-material-hex {
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 16rem;
+    color: white;
+    background: rgba(0,0,0,.35);
+    border: 1rem solid rgba(255,255,255,.35);
+    height: 27rem;
+  }
+
+  .road-material-number { width: 55rem; flex-shrink: 0; }
+  .road-material-hex { width: 100%; margin-top: 6rem; }
+  .road-material-number:focus, .road-material-hex:focus { border-color: #bf8a39; }
+
+  .road-material-icon-button {
+    width: 30rem;
+    height: 30rem;
+    margin-left: 8rem;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #bbb;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+
+  .road-material-icon-button svg, .road-material-button svg {
+    width: 20rem;
+    height: 20rem;
+    flex-shrink: 0;
+  }
+
+  .road-material-icon-button:hover { color: #e5ad58; }
+  .road-material-icon-button:disabled { opacity: .4; cursor: default; }
+
+  .road-material-color-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .road-material-color {
+    display: flex;
+    flex-direction: column;
+    width: 48.5%;
+    flex-shrink: 0;
+  }
+
+  .road-material-color-label { font-size: 16rem; margin-bottom: 6rem; }
+
+  .road-material-color-preview {
+    position: relative;
+    width: 100%;
+    height: 54rem;
+    border: 1rem solid rgba(255,255,255,.2);
+    border-radius: 4rem;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .road-material-picker {
     position: absolute;
-    top: 200rem;
-    width:auto;
-    
-}
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
 
-.roadconfiglabel{
-  position: absolute;
-  left:600rem;
-  font-size: 20rem;
+  .road-material-quick-label { font-size: 15rem; color: #bbb; margin-top: 13rem; margin-bottom: 7rem; }
+  .road-material-presets { display: flex; flex-direction: row; justify-content: space-between; }
 
-}
+  .road-material-preset {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 23.5%;
+    padding: 5rem;
+    box-sizing: border-box;
+    background: rgba(255,255,255,.04);
+    border: 1rem solid rgba(255,255,255,.1);
+    border-radius: 4rem;
+    font-size: 15rem;
+    color: #ddd;
+    cursor: pointer;
+  }
 
-.ApplyTexturesButton {
-      position: absolute;
-    top: 250rem;
-    width:auto;
-}
+  .road-material-preset:hover { background: rgba(255,255,255,.09); }
+  .road-material-preset.active { border-color: #bf8a39; }
+  .road-material-preset-swatch { display: flex; flex-direction: row; width: 100%; height: 32rem; margin-bottom: 5rem; }
+  .road-material-preset-swatch span { width: 50%; height: 100%; }
 
+  .road-material-texture-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
 
-.color-container {
-    position: absolute;
-  top: 50rem;   /* Stacked below brightness */
-    left: 400rem;
-          width:200rem;
-}
+  .road-material-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    min-height: 38rem;
+    padding: 6rem 12rem;
+    border: 1rem solid rgba(255,255,255,.15);
+    border-radius: 4rem;
+    color: #ddd;
+    background: rgba(255,255,255,.05);
+    font-size: 16rem;
+    cursor: pointer;
+  }
 
-.color-label-1 {
-  position: absolute;
-  top:20rem;
-  right:-15rem;
-}
+  .road-material-button svg { margin-right: 8rem; }
+  .road-material-button:hover { background: rgba(255,255,255,.12); }
+  .road-material-texture-actions .road-material-button { width: 48.5%; }
 
-.hex-input {
-    z-index: 0;
-  position: inherit;
-  top: inherit;
-  width: inherit;
-  color: white;
-  pointer-events: all;
-}
-
-.ColorPickerButton1 {
-  position: absolute;
-  right: 150rem;
-  width: 40rem;
-  height: 40rem;
-  border-radius: 50%;
-  background: linear-gradient(145deg, #2e2e2e, #252525);
-  box-shadow:
-    5rem 5rem 15rem #1c1c1c,
-    -5rem -5rem 15rem #383838;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition:
-    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.3s ease,
-    background 0.3s ease;
-}
-
-.ColorPickerButton1:hover {
-  transform: translateY(-3rem) scale(1.1);
-  background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
-  box-shadow:
-    8rem 8rem 20rem #171717,
-    -8rem -8rem 20rem #404040,
-    0 0 10rem 3rem #4d90fe99;
-}
-
-.ColorPickerButton1:active {
-  transform: translateY(0) scale(0.95);
-  box-shadow:
-    inset 3rem 3rem 5rem #1c1c1c,
-    inset -3rem -3rem 5rem #383838;
-  background: linear-gradient(145deg, #272727, #212121);
-}
-
-.ColorPickerButtonRandomize {
-  position: absolute;
-  right: 200rem; /* Adjust horizontal position as needed */
-  width: 40rem;
-  height: 40rem;
-  border-radius: 50%;
-  background: linear-gradient(145deg, #2e2e2e, #252525);
-  box-shadow:
-    5rem 5rem 15rem #1c1c1c,
-    -5rem -5rem 15rem #383838;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition:
-    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.3s ease,
-    background 0.3s ease;
-}
-
-.ColorPickerButtonRandomize:hover {
-  transform: translateY(-3rem) scale(1.1);
-  background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
-  box-shadow:
-    8rem 8rem 20rem #171717,
-    -8rem -8rem 20rem #404040,
-    0 0 10rem 3rem #4d90fe99;
-}
-
-.ColorPickerButtonRandomize:active {
-  transform: translateY(0) scale(0.95);
-  box-shadow:
-    inset 3rem 3rem 5rem #1c1c1c,
-    inset -3rem -3rem 5rem #383838;
-  background: linear-gradient(145deg, #272727, #212121);
-}
-
-
-.color-container-2 {
-    position: absolute;
-  top: 80rem;   /* Stacked below brightness */
-    left: 400rem;
-          width:200rem;
-}
-
-.color-label-2 {
-  position: absolute;
-  top:50rem;
-  right:1rem;
-}
-
-.hex-input-2 {
-    z-index: 0;
-  position: inherit;
-  top: inherit;
-  width: inherit;
-  color: white;
-  pointer-events: all;
+  .road-material-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12rem;
+    font-size: 13rem;
+    color: #999;
+    flex-shrink: 0;
+  }
 }
