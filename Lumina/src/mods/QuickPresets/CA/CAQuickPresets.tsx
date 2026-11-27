@@ -1,4 +1,5 @@
 import React from "react";
+import ViceCityLogo from "../../../img/ViceCity.svg";
 import {
   Palette,
   Sparkles,
@@ -16,7 +17,8 @@ type QuickPresetName =
   | "colorful"
   | "vibe"
   | "non-contemporary"
-  | "flow";
+  | "flow"
+  | "vice-city";
 
 interface QuickPreset {
   id: QuickPresetName;
@@ -107,6 +109,16 @@ export const CAQuickPresets: React.FC = () => {
             </button>
           );
         })}
+        <button
+          type="button"
+          className="quick-preset preset-vice-city"
+          title="Vice City '86"
+          aria-label="Vice City '86"
+          onClick={() => applyPreset("vice-city")}
+        >
+          <img className="quick-preset__vice-logo" src={ViceCityLogo} alt="Vice City" />
+          <span className="quick-preset__accent" aria-hidden="true" />
+        </button>
       </div>
     </section>
   );
