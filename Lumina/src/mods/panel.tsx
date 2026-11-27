@@ -1062,6 +1062,11 @@ id="Global"
 
     {ColorAdjustmentsEnabled$ && (
     <div className="ColorAdjustments">
+        <div style={{ position: "absolute", top: "25rem", left: "220rem", fontSize: "28rem", letterSpacing: "7rem", color: "white", fontWeight: 500, lineHeight: "32rem" }}>
+          LUMINA
+        </div>
+        <div aria-hidden="true" style={{ position: "absolute", top: "12rem", left: "932rem", width: "48rem", height: "40rem", backgroundImage: 'url("coui://ui-mods/Icons/Lumina.svg")', backgroundSize: "contain", backgroundPosition: "center", backgroundRepeat: "no-repeat", pointerEvents: "none" }} />
+
 
 
 
