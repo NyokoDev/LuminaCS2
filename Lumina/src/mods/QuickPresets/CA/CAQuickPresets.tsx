@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useRef, useState } from "react";
+import ViceCityRacer from "./ViceCityRacer";
 import ViceCityLogo from "../../../img/ViceCity.svg";
 import {
   Palette,
@@ -29,6 +30,8 @@ interface QuickPreset {
 
 export const CAQuickPresets: React.FC = () => {
   const { translate } = useLocalization();
+  const [showRacer, setShowRacer] = useState(false);
+  const viceClicks = useRef({ count: 0, last: 0 });
 
   const presets: QuickPreset[] = [
     {
@@ -64,6 +67,19 @@ export const CAQuickPresets: React.FC = () => {
       "ApplyColorAdjustmentQuickPreset",
       preset
     );
+  };
+
+  const handleViceCity = () => {
+    const now = Date.now();
+    const state = viceClicks.current;
+    state.count = now - state.last > 1500 ? 1 : state.count + 1;
+    state.last = now;
+    if (state.count === 1) applyPreset("vice-city");
+    if (state.count >= 5) {
+      state.count = 0;
+      state.last = 0;
+      setShowRacer(true);
+    }
   };
 
   return (
@@ -114,12 +130,13 @@ export const CAQuickPresets: React.FC = () => {
           className="quick-preset preset-vice-city"
           title="Vice City '86"
           aria-label="Vice City '86"
-          onClick={() => applyPreset("vice-city")}
+          onClick={handleViceCity}
         >
           <img className="quick-preset__vice-logo" src={ViceCityLogo} alt="Vice City" />
           <span className="quick-preset__accent" aria-hidden="true" />
         </button>
       </div>
+      {showRacer && <ViceCityRacer onClose={() => setShowRacer(false)} />}
     </section>
   );
 };
