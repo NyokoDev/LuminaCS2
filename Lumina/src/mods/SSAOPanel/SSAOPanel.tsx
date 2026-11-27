@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { bindValue, trigger, useValue } from "cs2/api";
 import { Slider } from "mods/slider";
 import mod from "./../../../mod.json";
-import { Tooltip } from "cs2/ui";
 import { SSAOQuickPresets } from "./SSAOQuickPresets/QuickPresets";
 
 export interface SSAOPanelBaseProps {
@@ -43,6 +42,82 @@ const ssaoDenoiserRadius$ = bindValue<number>(mod.id, "AmbientOcclusionDenoiserR
 /* =========================
    Component
 ========================= */
+
+type NumericControlProps = {
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+  disabled: boolean;
+  onChange: (value: number) => void;
+};
+
+const SSAONumber = ({ label, value, min, max, step, disabled, onChange }: NumericControlProps) => {
+  const format = (v: number) => Number.isFinite(v) ? String(Number(v.toFixed(3))) : "";
+  const [draft, setDraft] = useState(format(value));
+  const editing = useRef(false);
+  const cancelled = useRef(false);
+  const initial = useRef(value);
+
+  useEffect(() => {
+    if (!editing.current) setDraft(format(value));
+    if (Number.isFinite(value) && !Number.isFinite(initial.current)) initial.current = value;
+  }, [value]);
+
+  return (
+    <div className="ssao-setting-row">
+      <span className="ssao-setting-label">{label}</span>
+      <div className="ssao-slider-wrap">
+        <Slider value={value} start={min} end={max} step={step} gamepadStep={step} disabled={disabled} noFill={false} onChange={onChange} className="ssao-setting-slider" />
+      </div>
+      <input className="ssao-number" type="text" inputMode="decimal" aria-label={label} value={draft} disabled={disabled}
+        onFocus={() => { editing.current = true; cancelled.current = false; }}
+        onChange={event => setDraft(event.target.value)}
+        onBlur={() => {
+          editing.current = false;
+          const parsed = Number(draft);
+          if (disabled || cancelled.current || !draft.trim() || !Number.isFinite(parsed)) {
+            setDraft(format(value));
+            return;
+          }
+          const clamped = Math.max(min, Math.min(max, parsed));
+          const next = step === 1 && Number.isInteger(min) ? Math.round(clamped) : clamped;
+          setDraft(format(next));
+          if (next !== value) onChange(next);
+        }}
+        onKeyDown={event => {
+          event.stopPropagation();
+          if (event.key === "Enter" || event.key === "Escape") {
+            event.preventDefault();
+            cancelled.current = event.key === "Escape";
+            event.currentTarget.blur();
+          }
+        }}
+      />
+      <button type="button" className="ssao-reset" title="Restore value from when this panel opened" aria-label={"Restore " + label} disabled={disabled || !Number.isFinite(initial.current)} onClick={() => onChange(initial.current)}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M4 11a8 8 0 1 1 2 6M4 4v7h7" /></svg>
+      </button>
+    </div>
+  );
+};
+
+const SSAOCheck = ({ label, value, disabled, onChange }: { label: string; value: boolean; disabled?: boolean; onChange: (value: boolean) => void }) => (
+  <button type="button" className="ssao-check" role="checkbox" aria-checked={value} disabled={disabled} onClick={() => onChange(!value)}>
+    <span className={"ssao-check-box" + (value ? " checked" : "")}>{value ? "✓" : ""}</span>
+    <span>{label}</span>
+  </button>
+);
+
+const SSAOSection = ({ title, open, onToggle, children }: { title: string; open: boolean; onToggle: () => void; children: React.ReactNode }) => (
+  <div className="ssao-section">
+    <button type="button" className="ssao-section-heading" aria-expanded={open} onClick={onToggle}>
+      <span className={"ssao-chevron" + (open ? " open" : "")} />
+      <span>{title}</span>
+    </button>
+    <div className={open ? "ssao-section-content" : "ssao-section-content ssao-collapsed"}>{children}</div>
+  </div>
+);
 
 export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
   title = "",
@@ -94,7 +169,6 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
   const handleSSAOBlurSharpness = (v: number) => trigger(mod.id, "HandleSSAOBLurSharpness", v);
   const handleSSAOFullResolution = (v: boolean) => trigger(mod.id, "HandleSSAOFullResolution", v);
   const handleSSAOBilateralUpsample = (v: boolean) => trigger(mod.id, "HandleSSAOBilateralUpsample", v);
-  const handleSSAODirectionCount = (v: number) => trigger(mod.id, "HandleSSAODirectionCount", v);
   const handleSSAOSpecular = (v: number) => trigger(mod.id, "HandleSSAOSpecularOcclusion", v);
   const handleSSAOOccluderMotion = (v: boolean) => trigger(mod.id, "HandleSSAOOccluderMotionRejection", v);
   const handleSSAOReceiverMotion = (v: boolean) => trigger(mod.id, "HandleSSAOReceiverMotionRejection", v);
@@ -106,206 +180,51 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
   const handleSSAODenoiserRadius = (v: number) => trigger(mod.id, "HandleSSAODenoiserRadius", v);
 
 
-  /* UI */
+  const [sections, setSections] = useState({ ambient: true, filtering: true, ray: false });
+  const toggleSection = (key: keyof typeof sections) => setSections(old => ({ ...old, [key]: !old[key] }));
+  const disabled = !ssaoEnabled;
+  const rayDisabled = disabled || !rayTracing;
 
   return (
-    <>
     <div className={`ssao-panel-base ${className}`}>
-      {title && <div className="ssaoconfiglabel">{title}</div>}
+      <div className="ssao-brand">
+        <div><div className="ssao-brand-name">LUMINA</div><div className="ssao-brand-subtitle">{title || "Screen Space Ambient Occlusion"}</div></div>
+        <div className="ssao-brand-logo" />
+      </div>
       {children}
-
-<Tooltip tooltip={"Screen Space Ambient Occlusion"} >
-      <button
-        className={`SSAOToggleButton ${ssaoEnabled ? "enabled" : "disabled"}`}
-        onClick={() => handleSSAOEnabled(!ssaoEnabled)}
-      >
-        {ssaoEnabled ? "SSAO Enabled" : "SSAO Disabled"}
-      </button>
-</Tooltip>
-
-      {/* EXISTING SLIDERS REMAIN HERE (unchanged) */}
-{/* ===== EXISTING SSAO SLIDERS ===== */}
-
-<label className="title_SVH title_zQN">Intensity</label>
-<Slider
-    value={intensity}
-    start={0}
-    end={10}
-    step={0.01}
-    onChange={handleSSAOIntensity}
-    disabled={!ssaoEnabled} gamepadStep={0} noFill={false} />
-
-<label className="title_SVH title_zQN">Maximum Radius In Pixels</label>
-<Slider
-    value={maxRadius}
-    start={16}
-    end={256}
-    step={1}
-    onChange={handleSSAOMaxRadius}
-    disabled={!ssaoEnabled}
-    gamepadStep={1}
-    noFill={false}
-/>
-
-<label className="title_SVH title_zQN">Radius</label>
-<Slider
-    value={radius}
-    start={1}
-    end={256}
-    step={0.25}
-    onChange={handleSSAORadius}
-    disabled={!ssaoEnabled} gamepadStep={0} noFill={false} />
-
-<label className="title_SVH title_zQN">Step Count</label>
-<Slider
-    value={stepCount}
-    start={0}
-    end={32}
-    step={1}
-    onChange={handleSSAOStepCount}
-    disabled={!ssaoEnabled} gamepadStep={0} noFill={false} />
-
-<label className="title_SVH title_zQN">Bilateral Aggressiveness</label>
-<Slider
-    value={bilateral}
-    start={0}
-    end={100}
-    step={0.25}
-    onChange={handleSSAOBilateral}
-    disabled={!ssaoEnabled} gamepadStep={0} noFill={false} />
-
-<label className="title_SVH title_zQN">Ghosting Reduction</label>
-<Slider
-    value={ghosting}
-    start={0}
-    end={10}
-    step={0.01}
-    onChange={handleSSAOGhosting}
-    disabled={!ssaoEnabled} gamepadStep={0} noFill={false} />
-
-<label className="title_SVH title_zQN">Direct Lighting Strength</label>
-<Slider
-    value={directLighting}
-    start={0}
-    end={10}
-    step={0.50}
-    onChange={handleSSAODirectLighting}
-    disabled={!ssaoEnabled} gamepadStep={0} noFill={false} />
-
-
-      {/* ===== NEW CONTROLS ===== */}
-
-      <button
-        className={`SSAOToggleButton ${temporal ? "enabled" : "disabled"}`}
-        onClick={() => handleSSAOTemporal(!temporal)}
-        disabled={!ssaoEnabled}
-      >
-        Temporal Accumulation
-      </button>
-
-      <label className="title_SVH title_zQN">Blur Sharpness</label>
-      <Slider
-              value={blurSharpness}
-              start={0.1}
-              end={1}
-              step={0.1}
-              onChange={handleSSAOBlurSharpness}
-              disabled={!ssaoEnabled} gamepadStep={0} noFill={false}      />
-
-      <button
-        className={`SSAOToggleButton ${fullRes ? "enabled" : "disabled"}`}
-        onClick={() => handleSSAOFullResolution(!fullRes)}
-        disabled={!ssaoEnabled}
-      >
-        Full Resolution
-      </button>
-
-      <button
-        className={`SSAOToggleButton ${bilateralUpsample ? "enabled" : "disabled"}`}
-        onClick={() => handleSSAOBilateralUpsample(!bilateralUpsample)}
-        disabled={!ssaoEnabled}
-      >
-        Bilateral Upsample
-      </button>
-
-      <label className="title_SVH title_zQN">Specular Occlusion</label>
-      <Slider
-              value={specular}
-              start={0.5}
-              end={100}
-              step={0.01}
-              onChange={handleSSAOSpecular}
-              disabled={!ssaoEnabled} gamepadStep={0.01} noFill={false}      />
-
-      <button
-        className={`SSAOToggleButton ${occluderMotion ? "enabled" : "disabled"}`}
-        onClick={() => handleSSAOOccluderMotion(!occluderMotion)}
-        disabled={!ssaoEnabled}
-      >
-        Occluder Motion Rejection
-      </button>
-
-      <button
-        className={`SSAOToggleButton ${receiverMotion ? "enabled" : "disabled"}`}
-        onClick={() => handleSSAOReceiverMotion(!receiverMotion)}
-        disabled={!ssaoEnabled}
-      >
-        Receiver Motion Rejection
-      </button>
-
-      {/* ===== RAY TRACING SECTION ===== */}
-
-      <button
-        className={`SSAOToggleButton ${rayTracing ? "enabled" : "disabled"}`}
-        onClick={() => handleSSAORayTracing(!rayTracing)}
-        disabled={!ssaoEnabled}
-      >
-        Ray Tracing
-      </button>
-
-      <label className="title_SVH title_zQN">Ray Length</label>
-      <Slider
-              value={rayLength}
-              start={0.01}
-              end={50}
-              step={1}
-              onChange={handleSSAORayLength}
-              disabled={!ssaoEnabled || !rayTracing} gamepadStep={0} noFill={false}      />
-
-      <label className="title_SVH title_zQN">Sample Count</label>
-      <Slider
-              value={sampleCountRT}
-              start={1}
-              end={64}
-              step={1}
-              onChange={handleSSAOSampleCountRT}
-              disabled={!ssaoEnabled || !rayTracing} gamepadStep={0} noFill={false}      />
-
-      <button
-        className={`SSAOToggleButton ${denoise ? "enabled" : "disabled"}`}
-        onClick={() => handleSSAODenoise(!denoise)}
-        disabled={!ssaoEnabled || !rayTracing}
-      >
-        Denoise
-      </button>
-
-      <label className="title_SVH title_zQN">Denoiser Radius</label>
-      <Slider
-              value={denoiserRadius}
-              start={0.1}
-              end={1}
-              step={0.001}
-              onChange={handleSSAODenoiserRadius}
-              disabled={!ssaoEnabled || !rayTracing} gamepadStep={0.001} noFill={false}      />
-
-
-
+      <div className="ssao-master-row">
+        <span>Ambient Occlusion</span>
+        <SSAOCheck label={ssaoEnabled ? "Enabled" : "Disabled"} value={ssaoEnabled} onChange={handleSSAOEnabled} />
+      </div>
+      <SSAOSection title="Ambient Occlusion" open={sections.ambient} onToggle={() => toggleSection("ambient")}>
+        <SSAONumber label="Intensity" value={intensity} min={0} max={10} step={0.01} disabled={disabled} onChange={handleSSAOIntensity} />
+        <SSAONumber label="Maximum Radius in Pixels" value={maxRadius} min={16} max={256} step={1} disabled={disabled} onChange={handleSSAOMaxRadius} />
+        <SSAONumber label="Radius" value={radius} min={1} max={256} step={0.25} disabled={disabled} onChange={handleSSAORadius} />
+        <SSAONumber label="Step Count" value={stepCount} min={0} max={32} step={1} disabled={disabled} onChange={handleSSAOStepCount} />
+        <SSAONumber label="Direct Lighting Strength" value={directLighting} min={0} max={10} step={0.5} disabled={disabled} onChange={handleSSAODirectLighting} />
+      </SSAOSection>
+      <SSAOSection title="Filtering & Quality" open={sections.filtering} onToggle={() => toggleSection("filtering")}>
+        <SSAONumber label="Bilateral Aggressiveness" value={bilateral} min={0} max={100} step={0.25} disabled={disabled} onChange={handleSSAOBilateral} />
+        <SSAONumber label="Ghosting Reduction" value={ghosting} min={0} max={10} step={0.01} disabled={disabled} onChange={handleSSAOGhosting} />
+        <SSAONumber label="Blur Sharpness" value={blurSharpness} min={0.1} max={1} step={0.1} disabled={disabled} onChange={handleSSAOBlurSharpness} />
+        <SSAONumber label="Specular Occlusion" value={specular} min={0.5} max={100} step={0.01} disabled={disabled} onChange={handleSSAOSpecular} />
+        <div className="ssao-check-grid">
+          <SSAOCheck label="Temporal Accumulation" value={temporal} disabled={disabled} onChange={handleSSAOTemporal} />
+          <SSAOCheck label="Full Resolution" value={fullRes} disabled={disabled} onChange={handleSSAOFullResolution} />
+          <SSAOCheck label="Bilateral Upsample" value={bilateralUpsample} disabled={disabled} onChange={handleSSAOBilateralUpsample} />
+          <SSAOCheck label="Occluder Motion Rejection" value={occluderMotion} disabled={disabled} onChange={handleSSAOOccluderMotion} />
+          <SSAOCheck label="Receiver Motion Rejection" value={receiverMotion} disabled={disabled} onChange={handleSSAOReceiverMotion} />
+        </div>
+      </SSAOSection>
+      <SSAOSection title="Ray Tracing" open={sections.ray} onToggle={() => toggleSection("ray")}>
+        <SSAOCheck label="Enable Ray Tracing" value={rayTracing} disabled={disabled} onChange={handleSSAORayTracing} />
+        <SSAONumber label="Ray Length" value={rayLength} min={0.01} max={50} step={1} disabled={rayDisabled} onChange={handleSSAORayLength} />
+        <SSAONumber label="Sample Count" value={sampleCountRT} min={1} max={64} step={1} disabled={rayDisabled} onChange={handleSSAOSampleCountRT} />
+        <SSAOCheck label="Denoise" value={denoise} disabled={rayDisabled} onChange={handleSSAODenoise} />
+        <SSAONumber label="Denoiser Radius" value={denoiserRadius} min={0.1} max={1} step={0.001} disabled={rayDisabled || !denoise} onChange={handleSSAODenoiserRadius} />
+      </SSAOSection>
+      <div className="ssao-footer">SSAO · HDRP</div>
+      <SSAOQuickPresets />
     </div>
-
-
-              <SSAOQuickPresets />
-
-
-    </>
   );
 };
