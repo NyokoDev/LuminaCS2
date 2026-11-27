@@ -40,6 +40,7 @@ const format = (value: number) => String(Number(value.toFixed(4)));
 const points = (coordinates: number[][]) => coordinates.map(([lon, lat]) => (lon + 180) + "," + (90 - lat)).join(" ");
 
 const CoordinateInput = ({ label, value, limit, onChange }: { label: string; value: number; limit: number; onChange: (value: number) => void }) => {
+  const { translate } = useLocalization();
   const [draft, setDraft] = useState(format(value));
   const editing = useRef(false);
   const cancelled = useRef(false);
@@ -75,7 +76,7 @@ const CoordinateInput = ({ label, value, limit, onChange }: { label: string; val
             event.currentTarget.blur();
           }
         }} />
-      <button type="button" className="planetary-reset-icon" title={"Reset " + label + " to zero"} aria-label={"Reset " + label} onClick={() => onChange(0)}>
+      <button type="button" className="planetary-reset-icon" title={"Reset " + label + " to zero"} aria-label={(translate("LUMINA.resetcoordinates") ?? "Reset coordinates") + " · " + label} onClick={() => onChange(0)}>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M4 11a8 8 0 1 1 2 6M4 4v7h7" /></svg>
       </button>
     </div>
@@ -95,12 +96,12 @@ export const PlanetarySettings = ({ latitude, longitude, onLatitude, onLongitude
   return (
     <div className="planetary-settings">
       <div className="planetary-brand">
-        <div><div className="planetary-brand-name">LUMINA</div><div className="planetary-subtitle">Planetary Settings</div></div>
+        <div><div className="planetary-brand-name">LUMINA</div><div className="planetary-subtitle">{(translate("LUMINA.planetarytooltip") ?? "Planetary Settings")}</div></div>
         <div className="planetary-logo" aria-hidden="true" />
       </div>
-      <div className="planetary-heading">Geographic position</div>
+      <div className="planetary-heading">{(translate("LUMINA.geographicposition") ?? "Geographic position")}</div>
       <div className="planetary-map-frame">
-        <svg className="planetary-world-map" viewBox="0 0 360 180" preserveAspectRatio="none" aria-label="Schematic world map. Click to select coordinates."
+        <svg className="planetary-world-map" viewBox="0 0 360 180" preserveAspectRatio="none" aria-label={(translate("LUMINA.maphint") ?? "Schematic world map. Click to select coordinates.")}
           onClick={event => {
             const rect = event.currentTarget.getBoundingClientRect();
             if (!rect.width || !rect.height) return;
@@ -119,11 +120,11 @@ export const PlanetarySettings = ({ latitude, longitude, onLatitude, onLongitude
           <circle cx={180+lon} cy={90-lat} r="6" fill="#d3a052" opacity=".3" />
           <circle cx={180+lon} cy={90-lat} r="2.6" fill="#efbb6b" stroke="white" strokeWidth=".8" />
         </svg>
-        <div className="planetary-map-caption"><span>Selected coordinates</span><span className="planetary-map-value">{coordinateText}</span></div>
+        <div className="planetary-map-caption"><span>{(translate("LUMINA.selectedcoordinates") ?? "Selected coordinates")}</span><span className="planetary-map-value">{coordinateText}</span></div>
       </div>
       <CoordinateInput label={translate("LUMINA.latitude") ?? "Latitude"} value={lat} limit={90} onChange={onLatitude} />
       <CoordinateInput label={translate("LUMINA.longitude") ?? "Longitude"} value={lon} limit={180} onChange={onLongitude} />
-      <div className="planetary-heading">Location presets</div>
+      <div className="planetary-heading">{(translate("LUMINA.locationpresets") ?? "Location presets")}</div>
       <div className="planetary-locations">
         {locations.map(location => (
           <button key={location.name} type="button" className={"planetary-location" + (Math.abs(lat-location.lat) < 0.001 && Math.abs(lon-location.lon) < 0.001 ? " active" : "")} onClick={() => setPosition(location.lat, location.lon)}>
@@ -131,8 +132,8 @@ export const PlanetarySettings = ({ latitude, longitude, onLatitude, onLongitude
           </button>
         ))}
       </div>
-      <div className="planetary-notice"><span className="planetary-notice-symbol">i</span><span>Enable latitude and longitude adjustments in the game settings to use planetary overrides.</span></div>
-      <div className="planetary-footer"><span>PLANETARY · LUMINA</span><button type="button" className="planetary-reset-button" onClick={() => setPosition(0, 0)}>Reset coordinates</button></div>
+      <div className="planetary-notice"><span className="planetary-notice-symbol">i</span><span>{(translate("LUMINA.planetarynotice") ?? "Enable latitude and longitude adjustments in the game settings to use planetary overrides.")}</span></div>
+      <div className="planetary-footer"><span>{(translate("LUMINA.planetarytooltip") ?? "Planetary Settings")} · LUMINA</span><button type="button" className="planetary-reset-button" onClick={() => setPosition(0, 0)}>{(translate("LUMINA.resetcoordinates") ?? "Reset coordinates")}</button></div>
     </div>
   );
 };
