@@ -198,6 +198,7 @@
             AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "TimeLockStatus", TimeLockStatus));
             AddBinding(new TriggerBinding<string>(Mod.MODUI, "UpdateCubemapName", UpdateCubemapName));
             AddBinding(new TriggerBinding(Mod.MODUI, "LockTime", HandleTimeLocked));
+            AddBinding(new TriggerBinding(Mod.MODUI, "DisableTimeOfDaySlider", DisableTimeOfDaySlider));
         }
 
         private void RegisterSkyAndSunBindings()
@@ -1690,6 +1691,18 @@ ApplySSAOPreset));
             return TimeOfDayProcessor.Locked;
         }
 
+        private void DisableTimeOfDaySlider()
+        {
+            var gv = GlobalVariables.Instance;
+            gv.ViewTimeOfDaySlider = false;
+            gv.TimeOfDayLocked = false;
+            gv.ChangingTime = false;
+            TimeOfDayProcessor.Locked = false;
+            TimeOfDayProcessor.ChangingTime = false;
+            if (m_PlanetarySystem != null)
+                m_PlanetarySystem.overrideTime = false;
+        }
+
         private void HandleTimeLocked()
         {
             TimeOfDayProcessor.Locked = !TimeOfDayProcessor.Locked;
@@ -1706,7 +1719,7 @@ ApplySSAOPreset));
 
         private async Task WaitForChangingTime()
         {
-            while (Math.Abs(m_PlanetarySystem.time - TimeOfDayProcessor.TimeFloat) > 0.0001f)
+            while (GlobalVariables.Instance.ViewTimeOfDaySlider && Math.Abs(m_PlanetarySystem.time - TimeOfDayProcessor.TimeFloat) > 0.0001f)
             {
                 await Task.Delay(16); // Wait one frame (~60fps)
             }
