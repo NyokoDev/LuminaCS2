@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import "./ViceCityRacer.scss";
+import ViceCityLogo from "../../../img/ViceCity.svg";
 
 type Traffic = { x: number; y: number; color: string };
 type Game = { x: number; distance: number; speed: number; spawn: number; traffic: Traffic[]; over: boolean };
@@ -166,7 +167,7 @@ export default function ViceCityRacer({ onClose }: { onClose: () => void }) {
     return createPortal(
         <div className="vc-racer-overlay" onMouseDown={e => e.stopPropagation()} onClick={e => e.stopPropagation()}>
             <div className="vc-racer" ref={modalRef} tabIndex={-1} role="dialog" aria-modal="true" aria-label="Vice City Racer">
-                <div className="vc-racer-header"><div><span>LUMINA ARCADE</span><strong>VICE CITY RACER</strong></div><button type="button" aria-label="Close arcade" onClick={onClose}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 6l12 12M18 6L6 18" /></svg></button></div>
+                <div className="vc-racer-header"><div><span>LUMINA ARCADE</span><strong className="vc-racer-brand"><img src={ViceCityLogo} alt="Vice City" /><span>Racer</span></strong></div><button type="button" aria-label="Close arcade" onClick={onClose}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 6l12 12M18 6L6 18" /></svg></button></div>
                 <div className="vc-racer-score"><div><span>SCORE</span><strong>{String(score).padStart(5, "0")}</strong></div><div><span>BEST</span><strong>{String(best).padStart(5, "0")}</strong></div></div>
                 <div className="vc-racer-screen">
                     <canvas ref={canvasRef} width={360} height={520} />
