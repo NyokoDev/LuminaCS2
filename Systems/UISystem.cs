@@ -308,14 +308,20 @@
                     break;
 
                 case "vice-city":
-                    postExposure = 0.25f;
-                    contrast = 18f;
-                    hueShift = -5f;
-                    saturation = 28f;
-                    gv.Temperature = 15f;
-                    gv.Tint = 22f;
+                    postExposure = 0.10f;
+                    contrast = 24f;
+                    hueShift = -8f;
+                    saturation = 40f;
+                    gv.Temperature = 8f;
+                    gv.Tint = 38f;
                     gv.TemperatureActive = true;
                     gv.TintActive = true;
+                    gv.ViewTimeOfDaySlider = true;
+                    gv.TimeOfDayLocked = true;
+                    TimeOfDayProcessor.TimeFloat = 18.75f;
+                    TimeOfDayProcessor.Locked = true;
+                    TimeOfDayProcessor.ChangingTime = false;
+                    gv.ChangingTime = false;
                     break;
 
                 default:
