@@ -66,3 +66,33 @@
     left:6rem;
     width: 20rem;
 }
+
+.time-of-day-wrapper .lock-time-button {
+    right: 38rem;
+}
+.time-of-day-wrapper .time-of-day-close {
+    position: absolute;
+    top: 2rem;
+    right: 5rem;
+    width: 24rem;
+    height: 24rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1rem solid transparent;
+    border-radius: 4rem;
+    color: #ccc;
+    cursor: pointer;
+    pointer-events: auto;
+}
+.time-of-day-wrapper .time-of-day-close:hover {
+    background: #404040;
+    color: white;
+    border-color: #666;
+}
+.time-of-day-wrapper .time-of-day-close svg {
+    width: 16rem;
+    height: 16rem;
+}
