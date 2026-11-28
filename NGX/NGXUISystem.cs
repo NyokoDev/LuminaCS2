@@ -308,6 +308,18 @@ namespace Lumina.NGX
         {
             base.OnCreate();
 
+            AddBinding(new TriggerBinding(Mod.MODUI, "OpenNGXRadio", () =>
+            {
+                try
+                {
+                    UnityEngine.Application.OpenURL("https://www.youtube.com/watch?v=fPO76Jlnz6c");
+                }
+                catch (Exception exception)
+                {
+                    Mod.Log.Warn($"[NGX] Could not open music: {exception.Message}");
+                }
+            }));
+
             AddBinding(new TriggerBinding<string>(Mod.MODUI, "SaveNGX", SaveNGX));
             AddBinding(new TriggerBinding<string>(Mod.MODUI, "LoadNGX", LoadNGX));
             AddBinding(new TriggerBinding<string>(Mod.MODUI, "DeleteNGX", DeleteNGX));

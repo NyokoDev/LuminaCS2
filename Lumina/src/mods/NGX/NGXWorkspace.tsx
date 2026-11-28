@@ -257,6 +257,7 @@ export default function NGXWorkspace() {
         <div className="ngx-header" onMouseDown={beginDrag}>
             <div className="ngx-brand"><img src={LuminaLogo} alt="" /><strong>Lumina NGX</strong><span className="ngx-header-divider" /><span>Workspace</span><small>BETA</small></div>
             <div className="ngx-header-actions" onMouseDown={e => e.stopPropagation()}>
+                <button className="ngx-icon-button" type="button" title="Play Gangsta's Paradise on YouTube (opens browser)" aria-label="Play Gangsta's Paradise on YouTube" onClick={() => trigger("Lumina", "OpenNGXRadio")}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13M9 18c0 1.7-1.5 3-3.5 3S2 19.7 2 18s1.5-3 3.5-3S9 16.3 9 18ZM21 16c0 1.7-1.5 3-3.5 3S14 17.7 14 16s1.5-3 3.5-3 3.5 1.3 3.5 3Z" /></svg></button>
                 <button className="ngx-button" type="button" onClick={() => setShowPresets(!showPresets)}><Layers />Presets</button>
                 <button className="ngx-button" type="button" onClick={() => openConsole()}><Terminal />Console</button>
                 <button className="ngx-icon-button" type="button" title={compact ? "Expand workspace" : "Collapse workspace"} onClick={() => setCompact(!compact)}><WorkspaceIcon kind={compact ? "plus" : "minus"} /></button>
