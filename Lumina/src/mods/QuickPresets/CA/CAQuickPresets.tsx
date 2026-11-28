@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ViceCityRacer from "./ViceCityRacer";
 import ViceCityLogo from "../../../img/ViceCity.svg";
 import {
@@ -31,7 +31,23 @@ interface QuickPreset {
 export const CAQuickPresets: React.FC = () => {
   const { translate } = useLocalization();
   const [showRacer, setShowRacer] = useState(false);
-  const viceClicks = useRef({ count: 0, last: 0 });
+  const viceClicks = useRef(0);
+  const viceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [remainingClicks, setRemainingClicks] = useState(0);
+  const miniGameHint = remainingClicks === 1
+    ? "One more click to unlock the minigame!"
+    : `Click ${remainingClicks} more times to unlock the minigame!`;
+
+  useEffect(() => () => {
+    if (viceTimeout.current !== null) clearTimeout(viceTimeout.current);
+  }, []);
+
+  const resetViceClicks = () => {
+    if (viceTimeout.current !== null) clearTimeout(viceTimeout.current);
+    viceTimeout.current = null;
+    viceClicks.current = 0;
+    setRemainingClicks(0);
+  };
 
   const presets: QuickPreset[] = [
     {
@@ -70,16 +86,17 @@ export const CAQuickPresets: React.FC = () => {
   };
 
   const handleViceCity = () => {
-    const now = Date.now();
-    const state = viceClicks.current;
-    state.count = now - state.last > 1500 ? 1 : state.count + 1;
-    state.last = now;
-    if (state.count === 1) applyPreset("vice-city");
-    if (state.count >= 5) {
-      state.count = 0;
-      state.last = 0;
+    if (showRacer) return;
+    if (viceTimeout.current !== null) clearTimeout(viceTimeout.current);
+    viceClicks.current += 1;
+    if (viceClicks.current === 1) applyPreset("vice-city");
+    if (viceClicks.current >= 5) {
+      resetViceClicks();
       setShowRacer(true);
+      return;
     }
+    setRemainingClicks(5 - viceClicks.current);
+    viceTimeout.current = setTimeout(resetViceClicks, 8000);
   };
 
   return (
@@ -89,8 +106,8 @@ export const CAQuickPresets: React.FC = () => {
           {translate("LUMINA.caquickpresets")}
         </span>
 
-        <span className="quick-presets__subtitle">
-          {translate("LUMINA.oneclickcoloradjustment")}
+        <span className={"quick-presets__subtitle" + (remainingClicks > 0 ? " quick-presets__minigame-hint" : "")} aria-live="polite">
+          {remainingClicks > 0 ? miniGameHint : translate("LUMINA.oneclickcoloradjustment")}
         </span>
       </div>
 
@@ -103,7 +120,7 @@ export const CAQuickPresets: React.FC = () => {
               key={preset.id}
               type="button"
               className={`quick-preset ${preset.accentClass}`}
-              onClick={() => applyPreset(preset.id)}
+              onClick={() => { resetViceClicks(); applyPreset(preset.id); }}
             >
               <div className="quick-preset__content">
                 <span className="quick-preset__icon">
@@ -128,8 +145,8 @@ export const CAQuickPresets: React.FC = () => {
         <button
           type="button"
           className="quick-preset preset-vice-city"
-          title="Vice City '86"
-          aria-label="Vice City '86"
+          title={remainingClicks > 0 ? miniGameHint : "Vice City '86"}
+          aria-label={remainingClicks > 0 ? "Vice City '86 — " + miniGameHint : "Vice City '86"}
           onClick={handleViceCity}
         >
           <img className="quick-preset__vice-logo" src={ViceCityLogo} alt="Vice City" />
