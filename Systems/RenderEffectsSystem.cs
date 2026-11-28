@@ -1444,8 +1444,8 @@
             }
             if (customSunLight == null)
             {
-                if (Time.realtimeSinceStartup < nextSunSearch) return;
-                nextSunSearch = Time.realtimeSinceStartup + 1f;
+                if (UnityEngine.Time.realtimeSinceStartup < nextSunSearch) return;
+                nextSunSearch = UnityEngine.Time.realtimeSinceStartup + 1f;
                 var sunObject = GameObject.Find("SunLight");
                 var light = sunObject != null ? sunObject.GetComponent<Light>() : null;
                 if (light == null || light.type != UnityEngine.LightType.Directional)
