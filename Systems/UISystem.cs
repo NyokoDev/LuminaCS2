@@ -222,6 +222,28 @@
 
             AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "SunFlareSize", SunFlareSize));
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "handleSunFlareSize", handleSunFlareSize));
+            AddBinding(new TriggerBinding(Mod.MODUI, "ReloadCubemaps", ReloadCubemaps));
+            AddBinding(new TriggerBinding(Mod.MODUI, "OpenCubemapFolder", () =>
+            {
+                Directory.CreateDirectory(GlobalPaths.LuminaHDRIDirectory);
+                UnityEngine.Application.OpenURL(new Uri(GlobalPaths.LuminaHDRIDirectory).AbsoluteUri);
+            }));
+            AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "SkyStatus", () => RenderEffectsSystem.SkyStatus));
+            AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "SunStatus", () => RenderEffectsSystem.SunStatus));
+            AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "CubemapPreview", () => CubemapLoader.Preview));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "HDRISkyLux", () => GlobalVariables.Instance.HDRISkyLux));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "HDRISkyRotation", () => GlobalVariables.Instance.HDRISkyRotation));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetHDRISkyLux", v => { if (float.IsFinite(v)) { GlobalVariables.Instance.HDRISkyLux = Mathf.Clamp(v, 0f, 100000f); RenderEffectsSystem.ApplyCubemap(); } }));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetHDRISkyRotation", v => { if (float.IsFinite(v)) { GlobalVariables.Instance.HDRISkyRotation = Mathf.Clamp(v, 0f, 360f); RenderEffectsSystem.ApplyCubemap(); } }));
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "CustomFogEnabled", () => GlobalVariables.Instance.CustomFogEnabled));
+            AddBinding(new TriggerBinding(Mod.MODUI, "ToggleCustomFog", () => { GlobalVariables.Instance.CustomFogEnabled = !GlobalVariables.Instance.CustomFogEnabled; RenderEffectsSystem.ApplyCustomFog(); }));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "FogDistance", () => GlobalVariables.Instance.FogDistance));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "FogBaseHeight", () => GlobalVariables.Instance.FogBaseHeight));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "FogMaximumHeight", () => GlobalVariables.Instance.FogMaximumHeight));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetFogDistance", v => { if (float.IsFinite(v)) { GlobalVariables.Instance.FogDistance = Mathf.Clamp(v, 1f, 10000f); RenderEffectsSystem.ApplyCustomFog(); } }));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetFogBaseHeight", v => { if (float.IsFinite(v)) { var s = GlobalVariables.Instance; s.FogBaseHeight = Mathf.Clamp(v, -500f, 999f); s.FogMaximumHeight = Mathf.Max(s.FogMaximumHeight, s.FogBaseHeight + 1f); RenderEffectsSystem.ApplyCustomFog(); } }));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetFogMaximumHeight", v => { if (float.IsFinite(v)) { var s = GlobalVariables.Instance; s.FogMaximumHeight = Mathf.Clamp(v, s.FogBaseHeight + 1f, 1000f); RenderEffectsSystem.ApplyCustomFog(); } }));
+            AddBinding(new TriggerBinding(Mod.MODUI, "ResetCustomSun", () => { GlobalVariables.Instance.SunValuesInitialized = false; GlobalVariables.Instance.AngularDiameter = GlobalVariables.Instance.SunIntensity = GlobalVariables.Instance.SunFlareSize = 0f; RenderEffectsSystem.RestoreSun(); RenderEffectsSystem.AdjustAngularDiameter(); }));
         }
 
         private void RegisterUtilityBindings()
@@ -1314,34 +1336,35 @@ ApplySSAOPreset));
 
 
 
-        private void UpdateUIElements()
+        private void ReloadCubemaps()
         {
-            CubemapArrayExtendedReturn();
-            LUTArray();
+            if (CubemapArrayExtended != null) CubemapArrayExtended.Value = CubemapArrayExtendedReturn();
         }
 
+        private void UpdateUIElements()
+        {
+            ReloadCubemaps();
+            if (LutArrayExtended != null) LutArrayExtended.Value = LUTArray();
+        }
 
         private void handleAngularDiameter(float obj)
         {
-            SunDiameterValue = obj;
-            GlobalVariables.Instance.AngularDiameter = SunDiameterValue;
-
+            if (!float.IsFinite(obj) || !GlobalVariables.Instance.CustomSunEnabled) return;
+            GlobalVariables.Instance.AngularDiameter = Mathf.Clamp(obj, 0f, 90f);
             RenderEffectsSystem.AdjustAngularDiameter();
         }
 
         private void handleSunIntensity(float obj)
         {
-            SunIntensityValue = obj;
-            GlobalVariables.Instance.SunIntensity = SunIntensityValue;
-
+            if (!float.IsFinite(obj) || !GlobalVariables.Instance.CustomSunEnabled) return;
+            GlobalVariables.Instance.SunIntensity = Mathf.Clamp(obj, 0f, 200000f);
             RenderEffectsSystem.AdjustAngularDiameter();
         }
 
         private void handleSunFlareSize(float obj)
         {
-            SunFlareSizeValue = obj;
-            GlobalVariables.Instance.SunFlareSize = SunFlareSizeValue;
-
+            if (!float.IsFinite(obj) || !GlobalVariables.Instance.CustomSunEnabled) return;
+            GlobalVariables.Instance.SunFlareSize = Mathf.Clamp(obj, 0f, 90f);
             RenderEffectsSystem.AdjustAngularDiameter();
         }
 
@@ -1371,7 +1394,7 @@ ApplySSAOPreset));
         {
             GlobalVariables.Instance.CustomSunEnabled = !GlobalVariables.Instance.CustomSunEnabled;
             customSunEnabled = GlobalVariables.Instance.CustomSunEnabled;
-            Mod.Log.Info("Set CustomSun to " + customSunEnabled.ToString());
+            RenderEffectsSystem.AdjustAngularDiameter();
         }
 
         private bool IsCustomSunEnabled()
@@ -1402,39 +1425,14 @@ ApplySSAOPreset));
 
         private void UpdateCubemapName(string obj)
         {
-            // Update GlobalVariables.Instance.CubemapName with the provided name
-            GlobalVariables.Instance.CubemapName = obj;
-            CubemapLoader.IncomingCubemap = obj;
-
-            // Ensure the local CubemapName variable is also updated
-            CubemapName = GlobalVariables.Instance.CubemapName;
-
-            // Once the names are updated, call the method to update the cubemap
-            RenderEffectsSystem.UpdateCubemap();
+            if (RenderEffectsSystem.SelectCubemap(obj)) CubemapName = GlobalVariables.Instance.CubemapName;
         }
 
-        /// <summary>
-        /// Toggles the state of the HDRI Sky and applies or disables the cubemap accordingly.
-        /// </summary>
         private void SetHDRISkyEnabled()
         {
-            // Toggle the HDRI Sky state
-            bool isEnabled = !GlobalVariables.Instance.HDRISkyEnabled;
-            GlobalVariables.Instance.HDRISkyEnabled = isEnabled;
-            UsingHDRSky = isEnabled;
-
-            // Update the render effects based on the new state
-            if (isEnabled)
-            {
-                RenderEffectsSystem.ApplyCubemap();
-            }
-            else
-            {
-                RenderEffectsSystem.DisableCubemap();
-            }
+            RenderEffectsSystem.SetSkyEnabled(!GlobalVariables.Instance.HDRISkyEnabled);
+            UsingHDRSky = GlobalVariables.Instance.HDRISkyEnabled;
         }
-
-
 
         private bool IsHDRISkyEnabled()
         {

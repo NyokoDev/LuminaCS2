@@ -115,6 +115,8 @@
             CheckGPU();
             ConvertToHDRP();
             InitializeCubemap();
+            ApplyCustomFog();
+            skySettingsInstance = GlobalVariables.Instance;
             GetPrivateFieldm_PhysicallyBasedSky();
             InitializeAmbientOcclusion();
             InitializeScreenSpaceRefraction();
@@ -304,48 +306,96 @@
 
 
 
+        public static string SkyStatus { get; private set; } = "";
+        private static string loadedCubemapName;
+        private GlobalVariables skySettingsInstance;
         public static void InitializeCubemap()
         {
-            if (GlobalVariables.Instance == null)
+            var settings = GlobalVariables.Instance;
+            if (string.IsNullOrWhiteSpace(settings.CubemapName) || settings.CubemapName == "None" || settings.CubemapName == "Select Cubemap")
             {
-                Mod.Log.Error("GlobalVariables.Instance is null! Aborting.");
+                SelectCubemap("None");
                 return;
             }
-
-            if (string.IsNullOrEmpty(GlobalVariables.Instance.CubemapName) ||
-                GlobalVariables.Instance.CubemapName.Equals("None", StringComparison.OrdinalIgnoreCase))
+            if (!SelectCubemap(settings.CubemapName))
             {
-                Mod.Log.Info("Cubemap name is none or empty. Ignoring.");
-                return;
+                settings.HDRISkyEnabled = false;
+                DisableCubemap();
             }
-
-            // Load the new cubemap
-            if (string.IsNullOrEmpty(GlobalVariables.Instance.CubemapName) ||
-    GlobalVariables.Instance.CubemapName == "None" ||
-    GlobalVariables.Instance.CubemapName == "Select Cubemap")
-            {
-                Mod.Log.Info("Cubemap name is invalid. Skipping cubemap loading.");
-
-                GlobalCubemap = null;
-            }
-            else
-            {
-                GlobalCubemap = CubemapLoader.LoadSavedCubemap();
-            }
-
-
-            if (GlobalCubemap == null)
-            {
-                Mod.Log.Error("CubemapLoader.LoadSavedCubemap() returned null! Aborting.");
-                return;
-            }
-
-            RenderEffectsSystem.ApplyCubemap();
-            Mod.Log.Info("Initialized cubemap successfully.");
         }
 
+        public static bool SelectCubemap(string name)
+        {
+            var settings = GlobalVariables.Instance;
+            if (string.IsNullOrWhiteSpace(name) || name == "None" || name == "Select Cubemap")
+            {
+                settings.CubemapName = "None";
+                settings.HDRISkyEnabled = false;
+                DisableCubemap();
+                if (GlobalCubemap != null) UnityEngine.Object.Destroy(GlobalCubemap);
+                GlobalCubemap = null;
+                loadedCubemapName = null;
+                CubemapLoader.ClearPreview();
+                SkyStatus = "Using the game sky.";
+                return true;
+            }
+            var next = CubemapLoader.Load(name);
+            if (next == null) { SkyStatus = CubemapLoader.Error; return false; }
+            var previous = GlobalCubemap;
+            GlobalCubemap = next;
+            loadedCubemapName = name;
+            settings.CubemapName = name;
+            if (settings.HDRISkyEnabled) ApplyCubemap();
+            else SkyStatus = "Cubemap ready. Enable HDRI to apply.";
+            if (previous != null && previous != next) UnityEngine.Object.Destroy(previous);
+            return true;
+        }
 
+        internal static void SetSkyEnabled(bool enabled)
+        {
+            var settings = GlobalVariables.Instance;
+            if (!enabled)
+            {
+                settings.HDRISkyEnabled = false;
+                DisableCubemap();
+                SkyStatus = "Using the game sky.";
+                return;
+            }
+            if (GlobalCubemap == null || loadedCubemapName != settings.CubemapName)
+                if (!SelectCubemap(settings.CubemapName) || GlobalCubemap == null)
+                {
+                    settings.HDRISkyEnabled = false;
+                    SkyStatus = "Select a valid cubemap before enabling HDRI.";
+                    return;
+                }
+            settings.HDRISkyEnabled = true;
+            ApplyCubemap();
+        }
 
+        internal static void ApplyCustomFog()
+        {
+            var profile = LuminaVolume == null ? null : LuminaVolume.profile;
+            if (profile == null) return;
+            var settings = GlobalVariables.Instance;
+            if (!settings.CustomFogEnabled)
+            {
+                if (profile.TryGet(out UnityEngine.Rendering.HighDefinition.Fog existing))
+                {
+                    existing.enabled.overrideState = false;
+                    existing.meanFreePath.overrideState = false;
+                    existing.baseHeight.overrideState = false;
+                    existing.maximumHeight.overrideState = false;
+                }
+                return;
+            }
+            if (!profile.TryGet(out UnityEngine.Rendering.HighDefinition.Fog fog))
+                fog = profile.Add<UnityEngine.Rendering.HighDefinition.Fog>(false);
+            fog.active = true;
+            fog.enabled.Override(true);
+            fog.meanFreePath.Override(Mathf.Max(1f, settings.FogDistance));
+            fog.baseHeight.Override(settings.FogBaseHeight);
+            fog.maximumHeight.Override(Mathf.Max(settings.FogBaseHeight + 1f, settings.FogMaximumHeight));
+        }
 
         /// <summary>
         /// Logs current LUT log size.
@@ -404,6 +454,13 @@
             }
 #endif
 
+            if (skySettingsInstance != GlobalVariables.Instance)
+            {
+                skySettingsInstance = GlobalVariables.Instance;
+                InitializeCubemap();
+                if (!skySettingsInstance.HDRISkyEnabled) DisableCubemap();
+                ApplyCustomFog();
+            }
             UpdateNames();
 
             if (!LUTloaded)
@@ -530,127 +587,35 @@
         /// </summary>
         public static void DisableCubemap()
         {
-            try
+            var profile = LuminaVolume == null ? null : LuminaVolume.profile;
+            if (profile == null) return;
+            if (profile.TryGet(out VisualEnvironment environment))
+                environment.skyType.overrideState = false;
+            if (profile.TryGet(out HDRISky sky))
             {
-                // Enable the LightingPhysicallyBasedSky
-                LightingPhysicallyBasedSky.active = true;
-                DisableVisualEnvironment();
-                Mod.Log.Info("LightingPhysicallyBasedSky enabled successfully.");
-            }
-            catch (Exception ex)
-            {
-                // Log any unexpected errors
-                Mod.Log.Error($"Failed to enable LightingPhysicallyBasedSky: {ex.Message}");
+                sky.active = false;
+                sky.hdriSky.value = null;
             }
         }
-
-        /// <summary>
-        /// Removes the VisualEnvironment and HDRISky overrides from the LuminaVolume.
-        /// </summary>
-        private static void DisableVisualEnvironment()
-        {
-            // Ensure the LuminaVolume is available
-            Volume luminaVolume = RenderEffectsSystem.LuminaVolume;
-            if (luminaVolume == null)
-            {
-                Mod.Log.Error("LuminaVolume not found. Unable to remove VisualEnvironment and HDRISky.");
-                return;
-            }
-
-            // Get the VolumeProfile
-            VolumeProfile profile = luminaVolume.profile;
-            if (profile == null)
-            {
-                Mod.Log.Error("No VolumeProfile assigned to LuminaVolume.");
-                return;
-            }
-
-            // Attempt to remove the VisualEnvironment override
-            if (profile.TryGet(out VisualEnvironment visualEnvironment))
-            {
-                profile.Remove<VisualEnvironment>();
-                Mod.Log.Info("VisualEnvironment override removed successfully.");
-            }
-            else
-            {
-                Mod.Log.Info("VisualEnvironment override not found in the VolumeProfile.");
-            }
-
-            // Attempt to remove the HDRISky override
-            if (profile.TryGet(out HDRISky hdriSky))
-            {
-                profile.Remove<HDRISky>();
-                Mod.Log.Info("HDRISky override removed successfully.");
-            }
-            else
-            {
-                Mod.Log.Info("HDRISky override not found in the VolumeProfile.");
-            }
-        }
-
 
         public static void ApplyCubemap()
         {
-            // Ensure GlobalCubemap is not null
-            if (GlobalCubemap == null)
-            {
-                Mod.Log.Info("GlobalCubemap is null. Skipping cubemap application.");
-                return;
-            }
-
-            // Get the active Volume and ensure it's not null
-            Volume volume = RenderEffectsSystem.LuminaVolume;
-            if (volume == null)
-            {
-                Mod.Log.Info("No Volume found in the scene. Add a Volume to configure HDRI Sky.");
-                return;
-            }
-
-            // Fetch or create the VolumeProfile
-            VolumeProfile profile = volume.profile;
-            if (!profile)
-            {
-                Mod.Log.Info("No VolumeProfile assigned to the Volume.");
-                return;
-            }
-
-            // Ensure HDRI Sky and Visual Environment overrides are present
-            if (!profile.TryGet(out HDRISky hdriSky))
-            {
-                hdriSky = profile.Add<HDRISky>();
-                hdriSky.active = true;
-            }
-            if (!profile.TryGet(out VisualEnvironment visualEnvironment))
-            {
-                visualEnvironment = profile.Add<VisualEnvironment>();
-                visualEnvironment.active = true;
-            }
-
-            // Set HDRI Sky as the active sky type
-            visualEnvironment.skyType.Override((int)SkyType.HDRI);
-
-            // Assign the HDRI Cubemap
-            hdriSky.hdriSky.overrideState = true;
-            hdriSky.hdriSky.Override(GlobalCubemap);
-            Mod.Log.Info("Applied Cubemap " + GlobalVariables.Instance.CubemapName);
-            // Adjust brightness by setting the exposure
-            float desiredExposure = 7000f;
-            hdriSky.skyIntensityMode.Override(SkyIntensityMode.Lux);
-            hdriSky.desiredLuxValue.Override(desiredExposure);
-            GlobalVariables.Instance.HDRISkyEnabled = true;
-            Mod.Log.Info("Added Visual Environment HDRI Sky component.");
+            if (!GlobalVariables.Instance.HDRISkyEnabled || GlobalCubemap == null) return;
+            var profile = LuminaVolume == null ? null : LuminaVolume.profile;
+            if (profile == null) { SkyStatus = "Lumina volume is unavailable."; return; }
+            if (!profile.TryGet(out HDRISky sky)) sky = profile.Add<HDRISky>(false);
+            if (!profile.TryGet(out VisualEnvironment environment)) environment = profile.Add<VisualEnvironment>(false);
+            sky.active = true;
+            environment.active = true;
+            environment.skyType.Override((int)SkyType.HDRI);
+            sky.hdriSky.Override(GlobalCubemap);
+            sky.skyIntensityMode.Override(SkyIntensityMode.Lux);
+            sky.desiredLuxValue.Override(Mathf.Max(0f, GlobalVariables.Instance.HDRISkyLux));
+            sky.rotation.Override(Mathf.Repeat(GlobalVariables.Instance.HDRISkyRotation, 360f));
+            SkyStatus = "HDRI applied.";
         }
 
-        public static void UpdateCubemap()
-        {
-            // Load the new cubemap
-            GlobalCubemap = CubemapLoader.LoadCubemap();
-
-            RenderEffectsSystem.ApplyCubemap();
-
-            // Log that the cubemap has been initialized successfully
-            Mod.Log.Info("Initialized cubemap successfully.");
-        }
+        public static void UpdateCubemap() => SelectCubemap(CubemapLoader.IncomingCubemap);
 
         private void UpdateNames()
         {
@@ -1026,6 +991,7 @@
                 // Add Volume component
                 LuminaVolume = globalVolume.AddComponent<Volume>();
                 LuminaVolume.priority = 5000f;
+                LuminaVolume.isGlobal = true;
                 Mod.Log.Info("[LUMINA] Priority set to 1980.");
 
                 if (GlobalVariables.Instance.LuminaVolumeEnabled)
@@ -1456,45 +1422,70 @@
         internal static void handleEmissionMultiplier(float obj)
         {
             GlobalVariables.Instance.spaceEmissionMultiplier = obj;
-            LightingPhysicallyBasedSky.spaceEmissionMultiplier.Override(obj);
+            if (LightingPhysicallyBasedSky != null) LightingPhysicallyBasedSky.spaceEmissionMultiplier.Override(obj);
         }
 
         /// <summary>
         /// Adjusts light.
         /// </summary>
+        private static HDAdditionalLightData customSunLight;
+        private static float originalDiameter, originalIntensity, originalFlare;
+        private static float nextSunSearch;
+        public static bool CustomSunAvailable => customSunLight != null;
+        public static string SunStatus { get; private set; } = "";
+
         internal static void AdjustAngularDiameter()
         {
-            // Find the game object named "SunLight"
-            GameObject sunLightObject = GameObject.Find("SunLight");
-
-            if (sunLightObject != null)
+            var settings = GlobalVariables.Instance;
+            if (!settings.CustomSunEnabled)
             {
-                Light light = sunLightObject.GetComponent<Light>();
-
-                if (light != null && light.type == UnityEngine.LightType.Directional)
+                RestoreSun();
+                return;
+            }
+            if (customSunLight == null)
+            {
+                if (Time.realtimeSinceStartup < nextSunSearch) return;
+                nextSunSearch = Time.realtimeSinceStartup + 1f;
+                var sunObject = GameObject.Find("SunLight");
+                var light = sunObject != null ? sunObject.GetComponent<Light>() : null;
+                if (light == null || light.type != UnityEngine.LightType.Directional)
                 {
-                    HDAdditionalLightData hdLightData = light.GetComponent<HDAdditionalLightData>();
-
-                    if (hdLightData != null)
-                    {
-                        hdLightData.angularDiameter = GlobalVariables.Instance.AngularDiameter != 0f ? GlobalVariables.Instance.AngularDiameter : 0f;
-                        hdLightData.intensity = GlobalVariables.Instance.SunIntensity != 0f ? GlobalVariables.Instance.SunIntensity : 0f;
-                        hdLightData.flareSize = GlobalVariables.Instance.SunFlareSize != 0f ? GlobalVariables.Instance.SunFlareSize : 0f;
-                    }
-                    else
-                    {
-                         Mod.Log.Info($"Sun Light found but no HDAdditionalLightData: {light.gameObject.name}");
-                    }
+                    SunStatus = "Waiting for the scene sun.";
+                    return;
                 }
-                else
+                customSunLight = light.GetComponent<HDAdditionalLightData>();
+                if (customSunLight == null) { SunStatus = "HDRP sun unavailable."; return; }
+                originalDiameter = customSunLight.angularDiameter;
+                originalIntensity = customSunLight.intensity;
+                originalFlare = customSunLight.flareSize;
+                if (!settings.SunValuesInitialized)
                 {
-                     Mod.Log.Info($"GameObject 'SunLight' is not a directional light.");
+                    if (settings.AngularDiameter == 0f && settings.SunIntensity == 0f && settings.SunFlareSize == 0f)
+                    {
+                        settings.AngularDiameter = originalDiameter;
+                        settings.SunIntensity = originalIntensity;
+                        settings.SunFlareSize = originalFlare;
+                    }
+                    settings.SunValuesInitialized = true;
                 }
             }
-            else
+            customSunLight.angularDiameter = Mathf.Clamp(settings.AngularDiameter, 0f, 90f);
+            customSunLight.intensity = Mathf.Clamp(settings.SunIntensity, 0f, 200000f);
+            customSunLight.flareSize = Mathf.Clamp(settings.SunFlareSize, 0f, 90f);
+            SunStatus = "Custom sun active.";
+        }
+
+        internal static void RestoreSun()
+        {
+            if (customSunLight != null)
             {
-                 Mod.Log.Info("Sun Light (game object) not found in the scene.");
+                customSunLight.angularDiameter = originalDiameter;
+                customSunLight.intensity = originalIntensity;
+                customSunLight.flareSize = originalFlare;
             }
+            customSunLight = null;
+            nextSunSearch = 0f;
+            SunStatus = "";
         }
     }
 }

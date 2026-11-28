@@ -7,10 +7,7 @@
     {
         protected override void OnUpdate()
         {
-            if (LuminaMod.XML.GlobalVariables.Instance.CustomSunEnabled)
-            {
-                RenderEffectsSystem.AdjustAngularDiameter();
-            }
+            RenderEffectsSystem.AdjustAngularDiameter();
         }
     }
 }

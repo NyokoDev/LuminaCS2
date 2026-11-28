@@ -1,101 +1,129 @@
+import React, { useEffect, useRef, useState } from "react";
 import { bindValue, trigger, useValue } from "cs2/api";
 import { useLocalization } from "cs2/l10n";
 import mod from "../../../mod.json";
-import CustomSunCheckbox from "mods/Checkboxes/UseCustomSunCheckbox";
-import SpaceEmissionCheckbox from "mods/Checkboxes/UseHDRISky";
-import { Slider } from "mods/slider";
+import "../Cubemaps/Cubemaps.scss";
 
-export const EmissionMultiplier$ = bindValue<number>(mod.id, "EmissionMultiplier");
-export const SunDiameter$ = bindValue<number>(mod.id, "SunDiameter");
-export const SunIntensity$ = bindValue<number>(mod.id, "SunIntensity");
-export const SunFlareSize$ = bindValue<number>(mod.id, "SunFlareSize");
+export const EmissionMultiplier$ = bindValue<number>(mod.id, "EmissionMultiplier", 1000);
+export const SunDiameter$ = bindValue<number>(mod.id, "SunDiameter", 0);
+export const SunIntensity$ = bindValue<number>(mod.id, "SunIntensity", 0);
+export const SunFlareSize$ = bindValue<number>(mod.id, "SunFlareSize", 0);
+const cubes$ = bindValue<string[]>(mod.id, "CubemapArrayExtended", []);
+const name$ = bindValue<string>(mod.id, "CubemapName", "None");
+const preview$ = bindValue<string>(mod.id, "CubemapPreview", "");
+const hdri$ = bindValue<boolean>(mod.id, "IsHDRISkyEnabled", false);
+const customSun$ = bindValue<boolean>(mod.id, "IsCustomSunEnabled", false);
+const skyStatus$ = bindValue<string>(mod.id, "SkyStatus", "");
+const sunStatus$ = bindValue<string>(mod.id, "SunStatus", "");
+const lux$ = bindValue<number>(mod.id, "HDRISkyLux", 7000);
+const rotation$ = bindValue<number>(mod.id, "HDRISkyRotation", 0);
+const fog$ = bindValue<boolean>(mod.id, "CustomFogEnabled", false);
+const fogDistance$ = bindValue<number>(mod.id, "FogDistance", 1000);
+const fogBase$ = bindValue<number>(mod.id, "FogBaseHeight", 0);
+const fogMax$ = bindValue<number>(mod.id, "FogMaximumHeight", 100);
 
+const SkyCheck = ({ label, checked, onClick, disabled = false }: { label: string; checked: boolean; onClick: () => void; disabled?: boolean }) =>
+    <button type="button" className="sky-check" role="checkbox" aria-checked={checked} disabled={disabled} onClick={onClick}><span className={"sky-check-box" + (checked ? " checked" : "")}>{checked ? "✓" : ""}</span><span>{label}</span></button>;
+
+const SkySlider = ({ label, value, min, max, step, disabled, onChange, unit = "" }: { label: string; value: number; min: number; max: number; step: number; disabled: boolean; onChange: (n: number) => void; unit?: string }) => {
+    const ref = useRef<HTMLDivElement>(null);
+    const cleanup = useRef<(() => void) | null>(null);
+    const callback = useRef(onChange);
+    callback.current = onChange;
+    const safe = Number.isFinite(value) ? Math.max(min, Math.min(max, value)) : min;
+    const [drag, setDrag] = useState<number | null>(null);
+    const [draft, setDraft] = useState(String(safe));
+    const editing = useRef(false);
+    useEffect(() => { if (!editing.current) setDraft(String(safe)); }, [safe]);
+    useEffect(() => () => cleanup.current?.(), []);
+    const clamp = (n: number) => Math.max(min, Math.min(max, n));
+    const send = (n: number) => { const v = clamp(n); setDraft(String(v)); callback.current(v); };
+    const begin = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (disabled || e.button !== 0 || !ref.current) return;
+        e.preventDefault(); e.stopPropagation(); cleanup.current?.();
+        const rect = ref.current.getBoundingClientRect();
+        if (rect.width <= 0 || max <= min) return;
+        const update = (x: number) => { const n = clamp(Number((min + Math.round((x - rect.left) / rect.width * (max - min) / step) * step).toPrecision(10))); setDrag(n); send(n); };
+        const move = (ev: MouseEvent) => { ev.preventDefault(); update(ev.clientX); };
+        const stop = () => { cleanup.current?.(); setDrag(null); };
+        const up = (ev: MouseEvent) => { update(ev.clientX); stop(); };
+        cleanup.current = () => { document.removeEventListener("mousemove", move, true); document.removeEventListener("mouseup", up, true); window.removeEventListener("blur", stop); cleanup.current = null; };
+        document.addEventListener("mousemove", move, true); document.addEventListener("mouseup", up, true); window.addEventListener("blur", stop); update(e.clientX);
+    };
+    const percent = max > min ? (clamp(drag ?? safe) - min) / (max - min) * 100 : 0;
+    return <div className={"sky-slider-row" + (disabled ? " disabled" : "")}>
+        <div className="sky-slider-label"><span>{label}</span><div><input aria-label={label} type="text" disabled={disabled} value={draft} onFocus={() => { editing.current = true; }} onChange={e => setDraft(e.target.value)} onBlur={() => { editing.current = false; if (draft.trim() && Number.isFinite(Number(draft))) send(Number(draft)); else setDraft(String(safe)); }} onKeyDown={e => { e.stopPropagation(); if (e.key === "Enter") e.currentTarget.blur(); }} />{unit && <span className="sky-unit">{unit}</span>}</div></div>
+        <div ref={ref} className="sky-slider" tabIndex={disabled ? -1 : 0} role="slider" aria-label={label} aria-valuemin={min} aria-valuemax={max} aria-valuenow={safe} aria-disabled={disabled} onMouseDown={begin} onKeyDown={e => { if (disabled) return; const delta = e.key === "ArrowLeft" || e.key === "ArrowDown" ? -step : e.key === "ArrowRight" || e.key === "ArrowUp" ? step : 0; if (delta) { e.preventDefault(); e.stopPropagation(); send(Number((safe + delta).toPrecision(10))); } }}>
+            <div className="sky-slider-track"/><div className="sky-slider-fill" style={{width: percent + "%"}}/><div className="sky-slider-thumb" style={{left: percent + "%"}}/>
+        </div>
+    </div>;
+};
+
+const Preview = ({ pixels }: { pixels: string }) => {
+    const ref = useRef<HTMLCanvasElement>(null);
+    useEffect(() => {
+        if (!ref.current || typeof pixels !== "string" || pixels.length !== 48 * 28 * 6) return;
+        const ctx = ref.current.getContext("2d");
+        if (!ctx) return;
+        for (let y = 0; y < 28; y++) for (let x = 0; x < 48; x++) {
+            const i = (y * 48 + x) * 6;
+            ctx.fillStyle = "#" + pixels.slice(i, i + 6);
+            ctx.fillRect(x * 4, y * 4, 4, 4);
+        }
+    }, [pixels]);
+    return <div className="sky-preview">{pixels && pixels.length === 48 * 28 * 6 ? <canvas ref={ref} width={192} height={112} /> : <span>No preview</span>}</div>;
+};
 
 export const SkyAndFogPanel: React.FC = () => {
-  const { translate } = useLocalization();
-
-  const EmissionMultiplier = useValue(EmissionMultiplier$);
-  const SunDiameter = useValue(SunDiameter$);
-  const SunIntensity = useValue(SunIntensity$);
-  const SunFlareSize = useValue(SunFlareSize$);
-
-  const handleSunDiameter = (value: number) => {
-    trigger(mod.id, "handleSunDiameter", value);
-  };
-
-  const handleSunIntensity = (value: number) => {
-    trigger(mod.id, "handleSunIntensity", value);
-  };
-
-  const handleSunFlareSize = (value: number) => {
-    trigger(mod.id, "handleSunFlareSize", value);
-  };
-
-  return (
-    <div className="SkyAndFogPanel">
-      <h1 className="CubemapName">
-        {translate("LUMINA.cubemapname")}
-      </h1>
-
-      <label className="space-emission-texture-label">
-        {translate("LUMINA.environmenthdrisky")}
-      </label>
-
-      <SpaceEmissionCheckbox />
-
-      <CustomSunCheckbox />
-
-      <label className="custom-sun-label">
-        {translate("LUMINA.usecustomsunproperties")}
-      </label>
-
-      <label className="sun-diameter-label">
-        {translate("LUMINA.sundiameter")}
-      </label>
-
-      <Slider
-        value={SunDiameter}
-        start={0}
-        end={100}
-        step={0.01}
-        onChange={handleSunDiameter}
-        className="sun-adjust-diameter-slider"
-        gamepadStep={0.01}
-        disabled={false}
-        noFill={false}
-      />
-
-      <label className="sun-intensity-label">
-        {translate("LUMINA.sunintensity")}
-      </label>
-
-      <Slider
-        value={SunIntensity}
-        start={0}
-        end={100}
-        step={0.01}
-        onChange={handleSunIntensity}
-        className="sun-adjust-intensity-slider"
-        gamepadStep={0.01}
-        disabled={false}
-        noFill={false}
-      />
-
-      <label className="sun-flare-size-label">
-        {translate("LUMINA.sunflaresize")}
-      </label>
-
-      <Slider
-        value={SunFlareSize}
-        start={0}
-        end={100}
-        step={0.01}
-        onChange={handleSunFlareSize}
-        className="sun-adjust-flare-size-slider"
-        gamepadStep={0.01}
-        disabled={false}
-        noFill={false}
-      />
-    </div>
-  );
+    const { translate } = useLocalization();
+    const t = (key: string, fallback: string) => translate(key) || fallback;
+    const raw = useValue(cubes$);
+    const cubes = Array.isArray(raw) ? raw.filter((v): v is string => typeof v === "string" && v !== "None").sort() : [];
+    const name = useValue(name$) || "None";
+    const preview = useValue(preview$) || "";
+    const hdri = !!useValue(hdri$);
+    const customSun = !!useValue(customSun$);
+    const fog = !!useValue(fog$);
+    const skyStatus = useValue(skyStatus$);
+    const sunStatus = useValue(sunStatus$);
+    const diameter = useValue(SunDiameter$), intensity = useValue(SunIntensity$), flare = useValue(SunFlareSize$);
+    const lux = useValue(lux$), rotation = useValue(rotation$);
+    const fogDistance = useValue(fogDistance$), fogBase = useValue(fogBase$), fogMax = useValue(fogMax$);
+    const [picker, setPicker] = useState(false);
+    const send = (key: string) => (value: number) => trigger(mod.id, key, value);
+    const choose = (value: string) => { trigger(mod.id, "UpdateCubemapName", value); setPicker(false); };
+    return <div className="SkyAndFogPanel sky-panel-modern">
+        <div className="sky-panel-title">SKY &amp; FOG</div>
+        <div className="sky-cubemap">
+            <div className="sky-cubemap-select">
+                <span className="sky-label">Select cubemap</span>
+                <button className="sky-button sky-select" type="button" onClick={() => setPicker(!picker)}>{name === "None" ? "Game sky" : name}<span>{picker ? "−" : "+"}</span></button>
+                <div className="sky-file-actions"><button type="button" className="sky-button" onClick={() => trigger(mod.id, "ReloadCubemaps")}>Refresh</button><button type="button" className="sky-button" onClick={() => trigger(mod.id, "OpenCubemapFolder")}>Folder</button></div>
+            </div>
+            <Preview pixels={preview}/>
+        </div>
+        {picker && <div className="sky-cubemap-list"><button type="button" className="sky-button" onClick={() => choose("None")}>Game sky</button>{cubes.map(c => <button type="button" key={c} className={"sky-button" + (c === name ? " selected" : "")} onClick={() => choose(c)}>{c}</button>)}{cubes.length === 0 && <span className="sky-status">Add a 4 × 3 cross PNG in the cubemaps folder.</span>}</div>}
+        <SkyCheck label={t("LUMINA.environmenthdrisky", "Enable environment HDRI")} checked={hdri} onClick={() => trigger(mod.id, "SetHDRISkyEnabled")} disabled={name === "None" && !hdri}/>
+        {skyStatus && <div className="sky-status">{skyStatus}</div>}
+        {hdri && <div className="sky-group">
+            <SkySlider label="Environment brightness" unit="lx" value={lux} min={0} max={100000} step={100} disabled={!hdri} onChange={send("SetHDRISkyLux")}/>
+            <SkySlider label="Sky rotation" unit="°" value={rotation} min={0} max={360} step={1} disabled={!hdri} onChange={send("SetHDRISkyRotation")}/>
+        </div>}
+        <div className="sky-section-line"/>
+        <SkyCheck label={t("LUMINA.usecustomsunproperties", "Use custom sun properties")} checked={customSun} onClick={() => trigger(mod.id, "SetCustomSunEnabled")}/>
+        {sunStatus && <div className="sky-status">{sunStatus}</div>}
+        <div className="sky-group">
+            <SkySlider label={t("LUMINA.sundiameter", "Sun diameter")} unit="°" value={diameter} min={0} max={90} step={0.01} disabled={!customSun} onChange={send("handleAngularDiameter")}/>
+            <SkySlider label={t("LUMINA.sunintensity", "Sun intensity")} unit="lx" value={intensity} min={0} max={200000} step={100} disabled={!customSun} onChange={send("handleSunIntensity")}/>
+            <SkySlider label={t("LUMINA.sunflaresize", "Sun flare size")} unit="°" value={flare} min={0} max={90} step={0.01} disabled={!customSun} onChange={send("handleSunFlareSize")}/>
+            {customSun && <button type="button" className="sky-button sky-reset" onClick={() => trigger(mod.id, "ResetCustomSun")}>Restore scene sun values</button>}
+        </div>
+        <div className="sky-section-line"/>
+        <SkyCheck label="Override global fog" checked={fog} onClick={() => trigger(mod.id, "ToggleCustomFog")}/>
+        {fog && <div className="sky-group">
+            <SkySlider label="Fog attenuation distance" unit="m" value={fogDistance} min={1} max={10000} step={10} disabled={!fog} onChange={send("SetFogDistance")}/>
+            <SkySlider label="Fog base height" unit="m" value={fogBase} min={-500} max={999} step={1} disabled={!fog} onChange={send("SetFogBaseHeight")}/>
+            <SkySlider label="Fog maximum height" unit="m" value={fogMax} min={Math.min(999, (Number.isFinite(fogBase) ? fogBase : 0) + 1)} max={1000} step={1} disabled={!fog} onChange={send("SetFogMaximumHeight")}/>
+        </div>}
+    </div>;
 };

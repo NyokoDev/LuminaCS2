@@ -261,6 +261,14 @@ namespace LuminaMod.XML
         [XmlElement]
         public float SunFlareSize { get; set; }
 
+        [XmlElement] public bool SunValuesInitialized { get; set; }
+        [XmlElement] public float HDRISkyLux { get; set; } = 7000f;
+        [XmlElement] public float HDRISkyRotation { get; set; }
+        [XmlElement] public bool CustomFogEnabled { get; set; }
+        [XmlElement] public float FogDistance { get; set; } = 1000f;
+        [XmlElement] public float FogBaseHeight { get; set; }
+        [XmlElement] public float FogMaximumHeight { get; set; } = 100f;
+
         [XmlElement]
         public bool ReloadAllPackagesOnRestart { get; set; }
 

@@ -436,3 +436,53 @@
 
     letter-spacing: 1rem;
 }
+
+
+.SkyAndFogPanel.sky-panel-modern {
+    width: 480rem;
+    height: auto;
+    max-height: 900rem;
+    padding: 20rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    background: rgba(29, 29, 29, .91);
+    border-radius: 18rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    pointer-events: all;
+
+    &::before, &::after { display: none; }
+    .sky-panel-title { font-size: 20rem; color: #eee; letter-spacing: 1rem; margin-bottom: 15rem; }
+    .sky-cubemap { display: flex; flex-direction: row; align-items: center; margin-bottom: 12rem; flex-shrink: 0; }
+    .sky-cubemap-select { flex: 1; min-width: 0; margin-right: 12rem; display: flex; flex-direction: column; }
+    .sky-label { font-size: 15rem; color: #eee; margin-bottom: 6rem; }
+    .sky-preview { width: 144rem; height: 84rem; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #222; border: 1rem solid #535353; border-radius: 3rem; font-size: 12rem; color: #aaa; overflow: hidden; }
+    .sky-preview canvas { width: 144rem; height: 84rem; }
+    .sky-button { background: rgba(255,255,255,.08); color: #eee; border: 1rem solid #555; border-radius: 4rem; min-height: 29rem; padding: 4rem 8rem; font-size: 14rem; text-align: left; }
+    .sky-button:hover, .sky-button.selected { background: #354b55; border-color: #7eabb9; }
+    .sky-select { display: flex; justify-content: space-between; align-items: center; white-space: nowrap; overflow: hidden; }
+    .sky-select span { margin-left: 6rem; }
+    .sky-file-actions { display: flex; flex-direction: row; margin-top: 5rem; }
+    .sky-file-actions .sky-button { flex: 1; margin-right: 5rem; text-align: center; font-size: 12rem; }
+    .sky-cubemap-list { display: flex; flex-direction: column; max-height: 155rem; overflow-y: auto; margin-bottom: 8rem; flex-shrink: 0; }
+    .sky-check { display: flex; align-items: center; flex-direction: row; background: transparent; border: 0; color: #eee; font-size: 14rem; min-height: 38rem; text-align: left; padding: 0; flex-shrink: 0; }
+    .sky-check:disabled { opacity: .5; }
+    .sky-check-box { width: 25rem; height: 25rem; border: 1rem solid #738792; border-radius: 6rem; background: #26333b; margin-right: 10rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 19rem; flex-shrink: 0; }
+    .sky-check-box.checked { background: #31596a; border-color: #86b5c5; }
+    .sky-group { display: flex; flex-direction: column; margin-top: 5rem; flex-shrink: 0; }
+    .sky-slider-row { margin: 11rem 0; flex-shrink: 0; }
+    .sky-slider-row.disabled { opacity: .4; }
+    .sky-slider-label { display: flex; justify-content: space-between; align-items: center; font-size: 13rem; color: #e3d0a7; text-transform: uppercase; }
+    .sky-slider-label > div { display: flex; align-items: center; }
+    .sky-slider-label input { width: 68rem; height: 24rem; text-align: right; color: #eee; background: #242424; border: 1rem solid #606060; border-radius: 3rem; font-size: 13rem; }
+    .sky-unit { color: #aaa; margin-left: 4rem; font-size: 11rem; }
+    .sky-slider { position: relative; height: 24rem; width: 100%; cursor: pointer; }
+    .sky-slider-track, .sky-slider-fill { position: absolute; top: 50%; left: 0; height: 6rem; border-radius: 3rem; transform: translateY(-50%); pointer-events: none; }
+    .sky-slider-track { width: 100%; background: #777; }
+    .sky-slider-fill { background: #25839f; }
+    .sky-slider-thumb { position: absolute; top: 50%; width: 14rem; height: 14rem; border-radius: 7rem; background: #eee; border: 1rem solid #aaa; transform: translate(-50%, -50%); pointer-events: none; }
+    .sky-section-line { height: 1rem; background: rgba(255,255,255,.12); margin: 10rem 0; flex-shrink: 0; }
+    .sky-status { color: #b7b7b7; font-size: 12rem; margin: 2rem 0 8rem; flex-shrink: 0; }
+    .sky-reset { align-self: flex-start; margin-bottom: 4rem; }
+}
