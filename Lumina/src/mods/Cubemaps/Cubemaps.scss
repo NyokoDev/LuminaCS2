@@ -513,3 +513,8 @@
     .sky-current strong { font-size: 16rem; color: #eee; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .sky-load-status { background: rgba(255,255,255,.05); padding: 6rem; }
 }
+
+.SkyAndFogPanel.sky-panel-modern .sky-load-error { background: rgba(125,45,35,.32); border: 1rem solid #b66d59; color: #f1c9b8; padding: 10rem; }
+.SkyAndFogPanel.sky-panel-modern .sky-load-error strong { display: block; font-size: 15rem; margin-bottom: 5rem; }
+.SkyAndFogPanel.sky-panel-modern .sky-error-actions { display: flex; flex-direction: row; margin-top: 8rem; }
+.SkyAndFogPanel.sky-panel-modern .sky-error-actions .sky-button { margin-right: 6rem; }

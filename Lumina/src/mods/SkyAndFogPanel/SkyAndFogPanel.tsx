@@ -119,7 +119,11 @@ export const SkyAndFogPanel: React.FC = () => {
             <Preview pixels={loaded ? preview : ""}/>
         </div>
         <SkyCheck label={t("LUMINA.environmenthdrisky", "Enable environment HDRI")} checked={hdri} onClick={() => trigger(mod.id, "SetHDRISkyEnabled")} disabled={!loaded && !hdri}/>
-        {skyStatus && <div className="sky-status sky-load-status">{skyStatus}</div>}
+        {skyStatus && <div className={"sky-status sky-load-status" + (/rejected|failed|unavailable|invalid|not found|before enabling/i.test(skyStatus) ? " sky-load-error" : "")}>
+            {/rejected|failed|unavailable|invalid|not found|before enabling/i.test(skyStatus) && <strong>Unable to load cubemap</strong>}
+            <div>{skyStatus}</div>
+            {/rejected|failed|unavailable|invalid|not found|before enabling/i.test(skyStatus) && <div className="sky-error-actions"><button type="button" className="sky-button" onClick={() => trigger(mod.id, "ImportCubemap")}>Try another image</button><button type="button" className="sky-button" onClick={() => setPathOpen(true)}>Enter file path</button></div>}
+        </div>}
         {hdri && <div className="sky-group">
             <SkySlider label="Environment brightness" unit="lx" value={lux} min={0} max={100000} step={100} disabled={!hdri} onChange={send("SetHDRISkyLux")}/>
             <SkySlider label="Sky rotation" unit="°" value={rotation} min={0} max={360} step={1} disabled={!hdri} onChange={send("SetHDRISkyRotation")}/>

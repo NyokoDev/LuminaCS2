@@ -26,14 +26,14 @@ class CubemapLoader : MonoBehaviour
             if (string.IsNullOrWhiteSpace(name) || name != Path.GetFileName(name) || name == "None" || name == "Select Cubemap")
                 throw new ArgumentException("Select a cubemap first.");
             string path = Path.Combine(GlobalPaths.LuminaHDRIDirectory, name + ".png");
-            if (!File.Exists(path)) throw new FileNotFoundException("Cubemap PNG not found.");
+            if (!File.Exists(path)) throw new FileNotFoundException("Image rejected: PNG not found. Load the original file again or refresh the cubemap library.");
             texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
-            if (!texture.LoadImage(File.ReadAllBytes(path))) throw new InvalidDataException("Invalid PNG.");
+            if (!texture.LoadImage(File.ReadAllBytes(path))) throw new InvalidDataException("Image rejected: PNG could not be decoded. Open the original image in an image editor and export it again as an RGB or RGBA PNG.");
             bool cross = texture.width % 4 == 0 && texture.height % 3 == 0 && texture.width / 4 == texture.height / 3;
             bool panorama = texture.width == texture.height * 2;
-            if (!cross && !panorama) throw new InvalidDataException("Expected a 4:3 cubemap cross or a 2:1 equirectangular panorama.");
+            if (!cross && !panorama) throw new InvalidDataException($"Image rejected: {texture.width} × {texture.height}. Use a 2:1 equirectangular panorama (4096 × 2048) or a 4:3 cubemap cross (4096 × 3072). Convert or export the original sky in one of these layouts; do not simply stretch it.");
             int size = cross ? texture.width / 4 : Mathf.Min(texture.width / 4, 2048);
-            if (size < 1 || size > SystemInfo.maxCubemapSize) throw new InvalidDataException("Unsupported cubemap face size.");
+            if (size < 1 || size > SystemInfo.maxCubemapSize) throw new InvalidDataException($"Image rejected: face size {size} exceeds supported limits or is invalid. Export a smaller sky, such as 4096 × 2048 (panorama) or 4096 × 3072 (cross).");
             cube = new Cubemap(size, TextureFormat.RGBA32, true) { name = "LuminaCubemap", wrapMode = TextureWrapMode.Clamp, filterMode = FilterMode.Trilinear, anisoLevel = 9 };
             if (cross)
             {

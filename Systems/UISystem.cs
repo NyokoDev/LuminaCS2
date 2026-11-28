@@ -1372,7 +1372,7 @@ ApplySSAOPreset));
             {
                 string path = Path.GetFullPath((input ?? "").Trim().Trim('"'));
                 if (!File.Exists(path) || !string.Equals(Path.GetExtension(path), ".png", StringComparison.OrdinalIgnoreCase))
-                    throw new InvalidDataException("Choose an existing PNG file.");
+                    throw new InvalidDataException("Choose an existing PNG file. For HDR, EXR or JPEG images, export a PNG from an image editor first. Renaming the extension is not sufficient.");
                 Directory.CreateDirectory(GlobalPaths.LuminaHDRIDirectory);
                 string directory = Path.GetFullPath(GlobalPaths.LuminaHDRIDirectory);
                 string name = Path.GetFileNameWithoutExtension(path);
