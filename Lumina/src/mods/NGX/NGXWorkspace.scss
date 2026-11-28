@@ -330,3 +330,11 @@
     .ngx-video-radio .ngx-radio-track-info { margin: 6rem 0 8rem; }
     .ngx-radio-external { margin-top: 4rem; }
 }
+
+
+.NGXWorkspace.ngx-modern {
+    .ngx-audio-radio { width: 365rem; }
+    .ngx-radio-volume { display: flex; align-items: center; gap: 9rem; margin: 10rem 0; font-size: 13rem; }
+    .ngx-radio-volume .ngx-custom-slider { flex: 1; }
+    .ngx-radio-volume > span:last-child { width: 42rem; text-align: right; }
+}

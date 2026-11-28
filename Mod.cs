@@ -296,6 +296,7 @@ namespace Lumina
         {
             Log.Info(nameof(this.OnDispose));
 
+            Lumina.NGX.NGXRadioAudio.Shutdown();
             SSAOSettingsLock.Release();
             harmony?.UnpatchAll($"{nameof(Lumina)}.{nameof(Mod)}");
 
