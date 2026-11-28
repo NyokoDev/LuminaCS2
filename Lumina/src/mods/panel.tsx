@@ -579,9 +579,7 @@ id="Global"
 
 {/* TONEMAPPING PANEL */}
 {ToneMappingEnabled$ && (
-    <div className="TonemappingPanelNew">
-        <TonemappingPanelCompat />
-    </div>
+    <TonemappingPanelCompat />
 )}
 
 {SkyAndFogEnabled$ &&
