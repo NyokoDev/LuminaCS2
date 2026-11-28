@@ -24,6 +24,12 @@ const modes = [
     { name: "External", id: 1, description: "Apply a custom 3D color lookup table." },
 ];
 
+const featuredPacks = [
+    { name: "Filmstock LUT Pack", action: "DownloadFilmstockLUTPack" },
+    { name: "Candy Commercial LUT Pack", action: "DownloadCandyCommercialLUTPack" },
+    { name: "AgX LUT Pack", action: "DownloadAgXLUTPack" },
+];
+
 export const TonemappingPanel: React.FC = () => {
     const { translate } = useLocalization();
     const t = (key: string, fallback: string) => translate(key) || fallback;
@@ -76,6 +82,16 @@ export const TonemappingPanel: React.FC = () => {
                 <span className="sky-label">Selected LUT</span><strong>{name && name !== "None" ? name : "No LUT selected"}</strong>
             </div></div>
             <SkySlider label={t("LUMINA.lutcontribution", "LUT contribution")} value={contribution} min={0} max={1} step={0.001} disabled={false} onChange={send("HandleLUTContribution")}/>
+            <div className="sky-section-line"/>
+            <div className="sky-label">Featured LUT Packs</div>
+            <div className="sky-status">Discover more color grading looks on Paradox Mods.</div>
+            <div className="tone-featured-packs">
+                {featuredPacks.map(pack => <div className="tone-featured-pack" key={pack.action}>
+                    <span className="tone-featured-name">{pack.name}</span>
+                    <button type="button" className="sky-button tone-download" aria-label={"Download " + pack.name} onClick={() => trigger(mod.id, pack.action)}>Download</button>
+                </div>)}
+            </div>
+            <div className="sky-import-hint">Download opens the pack's Paradox Mods page in your browser.</div>
         </>}
         {mode === "Custom" && <>
             <div className="sky-section-line"/>
