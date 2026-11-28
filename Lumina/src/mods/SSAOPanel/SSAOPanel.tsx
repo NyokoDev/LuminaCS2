@@ -215,18 +215,11 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
         <span>{(translate("LUMINA.ao") ?? "Ambient Occlusion")}</span>
         <SSAOCheck label={ssaoEnabled ? (translate("LUMINA.enabled") ?? "Enabled") : (translate("LUMINA.disabled") ?? "Disabled")} value={ssaoEnabled} onChange={handleSSAOEnabled} />
       </div>
-      <div className="ssao-quality-row">
-        <span className="ssao-quality-label">Quality Preset</span>
-        <div className="ssao-quality-buttons">
-          {[{ id: "disabled", label: "Disabled" }, ...qualityPresets, { id: "custom", label: "Custom" }].map(p => (
-            <button key={p.id} type="button" className={"ssao-quality-button" + (quality === p.id ? " active" : "")}
-              disabled={p.id === "custom" && !!ssaoEnabled}
-              onClick={() => trigger(mod.id, "ApplySSAOQuality", p.id)}>
-              {p.label}
-            </button>
-          ))}
-        </div>
-      </div>
+      <SSAOQuickPresets
+        quality={quality}
+        qualityOptions={[{ id: "disabled", label: "Disabled" }, ...qualityPresets, { id: "custom", label: "Custom" }]}
+        onQualityChange={id => trigger(mod.id, "ApplySSAOQuality", id)}
+      />
       <SSAOSection title={(translate("LUMINA.ao") ?? "Ambient Occlusion")} open={sections.ambient} onToggle={() => toggleSection("ambient")}>
         <SSAONumber label={(translate("LUMINA.intensity") ?? "Intensity")} value={intensity} min={0} max={4} step={0.01} disabled={disabled} onChange={handleSSAOIntensity} />
         <SSAONumber label={(translate("LUMINA.maxradius") ?? "Maximum Radius in Pixels")} value={maxRadius} min={16} max={256} step={1} disabled={disabled} onChange={handleSSAOMaxRadius} />
@@ -256,7 +249,6 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
         <SSAONumber label={(translate("LUMINA.denoiserradius") ?? "Denoiser Radius")} value={denoiserRadius} min={0.1} max={1} step={0.001} disabled={rayDisabled || !denoise} onChange={handleSSAODenoiserRadius} />
       </SSAOSection>
       <div className="ssao-footer">SSAO · HDRP</div>
-      <SSAOQuickPresets />
     </div>
   );
 };

@@ -364,3 +364,74 @@
 
   stroke-width: 2;
 }
+
+.ssao-panel-base .ssao-quick-presets {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  min-height: 0;
+  padding: 12rem 14rem;
+  margin-bottom: 12rem;
+  border: 1rem solid rgba(255,255,255,.09);
+}
+
+.ssao-quick-presets__title-row {
+  margin-bottom: 10rem;
+}
+
+.ssao-quick-presets__bolt {
+  width: 22rem;
+  height: 22rem;
+}
+
+.ssao-presets-help {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6rem;
+  padding: 4rem 6rem;
+  color: #b9b9b9;
+  background: transparent;
+  border: 0;
+  font-size: 14rem;
+}
+
+.ssao-presets-help:hover { color: white; }
+.ssao-presets-help svg { width: 16rem; height: 16rem; }
+
+.ssao-style-row {
+  display: flex;
+  flex-direction: column;
+}
+
+.ssao-style-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 6rem;
+}
+
+.ssao-style-buttons .ssao-preset-card {
+  padding: 6rem;
+  gap: 6rem;
+  height: 54rem;
+}
+
+.ssao-style-buttons .ssao-preset-card__icon {
+  width: 29rem;
+  height: 29rem;
+  border-radius: 4rem;
+}
+
+.ssao-style-buttons .ssao-preset-card__icon svg {
+  width: 18rem;
+  height: 18rem;
+}
+
+.ssao-style-buttons .ssao-preset-card__name { font-size: 14rem; }
+.ssao-style-buttons .ssao-preset-card__description { font-size: 11rem; white-space: normal; }
+
+.ssao-presets-note {
+  margin-top: 8rem;
+  font-size: 12rem;
+  color: #aaa;
+}
