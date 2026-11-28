@@ -339,6 +339,39 @@
             gv.SaturationActive = true;
         }
 
+        private void ApplySSAOQuality(string preset)
+        {
+            var settings = GlobalVariables.Instance;
+            if (preset == "disabled")
+            {
+                settings.IsScreenSpaceAmbientOcclusion = false;
+                return;
+            }
+            if (preset == "custom")
+            {
+                settings.IsScreenSpaceAmbientOcclusion = true;
+                return;
+            }
+            int steps, directions, maxRadius;
+            bool full;
+            switch (preset)
+            {
+                case "low": steps = 4; directions = 2; maxRadius = 24; full = false; break;
+                case "medium": steps = 6; directions = 2; maxRadius = 32; full = false; break;
+                case "high": steps = 8; directions = 4; maxRadius = 40; full = true; break;
+                case "ultra": steps = 16; directions = 6; maxRadius = 64; full = true; break;
+                default: return;
+            }
+            settings.IsScreenSpaceAmbientOcclusion = true;
+            settings.AmbientOcclusionRayTracing = false;
+            settings.AmbientOcclusionStepCount = steps;
+            settings.AmbientOcclusionDirectionCount = directions;
+            settings.AmbientOcclusionMaxRadiusInPixels = maxRadius;
+            settings.AmbientOcclusionFullResolution = full;
+            settings.AmbientOcclusionTemporalAccumulation = !full;
+            settings.AmbientOcclusionBilateralUpsample = !full;
+        }
+
         private void ApplySSAOPreset(string preset)
         {
             var settings = GlobalVariables.Instance;
@@ -599,6 +632,7 @@
 
         private void AddScreenSpaceAmbientOcclusionBindings()
         {
+            AddBinding(new TriggerBinding<string>(Mod.MODUI, "ApplySSAOQuality", ApplySSAOQuality));
             // =========================
             // VALUE BINDINGS (UI reads)
             // =========================

@@ -191,6 +191,16 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
   const toggleSection = (key: keyof typeof sections) => setSections(old => ({ ...old, [key]: !old[key] }));
   const disabled = !ssaoEnabled;
   const rayDisabled = disabled || !rayTracing;
+  const qualityPresets = [
+    { id: "low", label: "Low", steps: 4, directions: 2, maxRadius: 24, full: false },
+    { id: "medium", label: "Medium", steps: 6, directions: 2, maxRadius: 32, full: false },
+    { id: "high", label: "High", steps: 8, directions: 4, maxRadius: 40, full: true },
+    { id: "ultra", label: "Ultra", steps: 16, directions: 6, maxRadius: 64, full: true },
+  ];
+  const matchingQuality = qualityPresets.find(p => !rayTracing && stepCount === p.steps &&
+    directionCount === p.directions && maxRadius === p.maxRadius && fullRes === p.full &&
+    temporal === !p.full && bilateralUpsample === !p.full);
+  const quality = !ssaoEnabled ? "disabled" : matchingQuality?.id ?? "custom";
 
   return (
     <div className={`ssao-panel-base ${className}`}>
@@ -202,6 +212,15 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
       <div className="ssao-master-row">
         <span>{(translate("LUMINA.ao") ?? "Ambient Occlusion")}</span>
         <SSAOCheck label={ssaoEnabled ? (translate("LUMINA.enabled") ?? "Enabled") : (translate("LUMINA.disabled") ?? "Disabled")} value={ssaoEnabled} onChange={handleSSAOEnabled} />
+      </div>
+      <div className="ssao-master-row">
+        <span>Quality Preset</span>
+        <select className="ssao-number" style={{ width: "auto", minWidth: "100px" }} aria-label="SSAO Quality Preset" value={quality}
+          onChange={event => trigger(mod.id, "ApplySSAOQuality", event.target.value)}>
+          <option value="disabled">Disabled</option>
+          {qualityPresets.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}
+          <option value="custom" disabled={ssaoEnabled}>Custom</option>
+        </select>
       </div>
       <SSAOSection title={(translate("LUMINA.ao") ?? "Ambient Occlusion")} open={sections.ambient} onToggle={() => toggleSection("ambient")}>
         <SSAONumber label={(translate("LUMINA.intensity") ?? "Intensity")} value={intensity} min={0} max={4} step={0.01} disabled={disabled} onChange={handleSSAOIntensity} />
