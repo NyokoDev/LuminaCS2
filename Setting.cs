@@ -294,65 +294,20 @@ namespace Lumina
             }
         }
 
-        [SettingsUISection(KSection, KSliderGroup)]
+        [SettingsUIHidden]
         public bool isSCGIInterventionEnabled
         {
             get => GlobalVariables.Instance.IsSSGIInterventionEnabled;
-            set
-            {
-                GlobalVariables.Instance.IsSSGIInterventionEnabled = value;
-
-                // Ensure the system exists in the ECS world
-                var world = World.DefaultGameObjectInjectionWorld; // or World.DefaultGameObjectInjectionWorld
-                var system = world.GetOrCreateSystemManaged<GraphicSettingsInterventionSystem>();
-
-                // Toggle SSGI immediately
-                system.ToggleGlobalIllumination();
-            }
+            set => GlobalVariables.Instance.IsSSGIInterventionEnabled = value;
         }
 
-        [SettingsUISection(KSection, KSliderGroup)]
+        [SettingsUIHidden]
         public bool IsContactShadows
         {
             get => GlobalVariables.Instance.IsContactShadows;
-            set
-            {
-                GlobalVariables.Instance.IsContactShadows = value;
-
-                // Ensure the ECS system exists
-                var world = World.DefaultGameObjectInjectionWorld;
-                var system = world.GetOrCreateSystemManaged<RenderEffectsSystem>();
-
-                // Access the static LuminaVolume on the type
-                var volume = RenderEffectsSystem.LuminaVolume;
-                if (volume == null)
-                {
-                    Lumina.Mod.Log.Info("[ContactShadows] LuminaVolume not found!");
-                    return;
-                }
-
-                var profile = volume.profile ?? volume.sharedProfile;
-                if (profile == null)
-                {
-                    Lumina.Mod.Log.Info("[ContactShadows] VolumeProfile not found!");
-                    return;
-                }
-
-                // Ensure the component exists
-                if (!profile.TryGet(out system.m_ContactShadows) || system.m_ContactShadows == null)
-                {
-                    system.m_ContactShadows = profile.Add<ContactShadows>();
-                    Lumina.Mod.Log.Info("[ContactShadows] Component added to profile.");
-                }
-
-                // Apply the toggle immediately
-                system.m_ContactShadows.enable.Override(GlobalVariables.Instance.IsContactShadows);
-                system.m_ContactShadows.active = GlobalVariables.Instance.IsContactShadows;
-
-                Lumina.Mod.Log.Info($"[ContactShadows] Enabled → {GlobalVariables.Instance.IsContactShadows}");
-                OpenUnityGUI();
-            }
+            set => GlobalVariables.Instance.IsContactShadows = value;
         }
+
         /// <summary>
         /// Screen Space Ambient Occlusion (UNITY HDRP).
         /// </summary>
@@ -367,10 +322,6 @@ namespace Lumina
                 RenderEffectsSystem.AmbientOcclusionUpdate();
             }
         }
-        private void OpenUnityGUI()
-        {
-        }
-
         private void CheckForMods()
         {
 

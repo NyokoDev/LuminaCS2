@@ -515,6 +515,9 @@ namespace Lumina.NGX
             if (!TrySetParameterValue(volumeParameter, value))
                 return;
 
+            if (component is GlobalIllumination || component is ContactShadows)
+                volumeParameter.overrideState = true;
+
             TrackPropertyChange(volumeName, componentName, propertyName, volumeParameter);
 
             if (selectedComponent == component)
@@ -927,6 +930,11 @@ namespace Lumina.NGX
                 if (parameter is BoolParameter boolParameter)
                 {
                     boolParameter.value = newState;
+                    if (component is GlobalIllumination || component is ContactShadows)
+                    {
+                        boolParameter.overrideState = true;
+                        TrackPropertyChange(selectedVolume.name, componentName, enableField.Name, boolParameter);
+                    }
                 }
             }
 
