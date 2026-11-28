@@ -103,11 +103,11 @@ export const CAQuickPresets: React.FC = () => {
     <section className="quick-presets">
       <div className="quick-presets__header">
         <span className="quick-presets__title">
-          {translate("LUMINA.caquickpresets")}
+          {translate("LUMINA.caquickpresets") ?? "Quick Presets"}
         </span>
 
-        <span className={"quick-presets__subtitle" + (remainingClicks > 0 ? " quick-presets__minigame-hint" : "")} aria-live="polite">
-          {remainingClicks > 0 ? miniGameHint : translate("LUMINA.oneclickcoloradjustment")}
+        <span className={"quick-presets__subtitle" + (remainingClicks > 0 ? " quick-presets__minigame-hint" : "")}>
+          {remainingClicks > 0 ? miniGameHint : (translate("LUMINA.oneclickcoloradjustment") ?? "One-click color adjustments")}
         </span>
       </div>
 
@@ -145,8 +145,7 @@ export const CAQuickPresets: React.FC = () => {
         <button
           type="button"
           className="quick-preset preset-vice-city"
-          title={remainingClicks > 0 ? miniGameHint : "Vice City '86"}
-          aria-label={remainingClicks > 0 ? "Vice City '86 — " + miniGameHint : "Vice City '86"}
+          aria-label="Vice City '86"
           onClick={handleViceCity}
         >
           <img className="quick-preset__vice-logo" src={ViceCityLogo} alt="Vice City" />
