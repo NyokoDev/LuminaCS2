@@ -194,6 +194,7 @@ namespace Lumina
         private void LoadSettingsTranslations()
         {
             GameManager.instance.localizationManager.AddSource("en-US", new LocaleEN(setting));
+            GameManager.instance.localizationManager.AddSource("en-US", SSAOSettingsLock.OwnershipLocale);
             GameManager.instance.localizationManager.AddSource("es-ES", new LocaleES(setting));
             GameManager.instance.localizationManager.AddSource("fr-FR", new LocaleFR(setting));
             GameManager.instance.localizationManager.AddSource("de-DE", new LocaleDE(setting));
@@ -296,6 +297,7 @@ namespace Lumina
         {
             Log.Info(nameof(this.OnDispose));
 
+            GameManager.instance.localizationManager.RemoveSource(SSAOSettingsLock.OwnershipLocale);
             harmony?.UnpatchAll($"{nameof(Lumina)}.{nameof(Mod)}");
 
             if (this.setting != null)
