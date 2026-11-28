@@ -198,6 +198,74 @@ const PropertyEditor = ({ property: p, onCommit, onConsole }: { property: Proper
     </div>;
 };
 
+const NGXRadio = ({ onClose }: { onClose: () => void }) => {
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const [url, setUrl] = useState("");
+    const [source, setSource] = useState("");
+    const [status, setStatus] = useState("");
+    const [playing, setPlaying] = useState(false);
+    const [muted, setMuted] = useState(false);
+
+    useEffect(() => {
+        const video = videoRef.current;
+        if (!source || !video) return;
+        return () => {
+            try { video.pause(); video.setAttribute("src", ""); } catch {}
+        };
+    }, [source]);
+
+    const load = () => {
+        const next = url.trim();
+        if (!/^https:\/\/[^\s]+\.webm(?:[?#][^\s]*)?$/i.test(next)) {
+            setStatus("Enter a direct HTTPS WebM video URL, not a YouTube page.");
+            return;
+        }
+        setStatus("Loading video...");
+        setPlaying(false);
+        if (next === source) {
+            try { const result = videoRef.current?.play(); if (result && typeof result.catch === "function") result.catch(() => setStatus("Playback unavailable.")); } catch { setStatus("Playback unavailable."); }
+        } else setSource(next);
+    };
+
+    const togglePlayback = () => {
+        const video = videoRef.current;
+        if (!video) return;
+        try {
+            if (playing) {
+                video.pause();
+                setPlaying(false);
+            } else {
+                const result = video.play();
+                if (result && typeof result.catch === "function") result.catch(() => setStatus("Playback unavailable."));
+            }
+        } catch { setStatus("Playback unavailable."); }
+    };
+
+    return <div className="ngx-radio-panel ngx-video-radio">
+        <div className="ngx-radio-heading"><span>NGX RADIO</span><button className="ngx-icon-button" type="button" aria-label="Close radio" onClick={onClose}><WorkspaceIcon kind="close" /></button></div>
+        <div className="ngx-radio-video-frame">
+            {source ? <video key={source} ref={videoRef} src={source} autoPlay muted={muted} preload="auto" width={384} height={216}
+                onPlaying={() => { setPlaying(true); setStatus(""); }}
+                onPlay={() => { setPlaying(true); setStatus(""); }}
+                onPause={() => setPlaying(false)}
+                onEnded={() => setPlaying(false)}
+                onError={() => { setPlaying(false); setStatus("Unable to load this video. Check its format and server support."); }} /> :
+                <div className="ngx-radio-video-empty"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><rect x="4" y="9" width="40" height="30" rx="3" /><path d="M20 17l12 7-12 7z" /></svg><span>In-game video player</span></div>}
+        </div>
+        <div className="ngx-radio-controls">
+            <button type="button" className="ngx-radio-play" disabled={!source} onClick={togglePlayback}>{playing ? "Pause" : "Play"}</button>
+            <button type="button" className="ngx-radio-play" disabled={!source} onClick={() => setMuted(value => !value)}>{muted ? "Unmute" : "Mute"}</button>
+            <button type="button" className="ngx-radio-play" disabled={!source} onClick={() => { setSource(""); setPlaying(false); setStatus(""); }}>Stop</button>
+        </div>
+        <div className="ngx-radio-source"><input className="ngx-value-input" type="text" value={url} placeholder="https://…/video.webm" aria-label="Direct WebM video URL" onChange={e => setUrl(e.target.value)} onKeyDown={e => { e.stopPropagation(); if (e.key === "Enter") load(); }} /><button type="button" className="ngx-radio-play" onClick={load}>Load</button></div>
+        {status && <div className="ngx-radio-note">{status}</div>}
+        <div className="ngx-radio-kicker">FEATURED TRACK</div>
+        <div className="ngx-radio-track-info"><strong>Gangsta's Paradise</strong><span>Coolio feat. L.V. · 1995</span></div>
+        <button type="button" className="ngx-radio-play ngx-radio-external" onClick={() => trigger("Lumina", "OpenNGXRadio")}>Official video on YouTube (browser)</button>
+        <div className="ngx-radio-note">In-game playback requires an authorized direct WebM source. YouTube pages cannot be embedded in the game UI.</div>
+    </div>;
+};
+
 export default function NGXWorkspace() {
     const [position, setPosition] = useState({ x: 30, y: 30 });
     const panelRef = useRef<HTMLDivElement>(null);
@@ -299,13 +367,7 @@ export default function NGXWorkspace() {
             </div>
             <div className="ngx-footer"><span></span><button className="ngx-button" type="button" onClick={() => openConsole()}><Terminal />Console</button></div>
         </>}
-        {showRadio && !compact && <div className="ngx-radio-panel">
-            <div className="ngx-radio-heading"><span>NGX RADIO</span><button className="ngx-icon-button" type="button" aria-label="Close radio" onClick={() => setShowRadio(false)}><WorkspaceIcon kind="close" /></button></div>
-            <div className="ngx-radio-kicker">WORKSPACE SOUNDTRACK · 01</div>
-            <div className="ngx-radio-track"><div className="ngx-radio-art"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><circle cx="24" cy="24" r="18" /><circle cx="24" cy="24" r="12" /><circle cx="24" cy="24" r="4" /><path d="M24 6v8M42 24h-8M24 42v-8M6 24h8" /></svg></div><div className="ngx-radio-track-info"><strong>Gangsta's Paradise</strong><span>Coolio feat. L.V. · 1995</span></div></div>
-            <button type="button" className="ngx-radio-play" onClick={() => trigger("Lumina", "OpenNGXRadio")}><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5l12 7-12 7z" /></svg>Play on YouTube</button>
-            <div className="ngx-radio-note">Music for your city-building sessions. Opens in your browser so you can keep editing in NGX.</div>
-        </div>}
+        {showRadio && !compact && <NGXRadio onClose={() => setShowRadio(false)} />}
         {showPresets && !compact && <div className="ngx-preset-overlay"><NGXSaveManager onClose={() => setShowPresets(false)} /></div>}
         {removeTarget && <div className="ngx-confirm-overlay">
             <div className="ngx-confirm-dialog" role="alertdialog" aria-modal="true" aria-labelledby="ngx-remove-title" aria-describedby="ngx-remove-description">

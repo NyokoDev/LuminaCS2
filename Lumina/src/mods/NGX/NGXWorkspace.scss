@@ -313,3 +313,20 @@
     .ngx-radio-play svg { width: 17rem; height: 17rem; margin-right: 6rem; }
     .ngx-radio-note { margin-top: 9rem; color: #999; font-size: 12rem; line-height: 1.4; }
 }
+
+
+.NGXWorkspace.ngx-modern {
+    .ngx-video-radio { width: 410rem; }
+    .ngx-radio-video-frame { width: 100%; height: 216rem; margin-top: 10rem; background: #101010; border: 1rem solid #454545; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .ngx-radio-video-frame video { width: 100%; height: 100%; }
+    .ngx-radio-video-empty { display: flex; flex-direction: column; align-items: center; color: #888; font-size: 13rem; }
+    .ngx-radio-video-empty svg { width: 40rem; height: 40rem; margin-bottom: 8rem; }
+    .ngx-radio-controls, .ngx-radio-source { display: flex; flex-direction: row; margin-top: 7rem; }
+    .ngx-radio-controls .ngx-radio-play { flex: 1; margin-right: 5rem; }
+    .ngx-radio-controls .ngx-radio-play:last-child { margin-right: 0; }
+    .ngx-radio-play:disabled { opacity: .4; }
+    .ngx-radio-source .ngx-value-input { flex: 1; min-width: 0; margin-right: 6rem; height: 32rem; }
+    .ngx-radio-source .ngx-radio-play { width: 62rem; flex-shrink: 0; }
+    .ngx-video-radio .ngx-radio-track-info { margin: 6rem 0 8rem; }
+    .ngx-radio-external { margin-top: 4rem; }
+}
