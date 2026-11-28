@@ -307,29 +307,6 @@ namespace Lumina.NGX
         protected override void OnCreate()
         {
             base.OnCreate();
-            AddBinding(new TriggerBinding<string>(Mod.MODUI, "NGXRadioLoadAudio", NGXRadioAudio.Load));
-            AddBinding(new TriggerBinding(Mod.MODUI, "NGXRadioToggleAudio", NGXRadioAudio.Toggle));
-            AddBinding(new TriggerBinding(Mod.MODUI, "NGXRadioStopAudio", NGXRadioAudio.Stop));
-            AddBinding(new TriggerBinding<float>(Mod.MODUI, "NGXRadioSetVolume", NGXRadioAudio.SetVolume));
-            AddBinding(new TriggerBinding<bool>(Mod.MODUI, "NGXRadioSetLoop", NGXRadioAudio.SetLoop));
-            AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "NGXRadioAudioStatus", () => NGXRadioAudio.Status));
-            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "NGXRadioAudioPlaying", () => NGXRadioAudio.Playing));
-            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "NGXRadioAudioLoaded", () => NGXRadioAudio.HasClip));
-            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "NGXRadioAudioVolume", () => NGXRadioAudio.Volume));
-            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "NGXRadioAudioLoop", () => NGXRadioAudio.Loop));
-
-
-            AddBinding(new TriggerBinding(Mod.MODUI, "OpenNGXRadio", () =>
-            {
-                try
-                {
-                    UnityEngine.Application.OpenURL("https://www.youtube.com/watch?v=fPO76Jlnz6c");
-                }
-                catch (Exception exception)
-                {
-                    Mod.Log.Warn($"[NGX] Could not open music: {exception.Message}");
-                }
-            }));
 
             AddBinding(new TriggerBinding<string>(Mod.MODUI, "SaveNGX", SaveNGX));
             AddBinding(new TriggerBinding<string>(Mod.MODUI, "LoadNGX", LoadNGX));
