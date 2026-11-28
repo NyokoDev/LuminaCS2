@@ -160,6 +160,9 @@
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "HandleLUTContribution", HandleLUTContribution));
             AddBinding(new TriggerBinding(Mod.MODUI, "OpenLUTFolder", OpenLUTFolder));
             AddBinding(new TriggerBinding(Mod.MODUI, "UpdateLUT", UpdateLUT));
+            AddBinding(new TriggerBinding(Mod.MODUI, "DownloadFilmstockLUTPack", () => OpenUrl("https://mods.paradoxplaza.com/mods/108745/Windows")));
+            AddBinding(new TriggerBinding(Mod.MODUI, "DownloadCandyCommercialLUTPack", () => OpenUrl("https://mods.paradoxplaza.com/mods/91836/Windows")));
+            AddBinding(new TriggerBinding(Mod.MODUI, "DownloadAgXLUTPack", () => OpenUrl("https://mods.paradoxplaza.com/mods/161637/Windows")));
 
             AddUpdateBinding(new GetterValueBinding<string>(Mod.MODUI, "TextureFormat", GetTextureFormatMode));
 
