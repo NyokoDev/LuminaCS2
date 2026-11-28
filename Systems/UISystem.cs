@@ -223,6 +223,9 @@
             AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "SunFlareSize", SunFlareSize));
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "handleSunFlareSize", handleSunFlareSize));
             AddBinding(new TriggerBinding(Mod.MODUI, "ReloadCubemaps", ReloadCubemaps));
+            AddBinding(new TriggerBinding(Mod.MODUI, "ImportCubemap", OpenCubemapFileDialog));
+            AddBinding(new TriggerBinding<string>(Mod.MODUI, "ImportCubemapPath", ImportCubemapFile));
+            AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "HasLoadedCubemap", () => RenderEffectsSystem.HasLoadedCubemap));
             AddBinding(new TriggerBinding(Mod.MODUI, "OpenCubemapFolder", () =>
             {
                 Directory.CreateDirectory(GlobalPaths.LuminaHDRIDirectory);
@@ -1336,6 +1339,80 @@ ApplySSAOPreset));
 
 
 
+        private void OpenCubemapFileDialog()
+        {
+            try
+            {
+                Directory.CreateDirectory(GlobalPaths.LuminaHDRIDirectory);
+                string path = null;
+                Exception failure = null;
+                var thread = new Thread(() =>
+                {
+                    try { path = CubemapFileDialog.ShowDialog("Load a cubemap", "Cubemap PNG files", "*.png"); }
+                    catch (Exception ex) { failure = ex; }
+                });
+                thread.SetApartmentState(ApartmentState.STA);
+                thread.Start();
+                thread.Join();
+                if (failure != null) throw failure;
+                if (!string.IsNullOrWhiteSpace(path)) ImportCubemapFile(path);
+            }
+            catch (Exception ex)
+            {
+                RenderEffectsSystem.SetSkyStatus("File picker unavailable: " + ex.Message + " — use the file path option.");
+                Mod.Log.Warn("[Sky & Fog] " + ex.Message);
+            }
+        }
+
+        private void ImportCubemapFile(string input)
+        {
+            string copied = null;
+            bool loaded = false;
+            try
+            {
+                string path = Path.GetFullPath((input ?? "").Trim().Trim('"'));
+                if (!File.Exists(path) || !string.Equals(Path.GetExtension(path), ".png", StringComparison.OrdinalIgnoreCase))
+                    throw new InvalidDataException("Choose an existing PNG file.");
+                Directory.CreateDirectory(GlobalPaths.LuminaHDRIDirectory);
+                string directory = Path.GetFullPath(GlobalPaths.LuminaHDRIDirectory);
+                string name = Path.GetFileNameWithoutExtension(path);
+                if (string.IsNullOrWhiteSpace(name)) throw new InvalidDataException("Invalid file name.");
+                if (name.Equals("None", StringComparison.OrdinalIgnoreCase) || name.Equals("Select Cubemap", StringComparison.OrdinalIgnoreCase))
+                    name += " Sky";
+                string destination = Path.Combine(directory, name + ".png");
+                if (!string.Equals(path, destination, StringComparison.OrdinalIgnoreCase))
+                {
+                    string original = name;
+                    int suffix = 2;
+                    while (File.Exists(destination))
+                    {
+                        name = original + " (" + suffix++ + ")";
+                        destination = Path.Combine(directory, name + ".png");
+                    }
+                    File.Copy(path, destination, false);
+                    copied = destination;
+                }
+                loaded = RenderEffectsSystem.SelectCubemap(name, true);
+                if (!loaded) return;
+                CubemapName = GlobalVariables.Instance.CubemapName;
+                UsingHDRSky = GlobalVariables.Instance.HDRISkyEnabled;
+                ReloadCubemaps();
+                if (GlobalVariables.Instance.SaveAutomatically) SaveToFile();
+            }
+            catch (Exception ex)
+            {
+                RenderEffectsSystem.SetSkyStatus("Cubemap import failed: " + ex.Message);
+                Mod.Log.Warn("[Sky & Fog] " + ex.Message);
+            }
+            finally
+            {
+                if (!loaded && copied != null)
+                {
+                    try { File.Delete(copied); } catch (Exception ex) { Mod.Log.Warn("[Sky & Fog] " + ex.Message); }
+                }
+            }
+        }
+
         private void ReloadCubemaps()
         {
             if (CubemapArrayExtended != null) CubemapArrayExtended.Value = CubemapArrayExtendedReturn();
@@ -1425,13 +1502,19 @@ ApplySSAOPreset));
 
         private void UpdateCubemapName(string obj)
         {
-            if (RenderEffectsSystem.SelectCubemap(obj)) CubemapName = GlobalVariables.Instance.CubemapName;
+            if (RenderEffectsSystem.SelectCubemap(obj, true))
+            {
+                CubemapName = GlobalVariables.Instance.CubemapName;
+                UsingHDRSky = GlobalVariables.Instance.HDRISkyEnabled;
+                if (GlobalVariables.Instance.SaveAutomatically) SaveToFile();
+            }
         }
 
         private void SetHDRISkyEnabled()
         {
             RenderEffectsSystem.SetSkyEnabled(!GlobalVariables.Instance.HDRISkyEnabled);
             UsingHDRSky = GlobalVariables.Instance.HDRISkyEnabled;
+            if (GlobalVariables.Instance.SaveAutomatically) SaveToFile();
         }
 
         private bool IsHDRISkyEnabled()

@@ -89,7 +89,11 @@ public static class CubemapFileDialog
         if (hr != 0)
             Marshal.ThrowExceptionForHR(hr);
 
-        var dialog = (IFileOpenDialog)Marshal.GetObjectForIUnknown(ppv);
+        IFileOpenDialog dialog;
+        try { dialog = (IFileOpenDialog)Marshal.GetObjectForIUnknown(ppv); }
+        finally { Marshal.Release(ppv); }
+        try
+        {
 
         // Set filter
         var filters = new COMDLG_FILTERSPEC[]
@@ -106,7 +110,8 @@ public static class CubemapFileDialog
             string defaultPath = GlobalPaths.LuminaHDRIDirectory; 
             Guid shellItemGuid = typeof(IShellItem).GUID;
             SHCreateItemFromParsingName(defaultPath, IntPtr.Zero, ref shellItemGuid, out IShellItem folder);
-            dialog.SetDefaultFolder(folder);
+            try { dialog.SetDefaultFolder(folder); }
+            finally { Marshal.ReleaseComObject(folder); }
         }
         catch
         {
@@ -118,11 +123,13 @@ public static class CubemapFileDialog
             return null;
 
         dialog.GetResult(out IShellItem item);
-        item.GetDisplayName(SIGDN.SIGDN_FILESYSPATH, out string filePath);
-
-        Marshal.ReleaseComObject(item);
-        Marshal.ReleaseComObject(dialog);
-
-        return filePath;
+        try
+        {
+            item.GetDisplayName(SIGDN.SIGDN_FILESYSPATH, out string filePath);
+            return filePath;
+        }
+        finally { Marshal.ReleaseComObject(item); }
+        }
+        finally { Marshal.ReleaseComObject(dialog); }
     }
 }

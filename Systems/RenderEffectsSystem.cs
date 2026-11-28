@@ -308,6 +308,8 @@
 
         public static string SkyStatus { get; private set; } = "";
         private static string loadedCubemapName;
+        public static bool HasLoadedCubemap => GlobalCubemap != null && loadedCubemapName == GlobalVariables.Instance.CubemapName;
+        internal static void SetSkyStatus(string message) => SkyStatus = message;
         private GlobalVariables skySettingsInstance;
         public static void InitializeCubemap()
         {
@@ -324,7 +326,7 @@
             }
         }
 
-        public static bool SelectCubemap(string name)
+        public static bool SelectCubemap(string name, bool activate = false)
         {
             var settings = GlobalVariables.Instance;
             if (string.IsNullOrWhiteSpace(name) || name == "None" || name == "Select Cubemap")
@@ -345,6 +347,7 @@
             GlobalCubemap = next;
             loadedCubemapName = name;
             settings.CubemapName = name;
+            if (activate) settings.HDRISkyEnabled = true;
             if (settings.HDRISkyEnabled) ApplyCubemap();
             else SkyStatus = "Cubemap ready. Enable HDRI to apply.";
             if (previous != null && previous != next) UnityEngine.Object.Destroy(previous);
@@ -361,11 +364,11 @@
                 SkyStatus = "Using the game sky.";
                 return;
             }
-            if (GlobalCubemap == null || loadedCubemapName != settings.CubemapName)
+            if (!HasLoadedCubemap)
                 if (!SelectCubemap(settings.CubemapName) || GlobalCubemap == null)
                 {
                     settings.HDRISkyEnabled = false;
-                    SkyStatus = "Select a valid cubemap before enabling HDRI.";
+                    if (string.IsNullOrEmpty(SkyStatus)) SkyStatus = "Load a valid cubemap before enabling HDRI.";
                     return;
                 }
             settings.HDRISkyEnabled = true;
@@ -612,7 +615,7 @@
             sky.skyIntensityMode.Override(SkyIntensityMode.Lux);
             sky.desiredLuxValue.Override(Mathf.Max(0f, GlobalVariables.Instance.HDRISkyLux));
             sky.rotation.Override(Mathf.Repeat(GlobalVariables.Instance.HDRISkyRotation, 360f));
-            SkyStatus = "HDRI applied.";
+            SkyStatus = LuminaVolume.enabled ? "HDRI applied." : "Cubemap loaded. Enable Lumina volume to see it.";
         }
 
         public static void UpdateCubemap() => SelectCubemap(CubemapLoader.IncomingCubemap);

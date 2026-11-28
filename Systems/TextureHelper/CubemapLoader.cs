@@ -29,23 +29,37 @@ class CubemapLoader : MonoBehaviour
             if (!File.Exists(path)) throw new FileNotFoundException("Cubemap PNG not found.");
             texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
             if (!texture.LoadImage(File.ReadAllBytes(path))) throw new InvalidDataException("Invalid PNG.");
-            int size = texture.width / 4;
-            if (size < 1 || texture.width != size * 4 || texture.height != size * 3 || size > SystemInfo.maxCubemapSize)
-                throw new InvalidDataException("Expected a 4 x 3 cubemap cross with square faces.");
+            bool cross = texture.width % 4 == 0 && texture.height % 3 == 0 && texture.width / 4 == texture.height / 3;
+            bool panorama = texture.width == texture.height * 2;
+            if (!cross && !panorama) throw new InvalidDataException("Expected a 4:3 cubemap cross or a 2:1 equirectangular panorama.");
+            int size = cross ? texture.width / 4 : Mathf.Min(texture.width / 4, 2048);
+            if (size < 1 || size > SystemInfo.maxCubemapSize) throw new InvalidDataException("Unsupported cubemap face size.");
             cube = new Cubemap(size, TextureFormat.RGBA32, true) { name = "LuminaCubemap", wrapMode = TextureWrapMode.Clamp, filterMode = FilterMode.Trilinear, anisoLevel = 9 };
-            SetCubemapFace(cube, texture, CubemapFace.PositiveX, 2, 1);
-            SetCubemapFace(cube, texture, CubemapFace.PositiveY, 1, 0);
-            SetCubemapFace(cube, texture, CubemapFace.PositiveZ, 1, 1);
-            SetCubemapFace(cube, texture, CubemapFace.NegativeX, 0, 1);
-            SetCubemapFace(cube, texture, CubemapFace.NegativeY, 1, 2);
-            SetCubemapFace(cube, texture, CubemapFace.NegativeZ, 3, 1);
+            if (cross)
+            {
+                SetCubemapFace(cube, texture, CubemapFace.PositiveX, 2, 1);
+                SetCubemapFace(cube, texture, CubemapFace.PositiveY, 1, 0);
+                SetCubemapFace(cube, texture, CubemapFace.PositiveZ, 1, 1);
+                SetCubemapFace(cube, texture, CubemapFace.NegativeX, 0, 1);
+                SetCubemapFace(cube, texture, CubemapFace.NegativeY, 1, 2);
+                SetCubemapFace(cube, texture, CubemapFace.NegativeZ, 3, 1);
+            }
+            else
+            {
+                texture.wrapModeU = TextureWrapMode.Repeat;
+                texture.wrapModeV = TextureWrapMode.Clamp;
+                foreach (CubemapFace face in new[] { CubemapFace.PositiveX, CubemapFace.NegativeX, CubemapFace.PositiveY, CubemapFace.NegativeY, CubemapFace.PositiveZ, CubemapFace.NegativeZ })
+                    SetPanoramaFace(cube, texture, face);
+            }
             cube.SmoothEdges();
             cube.Apply(true, true);
             var preview = new StringBuilder(48 * 28 * 6);
             for (int y = 0; y < 28; y++)
                 for (int x = 0; x < 48; x++)
                 {
-                    Color32 color = texture.GetPixel(size + x * size / 48, size + (27 - y) * size / 28);
+                    Color32 color = cross
+                        ? texture.GetPixel(size + x * size / 48, size + (27 - y) * size / 28)
+                        : texture.GetPixelBilinear(0.375f + x / 47f * 0.25f, 0.75f - y / 27f * 0.5f);
                     preview.Append(color.r.ToString("X2")).Append(color.g.ToString("X2")).Append(color.b.ToString("X2"));
                 }
             Preview = preview.ToString();
@@ -62,6 +76,34 @@ class CubemapLoader : MonoBehaviour
     }
 
     public static void ClearPreview() { Preview = ""; Error = ""; }
+
+    private static void SetPanoramaFace(Cubemap cube, Texture2D texture, CubemapFace face)
+    {
+        int size = cube.width;
+        var pixels = new Color[size * size];
+        for (int y = 0; y < size; y++)
+        {
+            float v = 2f * (y + 0.5f) / size - 1f;
+            for (int x = 0; x < size; x++)
+            {
+                float u = 2f * (x + 0.5f) / size - 1f;
+                Vector3 direction;
+                switch (face)
+                {
+                    case CubemapFace.PositiveX: direction = new Vector3(1f, -v, -u); break;
+                    case CubemapFace.NegativeX: direction = new Vector3(-1f, -v, u); break;
+                    case CubemapFace.PositiveY: direction = new Vector3(u, 1f, v); break;
+                    case CubemapFace.NegativeY: direction = new Vector3(u, -1f, -v); break;
+                    case CubemapFace.PositiveZ: direction = new Vector3(u, -v, 1f); break;
+                    default: direction = new Vector3(-u, -v, -1f); break;
+                }
+                float longitude = Mathf.Atan2(direction.x, direction.z) / (2f * Mathf.PI) + 0.5f;
+                float latitude = Mathf.Asin(direction.y / direction.magnitude) / Mathf.PI + 0.5f;
+                pixels[y * size + x] = texture.GetPixelBilinear(longitude, latitude);
+            }
+        }
+        cube.SetPixels(pixels, face);
+    }
 
     public static void SetCubemapFace(Cubemap cube, Texture2D texture, CubemapFace face, int x, int y)
     {

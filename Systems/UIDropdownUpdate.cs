@@ -35,6 +35,8 @@ namespace Lumina.Systems
             // Extract only the file names without the extension
             RenderEffectsSystem.CubemapFiles = filesWithFullPath
                 .Select(filePath => Path.GetFileNameWithoutExtension(filePath))
+                .Where(name => !string.IsNullOrWhiteSpace(name) && !name.Equals("None", StringComparison.OrdinalIgnoreCase) && !name.Equals("Select Cubemap", StringComparison.OrdinalIgnoreCase))
+                .OrderBy(name => name, StringComparer.OrdinalIgnoreCase)
                 .ToArray();
 
             // Log the updated cubemap files

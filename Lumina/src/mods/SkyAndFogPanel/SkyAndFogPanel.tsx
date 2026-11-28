@@ -10,6 +10,7 @@ export const SunIntensity$ = bindValue<number>(mod.id, "SunIntensity", 0);
 export const SunFlareSize$ = bindValue<number>(mod.id, "SunFlareSize", 0);
 const cubes$ = bindValue<string[]>(mod.id, "CubemapArrayExtended", []);
 const name$ = bindValue<string>(mod.id, "CubemapName", "None");
+const loaded$ = bindValue<boolean>(mod.id, "HasLoadedCubemap", false);
 const preview$ = bindValue<string>(mod.id, "CubemapPreview", "");
 const hdri$ = bindValue<boolean>(mod.id, "IsHDRISkyEnabled", false);
 const customSun$ = bindValue<boolean>(mod.id, "IsCustomSunEnabled", false);
@@ -89,22 +90,36 @@ export const SkyAndFogPanel: React.FC = () => {
     const diameter = useValue(SunDiameter$), intensity = useValue(SunIntensity$), flare = useValue(SunFlareSize$);
     const lux = useValue(lux$), rotation = useValue(rotation$);
     const fogDistance = useValue(fogDistance$), fogBase = useValue(fogBase$), fogMax = useValue(fogMax$);
+    const loaded = !!useValue(loaded$);
     const [picker, setPicker] = useState(false);
+    const [pathOpen, setPathOpen] = useState(false);
+    const [path, setPath] = useState("");
+    useEffect(() => { trigger(mod.id, "ReloadCubemaps"); }, []);
+    const importPath = () => { if (path.trim()) trigger(mod.id, "ImportCubemapPath", path.trim()); };
     const send = (key: string) => (value: number) => trigger(mod.id, key, value);
     const choose = (value: string) => { trigger(mod.id, "UpdateCubemapName", value); setPicker(false); };
-    return <div className="SkyAndFogPanel sky-panel-modern">
+    return <div className="SkyAndFogPanel sky-panel-modern sky-import-panel">
         <div className="sky-panel-title">SKY &amp; FOG</div>
-        <div className="sky-cubemap">
-            <div className="sky-cubemap-select">
-                <span className="sky-label">Select cubemap</span>
-                <button className="sky-button sky-select" type="button" onClick={() => setPicker(!picker)}>{name === "None" ? "Game sky" : name}<span>{picker ? "−" : "+"}</span></button>
-                <div className="sky-file-actions"><button type="button" className="sky-button" onClick={() => trigger(mod.id, "ReloadCubemaps")}>Refresh</button><button type="button" className="sky-button" onClick={() => trigger(mod.id, "OpenCubemapFolder")}>Folder</button></div>
-            </div>
-            <Preview pixels={preview}/>
+        <button type="button" className="sky-button sky-import-primary" onClick={() => trigger(mod.id, "ImportCubemap")}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7h6l2 3h10v10H3zM12 13v4M10 15h4"/></svg>
+            <span>Load Cubemap</span>
+        </button>
+        <div className="sky-import-hint">PNG · 4:3 cross or 2:1 panorama</div>
+        <div className="sky-file-actions sky-import-tools">
+            <button type="button" className="sky-button" onClick={() => setPicker(!picker)}>Library ({cubes.length})</button>
+            <button type="button" className="sky-button" onClick={() => trigger(mod.id, "OpenCubemapFolder")}>Folder</button>
+            <button type="button" className="sky-button" onClick={() => setPathOpen(!pathOpen)}>File path</button>
         </div>
-        {picker && <div className="sky-cubemap-list"><button type="button" className="sky-button" onClick={() => choose("None")}>Game sky</button>{cubes.map(c => <button type="button" key={c} className={"sky-button" + (c === name ? " selected" : "")} onClick={() => choose(c)}>{c}</button>)}{cubes.length === 0 && <span className="sky-status">Add a 4 × 3 cross PNG in the cubemaps folder.</span>}</div>}
-        <SkyCheck label={t("LUMINA.environmenthdrisky", "Enable environment HDRI")} checked={hdri} onClick={() => trigger(mod.id, "SetHDRISkyEnabled")} disabled={name === "None" && !hdri}/>
-        {skyStatus && <div className="sky-status">{skyStatus}</div>}
+        {pathOpen && <div className="sky-path-row"><input type="text" value={path} placeholder="C:\\...\\sky.png" onChange={e => setPath(e.target.value)} onKeyDown={e => { e.stopPropagation(); if (e.key === "Enter") importPath(); }}/><button type="button" className="sky-button" onClick={importPath}>Load</button></div>}
+        {picker && <div className="sky-library"><div className="sky-library-heading"><span>Installed cubemaps</span><button className="sky-button" type="button" onClick={() => trigger(mod.id, "ReloadCubemaps")}>Refresh</button></div><div className="sky-cubemap-list">{cubes.map(c => <button type="button" key={c} className={"sky-button" + (c === name && loaded ? " selected" : "")} onClick={() => choose(c)}>{c}</button>)}{cubes.length === 0 && <span className="sky-status">No installed cubemaps. Load a PNG to get started.</span>}</div></div>}
+        <div className="sky-cubemap sky-current">
+            <div className="sky-cubemap-select"><span className="sky-label">Current sky</span><strong>{loaded ? name : "Game sky"}</strong><span className="sky-status">{hdri && loaded ? "HDRI enabled" : loaded ? "Loaded · inactive" : "Vanilla environment"}</span>
+                {loaded && <button type="button" className="sky-button" onClick={() => choose("None")}>Restore game sky</button>}
+            </div>
+            <Preview pixels={loaded ? preview : ""}/>
+        </div>
+        <SkyCheck label={t("LUMINA.environmenthdrisky", "Enable environment HDRI")} checked={hdri} onClick={() => trigger(mod.id, "SetHDRISkyEnabled")} disabled={!loaded && !hdri}/>
+        {skyStatus && <div className="sky-status sky-load-status">{skyStatus}</div>}
         {hdri && <div className="sky-group">
             <SkySlider label="Environment brightness" unit="lx" value={lux} min={0} max={100000} step={100} disabled={!hdri} onChange={send("SetHDRISkyLux")}/>
             <SkySlider label="Sky rotation" unit="°" value={rotation} min={0} max={360} step={1} disabled={!hdri} onChange={send("SetHDRISkyRotation")}/>

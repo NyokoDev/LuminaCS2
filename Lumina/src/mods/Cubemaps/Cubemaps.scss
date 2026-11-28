@@ -486,3 +486,30 @@
     .sky-status { color: #b7b7b7; font-size: 12rem; margin: 2rem 0 8rem; flex-shrink: 0; }
     .sky-reset { align-self: flex-start; margin-bottom: 4rem; }
 }
+
+
+.SkyAndFogPanel.sky-panel-modern.sky-import-panel {
+    height: 820rem;
+    max-height: 820rem;
+    padding: 18rem;
+    .sky-panel-title { flex-shrink: 0; margin-bottom: 12rem; }
+    .sky-import-primary {
+        display: flex; flex-direction: row; justify-content: center; align-items: center;
+        width: 100%; min-height: 45rem; flex-shrink: 0;
+        background: #285b70; border: 1rem solid #78a8b8; color: #fff;
+        font-size: 18rem; font-weight: 600;
+    }
+    .sky-import-primary:hover { background: #33758d; }
+    .sky-import-primary svg { width: 24rem; height: 24rem; margin-right: 9rem; }
+    .sky-import-hint { font-size: 12rem; color: #b5b5b5; margin: 6rem 0; flex-shrink: 0; }
+    .sky-import-tools { margin-bottom: 10rem; flex-shrink: 0; }
+    .sky-import-tools .sky-button { margin-right: 6rem; min-height: 31rem; }
+    .sky-import-tools .sky-button:last-child { margin-right: 0; }
+    .sky-path-row { display: flex; flex-direction: row; margin-bottom: 8rem; flex-shrink: 0; }
+    .sky-path-row input { flex: 1; min-width: 0; color: white; border: 1rem solid #555; background: #222; padding: 5rem; margin-right: 6rem; }
+    .sky-library { display: flex; flex-direction: column; flex-shrink: 0; padding: 7rem; border: 1rem solid #555; margin-bottom: 10rem; }
+    .sky-library-heading { display: flex; justify-content: space-between; align-items: center; font-size: 13rem; margin-bottom: 6rem; }
+    .sky-current { padding: 10rem 0; border-top: 1rem solid #454545; border-bottom: 1rem solid #454545; }
+    .sky-current strong { font-size: 16rem; color: #eee; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .sky-load-status { background: rgba(255,255,255,.05); padding: 6rem; }
+}
