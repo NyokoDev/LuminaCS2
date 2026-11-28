@@ -57,6 +57,8 @@ type NumericControlProps = {
 
 const SSAONumber = ({ label, value, min, max, step, disabled, onChange }: NumericControlProps) => {
   const { translate } = useLocalization();
+  const valid = typeof value === "number" && Number.isFinite(value);
+  const safeValue = valid ? Math.max(min, Math.min(max, value)) : min;
   const format = (v: number) => Number.isFinite(v) ? String(Number(v.toFixed(3))) : "";
   const [draft, setDraft] = useState(format(value));
   const editing = useRef(false);
@@ -72,15 +74,15 @@ const SSAONumber = ({ label, value, min, max, step, disabled, onChange }: Numeri
     <div className="ssao-setting-row">
       <span className="ssao-setting-label">{label}</span>
       <div className="ssao-slider-wrap">
-        <Slider value={value} start={min} end={max} step={step} gamepadStep={step} disabled={disabled} noFill={false} onChange={onChange} className="ssao-setting-slider" />
+        <Slider value={safeValue} start={min} end={max} step={step} gamepadStep={step} disabled={disabled || !valid} noFill={false} onChange={next => { if (valid && Number.isFinite(next)) onChange(Math.max(min, Math.min(max, next))); }} className="ssao-setting-slider" />
       </div>
-      <input className="ssao-number" type="text" inputMode="decimal" aria-label={label} value={draft} disabled={disabled}
+      <input className="ssao-number" type="text" inputMode="decimal" aria-label={label} value={draft} disabled={disabled || !valid}
         onFocus={() => { editing.current = true; cancelled.current = false; }}
         onChange={event => setDraft(event.target.value)}
         onBlur={() => {
           editing.current = false;
           const parsed = Number(draft);
-          if (disabled || cancelled.current || !draft.trim() || !Number.isFinite(parsed)) {
+          if (disabled || !valid || cancelled.current || !draft.trim() || !Number.isFinite(parsed)) {
             setDraft(format(value));
             return;
           }
@@ -213,14 +215,17 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
         <span>{(translate("LUMINA.ao") ?? "Ambient Occlusion")}</span>
         <SSAOCheck label={ssaoEnabled ? (translate("LUMINA.enabled") ?? "Enabled") : (translate("LUMINA.disabled") ?? "Disabled")} value={ssaoEnabled} onChange={handleSSAOEnabled} />
       </div>
-      <div className="ssao-master-row">
-        <span>Quality Preset</span>
-        <select className="ssao-number" style={{ width: "auto", minWidth: "100px" }} aria-label="SSAO Quality Preset" value={quality}
-          onChange={event => trigger(mod.id, "ApplySSAOQuality", event.target.value)}>
-          <option value="disabled">Disabled</option>
-          {qualityPresets.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}
-          <option value="custom" disabled={ssaoEnabled}>Custom</option>
-        </select>
+      <div className="ssao-quality-row">
+        <span className="ssao-quality-label">Quality Preset</span>
+        <div className="ssao-quality-buttons">
+          {[{ id: "disabled", label: "Disabled" }, ...qualityPresets, { id: "custom", label: "Custom" }].map(p => (
+            <button key={p.id} type="button" className={"ssao-quality-button" + (quality === p.id ? " active" : "")}
+              disabled={p.id === "custom" && !!ssaoEnabled}
+              onClick={() => trigger(mod.id, "ApplySSAOQuality", p.id)}>
+              {p.label}
+            </button>
+          ))}
+        </div>
       </div>
       <SSAOSection title={(translate("LUMINA.ao") ?? "Ambient Occlusion")} open={sections.ambient} onToggle={() => toggleSection("ambient")}>
         <SSAONumber label={(translate("LUMINA.intensity") ?? "Intensity")} value={intensity} min={0} max={4} step={0.01} disabled={disabled} onChange={handleSSAOIntensity} />

@@ -207,3 +207,38 @@ BUTTON
     opacity: 1;
   }
 }
+
+.ssao-quality-row {
+  display: flex;
+  flex-direction: column;
+  padding: 4rem 0 12rem;
+  flex-shrink: 0;
+}
+
+.ssao-quality-label {
+  margin-bottom: 7rem;
+  color: #ddd;
+  font-size: 16rem;
+}
+
+.ssao-quality-buttons {
+  display: flex;
+  flex-direction: row;
+}
+
+.ssao-quality-button {
+  flex: 1 1 0;
+  min-width: 0;
+  margin-right: 5rem;
+  height: 33rem;
+  color: #ddd;
+  font-size: 15rem;
+  background: rgba(255,255,255,.06);
+  border: 1rem solid rgba(255,255,255,.17);
+  border-radius: 4rem;
+}
+
+.ssao-quality-button:last-child { margin-right: 0; }
+.ssao-quality-button:hover:not(:disabled) { background: rgba(255,255,255,.13); }
+.ssao-quality-button.active { background: rgba(168,117,42,.35); border-color: #d39b48; color: #fff; }
+.ssao-quality-button:disabled:not(.active) { opacity: .45; }
