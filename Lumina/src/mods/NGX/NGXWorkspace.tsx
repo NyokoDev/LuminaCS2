@@ -211,6 +211,7 @@ export default function NGXWorkspace() {
     const [showConsole, setShowConsole] = useState(false);
     const [consoleCommand, setConsoleCommand] = useState("");
     const [showPresets, setShowPresets] = useState(false);
+    const [showRadio, setShowRadio] = useState(false);
     const [compact, setCompact] = useState(false);
     const volumeList = strings(useValue(volumes));
     const currentVolume = asString(useValue(selectedVolume));
@@ -257,8 +258,8 @@ export default function NGXWorkspace() {
         <div className="ngx-header" onMouseDown={beginDrag}>
             <div className="ngx-brand"><img src={LuminaLogo} alt="" /><strong>Lumina NGX</strong><span className="ngx-header-divider" /><span>Workspace</span><small>BETA</small></div>
             <div className="ngx-header-actions" onMouseDown={e => e.stopPropagation()}>
-                <button className="ngx-icon-button" type="button" title="Play Gangsta's Paradise on YouTube (opens browser)" aria-label="Play Gangsta's Paradise on YouTube" onClick={() => trigger("Lumina", "OpenNGXRadio")}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13M9 18c0 1.7-1.5 3-3.5 3S2 19.7 2 18s1.5-3 3.5-3S9 16.3 9 18ZM21 16c0 1.7-1.5 3-3.5 3S14 17.7 14 16s1.5-3 3.5-3 3.5 1.3 3.5 3Z" /></svg></button>
-                <button className="ngx-button" type="button" onClick={() => setShowPresets(!showPresets)}><Layers />Presets</button>
+                <button className={"ngx-button ngx-radio-button" + (showRadio && !compact ? " selected" : "")} type="button" aria-label="NGX Radio" aria-expanded={showRadio && !compact} onClick={() => { if (compact) { setCompact(false); setShowRadio(true); } else setShowRadio(open => !open); setShowPresets(false); }}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="14" rx="2" /><path d="M5 7l13-5M7 11h10M7 15h3M7 18h3" /><circle cx="16" cy="16" r="2.5" /></svg>Radio</button>
+                <button className="ngx-button" type="button" onClick={() => { setShowRadio(false); setShowPresets(!showPresets); }}><Layers />Presets</button>
                 <button className="ngx-button" type="button" onClick={() => openConsole()}><Terminal />Console</button>
                 <button className="ngx-icon-button" type="button" title={compact ? "Expand workspace" : "Collapse workspace"} onClick={() => setCompact(!compact)}><WorkspaceIcon kind={compact ? "plus" : "minus"} /></button>
             </div>
@@ -298,6 +299,13 @@ export default function NGXWorkspace() {
             </div>
             <div className="ngx-footer"><span></span><button className="ngx-button" type="button" onClick={() => openConsole()}><Terminal />Console</button></div>
         </>}
+        {showRadio && !compact && <div className="ngx-radio-panel">
+            <div className="ngx-radio-heading"><span>NGX RADIO</span><button className="ngx-icon-button" type="button" aria-label="Close radio" onClick={() => setShowRadio(false)}><WorkspaceIcon kind="close" /></button></div>
+            <div className="ngx-radio-kicker">WORKSPACE SOUNDTRACK · 01</div>
+            <div className="ngx-radio-track"><div className="ngx-radio-art"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><circle cx="24" cy="24" r="18" /><circle cx="24" cy="24" r="12" /><circle cx="24" cy="24" r="4" /><path d="M24 6v8M42 24h-8M24 42v-8M6 24h8" /></svg></div><div className="ngx-radio-track-info"><strong>Gangsta's Paradise</strong><span>Coolio feat. L.V. · 1995</span></div></div>
+            <button type="button" className="ngx-radio-play" onClick={() => trigger("Lumina", "OpenNGXRadio")}><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5l12 7-12 7z" /></svg>Play on YouTube</button>
+            <div className="ngx-radio-note">Music for your city-building sessions. Opens in your browser so you can keep editing in NGX.</div>
+        </div>}
         {showPresets && !compact && <div className="ngx-preset-overlay"><NGXSaveManager onClose={() => setShowPresets(false)} /></div>}
         {removeTarget && <div className="ngx-confirm-overlay">
             <div className="ngx-confirm-dialog" role="alertdialog" aria-modal="true" aria-labelledby="ngx-remove-title" aria-describedby="ngx-remove-description">
