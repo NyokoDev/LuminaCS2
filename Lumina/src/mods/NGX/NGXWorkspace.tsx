@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { bindValue, trigger, useValue } from "cs2/api";
-import { Slider, SliderValueTransformer } from "../slider";
 import { Box, Layers, Search, Terminal, Check, ChevronRight, SlidersHorizontal } from "lucide-react";
 import LuminaLogo from "../../img/Lumina.svg";
 import NGXConsole from "./Console/NGXConsole";
@@ -9,12 +8,12 @@ import "./NGXWorkspace.scss";
 import "./NGXWorkspace.4k.scss";
 import "./NGXConfirmation.scss";
 
-export const volumes = bindValue<string[]>("Lumina", "GetVolumes");
-export const selectedVolume = bindValue<string>("Lumina", "SelectedVolume");
-export const volumeComponents = bindValue<string[]>("Lumina", "GetVolumeComponents");
-export const availableComponents = bindValue<string[]>("Lumina", "GetAvailableComponents");
-export const componentProperties = bindValue<string[]>("Lumina", "GetComponentProperties");
-export const componentStates = bindValue<string[]>("Lumina", "GetComponentStates");
+export const volumes = bindValue<string[]>("Lumina", "GetVolumes", []);
+export const selectedVolume = bindValue<string>("Lumina", "SelectedVolume", "");
+export const volumeComponents = bindValue<string[]>("Lumina", "GetVolumeComponents", []);
+export const availableComponents = bindValue<string[]>("Lumina", "GetAvailableComponents", []);
+export const componentProperties = bindValue<string[]>("Lumina", "GetComponentProperties", []);
+export const componentStates = bindValue<string[]>("Lumina", "GetComponentStates", []);
 
 const WorkspaceIcon = ({ kind }: { kind: "close" | "plus" | "minus" }) => (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
@@ -33,24 +32,32 @@ type Property = {
 };
 
 const friendly = (name: string) => name.replace(/_/g, " ").replace(/([a-z0-9])([A-Z])/g, "$1 $2").replace(/^./, c => c.toUpperCase());
+const strings = (value: unknown): string[] => Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : [];
+const asString = (value: unknown): string => typeof value === "string" ? value : typeof value === "number" || typeof value === "boolean" ? String(value) : "";
 const parseProperty = (raw: string): Property | null => {
+    if (typeof raw !== "string" || !raw) return null;
     try {
         const p = JSON.parse(raw);
-        if (typeof p.name !== "string" || typeof p.value !== "string") return null;
-        return p as Property;
+        if (!p || typeof p.name !== "string" || !p.name) return null;
+        return {
+            name: p.name, type: asString(p.type), value: asString(p.value),
+            kind: asString(p.kind) || "readonly", min: asString(p.min), max: asString(p.max),
+            options: strings(p.options),
+        };
     } catch {
-        const [name, type, ...rest] = raw.split("|");
+        const [name, type = "", ...rest] = raw.split("|");
         if (!name) return null;
         const kind = /BoolParameter/i.test(type) ? "bool" : /IntParameter/i.test(type) ? "int" : /FloatParameter/i.test(type) ? "float" : "readonly";
         return { name, type, value: rest.join("|"), kind, min: "", max: "", options: [] };
     }
 };
 
-const finite = (s: string) => s.trim() !== "" && Number.isFinite(Number(s));
+const finite = (s: unknown): s is string => typeof s === "string" && s.trim() !== "" && Number.isFinite(Number(s));
 const matches = (name: string, query: string) => (name + " " + friendly(name)).toLowerCase().includes(query.trim().toLowerCase());
 
 const PropertyEditor = ({ property: p, onCommit, onConsole }: { property: Property; onCommit: (value: string) => void; onConsole: () => void }) => {
     const [draft, setDraft] = useState(p.value);
+    const [enumOpen, setEnumOpen] = useState(false);
     const editing = useRef(false);
     const cancelled = useRef(false);
     const numeric = p.kind === "float" || p.kind === "int" || p.kind === "mask";
@@ -96,9 +103,12 @@ const PropertyEditor = ({ property: p, onCommit, onConsole }: { property: Proper
         <div className="ngx-property-label" title={p.name + " · " + p.type}><span>{friendly(p.name)}</span><small>{p.type}</small></div>
         <div className="ngx-property-editor">
             {p.kind === "bool" ? <button type="button" role="switch" aria-checked={p.value.toLowerCase() === "true"} className={"ngx-switch" + (p.value.toLowerCase() === "true" ? " active" : "")} onClick={() => onCommit(p.value.toLowerCase() === "true" ? "false" : "true")}><span /></button> :
-            p.kind === "enum" && p.options && p.options.length ? <select className="ngx-value-input" value={p.value} onChange={e => onCommit(e.target.value)}>{!p.options.includes(p.value) && <option value={p.value}>{p.value}</option>}{p.options.map(option => <option key={option} value={option}>{friendly(option)}</option>)}</select> :
+            p.kind === "enum" && p.options.length > 0 ? <div className="ngx-enum-picker">
+                <button type="button" className="ngx-enum-toggle" onClick={() => setEnumOpen(open => !open)}><span>{friendly(p.value) || "Select value"}</span><ChevronRight /></button>
+                {enumOpen && <div className="ngx-enum-options">{p.options.map(option => <button key={option} type="button" className={"ngx-enum-option" + (p.value === option ? " selected" : "")} onClick={() => { setEnumOpen(false); onCommit(option); }}><span>{friendly(option)}</span>{p.value === option && <Check />}</button>)}</div>}
+            </div> :
             p.kind === "readonly" ? <span className="ngx-readonly" title={p.value}>{p.value || "—"}</span> :
-            bounded && finite(p.value) ? <><div className="ngx-slider"><Slider value={Math.max(sliderMin, Math.min(sliderMax, Number(p.value)))} start={sliderMin} end={sliderMax} step={step} gamepadStep={step} valueTransformer={SliderValueTransformer.floatTransformer} disabled={false} noFill={false} onChange={v => commit(String(v))} /></div>{textInput}</> :
+            bounded && finite(p.value) ? <><div className="ngx-slider"><input className="ngx-native-range" type="range" min={sliderMin} max={sliderMax} step={step} value={Math.max(sliderMin, Math.min(sliderMax, Number(p.value)))} onChange={e => { const next = Number(e.target.value); if (Number.isFinite(next)) commit(String(next)); }} /></div>{textInput}</> :
             p.kind === "color" ? <><span className="ngx-swatch" style={{ backgroundColor: swatch }} title="Current color" />{textInput}</> : textInput}
         </div>
         <button className="ngx-icon-button ngx-property-console" type="button" title="Edit in optional console" aria-label={"Console: " + friendly(p.name)} onClick={onConsole}><Terminal /></button>
@@ -119,12 +129,12 @@ export default function NGXWorkspace() {
     const [consoleCommand, setConsoleCommand] = useState("");
     const [showPresets, setShowPresets] = useState(false);
     const [compact, setCompact] = useState(false);
-    const volumeList = useValue(volumes) ?? [];
-    const currentVolume = useValue(selectedVolume) ?? "";
-    const components = useValue(volumeComponents) ?? [];
-    const available = useValue(availableComponents) ?? [];
-    const rawProperties = useValue(componentProperties) ?? [];
-    const states = useValue(componentStates) ?? [];
+    const volumeList = strings(useValue(volumes));
+    const currentVolume = asString(useValue(selectedVolume));
+    const components = strings(useValue(volumeComponents));
+    const available = strings(useValue(availableComponents));
+    const rawProperties = strings(useValue(componentProperties));
+    const states = strings(useValue(componentStates));
     const activeComponent = selectedComponent && components.includes(selectedComponent) ? selectedComponent : null;
     const properties = rawProperties.map(parseProperty).filter((p): p is Property => p !== null);
     const filteredVolumes = volumeList.filter(v => matches(v, volumeSearch));

@@ -224,3 +224,21 @@
     .ngx-save-manager__action--load { background: #373737 !important; color: #eee !important; border-color: #666 !important; }
     .ngx-save-manager__preset--selected { border-color: #777; background: #303030 !important; }
 }
+
+
+.ngx-modern {
+    .ngx-enum-picker { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+    .ngx-enum-toggle, .ngx-enum-option {
+        display: flex; align-items: center; justify-content: space-between;
+        min-height: 27rem; padding: 4rem 7rem; color: #eee;
+        background: #202020; border: 1rem solid #545454; border-radius: 4rem;
+        font-size: 13rem; text-align: left;
+    }
+    .ngx-enum-toggle span, .ngx-enum-option span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+    .ngx-enum-toggle svg, .ngx-enum-option svg { width: 14rem; height: 14rem; flex-shrink: 0; }
+    .ngx-enum-toggle svg { transform: rotate(90deg); }
+    .ngx-enum-options { display: flex; flex-direction: column; max-height: 180rem; overflow-y: auto; margin-top: 3rem; }
+    .ngx-enum-option { border-radius: 0; border-color: #383838; }
+    .ngx-enum-option:hover, .ngx-enum-option.selected { background: #414141; }
+    .ngx-native-range { width: 100%; min-width: 0; height: 22rem; margin: 0; }
+}
