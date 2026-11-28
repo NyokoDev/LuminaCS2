@@ -224,6 +224,7 @@
             AddBinding(new TriggerBinding<float>(Mod.MODUI, "handleSunFlareSize", handleSunFlareSize));
             AddBinding(new TriggerBinding(Mod.MODUI, "ReloadCubemaps", ReloadCubemaps));
             AddBinding(new TriggerBinding(Mod.MODUI, "ImportCubemap", OpenCubemapFileDialog));
+            AddBinding(new TriggerBinding(Mod.MODUI, "ObtainCubemaps", () => OpenUrl("https://polyhaven.com/hdris")));
             AddBinding(new TriggerBinding<string>(Mod.MODUI, "ImportCubemapPath", ImportCubemapFile));
             AddUpdateBinding(new GetterValueBinding<bool>(Mod.MODUI, "HasLoadedCubemap", () => RenderEffectsSystem.HasLoadedCubemap));
             AddBinding(new TriggerBinding(Mod.MODUI, "OpenCubemapFolder", () =>
