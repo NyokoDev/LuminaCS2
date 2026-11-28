@@ -29,4 +29,42 @@
         margin-top: 4rem;
         margin-bottom: 14rem;
     }
+    .tone-featured-packs {
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+    }
+
+    .tone-featured-pack {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 45rem;
+        padding: 8rem 10rem;
+        margin-bottom: 6rem;
+        background: rgba(255,255,255,.04);
+        border: 1rem solid #454545;
+        border-radius: 5rem;
+    }
+
+    .tone-featured-name {
+        flex: 1;
+        min-width: 0;
+        margin-right: 10rem;
+        color: #eee;
+        font-size: 14rem;
+    }
+
+    .tone-download {
+        flex-shrink: 0;
+        min-width: 92rem;
+        text-align: center;
+        background: #285b70;
+        border-color: #78a8b8;
+    }
+
+    .tone-download:hover {
+        background: #33758d;
+    }
 }
