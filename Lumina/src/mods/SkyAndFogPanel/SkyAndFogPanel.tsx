@@ -23,10 +23,10 @@ const fogDistance$ = bindValue<number>(mod.id, "FogDistance", 1000);
 const fogBase$ = bindValue<number>(mod.id, "FogBaseHeight", 0);
 const fogMax$ = bindValue<number>(mod.id, "FogMaximumHeight", 100);
 
-const SkyCheck = ({ label, checked, onClick, disabled = false }: { label: string; checked: boolean; onClick: () => void; disabled?: boolean }) =>
+export const SkyCheck = ({ label, checked, onClick, disabled = false }: { label: string; checked: boolean; onClick: () => void; disabled?: boolean }) =>
     <button type="button" className="sky-check" role="checkbox" aria-checked={checked} disabled={disabled} onClick={onClick}><span className={"sky-check-box" + (checked ? " checked" : "")}>{checked ? "✓" : ""}</span><span>{label}</span></button>;
 
-const SkySlider = ({ label, value, min, max, step, disabled, onChange, unit = "" }: { label: string; value: number; min: number; max: number; step: number; disabled: boolean; onChange: (n: number) => void; unit?: string }) => {
+export const SkySlider = ({ label, value, min, max, step, disabled, onChange, unit = "" }: { label: string; value: number; min: number; max: number; step: number; disabled: boolean; onChange: (n: number) => void; unit?: string }) => {
     const ref = useRef<HTMLDivElement>(null);
     const cleanup = useRef<(() => void) | null>(null);
     const callback = useRef(onChange);
