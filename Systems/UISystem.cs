@@ -1887,6 +1887,39 @@ ApplySSAOPreset));
 
         private void StartShadowsMidtonesHighlights()
         {
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetShadowsStart", () => GlobalVariables.Instance.ShadowsStart));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetShadowsEnd", () => GlobalVariables.Instance.ShadowsEnd));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetHighlightsStart", () => GlobalVariables.Instance.HighlightsStart));
+            AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetHighlightsEnd", () => GlobalVariables.Instance.HighlightsEnd));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetShadowsStart", value =>
+            {
+                var settings = GlobalVariables.Instance;
+                settings.NormalizeTonalRanges();
+                if (!float.IsNaN(value) && !float.IsInfinity(value))
+                    settings.ShadowsStart = Mathf.Clamp(value, 0f, settings.ShadowsEnd - 0.01f);
+            }));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetShadowsEnd", value =>
+            {
+                var settings = GlobalVariables.Instance;
+                settings.NormalizeTonalRanges();
+                if (!float.IsNaN(value) && !float.IsInfinity(value))
+                    settings.ShadowsEnd = Mathf.Clamp(value, settings.ShadowsStart + 0.01f, settings.HighlightsStart);
+            }));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetHighlightsStart", value =>
+            {
+                var settings = GlobalVariables.Instance;
+                settings.NormalizeTonalRanges();
+                if (!float.IsNaN(value) && !float.IsInfinity(value))
+                    settings.HighlightsStart = Mathf.Clamp(value, settings.ShadowsEnd, settings.HighlightsEnd - 0.01f);
+            }));
+            AddBinding(new TriggerBinding<float>(Mod.MODUI, "SetHighlightsEnd", value =>
+            {
+                var settings = GlobalVariables.Instance;
+                settings.NormalizeTonalRanges();
+                if (!float.IsNaN(value) && !float.IsInfinity(value))
+                    settings.HighlightsEnd = Mathf.Clamp(value, settings.HighlightsStart + 0.01f, 1f);
+            }));
+            AddBinding(new TriggerBinding(Mod.MODUI, "ResetTonalRanges", () => GlobalVariables.Instance.ResetTonalRanges()));
 
             AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetShadows", () => GetShadows()));
             AddUpdateBinding(new GetterValueBinding<float>(Mod.MODUI, "GetMidtones", () => GetMidtones()));

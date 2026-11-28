@@ -24,6 +24,7 @@ import { SSRPanelBase } from "./ScreenSpaceRefraction/SSRPanel";
 import "../mods/UpdateNotifications/UpdateNotification.scss";
 import { FreshInstall } from "./PopUps/FreshInstall/FreshInstall";
 import { CAQuickPresets } from "./QuickPresets/CA/CAQuickPresets";
+import { TonalRangePanel } from "./TonalRangePanel";
 import { SkyAndFogPanel } from "./SkyAndFogPanel/SkyAndFogPanel";
 import { PlanetarySettings } from "./PlanetaryPanel";
 
@@ -1389,6 +1390,7 @@ id="Global"
 
 
 <CAQuickPresets />
+<TonalRangePanel />
 
 
 

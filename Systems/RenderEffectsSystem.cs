@@ -1001,6 +1001,20 @@
 
         private void ShadowsMidTonesHighlights()
         {
+            if (m_ShadowsMidtonesHighlights == null)
+                return;
+
+            var settings = GlobalVariables.Instance;
+            settings.NormalizeTonalRanges();
+            bool gradingActive = settings.ShadowsActive || settings.MidtonesActive || settings.HighlightsActive;
+            m_ShadowsMidtonesHighlights.shadowsStart.Override(settings.ShadowsStart);
+            m_ShadowsMidtonesHighlights.shadowsEnd.Override(settings.ShadowsEnd);
+            m_ShadowsMidtonesHighlights.highlightsStart.Override(settings.HighlightsStart);
+            m_ShadowsMidtonesHighlights.highlightsEnd.Override(settings.HighlightsEnd);
+            m_ShadowsMidtonesHighlights.shadowsStart.overrideState = gradingActive;
+            m_ShadowsMidtonesHighlights.shadowsEnd.overrideState = gradingActive;
+            m_ShadowsMidtonesHighlights.highlightsStart.overrideState = gradingActive;
+            m_ShadowsMidtonesHighlights.highlightsEnd.overrideState = gradingActive;
             m_ShadowsMidtonesHighlights.shadows.Override(new Vector4(GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows, GlobalVariables.Instance.Shadows));
             m_ShadowsMidtonesHighlights.shadows.overrideState = GlobalVariables.Instance.ShadowsActive;
             m_ShadowsMidtonesHighlights.midtones.Override(new Vector4(GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones, GlobalVariables.Instance.Midtones));

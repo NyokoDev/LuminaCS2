@@ -154,6 +154,39 @@ namespace LuminaMod.XML
         public bool HighlightsActive { get; set; }
 
         [XmlElement]
+        public float ShadowsStart { get; set; } = 0.02f;
+
+        [XmlElement]
+        public float ShadowsEnd { get; set; } = 0.22f;
+
+        [XmlElement]
+        public float HighlightsStart { get; set; } = 0.55f;
+
+        [XmlElement]
+        public float HighlightsEnd { get; set; } = 0.85f;
+
+        public void NormalizeTonalRanges()
+        {
+            ShadowsStart = Mathf.Clamp(FiniteRange(ShadowsStart, 0.02f), 0f, 0.98f);
+            ShadowsEnd = Mathf.Clamp(FiniteRange(ShadowsEnd, 0.22f), ShadowsStart + 0.01f, 0.99f);
+            HighlightsStart = Mathf.Clamp(FiniteRange(HighlightsStart, 0.55f), ShadowsEnd, 0.99f);
+            HighlightsEnd = Mathf.Clamp(FiniteRange(HighlightsEnd, 0.85f), HighlightsStart + 0.01f, 1f);
+        }
+
+        private static float FiniteRange(float value, float fallback)
+        {
+            return float.IsNaN(value) || float.IsInfinity(value) ? fallback : value;
+        }
+
+        public void ResetTonalRanges()
+        {
+            ShadowsStart = 0.02f;
+            ShadowsEnd = 0.22f;
+            HighlightsStart = 0.55f;
+            HighlightsEnd = 0.85f;
+        }
+
+        [XmlElement]
         public float LUTContribution { get; set; } = 1f;
 
         [XmlElement]
