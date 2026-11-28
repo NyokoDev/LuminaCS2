@@ -24,13 +24,13 @@ Description.md
 <!--Link to the forum post where the mod can be discussed-->
 <ForumLink Value="https://forum.paradoxplaza.com/forum/threads/lumina.1645623/" />
 <!--Version of the mod-->
-<ModVersion Value="v4.0" />
+<ModVersion Value="v4.1" />
 <!--Recommended version of the base game to use the mod-->
 <GameVersion Value="1.6.*" />
 <!--Dependency for the mod, can be set multiple times-->
 <Dependency Id="" />
 <!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
-	<ChangeLog Value="Lumina v3.7: Introduced a redesigned welcome experience, workflow selection for Lumina Classic and Lumina NGX, improved UI navigation, and refinements to NGX integration and localization." />
+	<ChangeLog Value="Lumina v4.1: Bug fixes, intervene game's SSAO settings to avoid the user from changing game settings when Lumina's SSAO is active. Release when it's not. Release SGCI and Contact Shadows to allow NGX intervention. NGX BUG FIXES: Fixes BUG when using NGX the UI would crash. Attempted to fix SSAO artifact lines by intercepting renderer's SSAO. Added 'Direction Count' slider.  " />
 <!--ChangeLog>
 </ChangeLog-->
 <!--External links-->
