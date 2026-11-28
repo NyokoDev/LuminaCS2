@@ -55,6 +55,89 @@ const parseProperty = (raw: string): Property | null => {
 const finite = (s: unknown): s is string => typeof s === "string" && s.trim() !== "" && Number.isFinite(Number(s));
 const matches = (name: string, query: string) => (name + " " + friendly(name)).toLowerCase().includes(query.trim().toLowerCase());
 
+type NGXSliderProps = {
+    value: number;
+    min: number;
+    max: number;
+    step: number;
+    label: string;
+    onChange: (value: number) => void;
+};
+
+const NGXSlider = ({ value, min, max, step, label, onChange }: NGXSliderProps) => {
+    const trackRef = useRef<HTMLDivElement>(null);
+    const cleanupRef = useRef<(() => void) | null>(null);
+    const latestChange = useRef(onChange);
+    latestChange.current = onChange;
+    const [dragValue, setDragValue] = useState<number | null>(null);
+    const clamp = (n: number) => Math.max(min, Math.min(max, n));
+    const safeValue = clamp(dragValue === null ? value : dragValue);
+    const percent = (safeValue - min) / (max - min) * 100;
+
+    const snap = (n: number) => {
+        if (n <= min) return min;
+        if (n >= max) return max;
+        return clamp(Number((min + Math.round((n - min) / step) * step).toPrecision(12)));
+    };
+
+    useEffect(() => () => { cleanupRef.current?.(); }, []);
+
+    const beginDrag = (event: React.MouseEvent<HTMLDivElement>) => {
+        if (event.button !== 0 || !trackRef.current) return;
+        event.preventDefault();
+        event.stopPropagation();
+        trackRef.current.focus();
+        cleanupRef.current?.();
+        const rect = trackRef.current.getBoundingClientRect();
+        if (rect.width <= 0) return;
+        let last: number | null = null;
+        const update = (clientX: number) => {
+            const next = snap(min + (clientX - rect.left) / rect.width * (max - min));
+            if (next === last) return;
+            last = next;
+            setDragValue(next);
+            latestChange.current(next);
+        };
+        const move = (e: MouseEvent) => { e.preventDefault(); e.stopPropagation(); update(e.clientX); };
+        const cleanup = () => {
+            document.removeEventListener("mousemove", move, true);
+            document.removeEventListener("mouseup", up, true);
+            window.removeEventListener("blur", blur);
+            cleanupRef.current = null;
+        };
+        const finish = () => { cleanup(); setDragValue(null); };
+        const up = (e: MouseEvent) => { e.preventDefault(); e.stopPropagation(); update(e.clientX); finish(); };
+        const blur = () => finish();
+        cleanupRef.current = cleanup;
+        document.addEventListener("mousemove", move, true);
+        document.addEventListener("mouseup", up, true);
+        window.addEventListener("blur", blur);
+        update(event.clientX);
+    };
+
+    const handleKey = (event: React.KeyboardEvent<HTMLDivElement>) => {
+        let next = safeValue;
+        switch (event.key) {
+            case "ArrowLeft": case "ArrowDown": next -= step; break;
+            case "ArrowRight": case "ArrowUp": next += step; break;
+            case "Home": next = min; break;
+            case "End": next = max; break;
+            default: return;
+        }
+        event.preventDefault();
+        event.stopPropagation();
+        latestChange.current(snap(next));
+    };
+
+    return <div ref={trackRef} className="ngx-custom-slider" tabIndex={0} role="slider"
+        aria-label={label} aria-valuemin={min} aria-valuemax={max} aria-valuenow={safeValue}
+        onMouseDown={beginDrag} onKeyDown={handleKey}>
+        <div className="ngx-custom-slider__track" />
+        <div className="ngx-custom-slider__fill" style={{ width: percent + "%" }} />
+        <div className="ngx-custom-slider__thumb" style={{ left: percent + "%" }} />
+    </div>;
+};
+
 const PropertyEditor = ({ property: p, onCommit, onConsole }: { property: Property; onCommit: (value: string) => void; onConsole: () => void }) => {
     const [draft, setDraft] = useState(p.value);
     const [enumOpen, setEnumOpen] = useState(false);
@@ -68,7 +151,7 @@ const PropertyEditor = ({ property: p, onCommit, onConsole }: { property: Proper
     useEffect(() => {
         if (!editing.current) setDraft(p.value);
     }, [p.value]);
-    const commit = (raw: string) => {
+    const commit = (raw: string, force = false) => {
         let value = raw.trim();
         if (numeric) {
             if (!finite(value)) { setDraft(p.value); return; }
@@ -90,7 +173,7 @@ const PropertyEditor = ({ property: p, onCommit, onConsole }: { property: Proper
         }
         if (!value) { setDraft(p.value); return; }
         setDraft(value);
-        if (value !== p.value) onCommit(value);
+        if (force || value !== p.value) onCommit(value);
     };
     const textInput = <input className={"ngx-value-input" + (numeric ? " numeric" : "")} type="text" value={draft} aria-label={friendly(p.name)}
         onFocus={() => { editing.current = true; cancelled.current = false; }}
@@ -108,7 +191,7 @@ const PropertyEditor = ({ property: p, onCommit, onConsole }: { property: Proper
                 {enumOpen && <div className="ngx-enum-options">{p.options.map(option => <button key={option} type="button" className={"ngx-enum-option" + (p.value === option ? " selected" : "")} onClick={() => { setEnumOpen(false); onCommit(option); }}><span>{friendly(option)}</span>{p.value === option && <Check />}</button>)}</div>}
             </div> :
             p.kind === "readonly" ? <span className="ngx-readonly" title={p.value}>{p.value || "—"}</span> :
-            bounded && finite(p.value) ? <><div className="ngx-slider"><input className="ngx-native-range" type="range" min={sliderMin} max={sliderMax} step={step} value={Math.max(sliderMin, Math.min(sliderMax, Number(p.value)))} onChange={e => { const next = Number(e.target.value); if (Number.isFinite(next)) commit(String(next)); }} /></div>{textInput}</> :
+            bounded && finite(p.value) ? <><div className="ngx-slider"><NGXSlider label={friendly(p.name)} value={Number(p.value)} min={sliderMin} max={sliderMax} step={step} onChange={next => commit(String(next), true)} /></div>{textInput}</> :
             p.kind === "color" ? <><span className="ngx-swatch" style={{ backgroundColor: swatch }} title="Current color" />{textInput}</> : textInput}
         </div>
         <button className="ngx-icon-button ngx-property-console" type="button" title="Edit in optional console" aria-label={"Console: " + friendly(p.name)} onClick={onConsole}><Terminal /></button>
