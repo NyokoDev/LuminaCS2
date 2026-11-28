@@ -1,6 +1,7 @@
 using System;
-using System.Reflection;
+using System.Runtime.CompilerServices;
 using Game.UI.Localization;
+using Game.UI.Widgets;
 using HarmonyLib;
 using LuminaMod.XML;
 
@@ -8,41 +9,27 @@ namespace Lumina.Systems
 {
     internal static class SSAOSettingsLock
     {
-        private static Type s_SSAOType;
-
-        private static bool OwnsSSAO => GlobalVariables.Instance.LuminaVolumeEnabled;
+        private static bool s_Installed;
+        private static readonly ConditionalWeakTable<Widget, object> s_Configured = new();
+        private static bool OwnsSSAO => s_Installed && GlobalVariables.Instance.LuminaVolumeEnabled;
 
         internal static void Install(Harmony harmony)
         {
             try
             {
-                s_SSAOType = AccessTools.TypeByName("Game.Settings.SSAOQualitySettings");
-                var itemType = AccessTools.TypeByName("Game.UI.Menu.AutomaticSettings+SettingItemData");
-                if (s_SSAOType == null || itemType == null)
+                var target = AccessTools.Method(typeof(Widget), "UpdateBase", Type.EmptyTypes);
+                if (target == null)
                 {
-                    Mod.Log.Warn("[SSAO] Native settings types not found.");
+                    Mod.Log.Warn("[SSAO] Widget.UpdateBase not found.");
                     return;
                 }
 
-                var constructor = Array.Find(itemType.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance),
-                    candidate =>
-                    {
-                        var parameters = candidate.GetParameters();
-                        return parameters.Length == 4 && parameters[3].ParameterType == typeof(string);
-                    });
-
-                if (constructor == null)
+                harmony.Patch(target, prefix: new HarmonyMethod(typeof(SSAOSettingsLock), nameof(ConfigureWidget))
                 {
-                    Mod.Log.Warn("[SSAO] SettingItemData constructor not found.");
-                    return;
-                }
-
-                harmony.Patch(constructor, postfix: new HarmonyMethod(typeof(SSAOSettingsLock), nameof(ConfigureItem))
-                {
-                    priority = Priority.Last
+                    priority = Priority.First
                 });
-
-                Mod.Log.Info("[SSAO] Native SSAO settings item lock and ownership label installed.");
+                s_Installed = true;
+                Mod.Log.Info("[SSAO] Native SSAO widget update hook installed.");
             }
             catch (Exception exception)
             {
@@ -50,51 +37,62 @@ namespace Lumina.Systems
             }
         }
 
-        private static void ConfigureItem(object __instance)
+        internal static void Release()
         {
+            s_Installed = false;
+        }
+
+        private static bool EndsWithPath(string path, string name)
+        {
+            return string.Equals(path, name, StringComparison.Ordinal)
+                || path.EndsWith("." + name, StringComparison.Ordinal);
+        }
+
+        private static void ConfigureWidget(Widget __instance)
+        {
+            if (!s_Installed || !(__instance is NamedWidget widget) || s_Configured.TryGetValue(widget, out _))
+                return;
+
+            string path = widget.path.ToString();
+            string id = widget.displayName.id ?? string.Empty;
+            if (string.IsNullOrEmpty(path))
+                return;
+
+            bool quality = EndsWithPath(path, "SSAOQualitySettings")
+                || EndsWithPath(path, "SSAOQualitySettings.Level")
+                || id == "Options.OPTION[SSAOQualitySettings]";
+            bool advanced = EndsWithPath(path, "SSAOQualitySettings.maxPixelRadius")
+                || EndsWithPath(path, "SSAOQualitySettings.fullscreen")
+                || EndsWithPath(path, "SSAOQualitySettings.stepCount");
+            if (!quality && !advanced)
+                return;
+
             try
             {
-                var type = __instance.GetType();
-                var setting = AccessTools.Property(type, "setting")?.GetValue(__instance);
-                if (setting == null || !s_SSAOType.IsInstanceOfType(setting))
-                    return;
-
-                var property = AccessTools.Property(type, "property")?.GetValue(__instance);
-                if (property == null)
-                    return;
-
-                var name = AccessTools.Property(property.GetType(), "name")?.GetValue(property) as string;
-                if (name != "Level" && name != "maxPixelRadius" && name != "fullscreen" && name != "stepCount")
-                    return;
-
-                var disable = AccessTools.Property(type, "disableAction");
-                var originalDisable = disable.GetValue(__instance) as Func<bool>;
-                disable.SetValue(__instance, (Func<bool>)(() => OwnsSSAO || (originalDisable?.Invoke() ?? false)));
-
-                var description = AccessTools.Property(type, "description");
-                var descriptionAction = AccessTools.Property(type, "descriptionAction");
-                var originalDescription = (LocalizedString)description.GetValue(__instance);
-                var originalDescriptionAction = descriptionAction.GetValue(__instance) as Func<LocalizedString>;
-                descriptionAction.SetValue(__instance, (Func<LocalizedString>)(() => OwnsSSAO
+                var originalDisabled = widget.disabled;
+                var originalDescription = widget.description;
+                var originalDescriptionAction = widget.descriptionAction;
+                widget.disabled = () => OwnsSSAO || (originalDisabled?.Invoke() ?? false);
+                widget.descriptionAction = () => OwnsSSAO
                     ? LocalizedString.Value("Managed by Lumina. Use Lumina's SSAO panel to adjust these settings.")
-                    : originalDescriptionAction?.Invoke() ?? originalDescription));
+                    : originalDescriptionAction?.Invoke() ?? originalDescription;
 
-                if (name == "Level")
+                if (quality)
                 {
-                    var displayName = AccessTools.Property(type, "displayName");
-                    var displayNameAction = AccessTools.Property(type, "dispayNameAction");
-                    var originalName = (LocalizedString)displayName.GetValue(__instance);
-                    var originalNameAction = displayNameAction.GetValue(__instance) as Func<LocalizedString>;
-                    displayNameAction.SetValue(__instance, (Func<LocalizedString>)(() => OwnsSSAO
-                        ? LocalizedString.Value("Ambient Occlusion Quality — Managed by Lumina")
-                        : originalNameAction?.Invoke() ?? originalName));
+                    var originalName = widget.displayName;
+                    var originalNameAction = widget.displayNameAction;
+                    widget.displayNameAction = () => OwnsSSAO
+                        ? LocalizedString.Value("Ambient Occlusion Quality (Managed by Lumina)")
+                        : originalNameAction?.Invoke() ?? originalName;
                 }
 
-                Mod.Log.Info($"[SSAO] Native settings item configured: {name}");
+                s_Configured.Add(widget, new object());
+                Mod.Log.Info($"[SSAO] Native SSAO widget configured: {path}, id={id}, quality={quality}");
             }
             catch (Exception exception)
             {
-                Mod.Log.Warn($"[SSAO] Could not configure native settings item: {exception.Message}");
+                Mod.Log.Warn($"[SSAO] Native SSAO widget configuration failed: {exception.Message}");
+                s_Configured.Add(widget, new object());
             }
         }
     }
