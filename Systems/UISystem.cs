@@ -409,7 +409,7 @@
                 ========================================= */
 
                 case "heavy":
-                    settings.AmbientOcclusionIntensity = 5f;
+                    settings.AmbientOcclusionIntensity = 3f;
 
                     settings.AmbientOcclusionRadius = 1.75f;
                     settings.AmbientOcclusionMaxRadiusInPixels = 72;
@@ -433,7 +433,7 @@
                 ========================================= */
 
                 case "dark":
-                    settings.AmbientOcclusionIntensity = 10;
+                    settings.AmbientOcclusionIntensity = 4f;
 
                     settings.AmbientOcclusionRadius = 3.0f;
                     settings.AmbientOcclusionMaxRadiusInPixels = 96;
@@ -678,7 +678,7 @@ ApplySSAOPreset));
             AddUpdateBinding(new GetterValueBinding<int>(
                 Mod.MODUI,
                 "AmbientOcclusionDirectionCount",
-                () => (int)GlobalVariables.Instance.AmbientOcclusionDirectionCount));
+                () => GlobalVariables.Instance.AmbientOcclusionDirectionCount is int directions ? directions : 2));
 
             AddUpdateBinding(new GetterValueBinding<float>(
                 Mod.MODUI,
@@ -793,7 +793,7 @@ ApplySSAOPreset));
             AddBinding(new TriggerBinding<int>(
                 Mod.MODUI,
                 "HandleSSAODirectionCount",
-                value => GlobalVariables.Instance.AmbientOcclusionDirectionCount = value));
+                value => GlobalVariables.Instance.AmbientOcclusionDirectionCount = Mathf.Clamp(value, 1, 6)));
 
             AddBinding(new TriggerBinding<float>(
                 Mod.MODUI,

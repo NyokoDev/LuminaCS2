@@ -316,7 +316,7 @@ namespace LuminaMod.XML
         public bool AmbientOcclusionBilateralUpsample { get; set; }
 
         [XmlElement]
-        public object AmbientOcclusionDirectionCount { get;  set; }
+        public object AmbientOcclusionDirectionCount { get;  set; } = 2;
 
         [XmlElement]
         public float AmbientOcclusionSpecularOcclusion { get;  set; }

@@ -158,52 +158,7 @@
 
         private void InitializeAmbientOcclusion()
         {
-            // Null safety
-            if (LuminaVolume == null)
-                return;
-
-            if (LuminaVolume.profile == null)
-                return;
-
-            var profile = LuminaVolume.profile;
-
-            // Add only if missing
-            if (!profile.TryGet(out m_AmbientOcclusion))
-                m_AmbientOcclusion = profile.Add<ScreenSpaceAmbientOcclusion>();
-
-            if (m_AmbientOcclusion == null)
-                return;
-
-            // Enable / disable component
-            m_AmbientOcclusion.active = GlobalVariables.Instance.IsScreenSpaceAmbientOcclusion;
-
-            // Proper HDRP overrides (ALWAYS use Override)
-            m_AmbientOcclusion.intensity.Override(GlobalVariables.Instance.AmbientOcclusionIntensity);
-        m_AmbientOcclusion.maximumRadiusInPixels = (GlobalVariables.Instance.AmbientOcclusionMaxRadiusInPixels);
-
-        m_AmbientOcclusion.radius.Override(GlobalVariables.Instance.AmbientOcclusionRadius);
-        m_AmbientOcclusion.stepCount = (GlobalVariables.Instance.AmbientOcclusionStepCount);
-
-        m_AmbientOcclusion.temporalAccumulation.Override(GlobalVariables.Instance.AmbientOcclusionTemporalAccumulation);
-        m_AmbientOcclusion.spatialBilateralAggressiveness.Override(GlobalVariables.Instance.AmbientOcclusionBilateralAggressiveness);
-        m_AmbientOcclusion.ghostingReduction.Override(GlobalVariables.Instance.AmbientOcclusionGhostingReduction);
-
-        m_AmbientOcclusion.fullResolution = (GlobalVariables.Instance.AmbientOcclusionFullResolution);
-        m_AmbientOcclusion.directLightingStrength.Override(GlobalVariables.Instance.AmbientOcclusionDirectLightingStrength);
-
-
-            // anything below this dont seem to have a change in game
-        m_AmbientOcclusion.specularOcclusion.Override(GlobalVariables.Instance.AmbientOcclusionSpecularOcclusion);
-        m_AmbientOcclusion.occluderMotionRejection.Override(GlobalVariables.Instance.AmbientOcclusionOccluderMotionRejection);
-        m_AmbientOcclusion.receiverMotionRejection.Override(GlobalVariables.Instance.AmbientOcclusionReceiverMotionRejection);
-
-        m_AmbientOcclusion.rayTracing.Override(GlobalVariables.Instance.AmbientOcclusionRayTracing);
-        m_AmbientOcclusion.rayLength = (GlobalVariables.Instance.AmbientOcclusionRayLength);
-        m_AmbientOcclusion.sampleCount = GlobalVariables.Instance.AmbientOcclusionSampleCount;
-        m_AmbientOcclusion.denoiserRadius = (GlobalVariables.Instance.AmbientOcclusionDenoiserRadius);
-        m_AmbientOcclusion.denoise = GlobalVariables.Instance.AmbientOcclusionDenoise;
-        m_AmbientOcclusion.denoiserRadius = (GlobalVariables.Instance.AmbientOcclusionDenoiserRadius);
-
+            AmbientOcclusionUpdate();
         }
 
         private void CheckVersion()
@@ -500,111 +455,55 @@
 
         public static void AmbientOcclusionUpdate()
         {
+            if (LuminaVolume == null)
+                return;
+
+            var profile = LuminaVolume.profile;
+            if (profile == null)
+                return;
+
+            if (!profile.TryGet(out m_AmbientOcclusion) || m_AmbientOcclusion == null)
+                m_AmbientOcclusion = profile.Add<ScreenSpaceAmbientOcclusion>();
+
+            ApplyAmbientOcclusion(m_AmbientOcclusion);
+        }
+
+        internal static void ApplyAmbientOcclusion(ScreenSpaceAmbientOcclusion ao)
+        {
+            if (ao == null)
+                return;
+
             var gv = GlobalVariables.Instance;
-            if (gv == null)
-                return;
+            bool enabled = gv.IsScreenSpaceAmbientOcclusion;
+            ao.active = true;
+            ao.SetAllOverridesTo(true);
+            ao.quality.levelAndOverride = (ao.quality.levelAndOverride.level, true);
+            ao.quality.overrideState = true;
 
-            if (LuminaVolume == null || LuminaVolume.profile == null)
-                return;
+            ao.intensity.Override(enabled ? gv.AmbientOcclusionIntensity : 0f);
+            ao.directLightingStrength.Override(gv.AmbientOcclusionDirectLightingStrength);
+            ao.radius.Override(gv.AmbientOcclusionRadius);
+            ao.temporalAccumulation.Override(gv.AmbientOcclusionTemporalAccumulation);
+            ao.ghostingReduction.Override(gv.AmbientOcclusionGhostingReduction);
+            ao.blurSharpness.Override(gv.AmbientOcclusionBlurSharpness);
+            ao.spatialBilateralAggressiveness.Override(gv.AmbientOcclusionBilateralAggressiveness);
+            ao.specularOcclusion.Override(gv.AmbientOcclusionSpecularOcclusion);
+            ao.occluderMotionRejection.Override(gv.AmbientOcclusionOccluderMotionRejection);
+            ao.receiverMotionRejection.Override(gv.AmbientOcclusionReceiverMotionRejection);
 
-            if (!LuminaVolume.profile.TryGet(out ScreenSpaceAmbientOcclusion ao) || ao == null)
-                return;
+            ao.stepCount = Mathf.Clamp(gv.AmbientOcclusionStepCount, 2, 32);
+            ao.fullResolution = gv.AmbientOcclusionFullResolution;
+            ao.maximumRadiusInPixels = Mathf.Clamp(gv.AmbientOcclusionMaxRadiusInPixels, 16, 256);
+            ao.bilateralUpsample = gv.AmbientOcclusionBilateralUpsample;
+            ao.directionCount = Mathf.Clamp(gv.AmbientOcclusionDirectionCount is int directions ? directions : 2, 1, 6);
 
-            try
-            {
-                // Enable/disable
-                ao.active = gv.IsScreenSpaceAmbientOcclusion;
-            }
-            catch
-            {
-                Lumina.Mod.Log.Info("ao.active = gv.IsScreenSpaceAmbientOcclusion;");
-            }
-
-            if (!ao.active)
-                return;
-
-            // ===== Fields with Override =====
-            try { ao.intensity.Override(gv.AmbientOcclusionIntensity); }
-            catch { Lumina.Mod.Log.Info("ao.intensity.Override(gv.AmbientOcclusionIntensity);"); }
-
-            try { ao.directLightingStrength.Override(gv.AmbientOcclusionDirectLightingStrength); }
-            catch { Lumina.Mod.Log.Info("ao.directLightingStrength.Override(gv.AmbientOcclusionDirectLightingStrength);"); }
-
-            try { ao.radius.Override(gv.AmbientOcclusionRadius); }
-            catch { Lumina.Mod.Log.Info("ao.radius.Override(gv.AmbientOcclusionRadius);"); }
-
-            try { ao.temporalAccumulation.Override(gv.AmbientOcclusionTemporalAccumulation); }
-            catch { Lumina.Mod.Log.Info("ao.temporalAccumulation.Override(gv.AmbientOcclusionTemporalAccumulation);"); }
-
-            try { ao.ghostingReduction.Override(gv.AmbientOcclusionGhostingReduction); }
-            catch { Lumina.Mod.Log.Info("ao.ghostingReduction.Override(gv.AmbientOcclusionGhostingReduction);"); }
-
-            try { ao.blurSharpness.Override(gv.AmbientOcclusionBlurSharpness); }
-            catch { Lumina.Mod.Log.Info("ao.blurSharpness.Override(gv.AmbientOcclusionBlurSharpness);"); }
-
-            try { ao.spatialBilateralAggressiveness.Override(gv.AmbientOcclusionBilateralAggressiveness); }
-            catch { Lumina.Mod.Log.Info("ao.spatialBilateralAggressiveness.Override(gv.AmbientOcclusionBilateralAggressiveness);"); }
-
-            try { ao.specularOcclusion.Override(gv.AmbientOcclusionSpecularOcclusion); }
-            catch { Lumina.Mod.Log.Info("ao.specularOcclusion.Override(gv.AmbientOcclusionSpecularOcclusion);"); }
-
-            try
-            {
-                ao.occluderMotionRejection.Override(gv.AmbientOcclusionOccluderMotionRejection);
-            }
-            catch { Lumina.Mod.Log.Info("ao.occluderMotionRejection.Override(gv.AmbientOcclusionOccluderMotionRejection);"); }
-
-            try
-            {
-                ao.receiverMotionRejection.Override(gv.AmbientOcclusionReceiverMotionRejection);
-            }
-            catch { Lumina.Mod.Log.Info("ao.receiverMotionRejection.Override(gv.AmbientOcclusionReceiverMotionRejection);"); }
-
-            bool rayTracingAvailable = IsRayTracingAvailable();
-
-            if (rayTracingAvailable)
-            {
-                try { ao.rayTracing.Override(gv.AmbientOcclusionRayTracing); }
-                catch { Lumina.Mod.Log.Info("ao.rayTracing.Override(gv.AmbientOcclusionRayTracing);"); }
-
-                if (gv.AmbientOcclusionRayTracing)
-                {
-                    try { ao.rayLength = gv.AmbientOcclusionRayLength; }
-                    catch { Lumina.Mod.Log.Info("ao.rayLength = gv.AmbientOcclusionRayLength;"); }
-
-                    try { ao.sampleCount = gv.AmbientOcclusionSampleCount; }
-                    catch { Lumina.Mod.Log.Info("ao.sampleCount = gv.AmbientOcclusionSampleCount;"); }
-
-                    try { ao.denoise = gv.AmbientOcclusionDenoise; }
-                    catch { Lumina.Mod.Log.Info("ao.denoise = gv.AmbientOcclusionDenoise;"); }
-
-                    try { ao.denoiserRadius = gv.AmbientOcclusionDenoiserRadius; }
-                    catch { Lumina.Mod.Log.Info("ao.denoiserRadius = gv.AmbientOcclusionDenoiserRadius;"); }
-                }
-            }
-
-            // ===== Plain Primitive Fields (no Override) =====
-            try { ao.stepCount = gv.AmbientOcclusionStepCount; }
-            catch { Lumina.Mod.Log.Info("ao.stepCount = gv.AmbientOcclusionStepCount;"); }
-
-            try
-            {
-                ao.quality.levelAndOverride = (
-                    ao.quality.levelAndOverride.level,
-                    true
-                );
-
-                ao.fullResolution = gv.AmbientOcclusionFullResolution;
-            }
-            catch
-            {
-            }
-
-            try { ao.maximumRadiusInPixels = gv.AmbientOcclusionMaxRadiusInPixels; }
-            catch { Lumina.Mod.Log.Info("ao.maximumRadiusInPixels = gv.AmbientOcclusionMaxRadiusInPixels;"); }
-
-            try { ao.bilateralUpsample = gv.AmbientOcclusionBilateralUpsample; }
-            catch { Lumina.Mod.Log.Info("ao.bilateralUpsample = gv.AmbientOcclusionBilateralUpsample;"); }
+            bool rayTracing = enabled && gv.AmbientOcclusionRayTracing && IsRayTracingAvailable();
+            ao.rayTracing.Override(rayTracing);
+            ao.layerMask.Override(gv.AmbientOcclusionLayerMask.value == 0 ? (LayerMask)(-1) : gv.AmbientOcclusionLayerMask);
+            ao.rayLength = Mathf.Max(0.01f, gv.AmbientOcclusionRayLength);
+            ao.sampleCount = Mathf.Clamp(gv.AmbientOcclusionSampleCount, 1, 64);
+            ao.denoise = gv.AmbientOcclusionDenoise;
+            ao.denoiserRadius = Mathf.Clamp(gv.AmbientOcclusionDenoiserRadius, 0.001f, 1f);
         }
 
         private static bool IsRayTracingAvailable()

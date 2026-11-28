@@ -67,6 +67,7 @@ namespace Lumina
             harmony = new Harmony($"{nameof(Lumina)}.{nameof(Mod)}");
 
             RunTranspilerPatch();
+            SSAOCameraOverride.Install(harmony);
 
 
             // Always patch PhotoModeRenderSystem.OnUpdate postfix

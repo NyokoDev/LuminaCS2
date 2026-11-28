@@ -20,6 +20,7 @@ const ssaoIntensity$ = bindValue<number>(mod.id, "AmbientOcclusionIntensity");
 const ssaoMaxRadius$ = bindValue<number>(mod.id, "AmbientOcclusionMaxRadiusInPixels");
 const ssaoRadius$ = bindValue<number>(mod.id, "AmbientOcclusionRadius");
 const ssaoStepCount$ = bindValue<number>(mod.id, "AmbientOcclusionStepCount");
+const ssaoDirectionCount$ = bindValue<number>(mod.id, "AmbientOcclusionDirectionCount");
 const ssaoBilateral$ = bindValue<number>(mod.id, "AmbientOcclusionBilateralAggressiveness");
 const ssaoGhosting$ = bindValue<number>(mod.id, "AmbientOcclusionGhostingReduction");
 const ssaoDirectLighting$ = bindValue<number>(mod.id, "AmbientOcclusionDirectLightingStrength");
@@ -136,6 +137,7 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
   const maxRadius = useValue(ssaoMaxRadius$);
   const radius = useValue(ssaoRadius$);
   const stepCount = useValue(ssaoStepCount$);
+  const directionCount = useValue(ssaoDirectionCount$);
   const bilateral = useValue(ssaoBilateral$);
   const ghosting = useValue(ssaoGhosting$);
   const directLighting = useValue(ssaoDirectLighting$);
@@ -163,6 +165,7 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
   const handleSSAOMaxRadius = (v: number) => trigger(mod.id, "HandleSSAOMaxRadius", v);
   const handleSSAORadius = (v: number) => trigger(mod.id, "HandleSSAORadius", v);
   const handleSSAOStepCount = (v: number) => trigger(mod.id, "HandleSSAOStepCount", v);
+  const handleSSAODirectionCount = (v: number) => trigger(mod.id, "HandleSSAODirectionCount", v);
   const handleSSAOBilateral = (v: number) => trigger(mod.id, "HandleSSAOBilateral", v);
   const handleSSAOGhosting = (v: number) => trigger(mod.id, "HandleSSAOGhosting", v);
   const handleSSAODirectLighting = (v: number) => trigger(mod.id, "HandleSSAODirectLighting", v);
@@ -201,17 +204,18 @@ export const SSAOPanelBase: React.FC<SSAOPanelBaseProps> = ({
         <SSAOCheck label={ssaoEnabled ? (translate("LUMINA.enabled") ?? "Enabled") : (translate("LUMINA.disabled") ?? "Disabled")} value={ssaoEnabled} onChange={handleSSAOEnabled} />
       </div>
       <SSAOSection title={(translate("LUMINA.ao") ?? "Ambient Occlusion")} open={sections.ambient} onToggle={() => toggleSection("ambient")}>
-        <SSAONumber label={(translate("LUMINA.intensity") ?? "Intensity")} value={intensity} min={0} max={10} step={0.01} disabled={disabled} onChange={handleSSAOIntensity} />
+        <SSAONumber label={(translate("LUMINA.intensity") ?? "Intensity")} value={intensity} min={0} max={4} step={0.01} disabled={disabled} onChange={handleSSAOIntensity} />
         <SSAONumber label={(translate("LUMINA.maxradius") ?? "Maximum Radius in Pixels")} value={maxRadius} min={16} max={256} step={1} disabled={disabled} onChange={handleSSAOMaxRadius} />
-        <SSAONumber label={(translate("LUMINA.radius") ?? "Radius")} value={radius} min={1} max={256} step={0.25} disabled={disabled} onChange={handleSSAORadius} />
-        <SSAONumber label={(translate("LUMINA.stepcount") ?? "Step Count")} value={stepCount} min={0} max={32} step={1} disabled={disabled} onChange={handleSSAOStepCount} />
-        <SSAONumber label={(translate("LUMINA.directlighting") ?? "Direct Lighting Strength")} value={directLighting} min={0} max={10} step={0.5} disabled={disabled} onChange={handleSSAODirectLighting} />
+        <SSAONumber label={(translate("LUMINA.radius") ?? "Radius")} value={radius} min={0.25} max={5} step={0.25} disabled={disabled} onChange={handleSSAORadius} />
+        <SSAONumber label={(translate("LUMINA.stepcount") ?? "Step Count")} value={stepCount} min={2} max={32} step={1} disabled={disabled} onChange={handleSSAOStepCount} />
+        <SSAONumber label={(translate("LUMINA.directlighting") ?? "Direct Lighting Strength")} value={directLighting} min={0} max={1} step={0.01} disabled={disabled} onChange={handleSSAODirectLighting} />
       </SSAOSection>
       <SSAOSection title={(translate("LUMINA.filterquality") ?? "Filtering & Quality")} open={sections.filtering} onToggle={() => toggleSection("filtering")}>
-        <SSAONumber label={(translate("LUMINA.bilateral") ?? "Bilateral Aggressiveness")} value={bilateral} min={0} max={100} step={0.25} disabled={disabled} onChange={handleSSAOBilateral} />
-        <SSAONumber label={(translate("LUMINA.ghosting") ?? "Ghosting Reduction")} value={ghosting} min={0} max={10} step={0.01} disabled={disabled} onChange={handleSSAOGhosting} />
-        <SSAONumber label={(translate("LUMINA.blursharpness") ?? "Blur Sharpness")} value={blurSharpness} min={0.1} max={1} step={0.1} disabled={disabled} onChange={handleSSAOBlurSharpness} />
-        <SSAONumber label={(translate("LUMINA.specular") ?? "Specular Occlusion")} value={specular} min={0.5} max={100} step={0.01} disabled={disabled} onChange={handleSSAOSpecular} />
+        <SSAONumber label={(translate("LUMINA.bilateral") ?? "Bilateral Aggressiveness")} value={bilateral} min={0} max={1} step={0.01} disabled={disabled} onChange={handleSSAOBilateral} />
+        <SSAONumber label={(translate("LUMINA.ghosting") ?? "Ghosting Reduction")} value={ghosting} min={0} max={1} step={0.01} disabled={disabled} onChange={handleSSAOGhosting} />
+        <SSAONumber label={(translate("LUMINA.blursharpness") ?? "Blur Sharpness")} value={blurSharpness} min={0} max={1} step={0.01} disabled={disabled} onChange={handleSSAOBlurSharpness} />
+        <SSAONumber label={(translate("LUMINA.specular") ?? "Specular Occlusion")} value={specular} min={0} max={1} step={0.01} disabled={disabled} onChange={handleSSAOSpecular} />
+        <SSAONumber label={(translate("LUMINA.directioncount") ?? "Direction Count")} value={directionCount} min={1} max={6} step={1} disabled={disabled || temporal} onChange={handleSSAODirectionCount} />
         <div className="ssao-check-grid">
           <SSAOCheck label={(translate("LUMINA.temporal") ?? "Temporal Accumulation")} value={temporal} disabled={disabled} onChange={handleSSAOTemporal} />
           <SSAOCheck label={(translate("LUMINA.fullresolution") ?? "Full Resolution")} value={fullRes} disabled={disabled} onChange={handleSSAOFullResolution} />
