@@ -418,25 +418,6 @@
                 Mod.Log.Info("Failed to retrieve the current HDRenderPipelineAsset.");
             }
 
-            // Check and set Tonemapping mode
-            if (m_Tonemapping.mode.value == TonemappingMode.External)
-            {
-                GlobalVariables.Instance.TonemappingMode = TonemappingMode.External;
-                IsExternalMode = true;
-                IsCustomMode = false;
-            }
-            else if (m_Tonemapping.mode.value == TonemappingMode.Custom)
-            {
-                GlobalVariables.Instance.TonemappingMode = TonemappingMode.Custom;
-                IsCustomMode = true;
-                IsExternalMode = false;
-            }
-            else
-            {
-                // If neither condition is met, set both to false
-                IsExternalMode = false;
-                IsCustomMode = false;
-            }
         }
 
 
@@ -463,10 +444,12 @@
                 InitializeCubemap();
                 if (!skySettingsInstance.HDRISkyEnabled) DisableCubemap();
                 ApplyCustomFog();
+                LUTloaded = false;
             }
+            UpdateTonemapping();
             UpdateNames();
 
-            if (!LUTloaded)
+            if (!LUTloaded && m_Tonemapping != null)
             {
                 TonemappingLUT();
                 LUTloaded = true;
@@ -637,165 +620,88 @@
         /// and saves these settings to a file. If an error occurs during the process, it is logged for debugging purposes.
         /// </remarks>
         /// <exception cref="Exception">Thrown if there is an error during the LUT update process.</exception>
+        private static Texture3D ownedTonemappingLut;
+
         public static void UpdateLUT()
         {
+            var name = LutName_Example;
+            if (string.IsNullOrWhiteSpace(name) || name == "None")
+            {
+                Mod.Log.Info("[LUMINA] Select a LUT before loading.");
+                return;
+            }
+
+            TryApplyLUT(Path.Combine(GlobalPaths.LuminaLUTSDirectory, name + ".cube"), name);
+        }
+
+        internal static bool TryApplyLUT(string path, string name)
+        {
+            if (m_Tonemapping == null) return false;
+
+            Texture3D next = null;
+            var previous = m_Tonemapping.lutTexture.value;
+            var previousOverride = m_Tonemapping.lutTexture.overrideState;
             try
             {
-                GC.Collect();
-
-                var lutFilePath = Path.Combine(GlobalPaths.LuminaLUTSDirectory, LutName_Example + ".cube");
-
-                Mod.Log.Info($"Attempting to update LUT from file: {lutFilePath}");
-
-                // Ensure tonemapping is active and properly configured
-                if (m_Tonemapping == null)
+                next = CubeLutLoader.LoadLutFromFile(path);
+                if (next == null)
                 {
-                    Mod.Log.Error("Tonemapping instance is null.");
-                    return;
+                    Mod.Log.Info("[LUMINA] LUT load failed: " + path);
+                    return false;
                 }
 
-                m_Tonemapping.active = true;
-                m_Tonemapping.mode.overrideState = true;
-                m_Tonemapping.mode.value = GlobalVariables.Instance.TonemappingMode;
-                m_Tonemapping.lutContribution.overrideState = GlobalVariables.Instance.LUTContributionOverrideState;
-                m_Tonemapping.lutContribution.Override(GlobalVariables.Instance.LUTContribution);
-                Mod.Log.Info($"Tonemapping mode set to: {m_Tonemapping.mode.value}");
+                next.name = name;
+                m_Tonemapping.lutTexture.value = next;
+                m_Tonemapping.lutTexture.overrideState = true;
 
-                // Find and delete the existing texture if it already exists
-                var existingTexture = Resources.FindObjectsOfTypeAll<Texture3D>().FirstOrDefault(t => t.name == RenderEffectsSystem.LutName_Example);
-                if (existingTexture != null)
+                if (!m_Tonemapping.ValidateLUT())
                 {
-                    Mod.Log.Info("Destroying existing Texture3D: " + existingTexture.name);
-                    UnityEngine.Object.DestroyImmediate(existingTexture);
-                }
-                else
-                {
-                    Mod.Log.Info("No existing Texture3D to destroy.");
+                    Mod.Log.Info("[LUMINA] HDRP rejected LUT: " + path);
+                    m_Tonemapping.lutTexture.value = previous;
+                    m_Tonemapping.lutTexture.overrideState = previousOverride;
+                    UnityEngine.Object.Destroy(next);
+                    return false;
                 }
 
-                // Create a new Texture3D object to hold the LUT
-                Texture3D newLutTexture = null;
-                Mod.Log.Info($"Loading LUT with format: {GraphicsFormat.R16G16B16A16_SFloat}");
+                if (ownedTonemappingLut != null && ownedTonemappingLut != next)
+                    UnityEngine.Object.Destroy(ownedTonemappingLut);
 
-                // Load the new LUT texture from the file based on the format
-                try
-                {
-                    newLutTexture = CubeLutLoader.LoadLutFromFile(lutFilePath);
-                }
-                catch (Exception ex)
-                {
-                    Mod.Log.Error($"Error loading LUT from file: {ex.Message}\n{ex.StackTrace}");
-                }
-
-                // Ensure that the newly created LUT texture is not null
-                if (newLutTexture != null)
-                {
-                    // Assign a name to the new texture
-                    newLutTexture.name = RenderEffectsSystem.LutName_Example;
-                    Mod.Log.Info("Loaded new Texture3D: " + newLutTexture.name);
-
-                    // Set the newly loaded LUT texture
-                    m_Tonemapping.lutTexture.value = newLutTexture;
-                    Mod.Log.Info("New LUT texture assigned.");
-                    m_Tonemapping.ValidateLUT();
-                    Mod.Log.Info($"LUT successfully set to: {lutFilePath}");
-                }
-                else
-                {
-                    Mod.Log.Info($"Failed to load LUT texture from: {lutFilePath}");
-                }
-
-                // Update global variables
-                GlobalVariables.Instance.LUTName = LutName_Example;
-                Mod.Log.Info("Updated GlobalVariables.Instance.LUTName");
-
-
-
+                ownedTonemappingLut = next;
+                LutName_Example = name;
+                GlobalVariables.Instance.LUTName = name;
+                UpdateTonemapping();
+                Mod.Log.Info("[LUMINA] LUT applied: " + name);
+                return true;
             }
             catch (Exception ex)
             {
-                Mod.Log.Error($"An error occurred while updating LUT: {ex.Message}\n{ex.StackTrace}");
+                m_Tonemapping.lutTexture.value = previous;
+                m_Tonemapping.lutTexture.overrideState = previousOverride;
+                if (next != null) UnityEngine.Object.Destroy(next);
+                Mod.Log.Error("[LUMINA] LUT load failed: " + ex.Message);
+                return false;
             }
         }
 
         private void TonemappingLUT()
         {
-            Mod.Log.Info("Starting TonemappingLUT process.");
-
             LogSizeAssureCorrectMode();
             ValidateLUTSDirectory();
+            UpdateTonemapping();
 
-            if (m_Tonemapping == null)
+            var name = GlobalVariables.Instance.LUTName;
+            LutName_Example = name;
+            if (!string.IsNullOrWhiteSpace(name) && name != "None")
+                UpdateLUT();
+            else if (m_Tonemapping != null)
             {
-                Mod.Log.Info("Tonemapping component is null.");
-                return;
-            }
-            Mod.Log.Info("Tonemapping component found.");
-
-            if (string.IsNullOrEmpty(lutFilePath))
-            {
-                Mod.Log.Info("LUT file path is null or empty.");
-                return;
-            }
-            Mod.Log.Info("LUT file path is valid: " + lutFilePath);
-
-            // Ensure tonemapping is active and set up correctly
-            m_Tonemapping.active = true;
-            m_Tonemapping.mode.value = GlobalVariables.Instance.TonemappingMode;
-            m_Tonemapping.mode.overrideState = true;
-            m_Tonemapping.lutTexture.overrideState = true;
-            Mod.Log.Info("Tonemapping activated with mode: " + GlobalVariables.Instance.TonemappingMode);
-
-            // Clear any existing LUT texture
-            if (m_Tonemapping.lutTexture.value != null)
-            {
-                UnityEngine.Object.DestroyImmediate(m_Tonemapping.lutTexture.value);
                 m_Tonemapping.lutTexture.value = null;
-                Mod.Log.Info("Tonemapping LUT: Previous LUT texture cleared.");
-            }
-
-            // Attempt to load the new LUT texture from file
-            Texture3D lutTexture = null;
-            lutTexture = CubeLutLoader.LoadLutFromFile(lutFilePath);
-            if (lutTexture == null)
-            {
-                Mod.Log.Info($"Failed to load LUT texture from file: {lutFilePath}");
-                return;
-            }
-
-            Mod.Log.Info("LUT texture loaded successfully.");
-
-            if (LUTSValidated)
-            {
-                // Set the name for initial texture management
-                lutTexture.name = RenderEffectsSystem.LutName_Example;
-                m_Tonemapping.lutTexture.value = lutTexture;
-                Mod.Log.Info("LUT texture applied to the tonemapping component with name: " + lutTexture.name);
-            }
-            else
-            {
-                Mod.Log.Info("LUT texture validation failed.");
-                return;
-            }
-
-            // Set LUT contribution
-            m_Tonemapping.lutContribution.overrideState = true;
-            m_Tonemapping.toeStrength.overrideState = GlobalVariables.Instance.ToeStrengthActive;
-            m_Tonemapping.toeStrength.Override(GlobalVariables.Instance.ToeStrengthValue);
-            m_Tonemapping.lutContribution.Override(GlobalVariables.Instance.LUTContribution);
-            Mod.Log.Info("LUT contribution set with value: " + GlobalVariables.Instance.LUTContribution);
-
-            // Validate and log the result
-            bool isLUTValid = m_Tonemapping.ValidateLUT();
-
-            Mod.Log.Info("LUT validation result: " + isLUTValid);
-
-            if (!isLUTValid)
-            {
-                Mod.Log.Info("Final LUT validation failed after assignment.");
+                if (ownedTonemappingLut != null)
+                    UnityEngine.Object.Destroy(ownedTonemappingLut);
+                ownedTonemappingLut = null;
+                UpdateTonemapping();
             }
         }
-
 
         /// <summary>
         /// Validates and ensures predetermined LUTs are available in ModsData.
@@ -1020,6 +926,7 @@
                 m_ColorAdjustments = m_Profile.Add<ColorAdjustments>();
                 m_ShadowsMidtonesHighlights = m_Profile.Add<ShadowsMidtonesHighlights>(); // Shadows, midtones, highlights
                 m_Tonemapping = m_Profile.Add<Tonemapping>();
+                UpdateTonemapping();
                 m_WhiteBalance = m_Profile.Add<WhiteBalance>();
 
 
@@ -1356,70 +1263,71 @@
 
         private static void UpdateTonemapping()
         {
-            m_Tonemapping.mode.value = GlobalVariables.Instance.TonemappingMode;
+            var settings = GlobalVariables.Instance;
+            var mode = settings.TonemappingMode;
+            ToneMappingMode = mode.ToString();
+            IsExternalMode = mode == TonemappingMode.External;
+            IsCustomMode = mode == TonemappingMode.Custom;
 
-            IsExternalMode = GlobalVariables.Instance.TonemappingMode == TonemappingMode.External;
-            IsCustomMode = GlobalVariables.Instance.TonemappingMode == TonemappingMode.Custom;
+            if (m_Tonemapping == null) return;
 
+            m_Tonemapping.active = true;
+            m_Tonemapping.mode.Override(mode);
+            m_Tonemapping.lutTexture.overrideState = IsExternalMode;
+            m_Tonemapping.lutContribution.value = Mathf.Clamp01(settings.LUTContribution);
+            m_Tonemapping.lutContribution.overrideState = IsExternalMode && settings.LUTContributionOverrideState;
+            SetTonemappingCustomModeProperties();
         }
 
         internal static void ToggleToeStrength()
         {
-            bool newState = !GlobalVariables.Instance.ToeStrengthActive;
-            GlobalVariables.Instance.ToeStrengthActive = newState;
-            m_Tonemapping.toeStrength.overrideState = newState;
+            GlobalVariables.Instance.ToeStrengthActive = !GlobalVariables.Instance.ToeStrengthActive;
+            UpdateTonemapping();
         }
 
         internal static void SetToeStrengthValue()
         {
-            m_Tonemapping.toeStrength.Override(GlobalVariables.Instance.ToeStrengthValue);
+            UpdateTonemapping();
         }
 
         internal static void SetTonemappingCustomModeProperties()
         {
-            if (m_Tonemapping.mode.value == TonemappingMode.Custom)
-            {
-                m_Tonemapping.toeStrength.overrideState = GlobalVariables.Instance.ToeStrengthActive;
-                m_Tonemapping.toeStrength.Override(GlobalVariables.Instance.ToeStrengthValue);
+            if (m_Tonemapping == null) return;
+            var settings = GlobalVariables.Instance;
+            var custom = settings.TonemappingMode == TonemappingMode.Custom;
 
-                m_Tonemapping.toeLength.overrideState = GlobalVariables.Instance.ToeLengthActive;
-                m_Tonemapping.toeLength.Override(GlobalVariables.Instance.ToeLengthValue);
-
-                m_Tonemapping.shoulderStrength.overrideState = GlobalVariables.Instance.shoulderStrengthActive;
-                m_Tonemapping.shoulderStrength.Override(GlobalVariables.Instance.shoulderStrengthValue);
-                m_Tonemapping.shoulderLength.overrideState = GlobalVariables.Instance.shoulderLengthActive;
-                m_Tonemapping.shoulderAngle.overrideState = GlobalVariables.Instance.shoulderAngleActive;
-                m_Tonemapping.shoulderAngle.Override(GlobalVariables.Instance.shoulderAngleValue);
-
-                m_Tonemapping.gamma.overrideState = GlobalVariables.Instance.TonemappingGammaActive;
-                m_Tonemapping.gamma.Override(GlobalVariables.Instance.TonemappingGammaValue);
-            }
-
+            m_Tonemapping.toeStrength.value = settings.ToeStrengthValue;
+            m_Tonemapping.toeStrength.overrideState = custom && settings.ToeStrengthActive;
+            m_Tonemapping.toeLength.value = settings.ToeLengthValue;
+            m_Tonemapping.toeLength.overrideState = custom && settings.ToeLengthActive;
+            m_Tonemapping.shoulderStrength.value = settings.shoulderStrengthValue;
+            m_Tonemapping.shoulderStrength.overrideState = custom && settings.shoulderStrengthActive;
+            m_Tonemapping.shoulderLength.overrideState = custom && settings.shoulderLengthActive;
+            m_Tonemapping.shoulderAngle.value = settings.shoulderAngleValue;
+            m_Tonemapping.shoulderAngle.overrideState = custom && settings.shoulderAngleActive;
+            m_Tonemapping.gamma.value = settings.TonemappingGammaValue;
+            m_Tonemapping.gamma.overrideState = custom && settings.TonemappingGammaActive;
         }
 
         internal static void SetToeLengthValue()
         {
-            m_Tonemapping.toeLength.Override(GlobalVariables.Instance.ToeLengthValue);
+            UpdateTonemapping();
         }
 
         internal static void ToggleToeLength()
         {
-            m_Tonemapping.toeStrength.overrideState = !m_Tonemapping.toeStrength.overrideState;
+            UpdateTonemapping();
         }
 
         internal static void SetShoulderStrengthActive()
         {
-            // Toggle the overrideState of shoulderStrength
-            m_Tonemapping.shoulderStrength.overrideState = !m_Tonemapping.shoulderStrength.overrideState;
-
-            // Update GlobalVariables.Instance.shoulderStrengthActive based on the new state
-            GlobalVariables.Instance.shoulderStrengthActive = m_Tonemapping.shoulderStrength.overrideState;
+            GlobalVariables.Instance.shoulderStrengthActive = !GlobalVariables.Instance.shoulderStrengthActive;
+            UpdateTonemapping();
         }
-
 
         internal static void handleShoulderStrength()
         {
-            m_Tonemapping.shoulderStrength.Override(GlobalVariables.Instance.shoulderStrengthValue);
+            UpdateTonemapping();
         }
 
         internal static void handleEmissionMultiplier(float obj)
