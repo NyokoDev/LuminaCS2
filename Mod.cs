@@ -68,6 +68,7 @@ namespace Lumina
 
             RunTranspilerPatch();
             SSAOCameraOverride.Install(harmony);
+            SSAOSettingsLock.Install(harmony);
 
 
             // Always patch PhotoModeRenderSystem.OnUpdate postfix

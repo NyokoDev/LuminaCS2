@@ -364,19 +364,7 @@ namespace Lumina
             {
                 GlobalVariables.Instance.IsScreenSpaceAmbientOcclusion = value;
 
-                if (RenderEffectsSystem.LuminaVolume != null &&
-                    RenderEffectsSystem.LuminaVolume.profile != null)
-                {
-                    var profile = RenderEffectsSystem.LuminaVolume.profile;
-
-                    if (!profile.TryGet(out RenderEffectsSystem.m_AmbientOcclusion))
-                    {
-                        RenderEffectsSystem.m_AmbientOcclusion =
-                            profile.Add<ScreenSpaceAmbientOcclusion>();
-                    }
-
-                    RenderEffectsSystem.m_AmbientOcclusion.active = value;
-                }
+                RenderEffectsSystem.AmbientOcclusionUpdate();
             }
         }
         private void OpenUnityGUI()
