@@ -104,7 +104,9 @@ export const SkyAndFogPanel: React.FC = () => {
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7h6l2 3h10v10H3zM12 13v4M10 15h4"/></svg>
             <span>Load Cubemap</span>
         </button>
-        <div className="sky-import-hint">PNG · 4:3 cross or 2:1 panorama</div>
+        <div className="sky-import-hint">Cubemaps must be PNG images · 4:3 cross or 2:1 panorama</div>
+        <button type="button" className="sky-button" onClick={() => trigger(mod.id, "ObtainCubemaps")}>Obtain cubemaps · Poly Haven ↗</button>
+        <div className="sky-import-hint">Convert downloaded HDR or EXR panoramas to PNG before importing.</div>
         <div className="sky-file-actions sky-import-tools">
             <button type="button" className="sky-button" onClick={() => setPicker(!picker)}>Library ({cubes.length})</button>
             <button type="button" className="sky-button" onClick={() => trigger(mod.id, "OpenCubemapFolder")}>Folder</button>
