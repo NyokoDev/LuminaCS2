@@ -9,12 +9,12 @@
 
     public class TonemappingCustomBindings
     {
-        public static bool IsToeStrengthActive = GlobalVariables.Instance.ToeStrengthActive;
+        public static bool IsToeStrengthActive => GlobalVariables.Instance.ToeStrengthActive;
         public static float ToeStrengthValue = GlobalVariables.Instance.ToeStrengthValue;
 
         internal static void UpdateTonemappingCustom()
         {
-            GlobalVariables.Instance.ToeStrengthActive = IsToeStrengthActive;
+            RenderEffectsSystem.SetTonemappingCustomModeProperties();
         }
 
         internal static void HandleToeStrengthActive(float obj)
@@ -25,7 +25,6 @@
 
         internal static void SetToeStrength()
         {
-            IsToeStrengthActive = !IsToeStrengthActive;
             RenderEffectsSystem.ToggleToeStrength();
 
         }
