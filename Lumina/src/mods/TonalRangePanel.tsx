@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { bindValue, trigger, useValue } from "cs2/api";
 import { Slider } from "./slider";
 import mod from "../../mod.json";
@@ -16,7 +16,7 @@ const smooth = (a: number, b: number, x: number) => {
 const finite = (value: number, fallback: number) => Number.isFinite(value) ? value : fallback;
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 
-export const TonalRangePanel = () => {
+const TonalRangeEditor = ({ onClose }: { onClose: () => void }) => {
     const ss = clamp(finite(useValue(ShadowsStart$), 0.02), 0, 0.98);
     const se = clamp(finite(useValue(ShadowsEnd$), 0.22), ss + 0.01, 0.99);
     const hs = clamp(finite(useValue(HighlightsStart$), 0.55), se, 0.99);
@@ -39,12 +39,15 @@ export const TonalRangePanel = () => {
         { label: "Highlight End", key: "SetHighlightsEnd", value: he, min: hs + 0.01, max: 1 },
     ];
     return (
-        <section className="lumina-tonal-range">
+        <section className="lumina-tonal-range" role="dialog" aria-label="Tonal Range">
             <div className="lumina-tonal-header">
                 <span>Tonal Range</span>
-                <button className="lumina-tonal-reset" onClick={() => trigger(mod.id, "ResetTonalRanges")}>Reset ranges</button>
+                <div className="lumina-tonal-actions">
+                    <button type="button" className="lumina-tonal-reset" onClick={() => trigger(mod.id, "ResetTonalRanges")}>Reset ranges</button>
+                    <button type="button" className="lumina-tonal-reset lumina-tonal-close" aria-label="Close tonal range" onClick={onClose}>×</button>
+                </div>
             </div>
-            <div className="lumina-tonal-description">Adjust which HDR luminance values receive shadow, midtone and highlight grading. Enable a brightness adjustment above to see the effect.</div>
+            <div className="lumina-tonal-description">Adjust which HDR luminance values receive shadow, midtone and highlight grading. Enable a brightness adjustment in Color Adjustments to see the effect.</div>
             <svg className="lumina-tonal-graph" viewBox="0 0 700 126" preserveAspectRatio="none">
                 {[0, .25, .5, .75, 1].map(x => <line key={x} x1={10+x*680} y1="6" x2={10+x*680} y2="103" stroke="#ffffff" opacity=".12" />)}
                 {Array.from({length: 50}, (_, i) => <rect key={i} x={10+i*13.6} y="108" width="13.7" height="13" fill={"rgb("+Math.round(i*255/49)+","+Math.round(i*255/49)+","+Math.round(i*255/49)+")"} />)}
@@ -62,5 +65,21 @@ export const TonalRangePanel = () => {
                 </div>
             ))}
         </section>
+    );
+};
+
+export const TonalRangePanel = () => {
+    const [open, setOpen] = useState(false);
+    return (
+        <>
+            <button type="button" className="lumina-tonal-open" aria-expanded={open} onClick={() => setOpen(value => !value)}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+                    <path d="M3 20V4M3 20h18M4 17c5 0 5-10 10-10h6M4 5c5 0 5 10 10 10h6" />
+                </svg>
+                <span>Tonal Range</span>
+                <span className="lumina-tonal-open-chevron" aria-hidden="true">{open ? "−" : "+"}</span>
+            </button>
+            {open && <TonalRangeEditor onClose={() => setOpen(false)} />}
+        </>
     );
 };
