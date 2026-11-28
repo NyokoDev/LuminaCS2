@@ -7,7 +7,6 @@ import { Dropdown, DropdownItem, DropdownToggle, UISound, FOCUS_AUTO } from "cs2
 const TonemappingModes = ["None", "External", "Custom", "Neutral", "ACES"];
 
 // This functions trigger an event on C# side and C# designates the method to implement.
-const TonemappingMode$ = bindValue<number>(mod.id, "TonemappingMode", 0);
 const TonemappingModeValue = bindValue<string>(mod.id, "TonemappingMode","");
 
 
@@ -23,17 +22,17 @@ const handleToggleSelected = (index: number) => {
   };
 
 export const TonemappingDropdown = () => {
-  const ColorMode = useValue(TonemappingMode$);
   const TonemappingMode = useValue(TonemappingModeValue);
-  const TonemmapingModeValueLabel = TonemappingMode ? TonemappingMode : "TonemappingMode";
+  const TonemmapingModeValueLabel = TonemappingMode ? TonemappingMode : "Select mode";
   const dropDownItems = TonemappingModes.map((mode, index) => (
-    <DropdownItem<Number>
+    <DropdownItem<number>
+      key={mode}
       theme={DropdownStyle}
       focusKey={FOCUS_AUTO}
       value={index}
       closeOnSelect={true}
       onToggleSelected={() => handleToggleSelected(index)}
-      selected={true}
+      selected={mode === TonemappingMode}
       sounds={{ select: "select-item" }}
     >
       {mode}
